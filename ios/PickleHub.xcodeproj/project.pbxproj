@@ -1,0 +1,14 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+		/* This is a placeholder Xcode project file */
+		/* In production, generate this using Xcode: File > New > Project > iOS > App */
+		/* For Swift Package Dependencies, add: */
+		/* - GoogleSignIn: https://github.com/google/GoogleSignIn-iOS */
+	};
+	rootObject = PLACEHOLDER;
+}

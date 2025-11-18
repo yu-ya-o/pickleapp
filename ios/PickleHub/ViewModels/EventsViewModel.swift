@@ -1,0 +1,159 @@
+import Foundation
+import SwiftUI
+
+@MainActor
+class EventsViewModel: ObservableObject {
+    @Published var events: [Event] = []
+    @Published var isLoading = false
+    @Published var errorMessage: String?
+
+    private let apiClient = APIClient.shared
+
+    // MARK: - Fetch Events
+
+    func fetchEvents(upcoming: Bool = true) async {
+        isLoading = true
+        errorMessage = nil
+
+        do {
+            events = try await apiClient.getEvents(status: "active", upcoming: upcoming)
+            isLoading = false
+        } catch {
+            isLoading = false
+            errorMessage = error.localizedDescription
+            print("Fetch events error: \(error)")
+        }
+    }
+
+    func refreshEvents() async {
+        await fetchEvents()
+    }
+
+    // MARK: - Create Event
+
+    func createEvent(
+        title: String,
+        description: String,
+        location: String,
+        startTime: Date,
+        endTime: Date,
+        maxParticipants: Int,
+        skillLevel: String
+    ) async throws {
+        isLoading = true
+        errorMessage = nil
+
+        let formatter = ISO8601DateFormatter()
+
+        let request = CreateEventRequest(
+            title: title,
+            description: description,
+            location: location,
+            startTime: formatter.string(from: startTime),
+            endTime: formatter.string(from: endTime),
+            maxParticipants: maxParticipants,
+            skillLevel: skillLevel
+        )
+
+        do {
+            let newEvent = try await apiClient.createEvent(request: request)
+            events.insert(newEvent, at: 0)
+            isLoading = false
+        } catch {
+            isLoading = false
+            errorMessage = error.localizedDescription
+            throw error
+        }
+    }
+
+    // MARK: - Update Event
+
+    func updateEvent(
+        id: String,
+        title: String? = nil,
+        description: String? = nil,
+        location: String? = nil,
+        startTime: Date? = nil,
+        endTime: Date? = nil,
+        maxParticipants: Int? = nil,
+        skillLevel: String? = nil,
+        status: String? = nil
+    ) async throws {
+        isLoading = true
+        errorMessage = nil
+
+        let formatter = ISO8601DateFormatter()
+
+        let request = UpdateEventRequest(
+            title: title,
+            description: description,
+            location: location,
+            startTime: startTime.map { formatter.string(from: $0) },
+            endTime: endTime.map { formatter.string(from: $0) },
+            maxParticipants: maxParticipants,
+            skillLevel: skillLevel,
+            status: status
+        )
+
+        do {
+            let updatedEvent = try await apiClient.updateEvent(id: id, request: request)
+
+            // Update in list
+            if let index = events.firstIndex(where: { $0.id == id }) {
+                events[index] = updatedEvent
+            }
+
+            isLoading = false
+        } catch {
+            isLoading = false
+            errorMessage = error.localizedDescription
+            throw error
+        }
+    }
+
+    // MARK: - Delete Event
+
+    func deleteEvent(id: String) async throws {
+        isLoading = true
+        errorMessage = nil
+
+        do {
+            try await apiClient.deleteEvent(id: id)
+
+            // Remove from list
+            events.removeAll { $0.id == id }
+
+            isLoading = false
+        } catch {
+            isLoading = false
+            errorMessage = error.localizedDescription
+            throw error
+        }
+    }
+
+    // MARK: - Reservations
+
+    func makeReservation(eventId: String) async throws {
+        do {
+            _ = try await apiClient.createReservation(eventId: eventId)
+
+            // Refresh events to update reservation status
+            await fetchEvents()
+        } catch {
+            errorMessage = error.localizedDescription
+            throw error
+        }
+    }
+
+    func cancelReservation(reservationId: String) async throws {
+        do {
+            try await apiClient.cancelReservation(id: reservationId)
+
+            // Refresh events to update reservation status
+            await fetchEvents()
+        } catch {
+            errorMessage = error.localizedDescription
+            throw error
+        }
+    }
+}
