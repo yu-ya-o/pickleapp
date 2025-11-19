@@ -6,7 +6,7 @@
     "dev": "next dev -p 3001",
     "build": "prisma generate && next build",
     "start": "next start -p 3001",
-    "start:ws": "ts-node server/index.ts",
+    "start:ws": "tsx server/index.ts",
     "lint": "next lint",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
@@ -32,6 +32,7 @@
     "@types/cors": "^2.8.17",
     "typescript": "^5",
     "prisma": "^5.7.1",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "tsx": "^4.7.0"
   }
 }
