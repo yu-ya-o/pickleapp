@@ -11,10 +11,10 @@ import {
 import { ApproveJoinRequestRequest } from '@/lib/types';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
     requestId: string;
-  };
+  }>;
 }
 
 /**
@@ -23,6 +23,7 @@ interface RouteParams {
  */
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id, requestId } = await params;
     const authHeader = request.headers.get('authorization');
     const user = await getUserFromAuth(authHeader);
 
@@ -31,7 +32,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     const team = await prisma.team.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         members: true,
       },
@@ -48,7 +49,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     const joinRequest = await prisma.teamJoinRequest.findUnique({
-      where: { id: params.requestId },
+      where: { id: requestId },
       include: {
         user: true,
       },
@@ -58,7 +59,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       throw new NotFoundError('Join request not found');
     }
 
-    if (joinRequest.teamId !== params.id) {
+    if (joinRequest.teamId !== id) {
       throw new BadRequestError('Join request does not belong to this team');
     }
 
@@ -76,7 +77,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       // Add user as member
       await prisma.teamMember.create({
         data: {
-          teamId: params.id,
+          teamId: id,
           userId: joinRequest.userId,
           role: 'member',
         },
@@ -84,7 +85,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
       // Update request status
       await prisma.teamJoinRequest.update({
-        where: { id: params.requestId },
+        where: { id: requestId },
         data: { status: 'approved' },
       });
 
@@ -95,7 +96,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     } else {
       // Reject request
       await prisma.teamJoinRequest.update({
-        where: { id: params.requestId },
+        where: { id: requestId },
         data: { status: 'rejected' },
       });
 

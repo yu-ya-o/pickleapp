@@ -10,10 +10,10 @@ import {
 import { UpdateTeamEventRequest, TeamEventResponse } from '@/lib/types';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
     eventId: string;
-  };
+  }>;
 }
 
 /**
@@ -22,6 +22,7 @@ interface RouteParams {
  */
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id, eventId } = await params;
     const authHeader = request.headers.get('authorization');
     const user = await getUserFromAuth(authHeader);
 
@@ -30,7 +31,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
 
     const team = await prisma.team.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         members: true,
       },
@@ -47,7 +48,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
 
     const event = await prisma.teamEvent.findUnique({
-      where: { id: params.eventId },
+      where: { id: eventId },
       include: {
         team: {
           select: {
@@ -83,7 +84,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       throw new NotFoundError('Event not found');
     }
 
-    if (event.teamId !== params.id) {
+    if (event.teamId !== id) {
       throw new ForbiddenError('Event does not belong to this team');
     }
 
@@ -127,6 +128,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
  */
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id, eventId } = await params;
     const authHeader = request.headers.get('authorization');
     const user = await getUserFromAuth(authHeader);
 
@@ -135,7 +137,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     const team = await prisma.team.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         members: true,
       },
@@ -146,14 +148,14 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     const event = await prisma.teamEvent.findUnique({
-      where: { id: params.eventId },
+      where: { id: eventId },
     });
 
     if (!event) {
       throw new NotFoundError('Event not found');
     }
 
-    if (event.teamId !== params.id) {
+    if (event.teamId !== id) {
       throw new ForbiddenError('Event does not belong to this team');
     }
 
@@ -187,7 +189,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     const updatedEvent = await prisma.teamEvent.update({
-      where: { id: params.eventId },
+      where: { id: eventId },
       data: updateData,
       include: {
         team: {
@@ -262,6 +264,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
  */
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id, eventId } = await params;
     const authHeader = request.headers.get('authorization');
     const user = await getUserFromAuth(authHeader);
 
@@ -270,7 +273,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     const team = await prisma.team.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         members: true,
       },
@@ -281,14 +284,14 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     const event = await prisma.teamEvent.findUnique({
-      where: { id: params.eventId },
+      where: { id: eventId },
     });
 
     if (!event) {
       throw new NotFoundError('Event not found');
     }
 
-    if (event.teamId !== params.id) {
+    if (event.teamId !== id) {
       throw new ForbiddenError('Event does not belong to this team');
     }
 
@@ -305,7 +308,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     await prisma.teamEvent.delete({
-      where: { id: params.eventId },
+      where: { id: eventId },
     });
 
     return NextResponse.json({ message: 'Event deleted successfully' });

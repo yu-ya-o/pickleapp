@@ -10,10 +10,10 @@ import {
 } from '@/lib/errors';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
     eventId: string;
-  };
+  }>;
 }
 
 /**
@@ -22,6 +22,7 @@ interface RouteParams {
  */
 export async function POST(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id, eventId } = await params;
     const authHeader = request.headers.get('authorization');
     const user = await getUserFromAuth(authHeader);
 
@@ -30,7 +31,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     const team = await prisma.team.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         members: true,
       },
@@ -47,7 +48,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     const event = await prisma.teamEvent.findUnique({
-      where: { id: params.eventId },
+      where: { id: eventId },
       include: {
         participants: {
           where: {
@@ -61,7 +62,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       throw new NotFoundError('Event not found');
     }
 
-    if (event.teamId !== params.id) {
+    if (event.teamId !== id) {
       throw new ForbiddenError('Event does not belong to this team');
     }
 
@@ -77,7 +78,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const existingParticipation = await prisma.teamEventParticipant.findUnique({
       where: {
         eventId_userId: {
-          eventId: params.eventId,
+          eventId,
           userId: user.id,
         },
       },
@@ -91,12 +92,12 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const participation = await prisma.teamEventParticipant.upsert({
       where: {
         eventId_userId: {
-          eventId: params.eventId,
+          eventId,
           userId: user.id,
         },
       },
       create: {
-        eventId: params.eventId,
+        eventId,
         userId: user.id,
         status: 'confirmed',
       },
@@ -134,6 +135,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
  */
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    const { eventId } = await params;
     const authHeader = request.headers.get('authorization');
     const user = await getUserFromAuth(authHeader);
 
@@ -144,7 +146,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     const participation = await prisma.teamEventParticipant.findUnique({
       where: {
         eventId_userId: {
-          eventId: params.eventId,
+          eventId,
           userId: user.id,
         },
       },

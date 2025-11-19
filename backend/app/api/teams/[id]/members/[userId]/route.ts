@@ -11,10 +11,10 @@ import {
 import { UpdateMemberRoleRequest } from '@/lib/types';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
     userId: string;
-  };
+  }>;
 }
 
 /**
@@ -23,6 +23,7 @@ interface RouteParams {
  */
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id, userId } = await params;
     const authHeader = request.headers.get('authorization');
     const user = await getUserFromAuth(authHeader);
 
@@ -31,7 +32,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     const team = await prisma.team.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         members: true,
       },
@@ -47,7 +48,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     // Find target member
-    const targetMember = team.members.find((m) => m.userId === params.userId);
+    const targetMember = team.members.find((m) => m.userId === userId);
     if (!targetMember) {
       throw new NotFoundError('Member not found');
     }
@@ -95,6 +96,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
  */
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id, userId } = await params;
     const authHeader = request.headers.get('authorization');
     const user = await getUserFromAuth(authHeader);
 
@@ -103,7 +105,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     const team = await prisma.team.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         members: true,
       },
@@ -113,7 +115,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       throw new NotFoundError('Team not found');
     }
 
-    const targetMember = team.members.find((m) => m.userId === params.userId);
+    const targetMember = team.members.find((m) => m.userId === userId);
     if (!targetMember) {
       throw new NotFoundError('Member not found');
     }
@@ -121,7 +123,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     // Check permissions
     const isOwner = team.ownerId === user.id;
     const isAdmin = team.members.find((m) => m.userId === user.id && m.role === 'admin');
-    const isSelf = params.userId === user.id;
+    const isSelf = userId === user.id;
 
     // Owner can remove anyone (except themselves)
     // Admin can remove members (not owner or other admins)

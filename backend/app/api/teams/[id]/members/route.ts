@@ -9,9 +9,9 @@ import {
 } from '@/lib/errors';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 /**
@@ -20,11 +20,12 @@ interface RouteParams {
  */
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params;
     const authHeader = request.headers.get('authorization');
     const currentUser = authHeader ? await getUserFromAuth(authHeader) : null;
 
     const team = await prisma.team.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         members: {
           include: {

@@ -11,9 +11,9 @@ import {
 import { TeamJoinRequestResponse } from '@/lib/types';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 /**
@@ -22,6 +22,7 @@ interface RouteParams {
  */
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params;
     const authHeader = request.headers.get('authorization');
     const user = await getUserFromAuth(authHeader);
 
@@ -30,7 +31,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
 
     const team = await prisma.team.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         members: true,
       },
@@ -48,7 +49,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     const joinRequests = await prisma.teamJoinRequest.findMany({
       where: {
-        teamId: params.id,
+        teamId: id,
         status: 'pending',
       },
       include: {
@@ -94,6 +95,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
  */
 export async function POST(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params;
     const authHeader = request.headers.get('authorization');
     const user = await getUserFromAuth(authHeader);
 
@@ -102,7 +104,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     const team = await prisma.team.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         members: true,
         joinRequests: {
@@ -134,7 +136,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     // Create join request
     const joinRequest = await prisma.teamJoinRequest.create({
       data: {
-        teamId: params.id,
+        teamId: id,
         userId: user.id,
         status: 'pending',
       },

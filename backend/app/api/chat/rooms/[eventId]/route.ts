@@ -5,9 +5,9 @@ import { errorResponse, UnauthorizedError, NotFoundError } from '@/lib/errors';
 import { ChatRoomResponse, MessageResponse } from '@/lib/types';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     eventId: string;
-  };
+  }>;
 }
 
 /**
@@ -16,6 +16,7 @@ interface RouteParams {
  */
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
+    const { eventId } = await params;
     const authHeader = request.headers.get('authorization');
     const user = await getUserFromAuth(authHeader);
 
@@ -25,7 +26,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     // Check if event exists
     const event = await prisma.event.findUnique({
-      where: { id: params.eventId },
+      where: { id: eventId },
     });
 
     if (!event) {
@@ -34,7 +35,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     // Get or create chat room
     let chatRoom = await prisma.chatRoom.findUnique({
-      where: { eventId: params.eventId },
+      where: { eventId },
       include: {
         messages: {
           include: {
@@ -57,7 +58,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     if (!chatRoom) {
       chatRoom = await prisma.chatRoom.create({
         data: {
-          eventId: params.eventId,
+          eventId,
         },
         include: {
           messages: {
