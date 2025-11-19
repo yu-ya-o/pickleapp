@@ -202,4 +202,218 @@ class APIClient {
             requiresAuth: true
         )
     }
+
+    // MARK: - Teams API
+
+    func getTeams(search: String? = nil, myTeams: Bool = false) async throws -> [Team] {
+        var endpoint = "/api/teams?"
+        if myTeams {
+            endpoint += "myTeams=true&"
+        }
+        if let search = search, !search.isEmpty {
+            endpoint += "search=\(search.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")&"
+        }
+        return try await request(endpoint: String(endpoint.dropLast()))
+    }
+
+    func getTeam(id: String) async throws -> Team {
+        return try await request(endpoint: "/api/teams/\(id)", requiresAuth: true)
+    }
+
+    func createTeam(request: CreateTeamRequest) async throws -> Team {
+        return try await self.request(
+            endpoint: "/api/teams",
+            method: "POST",
+            body: request,
+            requiresAuth: true
+        )
+    }
+
+    func updateTeam(id: String, request: UpdateTeamRequest) async throws -> Team {
+        return try await self.request(
+            endpoint: "/api/teams/\(id)",
+            method: "PATCH",
+            body: request,
+            requiresAuth: true
+        )
+    }
+
+    func deleteTeam(id: String) async throws {
+        struct EmptyResponse: Codable {}
+        let _: EmptyResponse = try await request(
+            endpoint: "/api/teams/\(id)",
+            method: "DELETE",
+            requiresAuth: true
+        )
+    }
+
+    // MARK: - Team Members API
+
+    func getTeamMembers(teamId: String) async throws -> [TeamMember] {
+        return try await request(
+            endpoint: "/api/teams/\(teamId)/members",
+            requiresAuth: true
+        )
+    }
+
+    func updateMemberRole(teamId: String, userId: String, role: String) async throws -> TeamMember {
+        let requestBody = UpdateMemberRoleRequest(role: role)
+        return try await request(
+            endpoint: "/api/teams/\(teamId)/members/\(userId)",
+            method: "PATCH",
+            body: requestBody,
+            requiresAuth: true
+        )
+    }
+
+    func removeMember(teamId: String, userId: String) async throws {
+        struct EmptyResponse: Codable { let message: String }
+        let _: EmptyResponse = try await request(
+            endpoint: "/api/teams/\(teamId)/members/\(userId)",
+            method: "DELETE",
+            requiresAuth: true
+        )
+    }
+
+    func leaveTeam(teamId: String, userId: String) async throws {
+        try await removeMember(teamId: teamId, userId: userId)
+    }
+
+    // MARK: - Team Join Requests API
+
+    func getTeamJoinRequests(teamId: String) async throws -> [TeamJoinRequest] {
+        return try await request(
+            endpoint: "/api/teams/\(teamId)/join-requests",
+            requiresAuth: true
+        )
+    }
+
+    func requestToJoinTeam(teamId: String) async throws -> TeamJoinRequest {
+        return try await request(
+            endpoint: "/api/teams/\(teamId)/join-requests",
+            method: "POST",
+            requiresAuth: true
+        )
+    }
+
+    func approveJoinRequest(teamId: String, requestId: String, action: String) async throws {
+        struct Response: Codable { let message: String; let status: String }
+        let requestBody = ApproveJoinRequestRequest(action: action)
+        let _: Response = try await request(
+            endpoint: "/api/teams/\(teamId)/join-requests/\(requestId)",
+            method: "PATCH",
+            body: requestBody,
+            requiresAuth: true
+        )
+    }
+
+    // MARK: - Team Invite URLs API
+
+    func generateTeamInvite(teamId: String) async throws -> TeamInviteUrl {
+        return try await request(
+            endpoint: "/api/teams/\(teamId)/invites",
+            method: "POST",
+            requiresAuth: true
+        )
+    }
+
+    func getTeamInvites(teamId: String) async throws -> [TeamInviteUrl] {
+        return try await request(
+            endpoint: "/api/teams/\(teamId)/invites",
+            requiresAuth: true
+        )
+    }
+
+    func validateInvite(token: String) async throws -> ValidateInviteResponse {
+        return try await request(endpoint: "/api/teams/invites/\(token)")
+    }
+
+    func useInvite(token: String) async throws {
+        struct Response: Codable { let message: String }
+        let _: Response = try await request(
+            endpoint: "/api/teams/invites/\(token)",
+            method: "POST",
+            requiresAuth: true
+        )
+    }
+
+    // MARK: - Team Events API
+
+    func getTeamEvents(teamId: String) async throws -> [TeamEvent] {
+        return try await request(
+            endpoint: "/api/teams/\(teamId)/events",
+            requiresAuth: true
+        )
+    }
+
+    func getTeamEvent(teamId: String, eventId: String) async throws -> TeamEvent {
+        return try await request(
+            endpoint: "/api/teams/\(teamId)/events/\(eventId)",
+            requiresAuth: true
+        )
+    }
+
+    func createTeamEvent(teamId: String, request: CreateTeamEventRequest) async throws -> TeamEvent {
+        return try await self.request(
+            endpoint: "/api/teams/\(teamId)/events",
+            method: "POST",
+            body: request,
+            requiresAuth: true
+        )
+    }
+
+    func updateTeamEvent(teamId: String, eventId: String, request: UpdateTeamEventRequest) async throws -> TeamEvent {
+        return try await self.request(
+            endpoint: "/api/teams/\(teamId)/events/\(eventId)",
+            method: "PATCH",
+            body: request,
+            requiresAuth: true
+        )
+    }
+
+    func deleteTeamEvent(teamId: String, eventId: String) async throws {
+        struct EmptyResponse: Codable { let message: String }
+        let _: EmptyResponse = try await request(
+            endpoint: "/api/teams/\(teamId)/events/\(eventId)",
+            method: "DELETE",
+            requiresAuth: true
+        )
+    }
+
+    func joinTeamEvent(teamId: String, eventId: String) async throws {
+        struct Response: Codable { let message: String }
+        let _: Response = try await request(
+            endpoint: "/api/teams/\(teamId)/events/\(eventId)/join",
+            method: "POST",
+            requiresAuth: true
+        )
+    }
+
+    func leaveTeamEvent(teamId: String, eventId: String) async throws {
+        struct Response: Codable { let message: String }
+        let _: Response = try await request(
+            endpoint: "/api/teams/\(teamId)/events/\(eventId)/join",
+            method: "DELETE",
+            requiresAuth: true
+        )
+    }
+
+    // MARK: - Team Chat API
+
+    func getTeamChatRoom(teamId: String) async throws -> TeamChatRoom {
+        return try await request(
+            endpoint: "/api/teams/\(teamId)/chat",
+            requiresAuth: true
+        )
+    }
+
+    func sendTeamMessage(teamId: String, content: String) async throws -> TeamMessage {
+        let requestBody = SendTeamMessageRequest(content: content)
+        return try await request(
+            endpoint: "/api/teams/\(teamId)/chat",
+            method: "POST",
+            body: requestBody,
+            requiresAuth: true
+        )
+    }
 }
