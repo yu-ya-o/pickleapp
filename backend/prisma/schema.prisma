@@ -19,9 +19,17 @@ model User {
   updatedAt     DateTime      @updatedAt
 
   // Relations
-  eventsCreated Event[]       @relation("EventCreator")
-  reservations  Reservation[]
-  messages      Message[]
+  eventsCreated       Event[]             @relation("EventCreator")
+  reservations        Reservation[]
+  messages            Message[]
+  teamsOwned          Team[]              @relation("TeamOwner")
+  teamMemberships     TeamMember[]
+  teamJoinRequests    TeamJoinRequest[]
+  teamInvitesCreated  TeamInviteUrl[]     @relation("InviteCreator")
+  teamInvitesUsed     TeamInviteUrl[]     @relation("InviteUser")
+  teamEventsCreated   TeamEvent[]         @relation("TeamEventCreator")
+  teamEventParticipations TeamEventParticipant[]
+  teamMessages        TeamMessage[]
 
   @@index([googleId])
   @@index([email])
@@ -90,6 +98,152 @@ model Message {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   chatRoomId String
   chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+
+  @@index([chatRoomId, createdAt])
+  @@index([userId])
+}
+
+// ============= TEAM MODELS =============
+
+model Team {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  iconImage   String?
+  visibility  String   @default("public") // "public", "private"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  ownerId         String
+  owner           User                @relation("TeamOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  members         TeamMember[]
+  joinRequests    TeamJoinRequest[]
+  inviteUrls      TeamInviteUrl[]
+  events          TeamEvent[]
+  chatRoom        TeamChatRoom?
+
+  @@index([ownerId])
+  @@index([visibility])
+  @@index([name])
+}
+
+model TeamMember {
+  id        String   @id @default(uuid())
+  role      String   // "owner", "admin", "member"
+  joinedAt  DateTime @default(now())
+
+  // Relations
+  teamId    String
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
+  @@index([teamId])
+  @@index([userId])
+  @@index([role])
+}
+
+model TeamJoinRequest {
+  id        String   @id @default(uuid())
+  status    String   @default("pending") // "pending", "approved", "rejected"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  teamId    String
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
+  @@index([teamId])
+  @@index([userId])
+  @@index([status])
+}
+
+model TeamInviteUrl {
+  id        String    @id @default(uuid())
+  token     String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  // Relations
+  teamId      String
+  team        Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  createdBy   String
+  creator     User      @relation("InviteCreator", fields: [createdBy], references: [id], onDelete: Cascade)
+  usedBy      String?
+  usedByUser  User?     @relation("InviteUser", fields: [usedBy], references: [id], onDelete: SetNull)
+
+  @@index([token])
+  @@index([teamId])
+  @@index([expiresAt])
+}
+
+model TeamEvent {
+  id              String   @id @default(uuid())
+  title           String
+  description     String
+  location        String
+  startTime       DateTime
+  endTime         DateTime
+  maxParticipants Int?     // null = unlimited
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  teamId      String
+  team        Team                    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  createdBy   String
+  creator     User                    @relation("TeamEventCreator", fields: [createdBy], references: [id], onDelete: Cascade)
+  participants TeamEventParticipant[]
+
+  @@index([teamId])
+  @@index([createdBy])
+  @@index([startTime])
+}
+
+model TeamEventParticipant {
+  id        String   @id @default(uuid())
+  status    String   @default("confirmed") // "confirmed", "cancelled"
+  joinedAt  DateTime @default(now())
+
+  // Relations
+  eventId   String
+  event     TeamEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+  @@index([eventId])
+  @@index([userId])
+  @@index([status])
+}
+
+model TeamChatRoom {
+  id        String        @id @default(uuid())
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  // Relations
+  teamId    String        @unique
+  team      Team          @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  messages  TeamMessage[]
+}
+
+model TeamMessage {
+  id         String       @id @default(uuid())
+  content    String
+  createdAt  DateTime     @default(now())
+
+  // Relations
+  userId       String
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chatRoomId   String
+  chatRoom     TeamChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
 
   @@index([chatRoomId, createdAt])
   @@index([userId])

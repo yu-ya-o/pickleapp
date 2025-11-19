@@ -119,3 +119,184 @@ export interface ErrorResponse {
   message: string;
   statusCode: number;
 }
+
+// ============= TEAMS =============
+export interface CreateTeamRequest {
+  name: string;
+  description: string;
+  iconImage?: string;
+  visibility: 'public' | 'private';
+}
+
+export interface UpdateTeamRequest {
+  name?: string;
+  description?: string;
+  iconImage?: string;
+  visibility?: 'public' | 'private';
+}
+
+export interface TeamResponse {
+  id: string;
+  name: string;
+  description: string;
+  iconImage: string | null;
+  visibility: string;
+  createdAt: string;
+  updatedAt: string;
+  owner: {
+    id: string;
+    name: string;
+    profileImage: string | null;
+  };
+  memberCount: number;
+  isUserMember?: boolean;
+  userRole?: string; // "owner", "admin", "member"
+  members?: TeamMemberResponse[];
+}
+
+export interface TeamMemberResponse {
+  id: string;
+  role: string;
+  joinedAt: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    profileImage: string | null;
+  };
+}
+
+export interface UpdateMemberRoleRequest {
+  role: 'admin' | 'member';
+}
+
+// ============= TEAM JOIN REQUESTS =============
+export interface TeamJoinRequestResponse {
+  id: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  team: {
+    id: string;
+    name: string;
+    iconImage: string | null;
+  };
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    profileImage: string | null;
+  };
+}
+
+export interface ApproveJoinRequestRequest {
+  action: 'approve' | 'reject';
+}
+
+// ============= TEAM INVITE URLS =============
+export interface TeamInviteUrlResponse {
+  id: string;
+  token: string;
+  inviteUrl: string;
+  expiresAt: string;
+  usedAt: string | null;
+  createdAt: string;
+  createdBy: {
+    id: string;
+    name: string;
+  };
+  usedBy?: {
+    id: string;
+    name: string;
+  };
+}
+
+export interface ValidateInviteResponse {
+  valid: boolean;
+  team?: {
+    id: string;
+    name: string;
+    description: string;
+    iconImage: string | null;
+    memberCount: number;
+  };
+  error?: string;
+}
+
+// ============= TEAM EVENTS =============
+export interface CreateTeamEventRequest {
+  title: string;
+  description: string;
+  location: string;
+  startTime: string;
+  endTime: string;
+  maxParticipants?: number; // null = unlimited
+}
+
+export interface UpdateTeamEventRequest {
+  title?: string;
+  description?: string;
+  location?: string;
+  startTime?: string;
+  endTime?: string;
+  maxParticipants?: number;
+}
+
+export interface TeamEventResponse {
+  id: string;
+  title: string;
+  description: string;
+  location: string;
+  startTime: string;
+  endTime: string;
+  maxParticipants: number | null;
+  createdAt: string;
+  updatedAt: string;
+  team: {
+    id: string;
+    name: string;
+  };
+  creator: {
+    id: string;
+    name: string;
+    profileImage: string | null;
+  };
+  participants: TeamEventParticipantResponse[];
+  participantCount: number;
+  availableSpots: number | null;
+  isUserParticipating?: boolean;
+}
+
+export interface TeamEventParticipantResponse {
+  id: string;
+  status: string;
+  joinedAt: string;
+  user: {
+    id: string;
+    name: string;
+    profileImage: string | null;
+  };
+}
+
+// ============= TEAM CHAT =============
+export interface TeamChatRoomResponse {
+  id: string;
+  teamId: string;
+  createdAt: string;
+  messages: TeamMessageResponse[];
+}
+
+export interface TeamMessageResponse {
+  id: string;
+  content: string;
+  createdAt: string;
+  user: {
+    id: string;
+    name: string;
+    profileImage: string | null;
+  };
+}
+
+export interface SendTeamMessageRequest {
+  content: string;
+}
