@@ -75,7 +75,17 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
           teamId: id,
         },
         include: {
-          messages: true,
+          messages: {
+            include: {
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  profileImage: true,
+                },
+              },
+            },
+          },
         },
       });
     }
