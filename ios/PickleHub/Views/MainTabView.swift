@@ -12,6 +12,11 @@ struct MainTabView: View {
                     Label("Events", systemImage: "calendar")
                 }
 
+            TeamsListView()
+                .tabItem {
+                    Label("Teams", systemImage: "person.3.fill")
+                }
+
             MyEventsView()
                 .environmentObject(eventsViewModel)
                 .tabItem {
