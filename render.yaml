@@ -1,0 +1,52 @@
+# Render Blueprint for PickleHub Backend
+services:
+  # Next.js API Server
+  - type: web
+    name: picklehub-api
+    runtime: node
+    region: oregon
+    plan: free
+    rootDir: backend
+    buildCommand: npm install && npm run prisma:generate && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: GOOGLE_CLIENT_ID_IOS
+        sync: false
+      - key: NEXT_PUBLIC_API_URL
+        sync: false
+    healthCheckPath: /
+
+  # WebSocket Server
+  - type: web
+    name: picklehub-websocket
+    runtime: node
+    region: oregon
+    plan: free
+    rootDir: backend
+    buildCommand: npm install && npm run prisma:generate
+    startCommand: npx ts-node server/index.ts
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: WEBSOCKET_PORT
+        value: 10000
+
+  # PostgreSQL Database
+  - type: pserv
+    name: picklehub-db
+    runtime: postgresql
+    region: oregon
+    plan: free
+    ipAllowList: []
+
+# Note: After creating services, you need to:
+# 1. Set DATABASE_URL in both API and WebSocket services (copy from database)
+# 2. Set GOOGLE_CLIENT_ID_IOS from Google Cloud Console
+# 3. Set NEXT_PUBLIC_API_URL to your API service URL
+# 4. Run database migration manually via Render Shell or add to build command
