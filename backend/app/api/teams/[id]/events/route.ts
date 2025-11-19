@@ -11,9 +11,9 @@ import {
 import { CreateTeamEventRequest, TeamEventResponse } from '@/lib/types';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 /**
@@ -22,6 +22,7 @@ interface RouteParams {
  */
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params;
     const authHeader = request.headers.get('authorization');
     const user = await getUserFromAuth(authHeader);
 
@@ -30,7 +31,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
 
     const team = await prisma.team.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         members: true,
       },
@@ -48,7 +49,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     const events = await prisma.teamEvent.findMany({
       where: {
-        teamId: params.id,
+        teamId: id,
       },
       include: {
         team: {
@@ -126,6 +127,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
  */
 export async function POST(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params;
     const authHeader = request.headers.get('authorization');
     const user = await getUserFromAuth(authHeader);
 
@@ -134,7 +136,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     const team = await prisma.team.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         members: true,
       },
@@ -178,7 +180,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     // Create event
     const event = await prisma.teamEvent.create({
       data: {
-        teamId: params.id,
+        teamId: id,
         createdBy: user.id,
         title: body.title,
         description: body.description,

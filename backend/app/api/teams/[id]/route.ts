@@ -10,9 +10,9 @@ import {
 import { UpdateTeamRequest, TeamResponse } from '@/lib/types';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 /**
@@ -21,11 +21,12 @@ interface RouteParams {
  */
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params;
     const authHeader = request.headers.get('authorization');
     const currentUser = authHeader ? await getUserFromAuth(authHeader) : null;
 
     const team = await prisma.team.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         owner: {
           select: {
@@ -95,6 +96,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
  */
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params;
     const authHeader = request.headers.get('authorization');
     const user = await getUserFromAuth(authHeader);
 
@@ -103,7 +105,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     const team = await prisma.team.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         members: true,
       },
@@ -129,7 +131,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     if (body.visibility !== undefined) updateData.visibility = body.visibility;
 
     const updatedTeam = await prisma.team.update({
-      where: { id: params.id },
+      where: { id },
       data: updateData,
       include: {
         owner: {
@@ -180,6 +182,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
  */
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params;
     const authHeader = request.headers.get('authorization');
     const user = await getUserFromAuth(authHeader);
 
@@ -188,7 +191,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     const team = await prisma.team.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!team) {
@@ -201,7 +204,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     await prisma.team.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: 'Team deleted successfully' });

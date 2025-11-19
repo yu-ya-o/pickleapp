@@ -10,9 +10,9 @@ import {
 import { ValidateInviteResponse } from '@/lib/types';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     token: string;
-  };
+  }>;
 }
 
 /**
@@ -21,8 +21,9 @@ interface RouteParams {
  */
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
+    const { token } = await params;
     const invite = await prisma.teamInviteUrl.findUnique({
-      where: { token: params.token },
+      where: { token },
       include: {
         team: {
           include: {
@@ -78,6 +79,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
  */
 export async function POST(request: NextRequest, { params }: RouteParams) {
   try {
+    const { token } = await params;
     const authHeader = request.headers.get('authorization');
     const user = await getUserFromAuth(authHeader);
 
@@ -86,7 +88,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     const invite = await prisma.teamInviteUrl.findUnique({
-      where: { token: params.token },
+      where: { token },
       include: {
         team: {
           include: {

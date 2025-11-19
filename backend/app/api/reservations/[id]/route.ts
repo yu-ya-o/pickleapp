@@ -9,9 +9,9 @@ import {
 } from '@/lib/errors';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 /**
@@ -20,6 +20,7 @@ interface RouteParams {
  */
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params;
     const authHeader = request.headers.get('authorization');
     const user = await getUserFromAuth(authHeader);
 
@@ -28,7 +29,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     const reservation = await prisma.reservation.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!reservation) {
@@ -42,7 +43,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     // Update status to cancelled instead of deleting
     await prisma.reservation.update({
-      where: { id: params.id },
+      where: { id },
       data: { status: 'cancelled' },
     });
 
