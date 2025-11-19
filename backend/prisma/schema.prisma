@@ -1,0 +1,96 @@
+// Prisma Schema for PickleHub
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String        @id @default(uuid())
+  email         String        @unique
+  name          String
+  googleId      String        @unique
+  profileImage  String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // Relations
+  eventsCreated Event[]       @relation("EventCreator")
+  reservations  Reservation[]
+  messages      Message[]
+
+  @@index([googleId])
+  @@index([email])
+}
+
+model Event {
+  id              String        @id @default(uuid())
+  title           String
+  description     String
+  location        String
+  startTime       DateTime
+  endTime         DateTime
+  maxParticipants Int
+  skillLevel      String        // "beginner", "intermediate", "advanced", "all"
+  status          String        @default("active") // "active", "cancelled", "completed"
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  creatorId       String
+  creator         User          @relation("EventCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  reservations    Reservation[]
+  chatRoom        ChatRoom?
+
+  @@index([creatorId])
+  @@index([startTime])
+  @@index([status])
+}
+
+model Reservation {
+  id          String   @id @default(uuid())
+  status      String   @default("confirmed") // "confirmed", "cancelled"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eventId     String
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, eventId])
+  @@index([userId])
+  @@index([eventId])
+  @@index([status])
+}
+
+model ChatRoom {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // Relations
+  eventId   String    @unique
+  event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  messages  Message[]
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  content    String
+  createdAt  DateTime @default(now())
+
+  // Relations
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chatRoomId String
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+
+  @@index([chatRoomId, createdAt])
+  @@index([userId])
+}
