@@ -19,7 +19,7 @@ struct LoginView: View {
                 .font(.system(size: 48, weight: .bold))
                 .foregroundColor(.primary)
 
-            Text("ピックルボール仲間とつながろう")
+            Text("Connect with pickleball players")
                 .font(.headline)
                 .foregroundColor(.secondary)
 
