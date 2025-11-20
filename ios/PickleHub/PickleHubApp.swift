@@ -8,8 +8,13 @@ struct PickleHubApp: App {
     var body: some Scene {
         WindowGroup {
             if authViewModel.isAuthenticated {
-                MainTabView()
-                    .environmentObject(authViewModel)
+                if authViewModel.currentUser?.isProfileComplete == false {
+                    ProfileSetupView()
+                        .environmentObject(authViewModel)
+                } else {
+                    MainTabView()
+                        .environmentObject(authViewModel)
+                }
             } else {
                 LoginView()
                     .environmentObject(authViewModel)

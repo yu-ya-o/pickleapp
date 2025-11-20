@@ -3,10 +3,12 @@ import SwiftUI
 struct ProfileView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @State private var showingSignOutAlert = false
+    @State private var showingEditProfile = false
 
     var body: some View {
         NavigationView {
             List {
+                // Profile Header
                 Section {
                     HStack(spacing: 16) {
                         // Profile Image
@@ -19,18 +21,19 @@ struct ProfileView: View {
                                 Image(systemName: "person.circle.fill")
                                     .resizable()
                             }
-                            .frame(width: 60, height: 60)
+                            .frame(width: 80, height: 80)
                             .clipShape(Circle())
                         } else {
                             Image(systemName: "person.circle.fill")
                                 .resizable()
-                                .frame(width: 60, height: 60)
+                                .frame(width: 80, height: 80)
                                 .foregroundColor(.gray)
                         }
 
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(authViewModel.currentUser?.name ?? "")
-                                .font(.headline)
+                            Text(authViewModel.currentUser?.displayName ?? "")
+                                .font(.title2)
+                                .bold()
                             Text(authViewModel.currentUser?.email ?? "")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
@@ -39,30 +42,65 @@ struct ProfileView: View {
                     .padding(.vertical, 8)
                 }
 
-                Section(header: Text("Account")) {
-                    HStack {
-                        Label("User ID", systemImage: "number")
-                        Spacer()
-                        Text(authViewModel.currentUser?.id ?? "")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                }
+                // Profile Details
+                if let user = authViewModel.currentUser {
+                    Section(header: Text("プロフィール")) {
+                        if let nickname = user.nickname {
+                            HStack {
+                                Label("ニックネーム", systemImage: "person.fill")
+                                Spacer()
+                                Text(nickname)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
 
-                Section(header: Text("App Info")) {
-                    HStack {
-                        Text("Version")
-                        Spacer()
-                        Text("1.0.0")
-                            .foregroundColor(.secondary)
+                        if let region = user.region {
+                            HStack {
+                                Label("地域", systemImage: "mappin.circle.fill")
+                                Spacer()
+                                Text(region)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+
+                        if let experience = user.pickleballExperience {
+                            HStack {
+                                Label("ピックルボール歴", systemImage: "clock.fill")
+                                Spacer()
+                                Text(experience)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+
+                        if let skillLevel = user.skillLevel {
+                            HStack {
+                                Label("レベル", systemImage: "star.fill")
+                                Spacer()
+                                Text(skillLevel)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+
+                        if let gender = user.gender {
+                            HStack {
+                                Label("性別", systemImage: "person.2.fill")
+                                Spacer()
+                                Text(gender)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
                     }
 
-                    HStack {
-                        Text("API Server")
-                        Spacer()
-                        Text(Config.apiBaseURL)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                    Section {
+                        Button(action: {
+                            showingEditProfile = true
+                        }) {
+                            HStack {
+                                Spacer()
+                                Text("プロフィールを編集")
+                                Spacer()
+                            }
+                        }
                     }
                 }
 
@@ -72,21 +110,27 @@ struct ProfileView: View {
                     }) {
                         HStack {
                             Spacer()
-                            Text("Sign Out")
+                            Text("ログアウト")
                                 .foregroundColor(.red)
                             Spacer()
                         }
                     }
                 }
             }
-            .navigationTitle("Profile")
-            .alert("Sign Out", isPresented: $showingSignOutAlert) {
-                Button("Cancel", role: .cancel) {}
-                Button("Sign Out", role: .destructive) {
+            .navigationTitle("プロフィール")
+            .sheet(isPresented: $showingEditProfile) {
+                if let user = authViewModel.currentUser {
+                    ProfileEditView(user: user)
+                        .environmentObject(authViewModel)
+                }
+            }
+            .alert("ログアウト", isPresented: $showingSignOutAlert) {
+                Button("キャンセル", role: .cancel) {}
+                Button("ログアウト", role: .destructive) {
                     authViewModel.signOut()
                 }
             } message: {
-                Text("Are you sure you want to sign out?")
+                Text("ログアウトしてもよろしいですか？")
             }
         }
     }

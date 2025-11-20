@@ -11,8 +11,39 @@ export interface GoogleSignInResponse {
     email: string;
     name: string;
     profileImage: string | null;
+    nickname: string | null;
+    region: string | null;
+    pickleballExperience: string | null;
+    gender: string | null;
+    skillLevel: string | null;
+    isProfileComplete: boolean;
   };
   token: string; // JWT or session token
+}
+
+// ============= USER PROFILE =============
+export interface UpdateProfileRequest {
+  nickname?: string;
+  region?: string;
+  pickleballExperience?: string;
+  gender?: string;
+  skillLevel?: string;
+  profileImage?: string;
+}
+
+export interface UserProfileResponse {
+  id: string;
+  email: string;
+  name: string;
+  profileImage: string | null;
+  nickname: string | null;
+  region: string | null;
+  pickleballExperience: string | null;
+  gender: string | null;
+  skillLevel: string | null;
+  isProfileComplete: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // ============= EVENTS =============
