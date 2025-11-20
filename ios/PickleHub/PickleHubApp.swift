@@ -9,7 +9,7 @@ struct PickleHubApp: App {
         WindowGroup {
             if authViewModel.isAuthenticated {
                 if authViewModel.currentUser?.isProfileComplete == false {
-                    ProfileSetupView()
+                    OnboardingContainerView()
                         .environmentObject(authViewModel)
                 } else {
                     MainTabView()
