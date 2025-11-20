@@ -2,12 +2,11 @@ import Foundation
 
 enum Config {
     // MARK: - API Configuration
-    static let apiBaseURL = "http://localhost:3001"
-    static let websocketURL = "ws://localhost:3002"
+    static let apiBaseURL = "https://pickleapp.onrender.com"
+    static let websocketURL = "wss://pickleapp-websocket.onrender.com"
 
     // MARK: - Google Sign-In
-    // Replace with your actual Google Client ID from Google Cloud Console
-    static let googleClientID = "YOUR_IOS_CLIENT_ID.apps.googleusercontent.com"
+    static let googleClientID = "738453907848-foqdf7208fdh9odmttp2i377o0qnf09j.apps.googleusercontent.com"
 
     // MARK: - API Endpoints
     enum Endpoint {
