@@ -6,8 +6,7 @@ enum Config {
     static let websocketURL = "ws://localhost:3002"
 
     // MARK: - Google Sign-In
-    // Replace with your actual Google Client ID from Google Cloud Console
-    static let googleClientID = "YOUR_IOS_CLIENT_ID.apps.googleusercontent.com"
+    static let googleClientID = "738453907848-foqdf7208fdh9odmttp2i377o0qnf09j.apps.googleusercontent.com"
 
     // MARK: - API Endpoints
     enum Endpoint {
