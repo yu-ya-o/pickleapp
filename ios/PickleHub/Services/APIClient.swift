@@ -115,6 +115,24 @@ class APIClient {
         return response
     }
 
+    // MARK: - Profile API
+
+    func getProfile() async throws -> User {
+        return try await request(
+            endpoint: "/api/profile",
+            requiresAuth: true
+        )
+    }
+
+    func updateProfile(request: UpdateProfileRequest) async throws -> User {
+        return try await self.request(
+            endpoint: "/api/profile",
+            method: "PATCH",
+            body: request,
+            requiresAuth: true
+        )
+    }
+
     // MARK: - Events API
 
     func getEvents(status: String = "active", upcoming: Bool = true) async throws -> [Event] {

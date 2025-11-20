@@ -19,7 +19,7 @@ struct LoginView: View {
                 .font(.system(size: 48, weight: .bold))
                 .foregroundColor(.primary)
 
-            Text("Connect with pickleball players")
+            Text("ピックルボール仲間とつながろう")
                 .font(.headline)
                 .foregroundColor(.secondary)
 
@@ -34,7 +34,7 @@ struct LoginView: View {
                 HStack {
                     Image(systemName: "g.circle.fill")
                         .font(.title2)
-                    Text("Sign in with Google")
+                    Text("Googleでログイン")
                         .font(.headline)
                 }
                 .foregroundColor(.white)

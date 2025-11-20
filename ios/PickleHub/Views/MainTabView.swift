@@ -9,23 +9,23 @@ struct MainTabView: View {
             EventsListView()
                 .environmentObject(eventsViewModel)
                 .tabItem {
-                    Label("Events", systemImage: "calendar")
+                    Label("イベント", systemImage: "calendar")
                 }
 
             TeamsListView()
                 .tabItem {
-                    Label("Teams", systemImage: "person.3.fill")
+                    Label("チーム", systemImage: "person.3.fill")
                 }
 
             MyEventsView()
                 .environmentObject(eventsViewModel)
                 .tabItem {
-                    Label("My Events", systemImage: "star.fill")
+                    Label("マイイベント", systemImage: "star.fill")
                 }
 
             ProfileView()
                 .tabItem {
-                    Label("Profile", systemImage: "person.circle")
+                    Label("プロフィール", systemImage: "person.circle")
                 }
         }
     }

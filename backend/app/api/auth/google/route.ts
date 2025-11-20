@@ -34,6 +34,12 @@ export async function POST(request: NextRequest) {
         email: user.email,
         name: user.name,
         profileImage: user.profileImage,
+        nickname: user.nickname,
+        region: user.region,
+        pickleballExperience: user.pickleballExperience,
+        gender: user.gender,
+        skillLevel: user.skillLevel,
+        isProfileComplete: user.isProfileComplete,
       },
       token,
     };
