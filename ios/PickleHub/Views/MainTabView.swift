@@ -8,6 +8,7 @@ struct MainTabView: View {
         TabView {
             EventsListView()
                 .environmentObject(eventsViewModel)
+                .environmentObject(authViewModel)
                 .tabItem {
                     Label("イベント", systemImage: "calendar")
                 }
