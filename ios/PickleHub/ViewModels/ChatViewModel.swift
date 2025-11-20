@@ -50,7 +50,7 @@ class ChatViewModel: ObservableObject {
         webSocketClient.connect(chatRoomId: chatRoomId, token: token)
     }
 
-    func disconnectWebSocket() {
+    nonisolated func disconnectWebSocket() {
         webSocketClient.disconnect()
     }
 
