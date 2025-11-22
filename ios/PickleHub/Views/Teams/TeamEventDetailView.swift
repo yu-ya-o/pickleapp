@@ -25,87 +25,15 @@ struct TeamEventDetailView: View {
         ScrollView {
             if let event = event {
                 VStack(alignment: .leading, spacing: 20) {
-                    // Header
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(event.title)
-                            .font(.title)
-                            .fontWeight(.bold)
-
-                        Text(event.description)
-                            .font(.body)
-                            .foregroundColor(.secondary)
-                    }
-                    .padding()
-
+                    headerSection(for: event)
                     Divider()
-
-                    // Time & Location
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack {
-                            Image(systemName: "calendar")
-                            Text(event.formattedDate)
-                        }
-
-                        HStack {
-                            Image(systemName: "mappin.circle")
-                            Text(event.location)
-                        }
-
-                        HStack {
-                            Image(systemName: "person.2")
-                            Text(event.capacityText)
-                                .foregroundColor(event.hasCapacity ? .green : .red)
-                        }
-                    }
-                    .font(.body)
-                    .padding(.horizontal)
-
+                    detailsSection(for: event)
                     Divider()
-
-                    // Creator
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Organized by")
-                            .font(.headline)
-                        HStack {
-                            Image(systemName: "person.circle.fill")
-                                .font(.title2)
-                            Text(event.creator.name)
-                        }
-                    }
-                    .padding(.horizontal)
-
-                    // Participants
-                    if !event.participants.isEmpty {
-                        Divider()
-
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Participants (\(event.participantCount))")
-                                .font(.headline)
-                                .padding(.horizontal)
-
-                            ForEach(event.participants) { participant in
-                                HStack {
-                                    Image(systemName: "person.circle")
-                                    Text(participant.user.displayName)
-                                    Spacer()
-                                    if participant.user.id == authViewModel.currentUser?.id {
-                                        Text("You")
-                                            .font(.caption)
-                                            .foregroundColor(.green)
-                                    }
-                                }
-                                .padding(.horizontal)
-                                .padding(.vertical, 4)
-                            }
-                        }
-                    }
-
+                    creatorSection(for: event)
+                    participantsSection(for: event)
                     Divider()
-
-                    // Actions
                     actionButtons
                         .padding(.horizontal)
-
                     Spacer()
                 }
             } else if isLoading {
@@ -122,6 +50,85 @@ struct TeamEventDetailView: View {
         }
         .task {
             await loadEvent()
+        }
+    }
+
+    @ViewBuilder
+    private func headerSection(for event: TeamEvent) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(event.title)
+                .font(.title)
+                .fontWeight(.bold)
+
+            Text(event.description)
+                .font(.body)
+                .foregroundColor(.secondary)
+        }
+        .padding()
+    }
+
+    @ViewBuilder
+    private func detailsSection(for event: TeamEvent) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: "calendar")
+                Text(event.formattedDate)
+            }
+
+            HStack {
+                Image(systemName: "mappin.circle")
+                Text(event.location)
+            }
+
+            HStack {
+                Image(systemName: "person.2")
+                Text(event.capacityText)
+                    .foregroundColor(event.hasCapacity ? .green : .red)
+            }
+        }
+        .font(.body)
+        .padding(.horizontal)
+    }
+
+    @ViewBuilder
+    private func creatorSection(for event: TeamEvent) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Organized by")
+                .font(.headline)
+            HStack {
+                Image(systemName: "person.circle.fill")
+                    .font(.title2)
+                Text(event.creator.name)
+            }
+        }
+        .padding(.horizontal)
+    }
+
+    @ViewBuilder
+    private func participantsSection(for event: TeamEvent) -> some View {
+        if !event.participants.isEmpty {
+            Divider()
+
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Participants (\(event.participantCount))")
+                    .font(.headline)
+                    .padding(.horizontal)
+
+                ForEach(event.participants) { participant in
+                    HStack {
+                        Image(systemName: "person.circle")
+                        Text(participant.user.displayName)
+                        Spacer()
+                        if participant.user.id == authViewModel.currentUser?.id {
+                            Text("You")
+                                .font(.caption)
+                                .foregroundColor(.green)
+                        }
+                    }
+                    .padding(.horizontal)
+                    .padding(.vertical, 4)
+                }
+            }
         }
     }
 
