@@ -13,21 +13,45 @@ struct ProfileView: View {
                     HStack(spacing: 16) {
                         // Profile Image
                         if let profileImageURL = authViewModel.currentUser?.profileImageURL {
-                            AsyncImage(url: profileImageURL) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                            } placeholder: {
-                                Image(systemName: "person.circle.fill")
-                                    .resizable()
+                            AsyncImage(url: profileImageURL) { phase in
+                                switch phase {
+                                case .success(let image):
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 80, height: 80)
+                                        .clipShape(Circle())
+                                case .failure(let error):
+                                    VStack {
+                                        Image(systemName: "person.circle.fill")
+                                            .resizable()
+                                            .frame(width: 80, height: 80)
+                                            .foregroundColor(.gray)
+                                    }
+                                    .onAppear {
+                                        print("❌ Failed to load profile image from: \(profileImageURL)")
+                                        print("   Error: \(error)")
+                                    }
+                                case .empty:
+                                    ProgressView()
+                                        .frame(width: 80, height: 80)
+                                @unknown default:
+                                    EmptyView()
+                                }
                             }
-                            .frame(width: 80, height: 80)
-                            .clipShape(Circle())
+                            .onAppear {
+                                print("📷 Loading profile image from: \(profileImageURL)")
+                                print("   User profileImage string: \(authViewModel.currentUser?.profileImage ?? "nil")")
+                            }
                         } else {
                             Image(systemName: "person.circle.fill")
                                 .resizable()
                                 .frame(width: 80, height: 80)
                                 .foregroundColor(.gray)
+                                .onAppear {
+                                    print("⚠️ No profile image URL")
+                                    print("   User profileImage string: \(authViewModel.currentUser?.profileImage ?? "nil")")
+                                }
                         }
 
                         VStack(alignment: .leading, spacing: 4) {
