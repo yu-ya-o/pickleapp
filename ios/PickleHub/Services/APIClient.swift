@@ -154,6 +154,14 @@ class APIClient {
         return try await request(endpoint: endpoint)
     }
 
+    func getMyTeamEvents(upcoming: Bool = true) async throws -> [TeamEvent] {
+        var endpoint = "/api/my-team-events"
+        if upcoming {
+            endpoint += "?upcoming=true"
+        }
+        return try await request(endpoint: endpoint, requiresAuth: true)
+    }
+
     func getEvent(id: String) async throws -> Event {
         return try await request(endpoint: Config.Endpoint.event(id: id))
     }

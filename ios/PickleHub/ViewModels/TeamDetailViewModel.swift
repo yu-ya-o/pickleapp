@@ -119,6 +119,17 @@ class TeamDetailViewModel: ObservableObject {
         }
     }
 
+    func requestToJoin() async throws {
+        do {
+            _ = try await apiClient.requestToJoinTeam(teamId: teamId)
+            // Refresh team to update membership status
+            await loadTeam()
+        } catch {
+            errorMessage = error.localizedDescription
+            throw error
+        }
+    }
+
     func approveJoinRequest(requestId: String, approve: Bool) async throws {
         let action = approve ? "approve" : "reject"
 

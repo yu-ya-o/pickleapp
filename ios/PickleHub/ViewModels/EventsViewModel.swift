@@ -4,6 +4,7 @@ import SwiftUI
 @MainActor
 class EventsViewModel: ObservableObject {
     @Published var events: [Event] = []
+    @Published var teamEvents: [TeamEvent] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
 
@@ -27,8 +28,28 @@ class EventsViewModel: ObservableObject {
         }
     }
 
+    func fetchTeamEvents(upcoming: Bool = true) async {
+        isLoading = true
+        errorMessage = nil
+
+        do {
+            teamEvents = try await apiClient.getMyTeamEvents(upcoming: upcoming)
+            print("✅ Fetched \(teamEvents.count) team events")
+            print("📝 Team Events: \(teamEvents.map { $0.title })")
+            isLoading = false
+        } catch {
+            isLoading = false
+            errorMessage = error.localizedDescription
+            print("❌ Fetch team events error: \(error)")
+        }
+    }
+
     func refreshEvents() async {
         await fetchEvents()
+    }
+
+    func refreshTeamEvents() async {
+        await fetchTeamEvents()
     }
 
     // MARK: - Create Event
