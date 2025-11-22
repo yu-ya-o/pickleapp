@@ -91,31 +91,33 @@ struct JoinRequestRow: View {
             }
 
             HStack(spacing: 12) {
-                Button(action: onReject) {
-                    HStack {
-                        Spacer()
-                        Text("Reject")
-                            .fontWeight(.semibold)
-                        Spacer()
-                    }
-                    .padding(.vertical, 8)
-                    .background(Color.red.opacity(0.1))
-                    .foregroundColor(.red)
-                    .cornerRadius(8)
+                Button(action: {
+                    print("🔴 Reject button tapped")
+                    onReject()
+                }) {
+                    Text("Reject")
+                        .fontWeight(.semibold)
+                        .foregroundColor(.red)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                        .background(Color.red.opacity(0.1))
+                        .cornerRadius(8)
                 }
+                .buttonStyle(.plain)
 
-                Button(action: onApprove) {
-                    HStack {
-                        Spacer()
-                        Text("Approve")
-                            .fontWeight(.semibold)
-                        Spacer()
-                    }
-                    .padding(.vertical, 8)
-                    .background(Color.green)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
+                Button(action: {
+                    print("🟢 Approve button tapped")
+                    onApprove()
+                }) {
+                    Text("Approve")
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                        .background(Color.green)
+                        .cornerRadius(8)
                 }
+                .buttonStyle(.plain)
             }
         }
         .padding(.vertical, 8)

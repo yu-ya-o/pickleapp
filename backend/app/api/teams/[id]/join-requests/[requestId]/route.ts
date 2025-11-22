@@ -69,11 +69,17 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
     const body: ApproveJoinRequestRequest = await request.json();
 
+    console.log(`📝 PATCH /api/teams/${id}/join-requests/${requestId}`);
+    console.log(`   User: ${user.email}, Role: ${userMembership.role}`);
+    console.log(`   Request status: ${joinRequest.status}`);
+    console.log(`   Action received: ${body.action}`);
+
     if (!['approve', 'reject'].includes(body.action)) {
       throw new BadRequestError('Invalid action');
     }
 
     if (body.action === 'approve') {
+      console.log(`   ✅ Approving request for user: ${joinRequest.user.email}`);
       // Add user as member
       await prisma.teamMember.create({
         data: {
@@ -94,6 +100,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         status: 'approved',
       });
     } else {
+      console.log(`   ❌ Rejecting request for user: ${joinRequest.user.email}`);
       // Reject request
       await prisma.teamJoinRequest.update({
         where: { id: requestId },
