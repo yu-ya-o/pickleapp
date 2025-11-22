@@ -156,6 +156,60 @@ class APIClient {
         )
     }
 
+    func uploadProfileImage(imageData: Data) async throws -> String {
+        guard let url = URL(string: "\(baseURL)/api/upload/image") else {
+            throw APIError.invalidURL
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+
+        // Add auth token
+        guard let token = authToken else {
+            throw APIError.unauthorized
+        }
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+        // Create multipart form data
+        let boundary = UUID().uuidString
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
+        var body = Data()
+
+        // Add image data
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"file\"; filename=\"profile.jpg\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+        body.append(imageData)
+        body.append("\r\n".data(using: .utf8)!)
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+
+        request.httpBody = body
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("❌ Invalid HTTP response")
+            throw APIError.invalidResponse
+        }
+
+        print("📊 Upload response status: \(httpResponse.statusCode)")
+
+        guard (200...299).contains(httpResponse.statusCode) else {
+            let errorMessage = String(data: data, encoding: .utf8) ?? "Unknown error"
+            print("❌ Upload failed with status \(httpResponse.statusCode): \(errorMessage)")
+            throw APIError.httpError(statusCode: httpResponse.statusCode, message: errorMessage)
+        }
+
+        struct UploadResponse: Codable {
+            let url: String
+        }
+
+        let uploadResponse = try JSONDecoder().decode(UploadResponse.self, from: data)
+        print("✅ Image uploaded successfully: \(uploadResponse.url)")
+        return uploadResponse.url
+    }
+
     // MARK: - Events API
 
     func getEvents(status: String = "active", upcoming: Bool = true) async throws -> [Event] {
