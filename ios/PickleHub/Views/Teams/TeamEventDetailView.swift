@@ -17,6 +17,10 @@ struct TeamEventDetailView: View {
         _viewModel = StateObject(wrappedValue: TeamEventsViewModel(teamId: teamId))
     }
 
+    private var isCreator: Bool {
+        event?.creator.id == authViewModel.currentUser?.id
+    }
+
     var body: some View {
         ScrollView {
             if let event = event {
@@ -100,38 +104,40 @@ struct TeamEventDetailView: View {
 
                     // Actions
                     VStack(spacing: 12) {
-                        if event.isUserParticipating == true {
-                            Button(action: {
-                                leaveEvent()
-                            }) {
-                                Text("Leave Event")
+                        if !isCreator {
+                            if event.isUserParticipating == true {
+                                Button(action: {
+                                    leaveEvent()
+                                }) {
+                                    Text("Leave Event")
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                        .background(Color.red)
+                                        .cornerRadius(12)
+                                }
+                            } else if event.hasCapacity {
+                                Button(action: {
+                                    joinEvent()
+                                }) {
+                                    Text("Join Event")
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                        .background(Color.green)
+                                        .cornerRadius(12)
+                                }
+                            } else {
+                                Text("Event is full")
                                     .font(.headline)
                                     .foregroundColor(.white)
                                     .frame(maxWidth: .infinity)
                                     .padding()
-                                    .background(Color.red)
+                                    .background(Color.gray)
                                     .cornerRadius(12)
                             }
-                        } else if event.hasCapacity {
-                            Button(action: {
-                                joinEvent()
-                            }) {
-                                Text("Join Event")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color.green)
-                                    .cornerRadius(12)
-                            }
-                        } else {
-                            Text("Event is full")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.gray)
-                                .cornerRadius(12)
                         }
                     }
                     .padding(.horizontal)
