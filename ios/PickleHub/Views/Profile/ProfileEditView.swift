@@ -11,7 +11,7 @@ struct ProfileEditView: View {
     @State private var selectedGender: String
     @State private var selectedSkillLevel: String
 
-    let regions = ["東京", "神奈川", "千葉", "埼玉", "大阪", "愛知", "福岡", "その他"]
+    let regions = Prefectures.all
     let experiences = ["6ヶ月未満", "6ヶ月〜1年", "1〜2年", "2〜3年", "3年以上"]
     let genders = ["男性", "女性", "その他", "回答しない"]
     let skillLevels = ["初心者", "中級者", "上級者"]
