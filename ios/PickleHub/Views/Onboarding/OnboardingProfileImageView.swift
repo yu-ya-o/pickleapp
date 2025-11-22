@@ -16,7 +16,7 @@ struct OnboardingProfileImageView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
 
-            Text("他のユーザーに表示されます")
+            Text("他のユーザーに表示されます(スキップ可)")
                 .font(.bodyLarge)
                 .foregroundColor(.secondary)
 
