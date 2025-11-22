@@ -17,11 +17,13 @@ class EventsViewModel: ObservableObject {
 
         do {
             events = try await apiClient.getEvents(status: "active", upcoming: upcoming)
+            print("✅ Fetched \(events.count) events")
+            print("📝 Events: \(events.map { $0.title })")
             isLoading = false
         } catch {
             isLoading = false
             errorMessage = error.localizedDescription
-            print("Fetch events error: \(error)")
+            print("❌ Fetch events error: \(error)")
         }
     }
 

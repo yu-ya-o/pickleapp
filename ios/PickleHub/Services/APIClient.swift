@@ -91,8 +91,19 @@ class APIClient {
             // Decode response
             do {
                 let decoder = JSONDecoder()
-                return try decoder.decode(T.self, from: data)
+                let decoded = try decoder.decode(T.self, from: data)
+
+                // Debug logging
+                if let jsonString = String(data: data, encoding: .utf8) {
+                    print("🔍 API Response for \(endpoint): \(jsonString.prefix(500))")
+                }
+
+                return decoded
             } catch {
+                print("❌ Decoding error for \(endpoint): \(error)")
+                if let jsonString = String(data: data, encoding: .utf8) {
+                    print("📄 Raw response: \(jsonString)")
+                }
                 throw APIError.decodingError(error)
             }
         } catch let error as APIError {
