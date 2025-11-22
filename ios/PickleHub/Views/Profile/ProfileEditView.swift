@@ -1,4 +1,5 @@
 import SwiftUI
+import PhotosUI
 
 struct ProfileEditView: View {
     @Environment(\.dismiss) var dismiss
@@ -10,6 +11,9 @@ struct ProfileEditView: View {
     @State private var selectedExperience: String
     @State private var selectedGender: String
     @State private var selectedSkillLevel: String
+    @State private var selectedPhotoItem: PhotosPickerItem?
+    @State private var selectedImageData: Data?
+    @State private var profileImageURL: String?
 
     let regions = Prefectures.all
     let experiences = ["6ヶ月未満", "6ヶ月〜1年", "1〜2年", "2〜3年", "3年以上"]
@@ -22,11 +26,53 @@ struct ProfileEditView: View {
         _selectedExperience = State(initialValue: user.pickleballExperience ?? "")
         _selectedGender = State(initialValue: user.gender ?? "")
         _selectedSkillLevel = State(initialValue: user.skillLevel ?? "")
+        _profileImageURL = State(initialValue: user.profileImage)
     }
 
     var body: some View {
         NavigationView {
             Form {
+                Section(header: Text("プロフィール画像")) {
+                    VStack(spacing: 12) {
+                        if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 100, height: 100)
+                                .clipShape(Circle())
+                        } else if let profileImageURL, let url = URL(string: profileImageURL) {
+                            AsyncImage(url: url) { image in
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                            } placeholder: {
+                                Image(systemName: "person.circle.fill")
+                                    .resizable()
+                                    .foregroundColor(.gray)
+                            }
+                            .frame(width: 100, height: 100)
+                            .clipShape(Circle())
+                        } else {
+                            Image(systemName: "person.circle.fill")
+                                .resizable()
+                                .foregroundColor(.gray)
+                                .frame(width: 100, height: 100)
+                        }
+
+                        PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
+                            Label("画像を選択", systemImage: "photo")
+                        }
+                        .onChange(of: selectedPhotoItem) { newItem in
+                            Task {
+                                if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                                    selectedImageData = data
+                                }
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                }
+
                 Section(header: Text("基本情報")) {
                     TextField("ニックネーム", text: $nickname)
                         .textContentType(.name)
@@ -106,12 +152,25 @@ struct ProfileEditView: View {
 
     private func saveProfile() {
         Task {
+            // Upload image first if selected
+            var newImageURL: String? = nil
+            if let imageData = selectedImageData {
+                print("📷 Uploading new profile image...")
+                newImageURL = await viewModel.uploadProfileImage(imageData: imageData)
+                if let url = newImageURL {
+                    print("✅ Profile image uploaded: \(url)")
+                } else {
+                    print("⚠️ Failed to upload image, continuing with profile update")
+                }
+            }
+
             await viewModel.updateProfile(
                 nickname: nickname,
                 region: selectedRegion,
                 pickleballExperience: selectedExperience,
                 gender: selectedGender,
-                skillLevel: selectedSkillLevel
+                skillLevel: selectedSkillLevel,
+                profileImage: newImageURL
             )
 
             if viewModel.errorMessage == nil {
@@ -136,7 +195,18 @@ class ProfileEditViewModel: ObservableObject {
 
     private let apiClient = APIClient.shared
 
-    func updateProfile(nickname: String, region: String, pickleballExperience: String, gender: String, skillLevel: String) async {
+    func uploadProfileImage(imageData: Data) async -> String? {
+        do {
+            let imageURL = try await apiClient.uploadProfileImage(imageData: imageData)
+            return imageURL
+        } catch {
+            errorMessage = "画像のアップロードに失敗しました"
+            print("Image upload error: \(error)")
+            return nil
+        }
+    }
+
+    func updateProfile(nickname: String, region: String, pickleballExperience: String, gender: String, skillLevel: String, profileImage: String?) async {
         isLoading = true
         errorMessage = nil
 
@@ -146,7 +216,8 @@ class ProfileEditViewModel: ObservableObject {
                 region: region,
                 pickleballExperience: pickleballExperience,
                 gender: gender,
-                skillLevel: skillLevel
+                skillLevel: skillLevel,
+                profileImage: profileImage
             )
 
             let user = try await apiClient.updateProfile(request: request)
