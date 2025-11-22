@@ -11,6 +11,9 @@ struct TeamDetailView: View {
     @State private var showingChat = false
     @State private var showingLeaveAlert = false
     @State private var showingDeleteAlert = false
+    @State private var showingJoinSuccessAlert = false
+    @State private var showingJoinErrorAlert = false
+    @State private var joinErrorMessage = ""
 
     init(teamId: String) {
         _viewModel = StateObject(wrappedValue: TeamDetailViewModel(teamId: teamId))
@@ -95,11 +98,16 @@ struct TeamDetailView: View {
                         // Request to Join (for non-members of public teams)
                         if !viewModel.isMember && !team.isPrivate {
                             Button(action: {
+                                print("🔘 Request to Join button pressed")
                                 Task {
                                     do {
                                         try await viewModel.requestToJoin()
+                                        print("✅ Join request successful, showing success alert")
+                                        showingJoinSuccessAlert = true
                                     } catch {
-                                        // Error handled by viewModel.errorMessage
+                                        print("❌ Join request failed: \(error)")
+                                        joinErrorMessage = viewModel.errorMessage ?? error.localizedDescription
+                                        showingJoinErrorAlert = true
                                     }
                                 }
                             }) {
@@ -287,6 +295,16 @@ struct TeamDetailView: View {
             }
         } message: {
             Text("This action cannot be undone. All team data will be permanently deleted.")
+        }
+        .alert("Request Sent", isPresented: $showingJoinSuccessAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Your request to join this team has been sent to the team administrators.")
+        }
+        .alert("Request Failed", isPresented: $showingJoinErrorAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(joinErrorMessage)
         }
         .task {
             await viewModel.loadTeam()

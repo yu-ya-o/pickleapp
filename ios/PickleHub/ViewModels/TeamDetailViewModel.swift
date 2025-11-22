@@ -120,11 +120,15 @@ class TeamDetailViewModel: ObservableObject {
     }
 
     func requestToJoin() async throws {
+        print("🎯 Requesting to join team: \(teamId)")
         do {
-            _ = try await apiClient.requestToJoinTeam(teamId: teamId)
+            let joinRequest = try await apiClient.requestToJoinTeam(teamId: teamId)
+            print("✅ Join request created: \(joinRequest.id)")
             // Refresh team to update membership status
             await loadTeam()
+            print("🔄 Team refreshed after join request")
         } catch {
+            print("❌ Request to join error: \(error)")
             errorMessage = error.localizedDescription
             throw error
         }
