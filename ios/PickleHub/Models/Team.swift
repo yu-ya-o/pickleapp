@@ -246,6 +246,11 @@ struct TeamEventParticipantUser: Codable, Hashable {
     let id: String
     let name: String
     let profileImage: String?
+    let nickname: String?
+
+    var displayName: String {
+        nickname ?? name
+    }
 }
 
 // MARK: - Create/Update Team Event
