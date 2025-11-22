@@ -86,17 +86,40 @@ struct TeamRowView: View {
     var body: some View {
         HStack(spacing: 12) {
             // Team Icon
-            ZStack {
-                Circle()
-                    .fill(Color.blue.opacity(0.2))
-                    .frame(width: 50, height: 50)
+            if let iconURL = team.iconImageURL {
+                AsyncImage(url: iconURL) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 50, height: 50)
+                            .clipShape(Circle())
+                    case .failure(_), .empty:
+                        ZStack {
+                            Circle()
+                                .fill(Color.blue.opacity(0.2))
+                                .frame(width: 50, height: 50)
+                            Image(systemName: "person.3.fill")
+                                .foregroundColor(.blue)
+                        }
+                    @unknown default:
+                        EmptyView()
+                    }
+                }
+            } else {
+                ZStack {
+                    Circle()
+                        .fill(Color.blue.opacity(0.2))
+                        .frame(width: 50, height: 50)
 
-                if team.isPrivate {
-                    Image(systemName: "lock.fill")
-                        .foregroundColor(.blue)
-                } else {
-                    Image(systemName: "person.3.fill")
-                        .foregroundColor(.blue)
+                    if team.isPrivate {
+                        Image(systemName: "lock.fill")
+                            .foregroundColor(.blue)
+                    } else {
+                        Image(systemName: "person.3.fill")
+                            .foregroundColor(.blue)
+                    }
                 }
             }
 

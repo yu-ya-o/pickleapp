@@ -27,37 +27,75 @@ struct TeamDetailView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     // Header
                     VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Text(team.name)
-                                .font(.title)
-                                .fontWeight(.bold)
+                        HStack(alignment: .top, spacing: 16) {
+                            // Team Icon
+                            if let iconURL = team.iconImageURL {
+                                AsyncImage(url: iconURL) { phase in
+                                    switch phase {
+                                    case .success(let image):
+                                        image
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 80, height: 80)
+                                            .clipShape(Circle())
+                                    case .failure(_), .empty:
+                                        Image(systemName: "person.3.fill")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 40, height: 40)
+                                            .foregroundColor(.gray)
+                                            .frame(width: 80, height: 80)
+                                            .background(Color(.systemGray6))
+                                            .clipShape(Circle())
+                                    @unknown default:
+                                        EmptyView()
+                                    }
+                                }
+                            } else {
+                                Image(systemName: "person.3.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 40, height: 40)
+                                    .foregroundColor(.gray)
+                                    .frame(width: 80, height: 80)
+                                    .background(Color(.systemGray6))
+                                    .clipShape(Circle())
+                            }
 
-                            if team.isPrivate {
-                                Image(systemName: "lock.fill")
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack {
+                                    Text(team.name)
+                                        .font(.title)
+                                        .fontWeight(.bold)
+
+                                    if team.isPrivate {
+                                        Image(systemName: "lock.fill")
+                                            .foregroundColor(.secondary)
+                                    }
+
+                                    Spacer()
+
+                                    if let role = team.userRole {
+                                        RoleBadge(role: role)
+                                            .font(.title3)
+                                    }
+                                }
+
+                                Text(team.description)
+                                    .font(.body)
                                     .foregroundColor(.secondary)
-                            }
 
-                            Spacer()
-
-                            if let role = team.userRole {
-                                RoleBadge(role: role)
-                                    .font(.title3)
+                                HStack {
+                                    Label("\(team.memberCount) members", systemImage: "person.2")
+                                    Text("•")
+                                    Text(team.visibility.capitalized)
+                                    Text("•")
+                                    Text("Created \(team.formattedCreatedDate)")
+                                }
+                                .font(.caption)
+                                .foregroundColor(.secondary)
                             }
                         }
-
-                        Text(team.description)
-                            .font(.body)
-                            .foregroundColor(.secondary)
-
-                        HStack {
-                            Label("\(team.memberCount) members", systemImage: "person.2")
-                            Text("•")
-                            Text(team.visibility.capitalized)
-                            Text("•")
-                            Text("Created \(team.formattedCreatedDate)")
-                        }
-                        .font(.caption)
-                        .foregroundColor(.secondary)
                     }
                     .padding()
 
