@@ -3,6 +3,7 @@ import SwiftUI
 struct TeamDetailView: View {
     @StateObject private var viewModel: TeamDetailViewModel
     @EnvironmentObject var authViewModel: AuthViewModel
+    @Environment(\.dismiss) var dismiss
     @State private var showingEditTeam = false
     @State private var showingMembers = false
     @State private var showingJoinRequests = false
@@ -11,6 +12,7 @@ struct TeamDetailView: View {
     @State private var showingChat = false
     @State private var showingLeaveAlert = false
     @State private var showingDeleteAlert = false
+    @State private var showingJoinConfirmAlert = false
     @State private var showingJoinSuccessAlert = false
     @State private var showingJoinErrorAlert = false
     @State private var joinErrorMessage = ""
@@ -113,18 +115,7 @@ struct TeamDetailView: View {
                             } else {
                                 // Show request button
                                 Button(action: {
-                                    print("🔘 Request to Join button pressed")
-                                    Task {
-                                        do {
-                                            try await viewModel.requestToJoin()
-                                            print("✅ Join request successful, showing success alert")
-                                            showingJoinSuccessAlert = true
-                                        } catch {
-                                            print("❌ Join request failed: \(error)")
-                                            joinErrorMessage = viewModel.errorMessage ?? error.localizedDescription
-                                            showingJoinErrorAlert = true
-                                        }
-                                    }
+                                    showingJoinConfirmAlert = true
                                 }) {
                                     HStack {
                                         Spacer()
@@ -314,6 +305,25 @@ struct TeamDetailView: View {
         } message: {
             Text("This action cannot be undone. All team data will be permanently deleted.")
         }
+        .alert("チームに参加リクエストを送信", isPresented: $showingJoinConfirmAlert) {
+            Button("キャンセル", role: .cancel) {}
+            Button("送信") {
+                print("🔘 Request to Join confirmed")
+                Task {
+                    do {
+                        try await viewModel.requestToJoin()
+                        print("✅ Join request successful, showing success alert")
+                        showingJoinSuccessAlert = true
+                    } catch {
+                        print("❌ Join request failed: \(error)")
+                        joinErrorMessage = viewModel.errorMessage ?? error.localizedDescription
+                        showingJoinErrorAlert = true
+                    }
+                }
+            }
+        } message: {
+            Text("このチームに参加リクエストを送信しますか?")
+        }
         .alert("Request Sent", isPresented: $showingJoinSuccessAlert) {
             Button("OK", role: .cancel) {}
         } message: {
@@ -338,9 +348,11 @@ struct TeamDetailView: View {
         Task {
             do {
                 try await viewModel.leaveTeam(userId: userId)
-                // Navigate back
+                print("✅ Left team successfully, navigating back")
+                dismiss()
             } catch {
-                // Show error
+                print("❌ Error leaving team: \(error)")
+                viewModel.errorMessage = error.localizedDescription
             }
         }
     }
@@ -349,9 +361,11 @@ struct TeamDetailView: View {
         Task {
             do {
                 try await APIClient.shared.deleteTeam(id: viewModel.teamId)
-                // Navigate back
+                print("✅ Deleted team successfully, navigating back")
+                dismiss()
             } catch {
-                // Show error
+                print("❌ Error deleting team: \(error)")
+                viewModel.errorMessage = error.localizedDescription
             }
         }
     }
