@@ -110,11 +110,24 @@ class TeamDetailViewModel: ObservableObject {
     // MARK: - Join Requests
 
     func loadJoinRequests() async {
-        guard canManageTeam else { return }
+        guard canManageTeam else {
+            print("⚠️ Cannot load join requests - user is not team manager")
+            return
+        }
 
+        print("🔍 Loading join requests for team: \(teamId)")
         do {
             joinRequests = try await apiClient.getTeamJoinRequests(teamId: teamId)
+            print("✅ Loaded \(joinRequests.count) join requests")
+            if joinRequests.isEmpty {
+                print("📭 No pending join requests found")
+            } else {
+                for request in joinRequests {
+                    print("   - Request from: \(request.user.name) (\(request.user.email)) - Status: \(request.status)")
+                }
+            }
         } catch {
+            print("❌ Error loading join requests: \(error)")
             errorMessage = error.localizedDescription
         }
     }

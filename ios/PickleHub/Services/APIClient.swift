@@ -15,6 +15,10 @@ enum APIError: Error, LocalizedError {
         case .invalidResponse:
             return "Invalid response from server"
         case .httpError(let statusCode, let message):
+            // For client errors (4xx), just show the message
+            if (400...499).contains(statusCode) {
+                return message
+            }
             return "HTTP \(statusCode): \(message)"
         case .decodingError(let error):
             return "Failed to decode response: \(error.localizedDescription)"
@@ -85,6 +89,14 @@ class APIClient {
             // Check status code
             guard (200...299).contains(httpResponse.statusCode) else {
                 let errorMessage = String(data: data, encoding: .utf8) ?? "Unknown error"
+
+                // Try to parse error message from JSON response
+                if let errorData = errorMessage.data(using: .utf8),
+                   let errorJson = try? JSONSerialization.jsonObject(with: errorData) as? [String: Any],
+                   let message = errorJson["message"] as? String {
+                    throw APIError.httpError(statusCode: httpResponse.statusCode, message: message)
+                }
+
                 throw APIError.httpError(statusCode: httpResponse.statusCode, message: errorMessage)
             }
 
