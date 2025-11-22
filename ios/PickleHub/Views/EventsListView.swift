@@ -10,6 +10,7 @@ struct EventsListView: View {
 
     var filteredEvents: [Event] {
         var events = eventsViewModel.events
+        print("🔍 Total events: \(events.count), Selected region: '\(selectedRegion)', Search: '\(searchText)'")
 
         // フリーテキスト検索
         if !searchText.isEmpty {
@@ -18,13 +19,16 @@ struct EventsListView: View {
                 event.description.localizedCaseInsensitiveContains(searchText) ||
                 event.location.localizedCaseInsensitiveContains(searchText)
             }
+            print("📝 After search filter: \(events.count) events")
         }
 
         // 地域フィルター
         if !selectedRegion.isEmpty && selectedRegion != "すべて" {
             events = events.filter { $0.location.contains(selectedRegion) }
+            print("📍 After region filter: \(events.count) events")
         }
 
+        print("✅ Final filtered events: \(events.count)")
         return events
     }
 
@@ -135,12 +139,19 @@ struct EventsListView: View {
                     .environmentObject(eventsViewModel)
             }
             .task {
-                // デフォルトでユーザーの地域を設定
-                if selectedRegion.isEmpty,
-                   let userRegion = authViewModel.currentUser?.region {
-                    selectedRegion = userRegion
+                // デフォルトで「すべて」を選択
+                if selectedRegion.isEmpty {
+                    selectedRegion = "すべて"
                 }
                 await eventsViewModel.fetchEvents()
+            }
+            .onChange(of: authViewModel.currentUser?.id) { _ in
+                // ユーザーが変更されたらフィルターをリセット
+                selectedRegion = "すべて"
+                searchText = ""
+                Task {
+                    await eventsViewModel.fetchEvents()
+                }
             }
         }
     }

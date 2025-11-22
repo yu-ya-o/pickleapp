@@ -182,10 +182,16 @@ struct EventDetailView: View {
     private func makeReservation() {
         Task {
             do {
+                print("📝 Making reservation for event: \(event.id)")
                 try await eventsViewModel.makeReservation(eventId: event.id)
+                print("✅ Reservation successful!")
                 alertMessage = "Reservation successful!"
                 showingAlert = true
             } catch {
+                print("❌ Reservation failed: \(error)")
+                if let apiError = error as? APIError {
+                    print("❌ API Error: \(apiError.errorDescription ?? "unknown")")
+                }
                 alertMessage = "Failed to make reservation: \(error.localizedDescription)"
                 showingAlert = true
             }

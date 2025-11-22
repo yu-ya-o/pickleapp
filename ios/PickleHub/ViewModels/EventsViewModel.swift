@@ -137,11 +137,15 @@ class EventsViewModel: ObservableObject {
 
     func makeReservation(eventId: String) async throws {
         do {
-            _ = try await apiClient.createReservation(eventId: eventId)
+            print("🎫 Creating reservation for event: \(eventId)")
+            let reservation = try await apiClient.createReservation(eventId: eventId)
+            print("✅ Reservation created: \(reservation.id)")
 
             // Refresh events to update reservation status
+            print("🔄 Refreshing events after reservation...")
             await fetchEvents()
         } catch {
+            print("❌ Make reservation error: \(error)")
             errorMessage = error.localizedDescription
             throw error
         }
