@@ -20,7 +20,7 @@ struct TeamMembersView: View {
 
                         VStack(alignment: .leading, spacing: 4) {
                             HStack {
-                                Text(member.user.name)
+                                Text(member.user.displayName)
                                     .font(.headline)
 
                                 if member.user.id == authViewModel.currentUser?.id {
@@ -102,7 +102,7 @@ struct TeamMembersView: View {
 
                 Button("Cancel", role: .cancel) {}
             } message: { member in
-                Text("Change role for \(member.user.name)?")
+                Text("Change role for \(member.user.displayName)?")
             }
             .alert("Remove Member", isPresented: $showingRemoveAlert, presenting: selectedMember) { member in
                 Button("Cancel", role: .cancel) {}
@@ -110,7 +110,7 @@ struct TeamMembersView: View {
                     removeMember(member)
                 }
             } message: { member in
-                Text("Remove \(member.user.name) from the team?")
+                Text("Remove \(member.user.displayName) from the team?")
             }
         }
     }

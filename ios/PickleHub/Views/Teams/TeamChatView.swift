@@ -136,7 +136,7 @@ struct TeamMessageBubbleView: View {
 
             VStack(alignment: isCurrentUser ? .trailing : .leading, spacing: 4) {
                 if !isCurrentUser {
-                    Text(message.user.name)
+                    Text(message.user.displayName)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }

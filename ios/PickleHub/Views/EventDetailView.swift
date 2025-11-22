@@ -92,7 +92,7 @@ struct EventDetailView: View {
                         ForEach(event.reservations) { reservation in
                             HStack {
                                 Image(systemName: "person.circle")
-                                Text(reservation.user.name)
+                                Text(reservation.user.displayName)
                                 Spacer()
                                 if reservation.user.id == authViewModel.currentUser?.id {
                                     Text("You")

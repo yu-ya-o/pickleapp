@@ -86,7 +86,7 @@ struct TeamEventDetailView: View {
                             ForEach(event.participants) { participant in
                                 HStack {
                                     Image(systemName: "person.circle")
-                                    Text(participant.user.name)
+                                    Text(participant.user.displayName)
                                     Spacer()
                                     if participant.user.id == authViewModel.currentUser?.id {
                                         Text("You")
