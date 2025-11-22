@@ -129,7 +129,7 @@ struct OnboardingContainerView: View {
         case 2: return !viewModel.selectedRegion.isEmpty
         case 3: return !viewModel.selectedExperience.isEmpty
         case 4: return !viewModel.selectedSkillLevel.isEmpty
-        case 5: return viewModel.profileImageURL != nil
+        case 5: return viewModel.selectedImageData != nil
         default: return false
         }
     }
