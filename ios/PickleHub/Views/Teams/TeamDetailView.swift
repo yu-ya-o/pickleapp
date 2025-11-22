@@ -289,6 +289,9 @@ struct TeamDetailView: View {
         .sheet(isPresented: $showingChat) {
             TeamChatView(teamId: viewModel.teamId, teamName: viewModel.team?.name ?? "Team")
         }
+        .sheet(isPresented: $showingEditTeam) {
+            EditTeamView(viewModel: viewModel)
+        }
         .alert("Leave Team", isPresented: $showingLeaveAlert) {
             Button("Cancel", role: .cancel) {}
             Button("Leave", role: .destructive) {

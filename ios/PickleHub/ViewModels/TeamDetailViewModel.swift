@@ -53,12 +53,13 @@ class TeamDetailViewModel: ObservableObject {
     func updateTeam(
         name: String? = nil,
         description: String? = nil,
-        visibility: String? = nil
+        visibility: String? = nil,
+        iconImage: String? = nil
     ) async throws {
         let request = UpdateTeamRequest(
             name: name,
             description: description,
-            iconImage: nil,
+            iconImage: iconImage,
             visibility: visibility
         )
 
