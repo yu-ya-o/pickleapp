@@ -25,10 +25,13 @@ class OnboardingViewModel: ObservableObject {
         do {
             // 1. Upload profile image if selected
             if let imageData = selectedImageData {
+                print("📤 Uploading profile image...")
                 profileImageURL = try await uploadImage(imageData: imageData)
+                print("✅ Image uploaded: \(profileImageURL ?? "nil")")
             }
 
             // 2. Update profile
+            print("📝 Updating profile...")
             let request = UpdateProfileRequest(
                 nickname: nickname,
                 region: selectedRegion,
@@ -39,13 +42,17 @@ class OnboardingViewModel: ObservableObject {
             )
 
             let user = try await apiClient.updateProfile(request: request)
+            print("✅ Profile updated successfully")
             updatedUser = user
             isCompleted = true
             isLoading = false
         } catch {
             isLoading = false
             errorMessage = error.localizedDescription
-            print("Onboarding completion error: \(error)")
+            print("❌ Onboarding completion error: \(error)")
+            if let apiError = error as? APIError {
+                print("❌ API Error details: \(apiError.errorDescription ?? "unknown")")
+            }
         }
     }
 
@@ -81,9 +88,17 @@ class OnboardingViewModel: ObservableObject {
 
         let (data, response) = try await URLSession.shared.data(for: request)
 
-        guard let httpResponse = response as? HTTPURLResponse,
-              (200...299).contains(httpResponse.statusCode) else {
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("❌ Invalid HTTP response")
             throw APIError.invalidResponse
+        }
+
+        print("📊 Upload response status: \(httpResponse.statusCode)")
+
+        guard (200...299).contains(httpResponse.statusCode) else {
+            let errorMessage = String(data: data, encoding: .utf8) ?? "Unknown error"
+            print("❌ Upload failed with status \(httpResponse.statusCode): \(errorMessage)")
+            throw APIError.httpError(statusCode: httpResponse.statusCode, message: errorMessage)
         }
 
         struct UploadResponse: Codable {
@@ -91,7 +106,13 @@ class OnboardingViewModel: ObservableObject {
             let publicId: String
         }
 
-        let uploadResponse = try JSONDecoder().decode(UploadResponse.self, from: data)
-        return uploadResponse.url
+        do {
+            let uploadResponse = try JSONDecoder().decode(UploadResponse.self, from: data)
+            return uploadResponse.url
+        } catch {
+            let responseString = String(data: data, encoding: .utf8) ?? "Unable to decode"
+            print("❌ Failed to decode upload response: \(responseString)")
+            throw APIError.decodingError(error)
+        }
     }
 }
