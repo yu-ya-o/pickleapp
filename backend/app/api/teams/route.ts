@@ -51,6 +51,7 @@ export async function GET(request: NextRequest) {
             id: true,
             name: true,
             profileImage: true,
+            nickname: true,
           },
         },
         members: {
@@ -143,6 +144,7 @@ export async function POST(request: NextRequest) {
             id: true,
             name: true,
             profileImage: true,
+            nickname: true,
           },
         },
         members: {

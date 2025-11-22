@@ -44,6 +44,11 @@ struct TeamOwner: Codable, Hashable {
     let id: String
     let name: String
     let profileImage: String?
+    let nickname: String?
+
+    var displayName: String {
+        nickname ?? name
+    }
 }
 
 // MARK: - Team Member
