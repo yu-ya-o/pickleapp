@@ -29,6 +29,11 @@ struct MessageUser: Codable, Hashable {
     let id: String
     let name: String
     let profileImage: String?
+    let nickname: String?
+
+    var displayName: String {
+        nickname ?? name
+    }
 }
 
 // MARK: - Send Message Request
