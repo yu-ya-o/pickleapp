@@ -262,59 +262,6 @@ struct EventRowView: View {
     }
 }
 
-struct TeamEventRowView: View {
-    let event: TeamEvent
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text(event.title)
-                    .font(.headline)
-                Spacer()
-                Image(systemName: "person.3.fill")
-                    .foregroundColor(.twitterBlue)
-            }
-
-            Text(event.formattedDate)
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-
-            HStack {
-                Label(event.team.name, systemImage: "person.3")
-                    .font(.caption)
-                    .foregroundColor(.twitterBlue)
-
-                Spacer()
-
-                Label(event.location, systemImage: "mappin.circle")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-
-            if let maxParticipants = event.maxParticipants, let availableSpots = event.availableSpots {
-                HStack {
-                    Label("\(event.participantCount)/\(maxParticipants) participants", systemImage: "person.2")
-                        .font(.caption)
-                        .foregroundColor(availableSpots > 0 ? .green : .red)
-
-                    Spacer()
-
-                    if event.isUserParticipating {
-                        Text("✓ Participating")
-                            .font(.caption)
-                            .foregroundColor(.green)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(Color.green.opacity(0.1))
-                            .cornerRadius(4)
-                    }
-                }
-            }
-        }
-        .padding(.vertical, 4)
-    }
-}
-
 #Preview {
     EventsListView()
         .environmentObject(EventsViewModel())
