@@ -4,6 +4,7 @@ import SwiftUI
 @MainActor
 class TeamEventsViewModel: ObservableObject {
     @Published var events: [TeamEvent] = []
+    @Published var team: Team?
     @Published var isLoading = false
     @Published var errorMessage: String?
 
@@ -12,6 +13,22 @@ class TeamEventsViewModel: ObservableObject {
 
     init(teamId: String) {
         self.teamId = teamId
+    }
+
+    var canCreateEvents: Bool {
+        guard let role = team?.userRole else { return false }
+        return ["owner", "admin"].contains(role)
+    }
+
+    // MARK: - Load Team
+
+    func loadTeam() async {
+        do {
+            team = try await apiClient.getTeam(id: teamId)
+        } catch {
+            errorMessage = error.localizedDescription
+            print("Load team error: \(error)")
+        }
     }
 
     // MARK: - Load Events
@@ -31,6 +48,7 @@ class TeamEventsViewModel: ObservableObject {
     }
 
     func refresh() async {
+        await loadTeam()
         await loadEvents()
     }
 

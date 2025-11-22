@@ -48,11 +48,13 @@ struct TeamEventsListView: View {
                     }
                 }
 
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        showingCreateEvent = true
-                    }) {
-                        Image(systemName: "plus")
+                if viewModel.canCreateEvents {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            showingCreateEvent = true
+                        }) {
+                            Image(systemName: "plus")
+                        }
                     }
                 }
             }
@@ -64,6 +66,7 @@ struct TeamEventsListView: View {
                     .environmentObject(viewModel)
             }
             .task {
+                await viewModel.loadTeam()
                 await viewModel.loadEvents()
             }
         }

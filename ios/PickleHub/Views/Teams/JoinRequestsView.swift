@@ -3,6 +3,9 @@ import SwiftUI
 struct JoinRequestsView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var viewModel: TeamDetailViewModel
+    @State private var showingApproveConfirm = false
+    @State private var showingRejectConfirm = false
+    @State private var selectedRequest: TeamJoinRequest?
 
     var body: some View {
         NavigationView {
@@ -26,10 +29,12 @@ struct JoinRequestsView: View {
                             JoinRequestRow(
                                 request: request,
                                 onApprove: {
-                                    approveRequest(request.id, approve: true)
+                                    selectedRequest = request
+                                    showingApproveConfirm = true
                                 },
                                 onReject: {
-                                    approveRequest(request.id, approve: false)
+                                    selectedRequest = request
+                                    showingRejectConfirm = true
                                 }
                             )
                         }
@@ -47,6 +52,30 @@ struct JoinRequestsView: View {
             }
             .refreshable {
                 await viewModel.loadJoinRequests()
+            }
+            .alert("参加リクエストを承認", isPresented: $showingApproveConfirm) {
+                Button("キャンセル", role: .cancel) {}
+                Button("承認") {
+                    if let request = selectedRequest {
+                        approveRequest(request.id, approve: true)
+                    }
+                }
+            } message: {
+                if let request = selectedRequest {
+                    Text("\(request.user.name)の参加リクエストを承認しますか?")
+                }
+            }
+            .alert("参加リクエストを拒否", isPresented: $showingRejectConfirm) {
+                Button("キャンセル", role: .cancel) {}
+                Button("拒否", role: .destructive) {
+                    if let request = selectedRequest {
+                        approveRequest(request.id, approve: false)
+                    }
+                }
+            } message: {
+                if let request = selectedRequest {
+                    Text("\(request.user.name)の参加リクエストを拒否しますか?")
+                }
             }
         }
     }
