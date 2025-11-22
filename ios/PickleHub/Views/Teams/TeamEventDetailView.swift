@@ -98,7 +98,7 @@ struct TeamEventDetailView: View {
             HStack {
                 Image(systemName: "person.circle.fill")
                     .font(.title2)
-                Text(event.creator.name)
+                Text(event.creator.displayName)
             }
         }
         .padding(.horizontal)

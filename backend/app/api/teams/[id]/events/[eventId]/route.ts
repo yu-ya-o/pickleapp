@@ -61,6 +61,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
             id: true,
             name: true,
             profileImage: true,
+            nickname: true,
           },
         },
         participants: {
@@ -204,6 +205,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
             id: true,
             name: true,
             profileImage: true,
+            nickname: true,
           },
         },
         participants: {
