@@ -20,14 +20,23 @@ class AuthViewModel: ObservableObject {
     // MARK: - Authentication
 
     func checkAuthStatus() {
+        print("🔍 Checking auth status...")
         // Check if we have saved auth token
         if let token = UserDefaults.standard.string(forKey: "authToken"),
            let userData = UserDefaults.standard.data(forKey: "currentUser"),
            let user = try? JSONDecoder().decode(User.self, from: userData) {
+            print("✅ Found saved auth data")
+            print("   User ID: \(user.id)")
+            print("   User email: \(user.email)")
+            print("   User nickname: \(user.nickname ?? "nil")")
+            print("   User profileImage: \(user.profileImage ?? "nil")")
+            print("   User profileImageURL: \(user.profileImageURL?.absoluteString ?? "nil")")
             self.authToken = token
             self.currentUser = user
             self.isAuthenticated = true
             apiClient.setAuthToken(token)
+        } else {
+            print("⚠️ No saved auth data found")
         }
     }
 
@@ -57,6 +66,13 @@ class AuthViewModel: ObservableObject {
             // Send to backend
             let response = try await apiClient.signInWithGoogle(idToken: idToken)
 
+            print("📥 Received sign-in response")
+            print("   User ID: \(response.user.id)")
+            print("   User email: \(response.user.email)")
+            print("   User nickname: \(response.user.nickname ?? "nil")")
+            print("   User profileImage: \(response.user.profileImage ?? "nil")")
+            print("   User profileImageURL: \(response.user.profileImageURL?.absoluteString ?? "nil")")
+
             // Save auth state
             self.currentUser = response.user
             self.authToken = response.token
@@ -66,6 +82,9 @@ class AuthViewModel: ObservableObject {
             UserDefaults.standard.set(response.token, forKey: "authToken")
             if let userData = try? JSONEncoder().encode(response.user) {
                 UserDefaults.standard.set(userData, forKey: "currentUser")
+                print("💾 Saved user data to UserDefaults")
+            } else {
+                print("❌ Failed to encode user data")
             }
 
             isLoading = false
