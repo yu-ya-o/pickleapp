@@ -1,33 +1,62 @@
 import SwiftUI
 import PhotosUI
 
-struct CreateTeamView: View {
+struct EditTeamView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var teamsViewModel: TeamsViewModel
+    @ObservedObject var viewModel: TeamDetailViewModel
 
-    @State private var name = ""
-    @State private var description = ""
-    @State private var visibility = "public"
+    @State private var name: String
+    @State private var description: String
+    @State private var visibility: String
+    @State private var selectedPhotoItem: PhotosPickerItem?
+    @State private var selectedImageData: Data?
     @State private var isLoading = false
     @State private var showingError = false
     @State private var errorMessage = ""
-    @State private var selectedPhotoItem: PhotosPickerItem?
-    @State private var selectedImageData: Data?
 
     let visibilityOptions = ["public", "private"]
+
+    init(viewModel: TeamDetailViewModel) {
+        self.viewModel = viewModel
+        _name = State(initialValue: viewModel.team?.name ?? "")
+        _description = State(initialValue: viewModel.team?.description ?? "")
+        _visibility = State(initialValue: viewModel.team?.visibility ?? "public")
+    }
 
     var body: some View {
         NavigationView {
             Form {
                 Section(header: Text("チームアイコン")) {
                     VStack(spacing: 12) {
-                        // Display selected or default icon
+                        // Display current, selected, or default icon
                         if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
                             Image(uiImage: uiImage)
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 100, height: 100)
                                 .clipShape(Circle())
+                        } else if let iconURL = viewModel.team?.iconImageURL {
+                            AsyncImage(url: iconURL) { phase in
+                                switch phase {
+                                case .success(let image):
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 100, height: 100)
+                                        .clipShape(Circle())
+                                case .failure(_), .empty:
+                                    Image(systemName: "person.3.fill")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 60, height: 60)
+                                        .foregroundColor(.gray)
+                                        .frame(width: 100, height: 100)
+                                        .background(Color(.systemGray6))
+                                        .clipShape(Circle())
+                                @unknown default:
+                                    EmptyView()
+                                }
+                            }
                         } else {
                             Image(systemName: "person.3.fill")
                                 .resizable()
@@ -40,7 +69,7 @@ struct CreateTeamView: View {
                         }
 
                         PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
-                            Label("画像を選択", systemImage: "photo")
+                            Label("画像を変更", systemImage: "photo")
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -78,7 +107,7 @@ struct CreateTeamView: View {
                 }
 
                 Section {
-                    Button(action: createTeam) {
+                    Button(action: updateTeam) {
                         if isLoading {
                             HStack {
                                 Spacer()
@@ -88,7 +117,7 @@ struct CreateTeamView: View {
                         } else {
                             HStack {
                                 Spacer()
-                                Text("Create Team")
+                                Text("Save Changes")
                                     .fontWeight(.semibold)
                                 Spacer()
                             }
@@ -97,7 +126,7 @@ struct CreateTeamView: View {
                     .disabled(!isFormValid || isLoading)
                 }
             }
-            .navigationTitle("Create Team")
+            .navigationTitle("Edit Team")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -126,18 +155,18 @@ struct CreateTeamView: View {
         !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
-    private func createTeam() {
+    private func updateTeam() {
         Task {
             isLoading = true
 
             do {
-                // Upload icon image if selected
-                var iconImageURL: String? = nil
+                // Upload new icon image if selected
+                var iconImageURL: String? = viewModel.team?.iconImage
                 if let imageData = selectedImageData {
                     iconImageURL = try await APIClient.shared.uploadProfileImage(imageData: imageData)
                 }
 
-                try await teamsViewModel.createTeam(
+                try await viewModel.updateTeam(
                     name: name.trimmingCharacters(in: .whitespacesAndNewlines),
                     description: description.trimmingCharacters(in: .whitespacesAndNewlines),
                     visibility: visibility,
@@ -151,9 +180,4 @@ struct CreateTeamView: View {
             }
         }
     }
-}
-
-#Preview {
-    CreateTeamView()
-        .environmentObject(TeamsViewModel())
 }

@@ -61,7 +61,8 @@ class TeamsViewModel: ObservableObject {
     func createTeam(
         name: String,
         description: String,
-        visibility: String
+        visibility: String,
+        iconImage: String? = nil
     ) async throws {
         isLoading = true
         errorMessage = nil
@@ -69,7 +70,7 @@ class TeamsViewModel: ObservableObject {
         let request = CreateTeamRequest(
             name: name,
             description: description,
-            iconImage: nil,
+            iconImage: iconImage,
             visibility: visibility
         )
 
