@@ -188,6 +188,12 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         startTime,
         endTime,
         maxParticipants: body.maxParticipants || null,
+        participants: {
+          create: {
+            userId: user.id,
+            status: 'confirmed',
+          },
+        },
       },
       include: {
         team: {
@@ -203,7 +209,17 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
             profileImage: true,
           },
         },
-        participants: true,
+        participants: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                profileImage: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -219,10 +235,17 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       updatedAt: event.updatedAt.toISOString(),
       team: event.team,
       creator: event.creator,
-      participants: [],
-      participantCount: 0,
-      availableSpots: event.maxParticipants,
-      isUserParticipating: false,
+      participants: event.participants.map((p) => ({
+        id: p.id,
+        status: p.status,
+        joinedAt: p.joinedAt.toISOString(),
+        user: p.user,
+      })),
+      participantCount: event.participants.length,
+      availableSpots: event.maxParticipants
+        ? event.maxParticipants - event.participants.length
+        : null,
+      isUserParticipating: true,
     };
 
     return NextResponse.json(response, { status: 201 });
