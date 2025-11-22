@@ -156,6 +156,9 @@ class TeamDetailViewModel: ObservableObject {
     func approveJoinRequest(requestId: String, approve: Bool) async throws {
         let action = approve ? "approve" : "reject"
 
+        print("📝 Processing join request: \(requestId)")
+        print("   Approve: \(approve), Action: \(action)")
+
         do {
             try await apiClient.approveJoinRequest(
                 teamId: teamId,
@@ -163,12 +166,14 @@ class TeamDetailViewModel: ObservableObject {
                 action: action
             )
 
+            print("✅ Join request processed successfully")
             joinRequests.removeAll { $0.id == requestId }
 
             if approve {
                 await loadMembers()
             }
         } catch {
+            print("❌ Error approving/rejecting join request: \(error)")
             errorMessage = error.localizedDescription
             throw error
         }
