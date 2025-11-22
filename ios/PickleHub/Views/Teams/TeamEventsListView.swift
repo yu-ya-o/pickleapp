@@ -77,44 +77,110 @@ struct TeamEventRowView: View {
     let event: TeamEvent
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text(event.title)
-                    .font(.headline)
-                Spacer()
-                if event.isUserParticipating == true {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(.green)
+        HStack(alignment: .top, spacing: Spacing.md) {
+            // Left: Creator profile image and nickname
+            VStack(spacing: Spacing.xs) {
+                if let profileImageURL = event.creator.profileImageURL {
+                    AsyncImage(url: profileImageURL) { phase in
+                        switch phase {
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 50, height: 50)
+                                .clipShape(Circle())
+                        case .failure(_), .empty:
+                            Image(systemName: "person.circle.fill")
+                                .resizable()
+                                .frame(width: 50, height: 50)
+                                .foregroundColor(.gray)
+                        @unknown default:
+                            EmptyView()
+                        }
+                    }
+                } else {
+                    Image(systemName: "person.circle.fill")
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .foregroundColor(.gray)
                 }
-            }
 
-            Text(event.formattedDate)
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-
-            HStack {
-                Label(event.location, systemImage: "mappin.circle")
+                Text(event.creator.displayName)
                     .font(.caption)
                     .foregroundColor(.secondary)
-
-                Spacer()
-
-                Label(event.capacityText, systemImage: "person.2")
-                    .font(.caption)
-                    .foregroundColor(event.hasCapacity ? .green : .red)
+                    .lineLimit(1)
+                    .frame(width: 50)
             }
 
-            if event.isUserParticipating == true {
-                Text("✓ Participating")
-                    .font(.caption)
-                    .foregroundColor(.green)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color.green.opacity(0.1))
-                    .cornerRadius(4)
+            // Right: Date, Title, Location
+            VStack(alignment: .leading, spacing: Spacing.xs) {
+                // Date
+                HStack(spacing: Spacing.xs) {
+                    Image(systemName: "calendar")
+                        .font(.caption)
+                        .foregroundColor(.twitterBlue)
+                    Text(event.formattedDate)
+                        .font(.bodySmall)
+                        .foregroundColor(.secondary)
+                }
+
+                // Title
+                Text(event.title)
+                    .font(.headlineMedium)
+                    .foregroundColor(.primary)
+                    .lineLimit(2)
+
+                // Location
+                HStack(spacing: Spacing.xs) {
+                    Image(systemName: "mappin.circle.fill")
+                        .font(.caption)
+                        .foregroundColor(.twitterBlue)
+                    Text(event.location)
+                        .font(.bodySmall)
+                        .foregroundColor(.secondary)
+                        .lineLimit(1)
+                }
+
+                // Participants and status
+                HStack(spacing: Spacing.xs) {
+                    Image(systemName: "person.2.fill")
+                        .font(.caption)
+                        .foregroundColor(.twitterBlue)
+                    Text(event.capacityText)
+                        .font(.bodySmall)
+                        .foregroundColor(.secondary)
+
+                    Spacer()
+
+                    // Participating badge
+                    if event.isUserParticipating == true {
+                        HStack(spacing: 2) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.caption)
+                            Text("参加中")
+                                .font(.labelSmall)
+                        }
+                        .foregroundColor(.white)
+                        .padding(.horizontal, Spacing.sm)
+                        .padding(.vertical, 2)
+                        .background(Capsule().fill(Color.green))
+                    } else if !event.hasCapacity {
+                        Text("満席")
+                            .font(.labelSmall)
+                            .foregroundColor(.white)
+                            .padding(.horizontal, Spacing.sm)
+                            .padding(.vertical, 2)
+                            .background(Capsule().fill(Color.red))
+                    }
+                }
             }
         }
-        .padding(.vertical, 4)
+        .padding(Spacing.md)
+        .background(
+            RoundedRectangle(cornerRadius: CornerRadius.medium)
+                .fill(Color.white)
+                .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
+        )
     }
 }
 
