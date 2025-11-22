@@ -103,44 +103,8 @@ struct TeamEventDetailView: View {
                     Divider()
 
                     // Actions
-                    VStack(spacing: 12) {
-                        if !isCreator {
-                            if event.isUserParticipating == true {
-                                Button(action: {
-                                    leaveEvent()
-                                }) {
-                                    Text("Leave Event")
-                                        .font(.headline)
-                                        .foregroundColor(.white)
-                                        .frame(maxWidth: .infinity)
-                                        .padding()
-                                        .background(Color.red)
-                                        .cornerRadius(12)
-                                }
-                            } else if event.hasCapacity {
-                                Button(action: {
-                                    joinEvent()
-                                }) {
-                                    Text("Join Event")
-                                        .font(.headline)
-                                        .foregroundColor(.white)
-                                        .frame(maxWidth: .infinity)
-                                        .padding()
-                                        .background(Color.green)
-                                        .cornerRadius(12)
-                                }
-                            } else {
-                                Text("Event is full")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color.gray)
-                                    .cornerRadius(12)
-                            }
-                        }
-                    }
-                    .padding(.horizontal)
+                    actionButtons
+                        .padding(.horizontal)
 
                     Spacer()
                 }
@@ -158,6 +122,43 @@ struct TeamEventDetailView: View {
         }
         .task {
             await loadEvent()
+        }
+    }
+
+    @ViewBuilder
+    private var actionButtons: some View {
+        VStack(spacing: 12) {
+            if let event = event, !isCreator {
+                if event.isUserParticipating == true {
+                    Button(action: leaveEvent) {
+                        Text("Leave Event")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.red)
+                            .cornerRadius(12)
+                    }
+                } else if event.hasCapacity {
+                    Button(action: joinEvent) {
+                        Text("Join Event")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.green)
+                            .cornerRadius(12)
+                    }
+                } else {
+                    Text("Event is full")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.gray)
+                        .cornerRadius(12)
+                }
+            }
         }
     }
 
