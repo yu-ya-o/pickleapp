@@ -95,9 +95,32 @@ struct TeamEventDetailView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Organized by")
                 .font(.headline)
-            HStack {
-                Image(systemName: "person.circle.fill")
-                    .font(.title2)
+            HStack(spacing: 12) {
+                // Creator profile image
+                if let profileImageURL = event.creator.profileImageURL {
+                    AsyncImage(url: profileImageURL) { phase in
+                        switch phase {
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 40, height: 40)
+                                .clipShape(Circle())
+                        case .failure(_), .empty:
+                            Image(systemName: "person.circle.fill")
+                                .resizable()
+                                .frame(width: 40, height: 40)
+                                .foregroundColor(.gray)
+                        @unknown default:
+                            EmptyView()
+                        }
+                    }
+                } else {
+                    Image(systemName: "person.circle.fill")
+                        .resizable()
+                        .frame(width: 40, height: 40)
+                        .foregroundColor(.gray)
+                }
                 Text(event.creator.displayName)
             }
         }
@@ -115,8 +138,32 @@ struct TeamEventDetailView: View {
                     .padding(.horizontal)
 
                 ForEach(event.participants) { participant in
-                    HStack {
-                        Image(systemName: "person.circle")
+                    HStack(spacing: 12) {
+                        // Participant profile image
+                        if let profileImageURL = participant.user.profileImageURL {
+                            AsyncImage(url: profileImageURL) { phase in
+                                switch phase {
+                                case .success(let image):
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 32, height: 32)
+                                        .clipShape(Circle())
+                                case .failure(_), .empty:
+                                    Image(systemName: "person.circle")
+                                        .resizable()
+                                        .frame(width: 32, height: 32)
+                                        .foregroundColor(.gray)
+                                @unknown default:
+                                    EmptyView()
+                                }
+                            }
+                        } else {
+                            Image(systemName: "person.circle")
+                                .resizable()
+                                .frame(width: 32, height: 32)
+                                .foregroundColor(.gray)
+                        }
                         Text(participant.user.displayName)
                         Spacer()
                         if participant.user.id == authViewModel.currentUser?.id {
