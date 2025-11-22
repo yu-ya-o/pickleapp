@@ -62,7 +62,7 @@ struct JoinRequestsView: View {
                 }
             } message: {
                 if let request = selectedRequest {
-                    Text("\(request.user.name)の参加リクエストを承認しますか?")
+                    Text("\(request.user.displayName)の参加リクエストを承認しますか?")
                 }
             }
             .alert("参加リクエストを拒否", isPresented: $showingRejectConfirm) {
@@ -74,7 +74,7 @@ struct JoinRequestsView: View {
                 }
             } message: {
                 if let request = selectedRequest {
-                    Text("\(request.user.name)の参加リクエストを拒否しますか?")
+                    Text("\(request.user.displayName)の参加リクエストを拒否しますか?")
                 }
             }
         }
@@ -104,7 +104,7 @@ struct JoinRequestRow: View {
                     .foregroundColor(.blue)
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(request.user.name)
+                    Text(request.user.displayName)
                         .font(.headline)
 
                     Text(request.user.email)
