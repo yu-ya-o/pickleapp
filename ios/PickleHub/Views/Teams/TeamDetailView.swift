@@ -158,8 +158,10 @@ struct TeamDetailView: View {
                         // Join Requests (admin/owner only)
                         if viewModel.canManageTeam {
                             Button(action: {
+                                print("📋 Join Requests button pressed")
                                 Task {
                                     await viewModel.loadJoinRequests()
+                                    print("📋 Opening Join Requests sheet with \(viewModel.joinRequests.count) requests")
                                     showingJoinRequests = true
                                 }
                             }) {
