@@ -73,7 +73,7 @@ struct TeamDetailView: View {
                             Image(systemName: "person.circle.fill")
                                 .font(.title2)
                                 .foregroundColor(.yellow)
-                            Text(team.owner.name)
+                            Text(team.owner.displayName)
                             Spacer()
                         }
                         .padding(.horizontal)
