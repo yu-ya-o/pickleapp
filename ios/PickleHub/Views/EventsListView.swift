@@ -55,26 +55,21 @@ struct EventsListView: View {
                     .cornerRadius(CornerRadius.medium)
 
                     // 地域フィルター
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: Spacing.sm) {
-                            ForEach(["すべて"] + getPrefectures(), id: \.self) { region in
-                                Button(action: {
-                                    selectedRegion = region
-                                }) {
-                                    Text(region)
-                                        .font(.bodySmall)
-                                        .foregroundColor(selectedRegion == region ? .white : .twitterBlue)
-                                        .padding(.horizontal, Spacing.md)
-                                        .padding(.vertical, Spacing.sm)
-                                        .background(
-                                            Capsule()
-                                                .fill(selectedRegion == region ? Color.twitterBlue : Color.twitterGray)
-                                        )
-                                }
+                    HStack {
+                        Image(systemName: "mappin.circle")
+                            .foregroundColor(.gray)
+                        Picker("地域を選択", selection: $selectedRegion) {
+                            Text("すべて").tag("すべて")
+                            ForEach(Prefectures.all, id: \.self) { prefecture in
+                                Text(prefecture).tag(prefecture)
                             }
                         }
-                        .padding(.horizontal, Spacing.md)
+                        .pickerStyle(.menu)
+                        .font(.bodyMedium)
                     }
+                    .padding(Spacing.sm)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(CornerRadius.medium)
                 }
                 .padding(Spacing.md)
                 .background(Color.white)
@@ -154,10 +149,6 @@ struct EventsListView: View {
                 }
             }
         }
-    }
-
-    private func getPrefectures() -> [String] {
-        ["東京都", "神奈川県", "千葉県", "埼玉県", "大阪府", "愛知県", "福岡県"]
     }
 }
 
