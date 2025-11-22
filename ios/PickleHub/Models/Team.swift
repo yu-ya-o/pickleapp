@@ -240,6 +240,11 @@ struct TeamEventCreator: Codable, Hashable {
     let profileImage: String?
     let nickname: String?
 
+    var profileImageURL: URL? {
+        guard let urlString = profileImage else { return nil }
+        return URL(string: urlString)
+    }
+
     var displayName: String {
         nickname ?? name
     }
@@ -257,6 +262,11 @@ struct TeamEventParticipantUser: Codable, Hashable {
     let name: String
     let profileImage: String?
     let nickname: String?
+
+    var profileImageURL: URL? {
+        guard let urlString = profileImage else { return nil }
+        return URL(string: urlString)
+    }
 
     var displayName: String {
         nickname ?? name
