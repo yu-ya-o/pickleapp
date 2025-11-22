@@ -97,31 +97,47 @@ struct TeamDetailView: View {
 
                         // Request to Join (for non-members of public teams)
                         if !viewModel.isMember && !team.isPrivate {
-                            Button(action: {
-                                print("🔘 Request to Join button pressed")
-                                Task {
-                                    do {
-                                        try await viewModel.requestToJoin()
-                                        print("✅ Join request successful, showing success alert")
-                                        showingJoinSuccessAlert = true
-                                    } catch {
-                                        print("❌ Join request failed: \(error)")
-                                        joinErrorMessage = viewModel.errorMessage ?? error.localizedDescription
-                                        showingJoinErrorAlert = true
-                                    }
-                                }
-                            }) {
+                            if viewModel.hasPendingJoinRequest {
+                                // Show pending status
                                 HStack {
                                     Spacer()
-                                    Image(systemName: "person.badge.plus")
-                                    Text("Request to Join")
+                                    Image(systemName: "clock.fill")
+                                    Text("リクエスト送信済み")
                                     Spacer()
                                 }
                                 .font(.headline)
-                                .foregroundColor(.white)
+                                .foregroundColor(.secondary)
                                 .padding()
-                                .background(Color.twitterBlue)
+                                .background(Color(.systemGray5))
                                 .cornerRadius(12)
+                            } else {
+                                // Show request button
+                                Button(action: {
+                                    print("🔘 Request to Join button pressed")
+                                    Task {
+                                        do {
+                                            try await viewModel.requestToJoin()
+                                            print("✅ Join request successful, showing success alert")
+                                            showingJoinSuccessAlert = true
+                                        } catch {
+                                            print("❌ Join request failed: \(error)")
+                                            joinErrorMessage = viewModel.errorMessage ?? error.localizedDescription
+                                            showingJoinErrorAlert = true
+                                        }
+                                    }
+                                }) {
+                                    HStack {
+                                        Spacer()
+                                        Image(systemName: "person.badge.plus")
+                                        Text("Request to Join")
+                                        Spacer()
+                                    }
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .background(Color.twitterBlue)
+                                    .cornerRadius(12)
+                                }
                             }
                         }
 

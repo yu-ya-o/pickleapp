@@ -70,6 +70,19 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       throw new ForbiddenError('This team is private');
     }
 
+    // Check if current user has pending join request
+    let hasPendingJoinRequest = false;
+    if (currentUser && !userMembership) {
+      const pendingRequest = await prisma.teamJoinRequest.findFirst({
+        where: {
+          teamId: id,
+          userId: currentUser.id,
+          status: 'pending',
+        },
+      });
+      hasPendingJoinRequest = !!pendingRequest;
+    }
+
     const response: TeamResponse = {
       id: team.id,
       name: team.name,
@@ -82,6 +95,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       memberCount: team.members.length,
       isUserMember: !!userMembership,
       userRole: userMembership?.role,
+      hasPendingJoinRequest,
       members: team.members.map((m) => ({
         id: m.id,
         role: m.role,

@@ -182,6 +182,7 @@ export interface TeamResponse {
   memberCount: number;
   isUserMember?: boolean;
   userRole?: string; // "owner", "admin", "member"
+  hasPendingJoinRequest?: boolean;
   members?: TeamMemberResponse[];
 }
 
