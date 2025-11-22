@@ -14,6 +14,7 @@ struct Team: Codable, Identifiable, Hashable {
     let memberCount: Int
     let isUserMember: Bool?
     let userRole: String? // "owner", "admin", "member"
+    let hasPendingJoinRequest: Bool?
     let members: [TeamMember]?
 
     var iconImageURL: URL? {

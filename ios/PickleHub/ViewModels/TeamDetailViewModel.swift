@@ -9,6 +9,7 @@ class TeamDetailViewModel: ObservableObject {
     @Published var invites: [TeamInviteUrl] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
+    @Published var hasPendingJoinRequest = false
 
     private let apiClient = APIClient.shared
     let teamId: String
@@ -25,8 +26,12 @@ class TeamDetailViewModel: ObservableObject {
 
         do {
             team = try await apiClient.getTeam(id: teamId)
-            if let team = team, let members = team.members {
-                self.members = members
+            if let team = team {
+                if let members = team.members {
+                    self.members = members
+                }
+                // Update pending join request status from server
+                hasPendingJoinRequest = team.hasPendingJoinRequest ?? false
             }
             isLoading = false
         } catch {
@@ -137,6 +142,7 @@ class TeamDetailViewModel: ObservableObject {
         do {
             let joinRequest = try await apiClient.requestToJoinTeam(teamId: teamId)
             print("✅ Join request created: \(joinRequest.id)")
+            hasPendingJoinRequest = true
             // Refresh team to update membership status
             await loadTeam()
             print("🔄 Team refreshed after join request")

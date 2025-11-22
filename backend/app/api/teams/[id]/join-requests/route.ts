@@ -145,48 +145,84 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       throw new BadRequestError('You are already a member of this team');
     }
 
-    // Check if already has a pending request
-    const hasPendingRequest = team.joinRequests.some(
-      (req) => req.status === 'pending'
-    );
-    if (hasPendingRequest) {
-      console.log(`   ⚠️ User already has a pending join request`);
-      throw new BadRequestError('You already have a pending join request');
+    // Check if already has any join request
+    const existingRequest = team.joinRequests[0]; // We only queried for this user's requests
+
+    let joinRequest;
+
+    if (existingRequest) {
+      if (existingRequest.status === 'pending') {
+        console.log(`   ⚠️ User already has a pending join request`);
+        throw new BadRequestError('You already have a pending join request');
+      }
+
+      // Update existing request back to pending (for rejected/approved requests)
+      console.log(`   ♻️ Updating existing ${existingRequest.status} request to pending`);
+      joinRequest = await prisma.teamJoinRequest.update({
+        where: { id: existingRequest.id },
+        data: {
+          status: 'pending',
+          updatedAt: new Date(),
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              profileImage: true,
+              nickname: true,
+              region: true,
+              pickleballExperience: true,
+              gender: true,
+              skillLevel: true,
+              isProfileComplete: true,
+            },
+          },
+          team: {
+            select: {
+              id: true,
+              name: true,
+              iconImage: true,
+            },
+          },
+        },
+      });
+      console.log(`   ✅ Join request updated: ID=${joinRequest.id}, Status=${joinRequest.status}`);
+    } else {
+      // Create new join request
+      joinRequest = await prisma.teamJoinRequest.create({
+        data: {
+          teamId: id,
+          userId: user.id,
+          status: 'pending',
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              profileImage: true,
+              nickname: true,
+              region: true,
+              pickleballExperience: true,
+              gender: true,
+              skillLevel: true,
+              isProfileComplete: true,
+            },
+          },
+          team: {
+            select: {
+              id: true,
+              name: true,
+              iconImage: true,
+            },
+          },
+        },
+      });
+      console.log(`   ✅ Join request created: ID=${joinRequest.id}, Status=${joinRequest.status}`);
     }
-
-    // Create join request
-    const joinRequest = await prisma.teamJoinRequest.create({
-      data: {
-        teamId: id,
-        userId: user.id,
-        status: 'pending',
-      },
-      include: {
-        user: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            profileImage: true,
-            nickname: true,
-            region: true,
-            pickleballExperience: true,
-            gender: true,
-            skillLevel: true,
-            isProfileComplete: true,
-          },
-        },
-        team: {
-          select: {
-            id: true,
-            name: true,
-            iconImage: true,
-          },
-        },
-      },
-    });
-
-    console.log(`   ✅ Join request created: ID=${joinRequest.id}, Status=${joinRequest.status}`);
 
     const response: TeamJoinRequestResponse = {
       id: joinRequest.id,
