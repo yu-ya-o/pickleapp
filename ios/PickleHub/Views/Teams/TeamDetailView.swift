@@ -92,6 +92,31 @@ struct TeamDetailView: View {
                             .cornerRadius(12)
                         }
 
+                        // Request to Join (for non-members of public teams)
+                        if !viewModel.isMember && !team.isPrivate {
+                            Button(action: {
+                                Task {
+                                    do {
+                                        try await viewModel.requestToJoin()
+                                    } catch {
+                                        // Error handled by viewModel.errorMessage
+                                    }
+                                }
+                            }) {
+                                HStack {
+                                    Spacer()
+                                    Image(systemName: "person.badge.plus")
+                                    Text("Request to Join")
+                                    Spacer()
+                                }
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .padding()
+                                .background(Color.twitterBlue)
+                                .cornerRadius(12)
+                            }
+                        }
+
                         // Events
                         if viewModel.isMember {
                             Button(action: { showingEvents = true }) {
