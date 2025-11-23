@@ -43,7 +43,7 @@ struct EventDetailContainerView: View {
         errorMessage = nil
 
         do {
-            let fetchedEvent = try await APIClient.shared.getEvent(eventId: eventId)
+            let fetchedEvent = try await APIClient.shared.getEvent(id: eventId)
             self.event = fetchedEvent
         } catch {
             errorMessage = "イベントの読み込みに失敗しました"
