@@ -83,7 +83,6 @@ struct ProfileView: View {
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("プロフィール情報")
                                     .font(.headline)
-                                    .padding(.horizontal)
 
                                 VStack(spacing: Spacing.md) {
                                     if let nickname = user.nickname {
@@ -132,6 +131,7 @@ struct ProfileView: View {
                                         .fill(Color(.systemGray6))
                                 )
                             }
+                            .padding(.horizontal)
 
                             Divider()
 
