@@ -22,11 +22,21 @@ struct CreateEventView: View {
     }
     @State private var selectedOrganizer: OrganizerType = .personal
 
+    // Team event visibility
+    @State private var teamEventVisibility = "public" // "public" or "private"
+
     @State private var isLoading = false
     @State private var showingError = false
     @State private var errorMessage = ""
 
     let skillLevels = ["beginner", "intermediate", "advanced", "all"]
+
+    var isTeamEvent: Bool {
+        if case .team = selectedOrganizer {
+            return true
+        }
+        return false
+    }
 
     // Filter teams where user can create events (owner or admin)
     var eligibleTeams: [Team] {
@@ -48,6 +58,17 @@ struct CreateEventView: View {
                         }
                     }
                     .pickerStyle(.menu)
+                }
+
+                // Team Event Visibility (only show for team events)
+                if isTeamEvent {
+                    Section(header: Text("公開範囲")) {
+                        Picker("公開設定", selection: $teamEventVisibility) {
+                            Text("全体公開").tag("public")
+                            Text("チームのみ公開").tag("private")
+                        }
+                        .pickerStyle(.segmented)
+                    }
                 }
 
                 Section(header: Text("Event Details")) {
@@ -175,7 +196,7 @@ struct CreateEventView: View {
             startTime: formatter.string(from: startDate),
             endTime: formatter.string(from: endDate),
             maxParticipants: maxParticipants,
-            visibility: "public" // Default to public for team events
+            visibility: teamEventVisibility
         )
 
         _ = try await APIClient.shared.createTeamEvent(teamId: teamId, request: request)
