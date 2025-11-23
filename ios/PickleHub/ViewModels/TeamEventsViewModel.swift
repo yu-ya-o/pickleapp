@@ -103,6 +103,7 @@ class TeamEventsViewModel: ObservableObject {
         startTime: Date? = nil,
         endTime: Date? = nil,
         maxParticipants: Int? = nil,
+        status: String? = nil,
         visibility: String? = nil
     ) async throws {
         let formatter = ISO8601DateFormatter()
@@ -116,6 +117,7 @@ class TeamEventsViewModel: ObservableObject {
             endTime: endTime.map { formatter.string(from: $0) },
             maxParticipants: maxParticipants,
             price: nil,
+            status: status,
             visibility: visibility
         )
 

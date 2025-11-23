@@ -12,6 +12,9 @@ struct TeamEventDetailView: View {
     @State private var selectedUser: User?
     @State private var showingUserProfile = false
     @State private var showingDeleteAlert = false
+    @State private var showingJoinConfirm = false
+    @State private var showingLeaveConfirm = false
+    @State private var showingCloseEventAlert = false
 
     let teamId: String
     let eventId: String
@@ -35,6 +38,10 @@ struct TeamEventDetailView: View {
             return ["owner", "admin"].contains(role)
         }
         return false
+    }
+
+    private var isClosed: Bool {
+        event?.status == "completed"
     }
 
     @ViewBuilder
@@ -121,6 +128,30 @@ struct TeamEventDetailView: View {
             }
         } message: {
             Text("Are you sure you want to delete this event? This action cannot be undone.")
+        }
+        .alert("Join Event", isPresented: $showingJoinConfirm) {
+            Button("Cancel", role: .cancel) {}
+            Button("Join") {
+                joinEvent()
+            }
+        } message: {
+            Text("このイベントに参加しますか？")
+        }
+        .alert("Leave Event", isPresented: $showingLeaveConfirm) {
+            Button("キャンセルしない", role: .cancel) {}
+            Button("参加をキャンセル", role: .destructive) {
+                leaveEvent()
+            }
+        } message: {
+            Text("参加をキャンセルしてもよろしいですか？")
+        }
+        .alert("Close Event", isPresented: $showingCloseEventAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("締め切る", role: .destructive) {
+                closeEvent()
+            }
+        } message: {
+            Text("イベントを締め切りますか？これ以上新しい参加を受け付けなくなります。")
         }
         .task {
             await loadEvent()
@@ -276,6 +307,17 @@ struct TeamEventDetailView: View {
     private var actionButtons: some View {
         VStack(spacing: 12) {
             if let event = event {
+                // Closed event banner
+                if isClosed {
+                    Text("締め切り済み")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.orange)
+                        .cornerRadius(12)
+                }
+
                 // Chat button (for participants and creator)
                 if event.isUserParticipating == true || isCreator {
                     Button(action: { showingChat = true }) {
@@ -294,7 +336,9 @@ struct TeamEventDetailView: View {
 
                 // Join/Leave buttons
                 if event.isUserParticipating == true {
-                    Button(action: leaveEvent) {
+                    Button(action: {
+                        showingLeaveConfirm = true
+                    }) {
                         Text("Leave Event")
                             .font(.headline)
                             .foregroundColor(.white)
@@ -303,8 +347,18 @@ struct TeamEventDetailView: View {
                             .background(Color.red)
                             .cornerRadius(12)
                     }
+                } else if isClosed {
+                    Text("参加受付終了")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.gray)
+                        .cornerRadius(12)
                 } else if event.hasCapacity {
-                    Button(action: joinEvent) {
+                    Button(action: {
+                        showingJoinConfirm = true
+                    }) {
                         Text("Join Event")
                             .font(.headline)
                             .foregroundColor(.white)
@@ -321,6 +375,25 @@ struct TeamEventDetailView: View {
                         .padding()
                         .background(Color.gray)
                         .cornerRadius(12)
+                }
+
+                // Close event button (for creator only, if event is active)
+                if !isClosed && canDelete {
+                    Button(action: {
+                        showingCloseEventAlert = true
+                    }) {
+                        HStack {
+                            Spacer()
+                            Image(systemName: "lock.fill")
+                            Text("イベントを締め切る")
+                                .fontWeight(.semibold)
+                            Spacer()
+                        }
+                        .foregroundColor(.orange)
+                        .padding()
+                        .background(Color.orange.opacity(0.1))
+                        .cornerRadius(12)
+                    }
                 }
 
                 // Delete button (for creator and admin+)
@@ -340,6 +413,21 @@ struct TeamEventDetailView: View {
                         .cornerRadius(12)
                     }
                 }
+            }
+        }
+    }
+
+    private func closeEvent() {
+        Task {
+            guard let event = event else { return }
+            do {
+                try await viewModel.updateEvent(eventId: event.id, status: "completed")
+                await loadEvent() // Refresh
+                alertMessage = "イベントを締め切りました"
+                showingAlert = true
+            } catch {
+                alertMessage = "Failed to close event: \(error.localizedDescription)"
+                showingAlert = true
             }
         }
     }
