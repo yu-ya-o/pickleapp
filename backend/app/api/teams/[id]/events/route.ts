@@ -58,6 +58,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
             id: true,
             name: true,
             iconImage: true,
+            headerImage: true,
           },
         },
         creator: {
@@ -118,6 +119,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         startTime: event.startTime.toISOString(),
         endTime: event.endTime.toISOString(),
         maxParticipants: event.maxParticipants,
+        price: event.price,
+        status: event.status,
         visibility: event.visibility,
         createdAt: event.createdAt.toISOString(),
         updatedAt: event.updatedAt.toISOString(),
@@ -217,6 +220,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
             id: true,
             name: true,
             iconImage: true,
+            headerImage: true,
           },
         },
         creator: {
@@ -252,6 +256,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       startTime: event.startTime.toISOString(),
       endTime: event.endTime.toISOString(),
       maxParticipants: event.maxParticipants,
+      price: event.price,
+      status: event.status,
       visibility: event.visibility,
       createdAt: event.createdAt.toISOString(),
       updatedAt: event.updatedAt.toISOString(),

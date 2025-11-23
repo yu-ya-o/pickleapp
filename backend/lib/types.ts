@@ -311,12 +311,16 @@ export interface TeamEventResponse {
   startTime: string;
   endTime: string;
   maxParticipants: number | null;
+  price: number | null;
+  status: string;
   visibility: string;
   createdAt: string;
   updatedAt: string;
   team: {
     id: string;
     name: string;
+    iconImage?: string | null;
+    headerImage?: string | null;
   };
   creator: {
     id: string;
