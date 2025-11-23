@@ -252,6 +252,10 @@ class UserProfileViewModel: ObservableObject {
         pickleballExperience: "1-2 years",
         gender: "Male",
         skillLevel: "intermediate",
-        isProfileComplete: true
+        isProfileComplete: true,
+        instagramUrl: nil,
+        twitterUrl: nil,
+        tiktokUrl: nil,
+        lineUrl: nil
     ))
 }
