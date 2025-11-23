@@ -7,6 +7,7 @@ struct ProfileEditView: View {
     @StateObject private var viewModel = ProfileEditViewModel()
 
     @State private var nickname: String
+    @State private var bio: String
     @State private var selectedRegion: String
     @State private var selectedExperience: String
     @State private var selectedGender: String
@@ -22,6 +23,7 @@ struct ProfileEditView: View {
 
     init(user: User) {
         _nickname = State(initialValue: user.nickname ?? "")
+        _bio = State(initialValue: user.bio ?? "")
         _selectedRegion = State(initialValue: user.region ?? "")
         _selectedExperience = State(initialValue: user.pickleballExperience ?? "")
         _selectedGender = State(initialValue: user.gender ?? "")
@@ -76,6 +78,25 @@ struct ProfileEditView: View {
                 Section(header: Text("基本情報")) {
                     TextField("ニックネーム", text: $nickname)
                         .textContentType(.name)
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("自己紹介")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+
+                        TextEditor(text: $bio)
+                            .frame(height: 80)
+                            .onChange(of: bio) { newValue in
+                                if newValue.count > 200 {
+                                    bio = String(newValue.prefix(200))
+                                }
+                            }
+
+                        Text("\(bio.count)/200")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                    }
 
                     Picker("地域", selection: $selectedRegion) {
                         Text("選択してください").tag("")
@@ -166,6 +187,7 @@ struct ProfileEditView: View {
 
             await viewModel.updateProfile(
                 nickname: nickname,
+                bio: bio.isEmpty ? nil : bio,
                 region: selectedRegion,
                 pickleballExperience: selectedExperience,
                 gender: selectedGender,
@@ -206,13 +228,14 @@ class ProfileEditViewModel: ObservableObject {
         }
     }
 
-    func updateProfile(nickname: String, region: String, pickleballExperience: String, gender: String, skillLevel: String, profileImage: String?) async {
+    func updateProfile(nickname: String, bio: String?, region: String, pickleballExperience: String, gender: String, skillLevel: String, profileImage: String?) async {
         isLoading = true
         errorMessage = nil
 
         do {
             let request = UpdateProfileRequest(
                 nickname: nickname,
+                bio: bio,
                 region: region,
                 pickleballExperience: pickleballExperience,
                 gender: gender,

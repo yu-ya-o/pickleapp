@@ -8,7 +8,7 @@ struct OnboardingContainerView: View {
     @State private var currentPage = 0
     @State private var dragOffset: CGFloat = 0
 
-    private let totalPages = 6
+    private let totalPages = 7
 
     var body: some View {
         ZStack {
@@ -31,20 +31,23 @@ struct OnboardingContainerView: View {
                     OnboardingNicknameView(viewModel: viewModel)
                         .tag(0)
 
-                    OnboardingGenderView(viewModel: viewModel)
+                    OnboardingBioView(viewModel: viewModel)
                         .tag(1)
 
-                    OnboardingRegionView(viewModel: viewModel)
+                    OnboardingGenderView(viewModel: viewModel)
                         .tag(2)
 
-                    OnboardingExperienceView(viewModel: viewModel)
+                    OnboardingRegionView(viewModel: viewModel)
                         .tag(3)
 
-                    OnboardingSkillLevelView(viewModel: viewModel)
+                    OnboardingExperienceView(viewModel: viewModel)
                         .tag(4)
 
-                    OnboardingProfileImageView(viewModel: viewModel)
+                    OnboardingSkillLevelView(viewModel: viewModel)
                         .tag(5)
+
+                    OnboardingProfileImageView(viewModel: viewModel)
+                        .tag(6)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .animation(.spring(response: 0.3, dampingFraction: 0.8), value: currentPage)
@@ -125,11 +128,12 @@ struct OnboardingContainerView: View {
     private func canProceedToNext() -> Bool {
         switch currentPage {
         case 0: return !viewModel.nickname.isEmpty
-        case 1: return !viewModel.selectedGender.isEmpty
-        case 2: return !viewModel.selectedRegion.isEmpty
-        case 3: return !viewModel.selectedExperience.isEmpty
-        case 4: return !viewModel.selectedSkillLevel.isEmpty
-        case 5: return true  // Profile image is optional
+        case 1: return true  // Bio is optional
+        case 2: return !viewModel.selectedGender.isEmpty
+        case 3: return !viewModel.selectedRegion.isEmpty
+        case 4: return !viewModel.selectedExperience.isEmpty
+        case 5: return !viewModel.selectedSkillLevel.isEmpty
+        case 6: return true  // Profile image is optional
         default: return false
         }
     }

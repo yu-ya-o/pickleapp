@@ -72,7 +72,7 @@ export async function PATCH(request: NextRequest) {
         pickleballExperience: body.pickleballExperience !== undefined ? body.pickleballExperience : user.pickleballExperience,
         gender: body.gender !== undefined ? body.gender : user.gender,
         skillLevel: body.skillLevel !== undefined ? body.skillLevel : user.skillLevel,
-        profileImage: body.profileImage !== undefined ? body.profileImage : user.profileImage,
+        profileImage: body.profileImage !== undefined ? (body.profileImage || null) : user.profileImage,
         isProfileComplete,
       },
     });

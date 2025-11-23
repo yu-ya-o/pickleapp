@@ -326,6 +326,10 @@ class APIClient {
         return try await request(endpoint: "/api/teams/\(id)", requiresAuth: true)
     }
 
+    func getUserTeams(userId: String) async throws -> [Team] {
+        return try await request(endpoint: "/api/users/\(userId)/teams", requiresAuth: false)
+    }
+
     func createTeam(request: CreateTeamRequest) async throws -> Team {
         return try await self.request(
             endpoint: "/api/teams",
