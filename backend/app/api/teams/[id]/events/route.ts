@@ -62,9 +62,16 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         creator: {
           select: {
             id: true,
+            email: true,
             name: true,
             profileImage: true,
             nickname: true,
+            bio: true,
+            region: true,
+            pickleballExperience: true,
+            gender: true,
+            skillLevel: true,
+            isProfileComplete: true,
           },
         },
         participants: {
@@ -75,9 +82,16 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
             user: {
               select: {
                 id: true,
+                email: true,
                 name: true,
                 profileImage: true,
                 nickname: true,
+                bio: true,
+                region: true,
+                pickleballExperience: true,
+                gender: true,
+                skillLevel: true,
+                isProfileComplete: true,
               },
             },
           },
@@ -205,9 +219,16 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         creator: {
           select: {
             id: true,
+            email: true,
             name: true,
             profileImage: true,
             nickname: true,
+            bio: true,
+            region: true,
+            pickleballExperience: true,
+            gender: true,
+            skillLevel: true,
+            isProfileComplete: true,
           },
         },
         participants: true,
