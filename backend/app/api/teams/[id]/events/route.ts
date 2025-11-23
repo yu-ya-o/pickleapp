@@ -101,6 +101,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         startTime: event.startTime.toISOString(),
         endTime: event.endTime.toISOString(),
         maxParticipants: event.maxParticipants,
+        visibility: event.visibility,
         createdAt: event.createdAt.toISOString(),
         updatedAt: event.updatedAt.toISOString(),
         team: event.team,
@@ -190,6 +191,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         startTime,
         endTime,
         maxParticipants: body.maxParticipants || null,
+        visibility: body.visibility || 'private',
       },
       include: {
         team: {
@@ -218,6 +220,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       startTime: event.startTime.toISOString(),
       endTime: event.endTime.toISOString(),
       maxParticipants: event.maxParticipants,
+      visibility: event.visibility,
       createdAt: event.createdAt.toISOString(),
       updatedAt: event.updatedAt.toISOString(),
       team: event.team,

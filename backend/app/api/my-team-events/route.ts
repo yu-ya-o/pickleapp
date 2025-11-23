@@ -112,6 +112,7 @@ export async function GET(request: NextRequest) {
         startTime: event.startTime.toISOString(),
         endTime: event.endTime.toISOString(),
         maxParticipants: event.maxParticipants,
+        visibility: event.visibility,
         createdAt: event.createdAt.toISOString(),
         updatedAt: event.updatedAt.toISOString(),
         team: event.team,

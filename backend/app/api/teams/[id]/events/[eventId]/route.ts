@@ -117,6 +117,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       startTime: event.startTime.toISOString(),
       endTime: event.endTime.toISOString(),
       maxParticipants: event.maxParticipants,
+      visibility: event.visibility,
       createdAt: event.createdAt.toISOString(),
       updatedAt: event.updatedAt.toISOString(),
       team: event.team,
@@ -195,6 +196,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     if (body.location !== undefined) updateData.location = body.location;
     if (body.maxParticipants !== undefined)
       updateData.maxParticipants = body.maxParticipants;
+    if (body.visibility !== undefined) updateData.visibility = body.visibility;
 
     if (body.startTime !== undefined) {
       updateData.startTime = new Date(body.startTime);
@@ -267,6 +269,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       startTime: updatedEvent.startTime.toISOString(),
       endTime: updatedEvent.endTime.toISOString(),
       maxParticipants: updatedEvent.maxParticipants,
+      visibility: updatedEvent.visibility,
       createdAt: updatedEvent.createdAt.toISOString(),
       updatedAt: updatedEvent.updatedAt.toISOString(),
       team: updatedEvent.team,

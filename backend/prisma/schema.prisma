@@ -205,6 +205,7 @@ model TeamEvent {
   startTime       DateTime
   endTime         DateTime
   maxParticipants Int?     // null = unlimited
+  visibility      String   @default("private") // "public" (通常イベントとしても公開), "private" (チームメンバーのみ)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -218,6 +219,7 @@ model TeamEvent {
   @@index([teamId])
   @@index([createdBy])
   @@index([startTime])
+  @@index([visibility])
 }
 
 model TeamEventParticipant {

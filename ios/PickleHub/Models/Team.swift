@@ -192,6 +192,7 @@ struct TeamEvent: Codable, Identifiable, Hashable {
     let startTime: String
     let endTime: String
     let maxParticipants: Int?
+    let visibility: String
     let createdAt: String
     let updatedAt: String
     let team: TeamEventTeam
@@ -320,6 +321,7 @@ struct CreateTeamEventRequest: Codable {
     let startTime: String
     let endTime: String
     let maxParticipants: Int?
+    let visibility: String?
 }
 
 struct UpdateTeamEventRequest: Codable {
@@ -329,6 +331,7 @@ struct UpdateTeamEventRequest: Codable {
     let startTime: String?
     let endTime: String?
     let maxParticipants: Int?
+    let visibility: String?
 }
 
 // MARK: - Team Chat
