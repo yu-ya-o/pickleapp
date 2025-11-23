@@ -209,6 +209,7 @@ struct TeamEvent: Codable, Identifiable, Hashable {
     var formattedDate: String {
         guard let date = startDate else { return "" }
         let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ja_JP")
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
         return formatter.string(from: date)

@@ -21,8 +21,10 @@ struct MyEventsView: View {
                     Section(header: Text("Events I Created")) {
                         ForEach(myCreatedEvents) { event in
                             NavigationLink(destination: EventDetailView(event: event)) {
-                                EventRowView(event: event)
+                                ModernEventRowView(event: event)
                             }
+                            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                            .listRowSeparator(.hidden)
                         }
                     }
                 }
@@ -31,22 +33,24 @@ struct MyEventsView: View {
                     Section(header: Text("Events I Joined")) {
                         ForEach(myReservedEvents) { event in
                             NavigationLink(destination: EventDetailView(event: event)) {
-                                EventRowView(event: event)
+                                ModernEventRowView(event: event)
                             }
+                            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                            .listRowSeparator(.hidden)
                         }
                     }
                 }
 
                 if myCreatedEvents.isEmpty && myReservedEvents.isEmpty {
-                    VStack(spacing: 20) {
+                    VStack(spacing: Spacing.lg) {
                         Image(systemName: "star.slash")
                             .font(.system(size: 60))
                             .foregroundColor(.gray)
                         Text("No events yet")
-                            .font(.headline)
+                            .font(.headlineMedium)
                             .foregroundColor(.secondary)
                         Text("Create or join an event to get started!")
-                            .font(.subheadline)
+                            .font(.bodyMedium)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
                     }
@@ -54,6 +58,7 @@ struct MyEventsView: View {
                     .padding()
                 }
             }
+            .listStyle(.plain)
             .navigationTitle("My Events")
             .refreshable {
                 await eventsViewModel.refreshEvents()

@@ -7,6 +7,7 @@ struct TeamEventDetailView: View {
     @State private var isLoading = true
     @State private var showingAlert = false
     @State private var alertMessage = ""
+    @State private var showingChat = false
 
     let teamId: String
     let eventId: String
@@ -47,6 +48,11 @@ struct TeamEventDetailView: View {
             Button("OK", role: .cancel) {}
         } message: {
             Text(alertMessage)
+        }
+        .sheet(isPresented: $showingChat) {
+            if let event = event {
+                ChatView(eventId: event.id, eventTitle: event.title)
+            }
         }
         .task {
             await loadEvent()
@@ -182,6 +188,22 @@ struct TeamEventDetailView: View {
     @ViewBuilder
     private var actionButtons: some View {
         VStack(spacing: 12) {
+            // Chat button (for participants and creator)
+            if let event = event, (event.isUserParticipating == true || isCreator) {
+                Button(action: { showingChat = true }) {
+                    HStack {
+                        Image(systemName: "message.fill")
+                        Text("Open Chat")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(12)
+                }
+            }
+
             if let event = event, !isCreator {
                 if event.isUserParticipating == true {
                     Button(action: leaveEvent) {
