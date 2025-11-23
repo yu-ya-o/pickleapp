@@ -166,19 +166,8 @@ struct TeamEventRowView: View {
 
                     Spacer()
 
-                    // Participating badge
-                    if event.isUserParticipating == true {
-                        HStack(spacing: 2) {
-                            Image(systemName: "checkmark.circle.fill")
-                                .font(.caption)
-                            Text("参加中")
-                                .font(.labelSmall)
-                        }
-                        .foregroundColor(.white)
-                        .padding(.horizontal, Spacing.sm)
-                        .padding(.vertical, 2)
-                        .background(Capsule().fill(Color.green))
-                    } else if !event.hasCapacity {
+                    // Status badge (満席のみ表示)
+                    if !event.hasCapacity {
                         Text("満席")
                             .font(.labelSmall)
                             .foregroundColor(.white)
@@ -189,12 +178,9 @@ struct TeamEventRowView: View {
                 }
             }
         }
-        .padding(Spacing.md)
-        .background(
-            RoundedRectangle(cornerRadius: CornerRadius.medium)
-                .fill(Color.white)
-                .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
-        )
+        .padding(.horizontal, Spacing.md)
+        .padding(.vertical, Spacing.sm)
+        .background(Color.white)
     }
 }
 
