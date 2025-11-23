@@ -10,11 +10,19 @@ struct EventDetailView: View {
     @State private var selectedUser: User?
     @State private var showingUserProfile = false
     @State private var showingDeleteAlert = false
+    @State private var showingReserveConfirm = false
+    @State private var showingCancelConfirm = false
+    @State private var showingCloseEventAlert = false
+    @State private var reservationToCancel: String?
 
     let event: Event
 
     private var isCreator: Bool {
         event.creator.id == authViewModel.currentUser?.id
+    }
+
+    private var isClosed: Bool {
+        event.status == "completed"
     }
 
     private var userReservation: Reservation? {
@@ -75,6 +83,32 @@ struct EventDetailView: View {
             }
         } message: {
             Text("Are you sure you want to delete this event? This action cannot be undone.")
+        }
+        .alert("Reserve Spot", isPresented: $showingReserveConfirm) {
+            Button("Cancel", role: .cancel) {}
+            Button("Reserve") {
+                makeReservation()
+            }
+        } message: {
+            Text("このイベントに参加予約しますか？")
+        }
+        .alert("Cancel Reservation", isPresented: $showingCancelConfirm) {
+            Button("キャンセルしない", role: .cancel) {}
+            Button("予約をキャンセル", role: .destructive) {
+                if let reservationId = reservationToCancel {
+                    cancelReservation(reservationId: reservationId)
+                }
+            }
+        } message: {
+            Text("予約をキャンセルしてもよろしいですか？")
+        }
+        .alert("Close Event", isPresented: $showingCloseEventAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("締め切る", role: .destructive) {
+                closeEvent()
+            }
+        } message: {
+            Text("イベントを締め切りますか？これ以上新しい予約を受け付けなくなります。")
         }
     }
 
@@ -235,6 +269,17 @@ struct EventDetailView: View {
     @ViewBuilder
     private var actionButtons: some View {
         VStack(spacing: 12) {
+            // Closed event banner
+            if isClosed {
+                Text("締め切り済み")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.orange)
+                    .cornerRadius(12)
+            }
+
             // Chat button (for participants and creator)
             if isCreator || userReservation != nil {
                 Button(action: { showingChat = true }) {
@@ -254,7 +299,8 @@ struct EventDetailView: View {
             // Join/Leave buttons
             if let reservation = userReservation {
                 Button(action: {
-                    cancelReservation(reservationId: reservation.id)
+                    reservationToCancel = reservation.id
+                    showingCancelConfirm = true
                 }) {
                     Text("Cancel Reservation")
                         .font(.headline)
@@ -264,8 +310,18 @@ struct EventDetailView: View {
                         .background(Color.red)
                         .cornerRadius(12)
                 }
+            } else if isClosed {
+                Text("予約受付終了")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.gray)
+                    .cornerRadius(12)
             } else if event.availableSpots > 0 {
-                Button(action: makeReservation) {
+                Button(action: {
+                    showingReserveConfirm = true
+                }) {
                     Text("Reserve Spot")
                         .font(.headline)
                         .foregroundColor(.white)
@@ -282,6 +338,25 @@ struct EventDetailView: View {
                     .padding()
                     .background(Color.gray)
                     .cornerRadius(12)
+            }
+
+            // Close event button (for creator only, if event is active)
+            if isCreator && !isClosed {
+                Button(action: {
+                    showingCloseEventAlert = true
+                }) {
+                    HStack {
+                        Spacer()
+                        Image(systemName: "lock.fill")
+                        Text("イベントを締め切る")
+                            .fontWeight(.semibold)
+                        Spacer()
+                    }
+                    .foregroundColor(.orange)
+                    .padding()
+                    .background(Color.orange.opacity(0.1))
+                    .cornerRadius(12)
+                }
             }
 
             // Delete button (for creator only)
@@ -331,6 +406,19 @@ struct EventDetailView: View {
                 showingAlert = true
             } catch {
                 alertMessage = "Failed to cancel reservation: \(error.localizedDescription)"
+                showingAlert = true
+            }
+        }
+    }
+
+    private func closeEvent() {
+        Task {
+            do {
+                try await eventsViewModel.updateEvent(id: event.id, status: "completed")
+                alertMessage = "イベントを締め切りました"
+                showingAlert = true
+            } catch {
+                alertMessage = "Failed to close event: \(error.localizedDescription)"
                 showingAlert = true
             }
         }
