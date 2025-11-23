@@ -1,29 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../lib/auth';
-import prisma from '../../../lib/prisma';
+import { prisma } from '@/lib/prisma';
+import { getUserFromAuth } from '@/lib/auth';
+import { errorResponse, UnauthorizedError, NotFoundError, BadRequestError } from '@/lib/errors';
 
 // GET /api/notifications - Get user's notifications
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
+    const authHeader = request.headers.get('authorization');
+    const user = await getUserFromAuth(authHeader);
 
     if (!user) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
+      throw new UnauthorizedError('Authentication required');
     }
 
     // Get notifications for the user, ordered by most recent first
@@ -49,35 +36,18 @@ export async function GET(request: NextRequest) {
       unreadCount,
     });
   } catch (error) {
-    console.error('Error fetching notifications:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch notifications' },
-      { status: 500 }
-    );
+    return errorResponse(error);
   }
 }
 
 // PATCH /api/notifications/read-all - Mark all notifications as read
 export async function PATCH(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
+    const authHeader = request.headers.get('authorization');
+    const user = await getUserFromAuth(authHeader);
 
     if (!user) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
+      throw new UnauthorizedError('Authentication required');
     }
 
     const searchParams = request.nextUrl.searchParams;
@@ -100,15 +70,8 @@ export async function PATCH(request: NextRequest) {
       });
     }
 
-    return NextResponse.json(
-      { error: 'Invalid action' },
-      { status: 400 }
-    );
+    throw new BadRequestError('Invalid action');
   } catch (error) {
-    console.error('Error updating notifications:', error);
-    return NextResponse.json(
-      { error: 'Failed to update notifications' },
-      { status: 500 }
-    );
+    return errorResponse(error);
   }
 }
