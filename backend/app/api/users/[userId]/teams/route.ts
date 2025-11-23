@@ -72,6 +72,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         name: team.name,
         description: team.description,
         iconImage: team.iconImage,
+        headerImage: team.headerImage,
         region: team.region,
         visibility: team.visibility,
         createdAt: team.createdAt.toISOString(),
@@ -80,6 +81,10 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         memberCount,
         isUserMember: !!userMembership,
         userRole: userMembership?.role,
+        instagramUrl: team.instagramUrl,
+        twitterUrl: team.twitterUrl,
+        tiktokUrl: team.tiktokUrl,
+        lineUrl: team.lineUrl,
       };
     });
 
