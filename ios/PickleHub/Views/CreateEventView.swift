@@ -67,7 +67,7 @@ struct CreateEventView: View {
                             Text("全体公開").tag("public")
                             Text("チームのみ公開").tag("private")
                         }
-                        .pickerStyle(.segmented)
+                        .pickerStyle(.menu)
                     }
                 }
 
