@@ -15,6 +15,10 @@ struct ProfileEditView: View {
     @State private var selectedPhotoItem: PhotosPickerItem?
     @State private var selectedImageData: Data?
     @State private var profileImageURL: String?
+    @State private var instagramUrl: String
+    @State private var twitterUrl: String
+    @State private var tiktokUrl: String
+    @State private var lineUrl: String
 
     let regions = Prefectures.all
     let experiences = ["6ヶ月未満", "6ヶ月〜1年", "1〜2年", "2〜3年", "3年以上"]
@@ -29,6 +33,10 @@ struct ProfileEditView: View {
         _selectedGender = State(initialValue: user.gender ?? "")
         _selectedSkillLevel = State(initialValue: user.skillLevel ?? "")
         _profileImageURL = State(initialValue: user.profileImage)
+        _instagramUrl = State(initialValue: user.instagramUrl ?? "")
+        _twitterUrl = State(initialValue: user.twitterUrl ?? "")
+        _tiktokUrl = State(initialValue: user.tiktokUrl ?? "")
+        _lineUrl = State(initialValue: user.lineUrl ?? "")
     }
 
     var body: some View {
@@ -131,6 +139,15 @@ struct ProfileEditView: View {
                     }
                 }
 
+                Section {
+                    SNSLinksEditor(
+                        instagramUrl: $instagramUrl,
+                        twitterUrl: $twitterUrl,
+                        tiktokUrl: $tiktokUrl,
+                        lineUrl: $lineUrl
+                    )
+                }
+
                 if let errorMessage = viewModel.errorMessage {
                     Section {
                         Text(errorMessage)
@@ -192,7 +209,11 @@ struct ProfileEditView: View {
                 pickleballExperience: selectedExperience,
                 gender: selectedGender,
                 skillLevel: selectedSkillLevel,
-                profileImage: newImageURL
+                profileImage: newImageURL,
+                instagramUrl: instagramUrl.isEmpty ? nil : instagramUrl,
+                twitterUrl: twitterUrl.isEmpty ? nil : twitterUrl,
+                tiktokUrl: tiktokUrl.isEmpty ? nil : tiktokUrl,
+                lineUrl: lineUrl.isEmpty ? nil : lineUrl
             )
 
             if viewModel.errorMessage == nil {
@@ -228,7 +249,7 @@ class ProfileEditViewModel: ObservableObject {
         }
     }
 
-    func updateProfile(nickname: String, bio: String?, region: String, pickleballExperience: String, gender: String, skillLevel: String, profileImage: String?) async {
+    func updateProfile(nickname: String, bio: String?, region: String, pickleballExperience: String, gender: String, skillLevel: String, profileImage: String?, instagramUrl: String?, twitterUrl: String?, tiktokUrl: String?, lineUrl: String?) async {
         isLoading = true
         errorMessage = nil
 
@@ -240,7 +261,11 @@ class ProfileEditViewModel: ObservableObject {
                 pickleballExperience: pickleballExperience,
                 gender: gender,
                 skillLevel: skillLevel,
-                profileImage: profileImage
+                profileImage: profileImage,
+                instagramUrl: instagramUrl,
+                twitterUrl: twitterUrl,
+                tiktokUrl: tiktokUrl,
+                lineUrl: lineUrl
             )
 
             let user = try await apiClient.updateProfile(request: request)

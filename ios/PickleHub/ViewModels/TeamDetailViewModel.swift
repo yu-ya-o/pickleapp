@@ -55,7 +55,11 @@ class TeamDetailViewModel: ObservableObject {
         description: String? = nil,
         region: String? = nil,
         visibility: String? = nil,
-        iconImage: String? = nil
+        iconImage: String? = nil,
+        instagramUrl: String? = nil,
+        twitterUrl: String? = nil,
+        tiktokUrl: String? = nil,
+        lineUrl: String? = nil
     ) async throws {
         let request = UpdateTeamRequest(
             name: name,
@@ -63,10 +67,10 @@ class TeamDetailViewModel: ObservableObject {
             iconImage: iconImage,
             region: region,
             visibility: visibility,
-            instagramUrl: nil,
-            twitterUrl: nil,
-            tiktokUrl: nil,
-            lineUrl: nil
+            instagramUrl: instagramUrl,
+            twitterUrl: twitterUrl,
+            tiktokUrl: tiktokUrl,
+            lineUrl: lineUrl
         )
 
         do {
