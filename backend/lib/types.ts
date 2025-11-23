@@ -299,6 +299,8 @@ export interface UpdateTeamEventRequest {
   startTime?: string;
   endTime?: string;
   maxParticipants?: number;
+  price?: number;
+  status?: string;
   visibility?: 'public' | 'private';
 }
 
