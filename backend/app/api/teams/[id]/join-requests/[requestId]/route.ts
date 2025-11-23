@@ -9,6 +9,7 @@ import {
   BadRequestError,
 } from '@/lib/errors';
 import { ApproveJoinRequestRequest } from '@/lib/types';
+import { notifyTeamJoinResponse } from '@/lib/notifications';
 
 interface RouteParams {
   params: Promise<{
@@ -95,6 +96,13 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         data: { status: 'approved' },
       });
 
+      // Send notification to the requester
+      notifyTeamJoinResponse(joinRequest.userId, team.name, true, id).catch(
+        (error) => {
+          console.error('Failed to send team join response notification:', error);
+        }
+      );
+
       return NextResponse.json({
         message: 'Join request approved',
         status: 'approved',
@@ -106,6 +114,13 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         where: { id: requestId },
         data: { status: 'rejected' },
       });
+
+      // Send notification to the requester
+      notifyTeamJoinResponse(joinRequest.userId, team.name, false, id).catch(
+        (error) => {
+          console.error('Failed to send team join response notification:', error);
+        }
+      );
 
       return NextResponse.json({
         message: 'Join request rejected',

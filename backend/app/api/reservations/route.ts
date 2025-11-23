@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { getUserFromAuth } from '@/lib/auth';
 import { errorResponse, UnauthorizedError, BadRequestError } from '@/lib/errors';
 import { CreateReservationRequest, ReservationResponse } from '@/lib/types';
+import { notifyEventJoined } from '@/lib/notifications';
 
 /**
  * POST /api/reservations
@@ -95,6 +96,11 @@ export async function POST(request: NextRequest) {
           },
         },
       },
+    });
+
+    // Send notification to event creator
+    notifyEventJoined(body.eventId, user.name, event.title).catch((error) => {
+      console.error('Failed to send event joined notification:', error);
     });
 
     const response: ReservationResponse = {
