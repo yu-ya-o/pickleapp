@@ -35,8 +35,11 @@ struct TeamEventsListView: View {
                             )) {
                                 TeamEventRowView(event: event)
                             }
+                            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                            .listRowSeparator(.hidden)
                         }
                     }
+                    .listStyle(.plain)
                 }
             }
             .navigationTitle("Team Events")
