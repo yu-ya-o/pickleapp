@@ -269,6 +269,7 @@ export interface CreateTeamEventRequest {
   title: string;
   description: string;
   location: string;
+  region?: string;
   startTime: string;
   endTime: string;
   maxParticipants?: number; // null = unlimited
@@ -279,6 +280,7 @@ export interface UpdateTeamEventRequest {
   title?: string;
   description?: string;
   location?: string;
+  region?: string;
   startTime?: string;
   endTime?: string;
   maxParticipants?: number;
@@ -290,6 +292,7 @@ export interface TeamEventResponse {
   title: string;
   description: string;
   location: string;
+  region?: string | null;
   startTime: string;
   endTime: string;
   maxParticipants: number | null;

@@ -110,6 +110,7 @@ export async function GET(request: NextRequest) {
         title: event.title,
         description: event.description,
         location: event.location,
+        region: event.region,
         startTime: event.startTime.toISOString(),
         endTime: event.endTime.toISOString(),
         maxParticipants: event.maxParticipants,

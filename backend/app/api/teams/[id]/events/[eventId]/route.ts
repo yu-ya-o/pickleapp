@@ -115,6 +115,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       title: event.title,
       description: event.description,
       location: event.location,
+      region: event.region,
       startTime: event.startTime.toISOString(),
       endTime: event.endTime.toISOString(),
       maxParticipants: event.maxParticipants,
@@ -195,6 +196,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     if (body.title !== undefined) updateData.title = body.title;
     if (body.description !== undefined) updateData.description = body.description;
     if (body.location !== undefined) updateData.location = body.location;
+    if (body.region !== undefined) updateData.region = body.region;
     if (body.maxParticipants !== undefined)
       updateData.maxParticipants = body.maxParticipants;
     if (body.visibility !== undefined) updateData.visibility = body.visibility;
@@ -268,6 +270,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       title: updatedEvent.title,
       description: updatedEvent.description,
       location: updatedEvent.location,
+      region: updatedEvent.region,
       startTime: updatedEvent.startTime.toISOString(),
       endTime: updatedEvent.endTime.toISOString(),
       maxParticipants: updatedEvent.maxParticipants,
