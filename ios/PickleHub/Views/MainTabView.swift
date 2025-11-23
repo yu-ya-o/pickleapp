@@ -25,6 +25,7 @@ struct MainTabView: View {
                 }
 
             ProfileView()
+                .environmentObject(eventsViewModel)
                 .tabItem {
                     Label("プロフィール", systemImage: "person.circle")
                 }

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ProfileView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var eventsViewModel: EventsViewModel
     @State private var showingSignOutAlert = false
     @State private var showingEditProfile = false
     @State private var showingMyEvents = false
@@ -210,6 +211,7 @@ struct ProfileView: View {
             .sheet(isPresented: $showingMyEvents) {
                 MyEventsView()
                     .environmentObject(authViewModel)
+                    .environmentObject(eventsViewModel)
             }
             .alert("ログアウト", isPresented: $showingSignOutAlert) {
                 Button("キャンセル", role: .cancel) {}
