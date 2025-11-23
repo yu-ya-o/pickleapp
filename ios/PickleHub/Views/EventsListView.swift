@@ -163,10 +163,7 @@ struct EventsListView: View {
                             List {
                                 ForEach(filteredTeamEvents) { event in
                                     NavigationLink(destination: TeamEventDetailView(teamId: event.team.id, eventId: event.id)) {
-                                        TeamEventRowView(event: event, onProfileTap: {
-                                            selectedUser = event.creator
-                                            showingUserProfile = true
-                                        })
+                                        TeamEventRowView(event: event)
                                     }
                                     .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                                     .listRowSeparator(.hidden)

@@ -4,8 +4,6 @@ struct TeamEventsListView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject private var viewModel: TeamEventsViewModel
     @State private var showingCreateEvent = false
-    @State private var selectedUser: User?
-    @State private var showingUserProfile = false
 
     init(teamId: String) {
         _viewModel = StateObject(wrappedValue: TeamEventsViewModel(teamId: teamId))
@@ -35,10 +33,7 @@ struct TeamEventsListView: View {
                                 teamId: viewModel.teamId,
                                 eventId: event.id
                             )) {
-                                TeamEventRowView(event: event, onProfileTap: {
-                                    selectedUser = event.creator
-                                    showingUserProfile = true
-                                })
+                                TeamEventRowView(event: event)
                             }
                             .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                             .listRowSeparator(.hidden)
@@ -73,11 +68,6 @@ struct TeamEventsListView: View {
                 CreateTeamEventView(teamId: viewModel.teamId)
                     .environmentObject(viewModel)
             }
-            .sheet(isPresented: $showingUserProfile) {
-                if let user = selectedUser {
-                    UserProfileView(user: user)
-                }
-            }
             .task {
                 await viewModel.loadTeam()
                 await viewModel.loadEvents()
@@ -88,41 +78,35 @@ struct TeamEventsListView: View {
 
 struct TeamEventRowView: View {
     let event: TeamEvent
-    var onProfileTap: (() -> Void)? = nil
 
     var body: some View {
         HStack(alignment: .top, spacing: Spacing.md) {
             // Left: Creator profile image and nickname
             VStack(spacing: Spacing.xs) {
-                Button(action: {
-                    onProfileTap?()
-                }) {
-                    if let profileImageURL = event.creator.profileImageURL {
-                        AsyncImage(url: profileImageURL) { phase in
-                            switch phase {
-                            case .success(let image):
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 50, height: 50)
-                                    .clipShape(Circle())
-                            case .failure(_), .empty:
-                                Image(systemName: "person.circle.fill")
-                                    .resizable()
-                                    .frame(width: 50, height: 50)
-                                    .foregroundColor(.gray)
-                            @unknown default:
-                                EmptyView()
-                            }
+                if let profileImageURL = event.creator.profileImageURL {
+                    AsyncImage(url: profileImageURL) { phase in
+                        switch phase {
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 50, height: 50)
+                                .clipShape(Circle())
+                        case .failure(_), .empty:
+                            Image(systemName: "person.circle.fill")
+                                .resizable()
+                                .frame(width: 50, height: 50)
+                                .foregroundColor(.gray)
+                        @unknown default:
+                            EmptyView()
                         }
-                    } else {
-                        Image(systemName: "person.circle.fill")
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .foregroundColor(.gray)
                     }
+                } else {
+                    Image(systemName: "person.circle.fill")
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .foregroundColor(.gray)
                 }
-                .buttonStyle(.plain)
 
                 Text(event.creator.displayName)
                     .font(.caption)
