@@ -8,15 +8,45 @@ struct TeamMembersView: View {
     @State private var selectedMember: TeamMember?
     @State private var showingRoleChange = false
     @State private var showingRemoveAlert = false
+    @State private var selectedUser: User?
+    @State private var showingUserProfile = false
 
     var body: some View {
         NavigationView {
             List {
                 ForEach(viewModel.members) { member in
                     HStack(spacing: 12) {
-                        Image(systemName: "person.circle.fill")
-                            .font(.title2)
-                            .foregroundColor(.blue)
+                        // Tappable Profile Image
+                        Button(action: {
+                            selectedUser = member.user
+                            showingUserProfile = true
+                        }) {
+                            if let profileImageURL = member.user.profileImageURL {
+                                AsyncImage(url: profileImageURL) { phase in
+                                    switch phase {
+                                    case .success(let image):
+                                        image
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 50, height: 50)
+                                            .clipShape(Circle())
+                                    case .failure(_), .empty:
+                                        Image(systemName: "person.circle.fill")
+                                            .resizable()
+                                            .frame(width: 50, height: 50)
+                                            .foregroundColor(.blue)
+                                    @unknown default:
+                                        EmptyView()
+                                    }
+                                }
+                            } else {
+                                Image(systemName: "person.circle.fill")
+                                    .resizable()
+                                    .frame(width: 50, height: 50)
+                                    .foregroundColor(.blue)
+                            }
+                        }
+                        .buttonStyle(.plain)
 
                         VStack(alignment: .leading, spacing: 4) {
                             HStack {
@@ -111,6 +141,11 @@ struct TeamMembersView: View {
                 }
             } message: { member in
                 Text("Remove \(member.user.displayName) from the team?")
+            }
+            .sheet(isPresented: $showingUserProfile) {
+                if let user = selectedUser {
+                    UserProfileView(user: user)
+                }
             }
         }
     }

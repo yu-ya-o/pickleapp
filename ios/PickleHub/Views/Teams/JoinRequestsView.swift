@@ -6,6 +6,8 @@ struct JoinRequestsView: View {
     @State private var showingApproveConfirm = false
     @State private var showingRejectConfirm = false
     @State private var selectedRequest: TeamJoinRequest?
+    @State private var selectedUser: User?
+    @State private var showingUserProfile = false
 
     var body: some View {
         NavigationView {
@@ -35,6 +37,10 @@ struct JoinRequestsView: View {
                                 onReject: {
                                     selectedRequest = request
                                     showingRejectConfirm = true
+                                },
+                                onProfileTap: {
+                                    selectedUser = request.user
+                                    showingUserProfile = true
                                 }
                             )
                         }
@@ -77,6 +83,11 @@ struct JoinRequestsView: View {
                     Text("\(request.user.displayName)の参加リクエストを拒否しますか?")
                 }
             }
+            .sheet(isPresented: $showingUserProfile) {
+                if let user = selectedUser {
+                    UserProfileView(user: user)
+                }
+            }
         }
     }
 
@@ -95,13 +106,44 @@ struct JoinRequestRow: View {
     let request: TeamJoinRequest
     let onApprove: () -> Void
     let onReject: () -> Void
+    let onProfileTap: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 12) {
-                Image(systemName: "person.circle.fill")
-                    .font(.title2)
-                    .foregroundColor(.blue)
+                // Tappable Profile Image
+                if let profileImageURL = request.user.profileImageURL {
+                    AsyncImage(url: profileImageURL) { phase in
+                        switch phase {
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 50, height: 50)
+                                .clipShape(Circle())
+                        case .failure(_), .empty:
+                            Image(systemName: "person.circle.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 50, height: 50)
+                                .foregroundColor(.blue)
+                        @unknown default:
+                            EmptyView()
+                        }
+                    }
+                    .onTapGesture {
+                        onProfileTap()
+                    }
+                } else {
+                    Image(systemName: "person.circle.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 50, height: 50)
+                        .foregroundColor(.blue)
+                        .onTapGesture {
+                            onProfileTap()
+                        }
+                }
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(request.user.displayName)

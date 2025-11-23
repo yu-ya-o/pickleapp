@@ -7,6 +7,8 @@ struct EventsListView: View {
     @State private var selectedSegment = 0  // 0: 通常イベント, 1: チームイベント
     @State private var searchText = ""
     @State private var selectedRegion = ""
+    @State private var selectedUser: User?
+    @State private var showingUserProfile = false
 
     var filteredEvents: [Event] {
         var events = eventsViewModel.events
@@ -129,7 +131,10 @@ struct EventsListView: View {
                             List {
                                 ForEach(filteredEvents) { event in
                                     NavigationLink(destination: EventDetailView(event: event)) {
-                                        ModernEventRowView(event: event)
+                                        ModernEventRowView(event: event, onProfileTap: {
+                                            selectedUser = event.creator
+                                            showingUserProfile = true
+                                        })
                                     }
                                     .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                                     .listRowSeparator(.hidden)
@@ -158,7 +163,10 @@ struct EventsListView: View {
                             List {
                                 ForEach(filteredTeamEvents) { event in
                                     NavigationLink(destination: TeamEventDetailView(teamId: event.team.id, eventId: event.id)) {
-                                        TeamEventRowView(event: event)
+                                        TeamEventRowView(event: event, onProfileTap: {
+                                            selectedUser = event.creator
+                                            showingUserProfile = true
+                                        })
                                     }
                                     .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                                     .listRowSeparator(.hidden)
@@ -188,6 +196,11 @@ struct EventsListView: View {
             .sheet(isPresented: $showingCreateEvent) {
                 CreateEventView()
                     .environmentObject(eventsViewModel)
+            }
+            .sheet(isPresented: $showingUserProfile) {
+                if let user = selectedUser {
+                    UserProfileView(user: user)
+                }
             }
             .task {
                 // デフォルトで「すべて」を選択

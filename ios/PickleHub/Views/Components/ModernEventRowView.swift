@@ -2,35 +2,41 @@ import SwiftUI
 
 struct ModernEventRowView: View {
     let event: Event
+    var onProfileTap: (() -> Void)? = nil
 
     var body: some View {
         HStack(alignment: .top, spacing: Spacing.md) {
             // Left: Creator profile image and nickname
             VStack(spacing: Spacing.xs) {
-                if let profileImageURL = event.creator.profileImageURL {
-                    AsyncImage(url: profileImageURL) { phase in
-                        switch phase {
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 50, height: 50)
-                                .clipShape(Circle())
-                        case .failure(_), .empty:
-                            Image(systemName: "person.circle.fill")
-                                .resizable()
-                                .frame(width: 50, height: 50)
-                                .foregroundColor(.gray)
-                        @unknown default:
-                            EmptyView()
+                Button(action: {
+                    onProfileTap?()
+                }) {
+                    if let profileImageURL = event.creator.profileImageURL {
+                        AsyncImage(url: profileImageURL) { phase in
+                            switch phase {
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                            case .failure(_), .empty:
+                                Image(systemName: "person.circle.fill")
+                                    .resizable()
+                                    .frame(width: 50, height: 50)
+                                    .foregroundColor(.gray)
+                            @unknown default:
+                                EmptyView()
+                            }
                         }
+                    } else {
+                        Image(systemName: "person.circle.fill")
+                            .resizable()
+                            .frame(width: 50, height: 50)
+                            .foregroundColor(.gray)
                     }
-                } else {
-                    Image(systemName: "person.circle.fill")
-                        .resizable()
-                        .frame(width: 50, height: 50)
-                        .foregroundColor(.gray)
                 }
+                .buttonStyle(.plain)
 
                 Text(event.creator.displayName)
                     .font(.caption)
