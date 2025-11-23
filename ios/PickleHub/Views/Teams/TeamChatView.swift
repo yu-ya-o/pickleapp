@@ -9,10 +9,17 @@ struct TeamChatView: View {
     @State private var isLoading = false
     @State private var errorMessage: String?
     @State private var showingEventPicker = false
+    @State private var showingShareConfirmation = false
+    @State private var selectedEventToShare: TeamEvent?
     @State private var teamEvents: [TeamEvent] = []
+    @State private var userRole: String?
 
     let teamId: String
     let teamName: String
+
+    private var canShareEvents: Bool {
+        userRole == "owner" || userRole == "admin"
+    }
 
     var body: some View {
         NavigationView {
@@ -39,7 +46,8 @@ struct TeamChatView: View {
                                 ForEach(messages) { message in
                                     TeamMessageBubbleView(
                                         message: message,
-                                        isCurrentUser: message.user.id == authViewModel.currentUser?.id
+                                        isCurrentUser: message.user.id == authViewModel.currentUser?.id,
+                                        teamId: teamId
                                     )
                                     .id(message.id)
                                 }
@@ -54,15 +62,17 @@ struct TeamChatView: View {
 
                 // Input area
                 HStack(spacing: 12) {
-                    // Event share button
-                    Button(action: {
-                        showingEventPicker = true
-                    }) {
-                        Image(systemName: "calendar.badge.plus")
-                            .foregroundColor(.twitterBlue)
-                            .padding(10)
-                            .background(Color(.systemGray6))
-                            .clipShape(Circle())
+                    // Event share button (only for owners and admins)
+                    if canShareEvents {
+                        Button(action: {
+                            showingEventPicker = true
+                        }) {
+                            Image(systemName: "calendar.badge.plus")
+                                .foregroundColor(.twitterBlue)
+                                .padding(10)
+                                .background(Color(.systemGray6))
+                                .clipShape(Circle())
+                        }
                     }
 
                     TextField("メッセージを入力...", text: $messageText, axis: .vertical)
@@ -93,15 +103,32 @@ struct TeamChatView: View {
             .task {
                 await loadMessages()
                 await loadTeamEvents()
+                await loadUserRole()
             }
             .sheet(isPresented: $showingEventPicker) {
                 EventPickerView(
                     events: teamEvents,
                     onSelectEvent: { event in
-                        shareEvent(event)
+                        selectedEventToShare = event
                         showingEventPicker = false
+                        showingShareConfirmation = true
                     }
                 )
+            }
+            .alert("イベント共有", isPresented: $showingShareConfirmation) {
+                Button("キャンセル", role: .cancel) {
+                    selectedEventToShare = nil
+                }
+                Button("共有する") {
+                    if let event = selectedEventToShare {
+                        shareEvent(event)
+                    }
+                    selectedEventToShare = nil
+                }
+            } message: {
+                if let event = selectedEventToShare {
+                    Text("「\(event.title)」をチームに共有しますか？")
+                }
             }
         }
     }
@@ -145,15 +172,26 @@ struct TeamChatView: View {
         }
     }
 
+    private func loadUserRole() async {
+        do {
+            let team = try await APIClient.shared.getTeamDetail(teamId: teamId)
+            if let currentUserId = authViewModel.currentUser?.id {
+                userRole = team.userRole
+            }
+        } catch {
+            print("Load user role error: \(error)")
+        }
+    }
+
     private func shareEvent(_ event: TeamEvent) {
+        // Include event ID as metadata at the end for parsing
         let eventInfo = """
 📅 イベント共有
 【\(event.title)】
 📍 \(event.location)
 🕐 \(event.formattedDate)
 👥 \(event.participantCount)/\(event.maxParticipants ?? 0)人
-
-イベントID: \(event.id)
+[event:\(event.id)]
 """
         Task {
             do {
@@ -240,9 +278,35 @@ struct EventPickerView: View {
 struct TeamMessageBubbleView: View {
     let message: TeamMessage
     let isCurrentUser: Bool
+    let teamId: String
+    @State private var showingEventDetail = false
+    @State private var eventId: String?
+
+    private var isEventShare: Bool {
+        message.content.hasPrefix("📅 イベント共有")
+    }
+
+    private var displayContent: String {
+        // Remove [event:xxx] metadata from display
+        message.content.replacingOccurrences(
+            of: "\\[event:[^\\]]+\\]",
+            with: "",
+            options: .regularExpression
+        ).trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private func extractEventId() -> String? {
+        let pattern = "\\[event:([^\\]]+)\\]"
+        guard let regex = try? NSRegularExpression(pattern: pattern),
+              let match = regex.firstMatch(in: message.content, range: NSRange(message.content.startIndex..., in: message.content)),
+              let range = Range(match.range(at: 1), in: message.content) else {
+            return nil
+        }
+        return String(message.content[range])
+    }
 
     var body: some View {
-        HStack(alignment: .bottom, spacing: 8) {
+        HStack(alignment: .top, spacing: 8) {
             if isCurrentUser {
                 Spacer()
             }
@@ -271,12 +335,30 @@ struct TeamMessageBubbleView: View {
                         .foregroundColor(.secondary)
                 }
 
-                // Message content
-                Text(message.content)
-                    .padding(12)
-                    .background(isCurrentUser ? Color.twitterBlue : Color(.systemGray5))
-                    .foregroundColor(isCurrentUser ? .white : .primary)
-                    .cornerRadius(16)
+                // Message content - tappable if it's an event share
+                if isEventShare {
+                    Button(action: {
+                        eventId = extractEventId()
+                        showingEventDetail = true
+                    }) {
+                        Text(displayContent)
+                            .padding(12)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(isCurrentUser ? Color.twitterBlue.opacity(0.9) : Color(.systemGray5))
+                            .foregroundColor(isCurrentUser ? .white : .primary)
+                            .cornerRadius(16)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .stroke(Color.twitterBlue.opacity(0.3), lineWidth: 2)
+                            )
+                    }
+                } else {
+                    Text(displayContent)
+                        .padding(12)
+                        .background(isCurrentUser ? Color.twitterBlue : Color(.systemGray5))
+                        .foregroundColor(isCurrentUser ? .white : .primary)
+                        .cornerRadius(16)
+                }
 
                 // Timestamp
                 Text(message.formattedTime)
@@ -301,6 +383,11 @@ struct TeamMessageBubbleView: View {
 
             if !isCurrentUser {
                 Spacer()
+            }
+        }
+        .sheet(isPresented: $showingEventDetail) {
+            if let eventId = eventId {
+                TeamEventDetailContainerView(teamId: teamId, eventId: eventId)
             }
         }
     }
