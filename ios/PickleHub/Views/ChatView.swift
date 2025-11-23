@@ -111,27 +111,61 @@ struct MessageBubbleView: View {
     let isCurrentUser: Bool
 
     var body: some View {
-        HStack {
+        HStack(alignment: .bottom, spacing: 8) {
             if isCurrentUser {
                 Spacer()
             }
 
+            // User icon for other users
+            if !isCurrentUser {
+                AsyncImage(url: URL(string: message.user.profileImage ?? "")) { image in
+                    image
+                        .resizable()
+                        .scaledToFill()
+                } placeholder: {
+                    Image(systemName: "person.circle.fill")
+                        .resizable()
+                        .foregroundColor(.gray)
+                }
+                .frame(width: 32, height: 32)
+                .clipShape(Circle())
+            }
+
             VStack(alignment: isCurrentUser ? .trailing : .leading, spacing: 4) {
+                // User name for other users
                 if !isCurrentUser {
                     Text(message.user.displayName)
                         .font(.caption)
+                        .fontWeight(.semibold)
                         .foregroundColor(.secondary)
                 }
 
+                // Message content
                 Text(message.content)
                     .padding(12)
-                    .background(isCurrentUser ? Color.blue : Color(.systemGray5))
+                    .background(isCurrentUser ? Color.twitterBlue : Color(.systemGray5))
                     .foregroundColor(isCurrentUser ? .white : .primary)
                     .cornerRadius(16)
 
+                // Timestamp
                 Text(message.formattedTime)
                     .font(.caption2)
                     .foregroundColor(.secondary)
+            }
+
+            // User icon for current user
+            if isCurrentUser {
+                AsyncImage(url: URL(string: message.user.profileImage ?? "")) { image in
+                    image
+                        .resizable()
+                        .scaledToFill()
+                } placeholder: {
+                    Image(systemName: "person.circle.fill")
+                        .resizable()
+                        .foregroundColor(.gray)
+                }
+                .frame(width: 32, height: 32)
+                .clipShape(Circle())
             }
 
             if !isCurrentUser {

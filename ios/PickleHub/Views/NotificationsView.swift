@@ -67,14 +67,13 @@ struct NotificationsView: View {
                             NotificationRow(
                                 notification: notification,
                                 onTap: {
-                                    // Mark as read
-                                    if !notification.isRead {
-                                        Task {
-                                            await viewModel.markAsRead(notificationId: notification.id)
-                                        }
-                                    }
                                     // Navigate to related content
                                     navigateToDetails(for: notification)
+
+                                    // Delete notification after viewing
+                                    Task {
+                                        await viewModel.deleteNotification(notificationId: notification.id)
+                                    }
                                 }
                             )
                             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
