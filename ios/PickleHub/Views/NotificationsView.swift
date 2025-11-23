@@ -117,8 +117,18 @@ struct NotificationsView: View {
             }
             .sheet(isPresented: $showingTeamDetail) {
                 if let teamId = selectedTeamId {
-                    TeamDetailView(teamId: teamId)
-                        .environmentObject(authViewModel)
+                    NavigationView {
+                        TeamDetailView(teamId: teamId)
+                            .environmentObject(authViewModel)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .toolbar {
+                                ToolbarItem(placement: .navigationBarTrailing) {
+                                    Button("Done") {
+                                        showingTeamDetail = false
+                                    }
+                                }
+                            }
+                    }
                 }
             }
         }

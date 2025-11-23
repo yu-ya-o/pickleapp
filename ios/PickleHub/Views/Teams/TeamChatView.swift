@@ -342,14 +342,22 @@ struct TeamMessageBubbleView: View {
                         Text(displayContent)
                             .padding(12)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(isCurrentUser ? Color.twitterBlue.opacity(0.9) : Color(.systemGray5))
-                            .foregroundColor(isCurrentUser ? .white : .primary)
+                            .background(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [Color.green.opacity(0.7), Color.green.opacity(0.5)]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .foregroundColor(.white)
                             .cornerRadius(16)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 16)
-                                    .stroke(Color.twitterBlue.opacity(0.3), lineWidth: 2)
+                                    .stroke(Color.green, lineWidth: 2)
                             )
+                            .shadow(color: Color.green.opacity(0.3), radius: 4, x: 0, y: 2)
                     }
+                    .buttonStyle(.plain)
                 } else {
                     Text(displayContent)
                         .padding(12)
