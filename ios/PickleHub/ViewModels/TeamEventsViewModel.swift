@@ -77,6 +77,7 @@ class TeamEventsViewModel: ObservableObject {
             startTime: formatter.string(from: startTime),
             endTime: formatter.string(from: endTime),
             maxParticipants: maxParticipants,
+            price: nil,
             visibility: visibility
         )
 
@@ -114,6 +115,7 @@ class TeamEventsViewModel: ObservableObject {
             startTime: startTime.map { formatter.string(from: $0) },
             endTime: endTime.map { formatter.string(from: $0) },
             maxParticipants: maxParticipants,
+            price: nil,
             visibility: visibility
         )
 
