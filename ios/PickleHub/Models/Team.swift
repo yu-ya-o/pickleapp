@@ -18,6 +18,12 @@ struct Team: Codable, Identifiable, Hashable {
     let hasPendingJoinRequest: Bool?
     let members: [TeamMember]?
 
+    // SNS Links
+    let instagramUrl: String?
+    let twitterUrl: String?
+    let tiktokUrl: String?
+    let lineUrl: String?
+
     var iconImageURL: URL? {
         guard let urlString = iconImage else { return nil }
         return URL(string: urlString)
@@ -77,6 +83,10 @@ struct CreateTeamRequest: Codable {
     let iconImage: String?
     let region: String?
     let visibility: String // "public" or "private"
+    let instagramUrl: String?
+    let twitterUrl: String?
+    let tiktokUrl: String?
+    let lineUrl: String?
 }
 
 struct UpdateTeamRequest: Codable {
@@ -85,6 +95,10 @@ struct UpdateTeamRequest: Codable {
     let iconImage: String?
     let region: String?
     let visibility: String?
+    let instagramUrl: String?
+    let twitterUrl: String?
+    let tiktokUrl: String?
+    let lineUrl: String?
 }
 
 struct UpdateMemberRoleRequest: Codable {

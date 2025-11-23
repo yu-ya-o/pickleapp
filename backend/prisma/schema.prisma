@@ -25,6 +25,12 @@ model User {
   skillLevel            String?   // "beginner", "intermediate", "advanced"
   isProfileComplete     Boolean   @default(false)
 
+  // SNS Links
+  instagramUrl          String?
+  twitterUrl            String?
+  tiktokUrl             String?
+  lineUrl               String?
+
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
@@ -127,6 +133,12 @@ model Team {
   visibility  String   @default("public") // "public", "private"
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  // SNS Links
+  instagramUrl String?
+  twitterUrl   String?
+  tiktokUrl    String?
+  lineUrl      String?
 
   // Relations
   ownerId         String
