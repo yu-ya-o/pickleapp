@@ -18,6 +18,7 @@ model User {
 
   // Profile fields
   nickname              String?
+  bio                   String?   // 自己紹介文
   region                String?
   pickleballExperience  String?   // e.g., "6ヶ月", "1年", "3年以上"
   gender                String?   // "male", "female", "other", "prefer_not_to_say"

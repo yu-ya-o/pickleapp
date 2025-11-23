@@ -254,6 +254,7 @@ struct TeamEventCreator: Codable, Hashable {
     let name: String
     let profileImage: String?
     let nickname: String?
+    let bio: String?
     let region: String?
     let pickleballExperience: String?
     let gender: String?
@@ -271,7 +272,7 @@ struct TeamEventCreator: Codable, Hashable {
 
     // Convert to User
     func toUser() -> User {
-        User(id: id, email: email, name: name, profileImage: profileImage, nickname: nickname, region: region, pickleballExperience: pickleballExperience, gender: gender, skillLevel: skillLevel, isProfileComplete: isProfileComplete)
+        User(id: id, email: email, name: name, profileImage: profileImage, nickname: nickname, bio: bio, region: region, pickleballExperience: pickleballExperience, gender: gender, skillLevel: skillLevel, isProfileComplete: isProfileComplete)
     }
 }
 
@@ -288,6 +289,7 @@ struct TeamEventParticipantUser: Codable, Hashable {
     let name: String
     let profileImage: String?
     let nickname: String?
+    let bio: String?
     let region: String?
     let pickleballExperience: String?
     let gender: String?
@@ -305,7 +307,7 @@ struct TeamEventParticipantUser: Codable, Hashable {
 
     // Convert to User
     func toUser() -> User {
-        User(id: id, email: email, name: name, profileImage: profileImage, nickname: nickname, region: region, pickleballExperience: pickleballExperience, gender: gender, skillLevel: skillLevel, isProfileComplete: isProfileComplete)
+        User(id: id, email: email, name: name, profileImage: profileImage, nickname: nickname, bio: bio, region: region, pickleballExperience: pickleballExperience, gender: gender, skillLevel: skillLevel, isProfileComplete: isProfileComplete)
     }
 }
 

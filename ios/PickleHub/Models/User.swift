@@ -6,6 +6,7 @@ struct User: Codable, Identifiable, Hashable {
     let name: String
     let profileImage: String?
     let nickname: String?
+    let bio: String?
     let region: String?
     let pickleballExperience: String?
     let gender: String?
@@ -35,6 +36,7 @@ struct GoogleSignInResponse: Codable {
 // MARK: - Profile
 struct UpdateProfileRequest: Codable {
     let nickname: String?
+    let bio: String?
     let region: String?
     let pickleballExperience: String?
     let gender: String?
@@ -42,12 +44,14 @@ struct UpdateProfileRequest: Codable {
     let profileImage: String?
 
     init(nickname: String? = nil,
+         bio: String? = nil,
          region: String? = nil,
          pickleballExperience: String? = nil,
          gender: String? = nil,
          skillLevel: String? = nil,
          profileImage: String? = nil) {
         self.nickname = nickname
+        self.bio = bio
         self.region = region
         self.pickleballExperience = pickleballExperience
         self.gender = gender

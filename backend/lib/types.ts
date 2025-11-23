@@ -12,6 +12,7 @@ export interface GoogleSignInResponse {
     name: string;
     profileImage: string | null;
     nickname: string | null;
+    bio: string | null;
     region: string | null;
     pickleballExperience: string | null;
     gender: string | null;
@@ -24,6 +25,7 @@ export interface GoogleSignInResponse {
 // ============= USER PROFILE =============
 export interface UpdateProfileRequest {
   nickname?: string;
+  bio?: string;
   region?: string;
   pickleballExperience?: string;
   gender?: string;
@@ -37,6 +39,7 @@ export interface UserProfileResponse {
   name: string;
   profileImage: string | null;
   nickname: string | null;
+  bio: string | null;
   region: string | null;
   pickleballExperience: string | null;
   gender: string | null;
