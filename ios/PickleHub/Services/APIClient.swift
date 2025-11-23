@@ -534,4 +534,40 @@ class APIClient {
             requiresAuth: true
         )
     }
+
+    // MARK: - Notifications API
+
+    func getNotifications() async throws -> NotificationsResponse {
+        return try await request(
+            endpoint: "/api/notifications",
+            requiresAuth: true
+        )
+    }
+
+    func markNotificationAsRead(notificationId: String) async throws {
+        struct Response: Codable { let message: String }
+        let _: Response = try await request(
+            endpoint: "/api/notifications/\(notificationId)/read",
+            method: "PATCH",
+            requiresAuth: true
+        )
+    }
+
+    func markAllNotificationsAsRead() async throws {
+        struct Response: Codable { let message: String }
+        let _: Response = try await request(
+            endpoint: "/api/notifications/read-all",
+            method: "PATCH",
+            requiresAuth: true
+        )
+    }
+
+    func deleteNotification(notificationId: String) async throws {
+        struct Response: Codable { let message: String }
+        let _: Response = try await request(
+            endpoint: "/api/notifications/\(notificationId)",
+            method: "DELETE",
+            requiresAuth: true
+        )
+    }
 }
