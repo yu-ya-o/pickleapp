@@ -135,16 +135,20 @@ struct TeamsListView: View {
                 }
             }
             .navigationBarHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        showingCreateTeam = true
-                    }) {
-                        Image(systemName: "plus.circle.fill")
-                            .foregroundColor(.twitterBlue)
-                            .font(.title2)
-                    }
+            .overlay(alignment: .bottomLeading) {
+                Button(action: {
+                    showingCreateTeam = true
+                }) {
+                    Image(systemName: "plus")
+                        .font(.title2)
+                        .foregroundColor(.white)
+                        .frame(width: 56, height: 56)
+                        .background(Color.twitterBlue)
+                        .clipShape(Circle())
+                        .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
                 }
+                .padding(.leading, 16)
+                .padding(.bottom, 16)
             }
             .refreshable {
                 await viewModel.refresh()
