@@ -76,6 +76,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       title: event.title,
       description: event.description,
       location: event.location,
+      region: event.region,
       startTime: event.startTime.toISOString(),
       endTime: event.endTime.toISOString(),
       maxParticipants: event.maxParticipants,
@@ -138,6 +139,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     if (body.title) updateData.title = body.title;
     if (body.description) updateData.description = body.description;
     if (body.location) updateData.location = body.location;
+    if (body.region !== undefined) updateData.region = body.region;
     if (body.skillLevel) updateData.skillLevel = body.skillLevel;
     if (body.maxParticipants) updateData.maxParticipants = body.maxParticipants;
     if (body.status) updateData.status = body.status;
@@ -197,6 +199,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       title: updatedEvent.title,
       description: updatedEvent.description,
       location: updatedEvent.location,
+      region: updatedEvent.region,
       startTime: updatedEvent.startTime.toISOString(),
       endTime: updatedEvent.endTime.toISOString(),
       maxParticipants: updatedEvent.maxParticipants,
