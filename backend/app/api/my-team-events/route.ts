@@ -54,6 +54,7 @@ export async function GET(request: NextRequest) {
             id: true,
             name: true,
             iconImage: true,
+            headerImage: true,
           },
         },
         creator: {
@@ -114,6 +115,8 @@ export async function GET(request: NextRequest) {
         startTime: event.startTime.toISOString(),
         endTime: event.endTime.toISOString(),
         maxParticipants: event.maxParticipants,
+        price: event.price,
+        status: event.status,
         visibility: event.visibility,
         createdAt: event.createdAt.toISOString(),
         updatedAt: event.updatedAt.toISOString(),
