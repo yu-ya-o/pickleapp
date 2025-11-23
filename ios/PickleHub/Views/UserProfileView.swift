@@ -54,6 +54,14 @@ struct UserProfileView: View {
                             .padding(.horizontal, Spacing.md)
                     }
 
+                    // SNS Links
+                    SNSLinksView(
+                        instagramUrl: user.instagramUrl,
+                        twitterUrl: user.twitterUrl,
+                        tiktokUrl: user.tiktokUrl,
+                        lineUrl: user.lineUrl
+                    )
+
                     // Profile Details
                     VStack(spacing: Spacing.md) {
                         if let region = user.region {
