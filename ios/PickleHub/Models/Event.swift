@@ -27,12 +27,18 @@ struct Event: Codable, Identifiable, Hashable {
     }
 
     var formattedDate: String {
-        guard let date = startDate else { return "" }
+        guard let date = startDate else {
+            print("⚠️ Event formattedDate: startDate is nil for event '\(title)'")
+            print("   startTime string: '\(startTime)'")
+            return ""
+        }
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ja_JP")
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
-        return formatter.string(from: date)
+        let formatted = formatter.string(from: date)
+        print("✅ Event formattedDate: '\(formatted)' for event '\(title)'")
+        return formatted
     }
 
     var skillLevelEmoji: String {
