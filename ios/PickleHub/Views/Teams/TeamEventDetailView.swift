@@ -105,9 +105,9 @@ struct TeamEventDetailView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .navigationTitle("Event")
+        .navigationTitle("イベント")
         .navigationBarTitleDisplayMode(.inline)
-        .alert("Notification", isPresented: $showingAlert) {
+        .alert("通知", isPresented: $showingAlert) {
             Button("OK", role: .cancel) {}
         } message: {
             Text(alertMessage)
@@ -435,7 +435,7 @@ struct TeamEventDetailView: View {
                 alertMessage = "イベントを締め切りました"
                 showingAlert = true
             } catch {
-                alertMessage = "Failed to close event: \(error.localizedDescription)"
+                alertMessage = "イベントの締め切りに失敗しました: \(error.localizedDescription)"
                 showingAlert = true
             }
         }
@@ -459,10 +459,10 @@ struct TeamEventDetailView: View {
             do {
                 try await viewModel.joinEvent(eventId: eventId)
                 await loadEvent()
-                alertMessage = "Successfully joined event!"
+                alertMessage = "イベントに参加しました！"
                 showingAlert = true
             } catch {
-                alertMessage = "Failed to join event: \(error.localizedDescription)"
+                alertMessage = "イベント参加に失敗しました: \(error.localizedDescription)"
                 showingAlert = true
             }
         }
@@ -473,10 +473,10 @@ struct TeamEventDetailView: View {
             do {
                 try await viewModel.leaveEvent(eventId: eventId)
                 await loadEvent()
-                alertMessage = "Left event successfully"
+                alertMessage = "イベントから退出しました"
                 showingAlert = true
             } catch {
-                alertMessage = "Failed to leave event: \(error.localizedDescription)"
+                alertMessage = "イベント退出に失敗しました: \(error.localizedDescription)"
                 showingAlert = true
             }
         }
@@ -488,7 +488,7 @@ struct TeamEventDetailView: View {
                 try await viewModel.deleteEvent(eventId: eventId)
                 dismiss()
             } catch {
-                alertMessage = "Failed to delete event: \(error.localizedDescription)"
+                alertMessage = "イベントの削除に失敗しました: \(error.localizedDescription)"
                 showingAlert = true
             }
         }

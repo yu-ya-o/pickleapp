@@ -61,7 +61,7 @@ struct EventDetailView: View {
                 Spacer()
             }
         }
-        .navigationTitle("Event")
+        .navigationTitle("イベント")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingChat) {
             ChatView(eventId: event.id, eventTitle: event.title)
@@ -153,7 +153,7 @@ struct EventDetailView: View {
 
             HStack {
                 Image(systemName: "person.2")
-                Text("\(event.availableSpots) of \(event.maxParticipants) spots available")
+                Text("\(event.maxParticipants)人中\(event.availableSpots)人空き")
                     .foregroundColor(event.availableSpots > 0 ? .green : .red)
             }
 
@@ -383,14 +383,14 @@ struct EventDetailView: View {
                 print("📝 Making reservation for event: \(event.id)")
                 try await eventsViewModel.makeReservation(eventId: event.id)
                 print("✅ Reservation successful!")
-                alertMessage = "Reservation successful!"
+                alertMessage = "予約が完了しました！"
                 showingAlert = true
             } catch {
                 print("❌ Reservation failed: \(error)")
                 if let apiError = error as? APIError {
                     print("❌ API Error: \(apiError.errorDescription ?? "unknown")")
                 }
-                alertMessage = "Failed to make reservation: \(error.localizedDescription)"
+                alertMessage = "予約に失敗しました: \(error.localizedDescription)"
                 showingAlert = true
             }
         }
@@ -400,10 +400,10 @@ struct EventDetailView: View {
         Task {
             do {
                 try await eventsViewModel.cancelReservation(reservationId: reservationId)
-                alertMessage = "Reservation cancelled"
+                alertMessage = "予約をキャンセルしました"
                 showingAlert = true
             } catch {
-                alertMessage = "Failed to cancel reservation: \(error.localizedDescription)"
+                alertMessage = "予約のキャンセルに失敗しました: \(error.localizedDescription)"
                 showingAlert = true
             }
         }
@@ -416,7 +416,7 @@ struct EventDetailView: View {
                 alertMessage = "イベントを締め切りました"
                 showingAlert = true
             } catch {
-                alertMessage = "Failed to close event: \(error.localizedDescription)"
+                alertMessage = "イベントの締め切りに失敗しました: \(error.localizedDescription)"
                 showingAlert = true
             }
         }
@@ -428,7 +428,7 @@ struct EventDetailView: View {
                 try await eventsViewModel.deleteEvent(id: event.id)
                 dismiss()
             } catch {
-                alertMessage = "Failed to delete event: \(error.localizedDescription)"
+                alertMessage = "イベントの削除に失敗しました: \(error.localizedDescription)"
                 showingAlert = true
             }
         }

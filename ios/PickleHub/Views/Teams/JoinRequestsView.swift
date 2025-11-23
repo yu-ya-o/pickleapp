@@ -17,10 +17,10 @@ struct JoinRequestsView: View {
                         Image(systemName: "person.crop.circle.badge.checkmark")
                             .font(.system(size: 60))
                             .foregroundColor(.gray)
-                        Text("No Pending Requests")
+                        Text("保留中のリクエストはありません")
                             .font(.headline)
                             .foregroundColor(.secondary)
-                        Text("Join requests will appear here")
+                        Text("参加リクエストがここに表示されます")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
@@ -47,11 +47,11 @@ struct JoinRequestsView: View {
                     }
                 }
             }
-            .navigationTitle("Join Requests")
+            .navigationTitle("参加リクエスト")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button("完了") {
                         dismiss()
                     }
                 }
@@ -149,7 +149,7 @@ struct JoinRequestRow: View {
                     Text(request.user.displayName)
                         .font(.headline)
 
-                    Text("Requested \(request.formattedDate)")
+                    Text("リクエスト日: \(request.formattedDate)")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -162,7 +162,7 @@ struct JoinRequestRow: View {
                     print("🔴 Reject button tapped")
                     onReject()
                 }) {
-                    Text("Reject")
+                    Text("拒否")
                         .fontWeight(.semibold)
                         .foregroundColor(.red)
                         .frame(maxWidth: .infinity)
@@ -176,7 +176,7 @@ struct JoinRequestRow: View {
                     print("🟢 Approve button tapped")
                     onApprove()
                 }) {
-                    Text("Approve")
+                    Text("承認")
                         .fontWeight(.semibold)
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)

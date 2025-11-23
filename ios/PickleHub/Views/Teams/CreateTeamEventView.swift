@@ -23,11 +23,11 @@ struct CreateTeamEventView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Event Details")) {
-                    TextField("Event Title", text: $title)
-                    TextField("Description", text: $description, axis: .vertical)
+                Section(header: Text("イベント詳細")) {
+                    TextField("イベントタイトル", text: $title)
+                    TextField("説明", text: $description, axis: .vertical)
                         .lineLimit(3...6)
-                    TextField("Location", text: $location)
+                    TextField("場所", text: $location)
                 }
 
                 Section(header: Text("地域")) {
@@ -40,25 +40,25 @@ struct CreateTeamEventView: View {
                     .pickerStyle(.menu)
                 }
 
-                Section(header: Text("Date & Time")) {
-                    DatePicker("Start Time", selection: $startDate, in: Date()...)
-                    DatePicker("End Time", selection: $endDate, in: startDate...)
+                Section(header: Text("日時")) {
+                    DatePicker("開始時刻", selection: $startDate, in: Date()...)
+                    DatePicker("終了時刻", selection: $endDate, in: startDate...)
                 }
 
-                Section(header: Text("Participants")) {
-                    Toggle("Set participant limit", isOn: $hasCapacityLimit)
+                Section(header: Text("参加者")) {
+                    Toggle("参加人数制限を設定", isOn: $hasCapacityLimit)
 
                     if hasCapacityLimit {
-                        Stepper("Max Participants: \(maxParticipants)", value: $maxParticipants, in: 2...50)
+                        Stepper("最大参加者数: \(maxParticipants)", value: $maxParticipants, in: 2...50)
                     } else {
-                        Text("Unlimited participants")
+                        Text("参加人数無制限")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
                 }
 
-                Section(header: Text("Visibility")) {
-                    Picker("Event Visibility", selection: $visibility) {
+                Section(header: Text("公開設定")) {
+                    Picker("イベントの公開設定", selection: $visibility) {
                         Text("プライベート（チームのみ）").tag("private")
                         Text("パブリック（全体に公開）").tag("public")
                     }
@@ -86,7 +86,7 @@ struct CreateTeamEventView: View {
                         } else {
                             HStack {
                                 Spacer()
-                                Text("Create Event")
+                                Text("イベントを作成")
                                     .fontWeight(.semibold)
                                 Spacer()
                             }
@@ -95,16 +95,16 @@ struct CreateTeamEventView: View {
                     .disabled(!isFormValid || isLoading)
                 }
             }
-            .navigationTitle("Create Team Event")
+            .navigationTitle("チームイベント作成")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button("キャンセル") {
                         dismiss()
                     }
                 }
             }
-            .alert("Error", isPresented: $showingError) {
+            .alert("エラー", isPresented: $showingError) {
                 Button("OK", role: .cancel) {}
             } message: {
                 Text(errorMessage)

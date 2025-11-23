@@ -56,7 +56,7 @@ struct TeamMembersView: View {
                                     .font(.headline)
 
                                 if member.user.id == authViewModel.currentUser?.id {
-                                    Text("(You)")
+                                    Text("(あなた)")
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                 }
@@ -71,7 +71,7 @@ struct TeamMembersView: View {
                                     .foregroundColor(.secondary)
 
                                 if let date = member.joinedDate {
-                                    Text("Joined \(date, style: .date)")
+                                    Text("参加日: \(date, style: .date)")
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                 }
@@ -102,42 +102,42 @@ struct TeamMembersView: View {
                                 selectedMember = member
                                 showingRemoveAlert = true
                             } label: {
-                                Label("Remove", systemImage: "person.badge.minus")
+                                Label("削除", systemImage: "person.badge.minus")
                             }
                         }
                     }
                 }
             }
-            .navigationTitle("Members (\(viewModel.members.count))")
+            .navigationTitle("メンバー (\(viewModel.members.count))")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button("完了") {
                         dismiss()
                     }
                 }
             }
             .confirmationDialog(
-                "Change Role",
+                "役割を変更",
                 isPresented: $showingRoleChange,
                 presenting: selectedMember
             ) { member in
                 // Owner can do everything
                 if viewModel.isOwner {
                     if member.role == "member" {
-                        Button("Promote to Admin") {
+                        Button("管理者に昇格") {
                             changeRole(member: member, newRole: "admin")
                         }
-                        Button("Promote to Owner") {
+                        Button("オーナーに昇格") {
                             memberToPromoteToOwner = member
                             showingOwnershipTransferAlert = true
                         }
                     } else if member.role == "admin" {
-                        Button("Promote to Owner") {
+                        Button("オーナーに昇格") {
                             memberToPromoteToOwner = member
                             showingOwnershipTransferAlert = true
                         }
-                        Button("Demote to Member") {
+                        Button("メンバーに降格") {
                             changeRole(member: member, newRole: "member")
                         }
                     }
@@ -145,35 +145,35 @@ struct TeamMembersView: View {
                 // Admin can only change admin and member roles
                 else if viewModel.isAdmin {
                     if member.role == "member" {
-                        Button("Promote to Admin") {
+                        Button("管理者に昇格") {
                             changeRole(member: member, newRole: "admin")
                         }
                     } else if member.role == "admin" {
-                        Button("Demote to Member") {
+                        Button("メンバーに降格") {
                             changeRole(member: member, newRole: "member")
                         }
                     }
                 }
 
-                Button("Cancel", role: .cancel) {}
+                Button("キャンセル", role: .cancel) {}
             } message: { member in
-                Text("Change role for \(member.user.displayName)?")
+                Text("\(member.user.displayName)の役割を変更しますか？")
             }
-            .alert("Remove Member", isPresented: $showingRemoveAlert, presenting: selectedMember) { member in
-                Button("Cancel", role: .cancel) {}
-                Button("Remove", role: .destructive) {
+            .alert("メンバーを削除", isPresented: $showingRemoveAlert, presenting: selectedMember) { member in
+                Button("キャンセル", role: .cancel) {}
+                Button("削除", role: .destructive) {
                     removeMember(member)
                 }
             } message: { member in
-                Text("Remove \(member.user.displayName) from the team?")
+                Text("\(member.user.displayName)をチームから削除しますか？")
             }
-            .alert("Transfer Ownership", isPresented: $showingOwnershipTransferAlert, presenting: memberToPromoteToOwner) { member in
-                Button("Cancel", role: .cancel) {}
-                Button("Transfer", role: .destructive) {
+            .alert("オーナー権限を譲渡", isPresented: $showingOwnershipTransferAlert, presenting: memberToPromoteToOwner) { member in
+                Button("キャンセル", role: .cancel) {}
+                Button("譲渡", role: .destructive) {
                     changeRole(member: member, newRole: "owner")
                 }
             } message: { member in
-                Text("Transfer ownership to \(member.user.displayName)? You will become an admin.")
+                Text("\(member.user.displayName)にオーナー権限を譲渡しますか？あなたは管理者になります。")
             }
             .sheet(isPresented: $showingUserProfile) {
                 if let user = selectedUser {

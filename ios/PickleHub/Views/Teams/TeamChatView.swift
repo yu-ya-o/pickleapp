@@ -33,10 +33,10 @@ struct TeamChatView: View {
                                     Image(systemName: "message")
                                         .font(.system(size: 60))
                                         .foregroundColor(.gray)
-                                    Text("No messages yet")
+                                    Text("まだメッセージがありません")
                                         .font(.headline)
                                         .foregroundColor(.secondary)
-                                    Text("Be the first to send a message!")
+                                    Text("最初のメッセージを送信しましょう！")
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                 }
@@ -95,7 +95,7 @@ struct TeamChatView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button("完了") {
                         dismiss()
                     }
                 }

@@ -144,9 +144,9 @@ struct EditTeamView: View {
                     .frame(maxWidth: .infinity)
                 }
 
-                Section(header: Text("Team Information")) {
-                    TextField("Team Name", text: $name)
-                    TextField("Description", text: $description, axis: .vertical)
+                Section(header: Text("チーム情報")) {
+                    TextField("チーム名", text: $name)
+                    TextField("説明", text: $description, axis: .vertical)
                         .lineLimit(3...6)
                 }
 
@@ -160,26 +160,26 @@ struct EditTeamView: View {
                     .pickerStyle(.menu)
                 }
 
-                Section(header: Text("Visibility")) {
-                    Picker("Who can find this team?", selection: $visibility) {
+                Section(header: Text("公開設定")) {
+                    Picker("誰がこのチームを見つけられますか？", selection: $visibility) {
                         HStack {
                             Image(systemName: "globe")
-                            Text("Public")
+                            Text("公開")
                         }.tag("public")
 
                         HStack {
                             Image(systemName: "lock.fill")
-                            Text("Private")
+                            Text("非公開")
                         }.tag("private")
                     }
                     .pickerStyle(.segmented)
 
                     if visibility == "public" {
-                        Text("Anyone can find and request to join this team")
+                        Text("誰でもこのチームを見つけて参加リクエストできます")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {
-                        Text("Only accessible via invite link. Not visible in search.")
+                        Text("招待リンク経由でのみアクセス可能。検索には表示されません。")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -205,7 +205,7 @@ struct EditTeamView: View {
                         } else {
                             HStack {
                                 Spacer()
-                                Text("Save Changes")
+                                Text("変更を保存")
                                     .fontWeight(.semibold)
                                 Spacer()
                             }
@@ -214,16 +214,16 @@ struct EditTeamView: View {
                     .disabled(!isFormValid || isLoading)
                 }
             }
-            .navigationTitle("Edit Team")
+            .navigationTitle("チームを編集")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button("キャンセル") {
                         dismiss()
                     }
                 }
             }
-            .alert("Error", isPresented: $showingError) {
+            .alert("エラー", isPresented: $showingError) {
                 Button("OK", role: .cancel) {}
             } message: {
                 Text(errorMessage)

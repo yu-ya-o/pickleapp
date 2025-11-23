@@ -134,11 +134,11 @@ struct TeamDetailView: View {
                                 )
 
                                 HStack {
-                                    Label("\(team.memberCount) members", systemImage: "person.2")
+                                    Label("\(team.memberCount)人", systemImage: "person.2")
                                     Text("•")
                                     Text(team.visibility.capitalized)
                                     Text("•")
-                                    Text("Created \(team.formattedCreatedDate)")
+                                    Text("作成日: \(team.formattedCreatedDate)")
                                 }
                                 .font(.caption)
                                 .foregroundColor(.secondary)
@@ -151,7 +151,7 @@ struct TeamDetailView: View {
 
                     // Owner Info
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Owner")
+                        Text("オーナー")
                             .font(.headline)
                             .padding(.horizontal)
 
@@ -173,7 +173,7 @@ struct TeamDetailView: View {
                         Button(action: { showingMembers = true }) {
                             HStack {
                                 Image(systemName: "person.2")
-                                Text("View Members")
+                                Text("メンバーを見る")
                                 Spacer()
                                 Image(systemName: "chevron.right")
                             }
@@ -206,7 +206,7 @@ struct TeamDetailView: View {
                                     HStack {
                                         Spacer()
                                         Image(systemName: "person.badge.plus")
-                                        Text("Request to Join")
+                                        Text("参加リクエスト")
                                         Spacer()
                                     }
                                     .font(.headline)
@@ -223,7 +223,7 @@ struct TeamDetailView: View {
                             Button(action: { showingEvents = true }) {
                                 HStack {
                                     Image(systemName: "calendar")
-                                    Text("Team Events")
+                                    Text("チームイベント")
                                     Spacer()
                                     Image(systemName: "chevron.right")
                                 }
@@ -237,7 +237,7 @@ struct TeamDetailView: View {
                             Button(action: { showingChat = true }) {
                                 HStack {
                                     Image(systemName: "message")
-                                    Text("Team Chat")
+                                    Text("チームチャット")
                                     Spacer()
                                     Image(systemName: "chevron.right")
                                 }
@@ -260,7 +260,7 @@ struct TeamDetailView: View {
                             }) {
                                 HStack {
                                     Image(systemName: "person.crop.circle.badge.plus")
-                                    Text("Join Requests")
+                                    Text("参加リクエスト管理")
                                     Spacer()
                                     if viewModel.joinRequests.count > 0 {
                                         Text("\(viewModel.joinRequests.count)")
@@ -289,7 +289,7 @@ struct TeamDetailView: View {
                                 }) {
                                     HStack {
                                         Image(systemName: "link")
-                                        Text("Invite Links")
+                                        Text("招待リンク")
                                         Spacer()
                                         Image(systemName: "chevron.right")
                                     }
@@ -304,7 +304,7 @@ struct TeamDetailView: View {
                             Button(action: { showingEditTeam = true }) {
                                 HStack {
                                     Image(systemName: "pencil")
-                                    Text("Edit Team")
+                                    Text("チームを編集")
                                     Spacer()
                                     Image(systemName: "chevron.right")
                                 }
@@ -320,7 +320,7 @@ struct TeamDetailView: View {
                             Button(action: { showingLeaveAlert = true }) {
                                 HStack {
                                     Spacer()
-                                    Text("Leave Team")
+                                    Text("チームを退出")
                                         .foregroundColor(.red)
                                     Spacer()
                                 }
@@ -335,7 +335,7 @@ struct TeamDetailView: View {
                             Button(action: { showingDeleteAlert = true }) {
                                 HStack {
                                     Spacer()
-                                    Text("Delete Team")
+                                    Text("チームを削除")
                                         .foregroundColor(.red)
                                         .fontWeight(.semibold)
                                     Spacer()
@@ -355,7 +355,7 @@ struct TeamDetailView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .navigationTitle("Team")
+        .navigationTitle("チーム")
         .navigationBarTitleDisplayMode(.inline)
         .refreshable {
             await viewModel.refresh()
@@ -373,26 +373,26 @@ struct TeamDetailView: View {
             TeamEventsListView(teamId: viewModel.teamId)
         }
         .sheet(isPresented: $showingChat) {
-            TeamChatView(teamId: viewModel.teamId, teamName: viewModel.team?.name ?? "Team")
+            TeamChatView(teamId: viewModel.teamId, teamName: viewModel.team?.name ?? "チーム")
         }
         .sheet(isPresented: $showingEditTeam) {
             EditTeamView(viewModel: viewModel)
         }
-        .alert("Leave Team", isPresented: $showingLeaveAlert) {
-            Button("Cancel", role: .cancel) {}
-            Button("Leave", role: .destructive) {
+        .alert("チーム退出", isPresented: $showingLeaveAlert) {
+            Button("キャンセル", role: .cancel) {}
+            Button("退出", role: .destructive) {
                 leaveTeam()
             }
         } message: {
-            Text("Are you sure you want to leave this team?")
+            Text("このチームを退出してもよろしいですか？")
         }
-        .alert("Delete Team", isPresented: $showingDeleteAlert) {
-            Button("Cancel", role: .cancel) {}
-            Button("Delete", role: .destructive) {
+        .alert("チーム削除", isPresented: $showingDeleteAlert) {
+            Button("キャンセル", role: .cancel) {}
+            Button("削除", role: .destructive) {
                 deleteTeam()
             }
         } message: {
-            Text("This action cannot be undone. All team data will be permanently deleted.")
+            Text("この操作は取り消せません。すべてのチームデータが完全に削除されます。")
         }
         .alert("チームに参加リクエストを送信", isPresented: $showingJoinConfirmAlert) {
             Button("キャンセル", role: .cancel) {}
@@ -413,12 +413,12 @@ struct TeamDetailView: View {
         } message: {
             Text("このチームに参加リクエストを送信しますか?")
         }
-        .alert("Request Sent", isPresented: $showingJoinSuccessAlert) {
+        .alert("リクエスト送信完了", isPresented: $showingJoinSuccessAlert) {
             Button("OK", role: .cancel) {}
         } message: {
-            Text("Your request to join this team has been sent to the team administrators.")
+            Text("チームの管理者に参加リクエストが送信されました。")
         }
-        .alert("Request Failed", isPresented: $showingJoinErrorAlert) {
+        .alert("リクエスト失敗", isPresented: $showingJoinErrorAlert) {
             Button("OK", role: .cancel) {}
         } message: {
             Text(joinErrorMessage)
