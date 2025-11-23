@@ -1,42 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getUserFromAuth } from '@/lib/auth';
-import { errorResponse, UnauthorizedError } from '@/lib/errors';
+import { errorResponse } from '@/lib/errors';
 import { TeamEventResponse } from '@/lib/types';
 
 /**
- * GET /api/my-team-events
- * Get all team events for teams the user is a member of
+ * GET /api/public-team-events
+ * Get all public team events (visibility='public')
  */
 export async function GET(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const user = await getUserFromAuth(authHeader);
-
-    if (!user) {
-      throw new UnauthorizedError('Authentication required');
-    }
-
     const { searchParams } = new URL(request.url);
     const upcoming = searchParams.get('upcoming') === 'true';
 
-    // Get all teams the user is a member of
-    const userTeams = await prisma.teamMember.findMany({
-      where: {
-        userId: user.id,
-      },
-      select: {
-        teamId: true,
-      },
-    });
+    // Get current user if authenticated (for isUserParticipating)
+    const authHeader = request.headers.get('authorization');
+    const user = authHeader ? await getUserFromAuth(authHeader) : null;
 
-    const teamIds = userTeams.map((t) => t.teamId);
-
-    // Build where clause
     const where: any = {
-      teamId: {
-        in: teamIds,
-      },
+      visibility: 'public',
     };
 
     if (upcoming) {
@@ -45,7 +27,6 @@ export async function GET(request: NextRequest) {
       };
     }
 
-    // Get all events for these teams
     const events = await prisma.teamEvent.findMany({
       where,
       include: {
@@ -126,7 +107,9 @@ export async function GET(request: NextRequest) {
         })),
         participantCount,
         availableSpots,
-        isUserParticipating: event.participants.some((p) => p.userId === user.id),
+        isUserParticipating: user
+          ? event.participants.some((p) => p.userId === user.id)
+          : false,
       };
     });
 

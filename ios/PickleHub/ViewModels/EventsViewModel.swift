@@ -5,6 +5,7 @@ import SwiftUI
 class EventsViewModel: ObservableObject {
     @Published var events: [Event] = []
     @Published var teamEvents: [TeamEvent] = []
+    @Published var publicTeamEvents: [TeamEvent] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
 
@@ -17,9 +18,16 @@ class EventsViewModel: ObservableObject {
         errorMessage = nil
 
         do {
-            events = try await apiClient.getEvents(status: "active", upcoming: upcoming)
-            print("✅ Fetched \(events.count) events")
-            print("📝 Events: \(events.map { $0.title })")
+            // Fetch both regular events and public team events
+            async let regularEvents = apiClient.getEvents(status: "active", upcoming: upcoming)
+            async let publicEvents = apiClient.getPublicTeamEvents(upcoming: upcoming)
+
+            events = try await regularEvents
+            publicTeamEvents = try await publicEvents
+
+            print("✅ Fetched \(events.count) regular events and \(publicTeamEvents.count) public team events")
+            print("📝 Regular Events: \(events.map { $0.title })")
+            print("📝 Public Team Events: \(publicTeamEvents.map { $0.title })")
             isLoading = false
         } catch {
             isLoading = false

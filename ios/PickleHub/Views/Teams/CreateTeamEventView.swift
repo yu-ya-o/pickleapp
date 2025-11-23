@@ -11,6 +11,7 @@ struct CreateTeamEventView: View {
     @State private var endDate = Date().addingTimeInterval(7200) // 2 hours from now
     @State private var hasCapacityLimit = true
     @State private var maxParticipants = 8
+    @State private var visibility = "private"
 
     @State private var isLoading = false
     @State private var showingError = false
@@ -41,6 +42,24 @@ struct CreateTeamEventView: View {
                     } else {
                         Text("Unlimited participants")
                             .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                }
+
+                Section(header: Text("Visibility")) {
+                    Picker("Event Visibility", selection: $visibility) {
+                        Text("プライベート（チームのみ）").tag("private")
+                        Text("パブリック（全体に公開）").tag("public")
+                    }
+                    .pickerStyle(.menu)
+
+                    if visibility == "private" {
+                        Text("このイベントはチームメンバーのみに表示されます")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    } else {
+                        Text("このイベントは全ユーザーの通常イベント一覧に表示されます")
+                            .font(.caption)
                             .foregroundColor(.secondary)
                     }
                 }
@@ -100,7 +119,8 @@ struct CreateTeamEventView: View {
                     location: location,
                     startTime: startDate,
                     endTime: endDate,
-                    maxParticipants: hasCapacityLimit ? maxParticipants : nil
+                    maxParticipants: hasCapacityLimit ? maxParticipants : nil,
+                    visibility: visibility
                 )
                 dismiss()
             } catch {
