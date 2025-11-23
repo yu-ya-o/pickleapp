@@ -14,6 +14,10 @@ struct EditTeamView: View {
     @State private var isLoading = false
     @State private var showingError = false
     @State private var errorMessage = ""
+    @State private var instagramUrl: String
+    @State private var twitterUrl: String
+    @State private var tiktokUrl: String
+    @State private var lineUrl: String
 
     let visibilityOptions = ["public", "private"]
 
@@ -23,6 +27,10 @@ struct EditTeamView: View {
         _description = State(initialValue: viewModel.team?.description ?? "")
         _region = State(initialValue: viewModel.team?.region ?? "")
         _visibility = State(initialValue: viewModel.team?.visibility ?? "public")
+        _instagramUrl = State(initialValue: viewModel.team?.instagramUrl ?? "")
+        _twitterUrl = State(initialValue: viewModel.team?.twitterUrl ?? "")
+        _tiktokUrl = State(initialValue: viewModel.team?.tiktokUrl ?? "")
+        _lineUrl = State(initialValue: viewModel.team?.lineUrl ?? "")
     }
 
     var body: some View {
@@ -119,6 +127,15 @@ struct EditTeamView: View {
                 }
 
                 Section {
+                    SNSLinksEditor(
+                        instagramUrl: $instagramUrl,
+                        twitterUrl: $twitterUrl,
+                        tiktokUrl: $tiktokUrl,
+                        lineUrl: $lineUrl
+                    )
+                }
+
+                Section {
                     Button(action: updateTeam) {
                         if isLoading {
                             HStack {
@@ -183,7 +200,11 @@ struct EditTeamView: View {
                     description: description.trimmingCharacters(in: .whitespacesAndNewlines),
                     region: region.isEmpty ? nil : region,
                     visibility: visibility,
-                    iconImage: iconImageURL
+                    iconImage: iconImageURL,
+                    instagramUrl: instagramUrl.isEmpty ? nil : instagramUrl,
+                    twitterUrl: twitterUrl.isEmpty ? nil : twitterUrl,
+                    tiktokUrl: tiktokUrl.isEmpty ? nil : tiktokUrl,
+                    lineUrl: lineUrl.isEmpty ? nil : lineUrl
                 )
                 dismiss()
             } catch {
