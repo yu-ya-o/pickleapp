@@ -7,6 +7,7 @@ struct CreateTeamView: View {
 
     @State private var name = ""
     @State private var description = ""
+    @State private var region = ""
     @State private var visibility = "public"
     @State private var isLoading = false
     @State private var showingError = false
@@ -50,6 +51,16 @@ struct CreateTeamView: View {
                     TextField("Team Name", text: $name)
                     TextField("Description", text: $description, axis: .vertical)
                         .lineLimit(3...6)
+                }
+
+                Section(header: Text("地域")) {
+                    Picker("都道府県を選択", selection: $region) {
+                        Text("選択してください").tag("")
+                        ForEach(Prefectures.all, id: \.self) { prefecture in
+                            Text(prefecture).tag(prefecture)
+                        }
+                    }
+                    .pickerStyle(.menu)
                 }
 
                 Section(header: Text("Visibility")) {
@@ -140,6 +151,7 @@ struct CreateTeamView: View {
                 try await teamsViewModel.createTeam(
                     name: name.trimmingCharacters(in: .whitespacesAndNewlines),
                     description: description.trimmingCharacters(in: .whitespacesAndNewlines),
+                    region: region.isEmpty ? nil : region,
                     visibility: visibility,
                     iconImage: iconImageURL
                 )

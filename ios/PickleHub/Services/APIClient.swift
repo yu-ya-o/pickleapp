@@ -308,13 +308,16 @@ class APIClient {
 
     // MARK: - Teams API
 
-    func getTeams(search: String? = nil, myTeams: Bool = false) async throws -> [Team] {
+    func getTeams(search: String? = nil, region: String? = nil, myTeams: Bool = false) async throws -> [Team] {
         var endpoint = "/api/teams?"
         if myTeams {
             endpoint += "myTeams=true&"
         }
         if let search = search, !search.isEmpty {
             endpoint += "search=\(search.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")&"
+        }
+        if let region = region, !region.isEmpty {
+            endpoint += "region=\(region.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")&"
         }
         return try await request(endpoint: String(endpoint.dropLast()))
     }

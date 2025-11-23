@@ -12,6 +12,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const search = searchParams.get('search') || '';
+    const region = searchParams.get('region') || '';
     const myTeams = searchParams.get('myTeams') === 'true';
 
     const authHeader = request.headers.get('authorization');
@@ -41,6 +42,11 @@ export async function GET(request: NextRequest) {
         { name: { contains: search, mode: 'insensitive' } },
         { description: { contains: search, mode: 'insensitive' } },
       ];
+    }
+
+    // Add region filter
+    if (region) {
+      where.region = region;
     }
 
     const teams = await prisma.team.findMany({
@@ -83,6 +89,7 @@ export async function GET(request: NextRequest) {
         name: team.name,
         description: team.description,
         iconImage: team.iconImage,
+        region: team.region,
         visibility: team.visibility,
         createdAt: team.createdAt.toISOString(),
         updatedAt: team.updatedAt.toISOString(),
@@ -129,6 +136,7 @@ export async function POST(request: NextRequest) {
         name: body.name,
         description: body.description,
         iconImage: body.iconImage || null,
+        region: body.region || null,
         visibility: body.visibility,
         ownerId: user.id,
         members: {
@@ -174,6 +182,7 @@ export async function POST(request: NextRequest) {
       name: team.name,
       description: team.description,
       iconImage: team.iconImage,
+      region: team.region,
       visibility: team.visibility,
       createdAt: team.createdAt.toISOString(),
       updatedAt: team.updatedAt.toISOString(),

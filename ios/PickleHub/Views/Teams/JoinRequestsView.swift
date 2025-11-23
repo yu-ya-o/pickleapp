@@ -107,10 +107,6 @@ struct JoinRequestRow: View {
                     Text(request.user.displayName)
                         .font(.headline)
 
-                    Text(request.user.email)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-
                     Text("Requested \(request.formattedDate)")
                         .font(.caption)
                         .foregroundColor(.secondary)

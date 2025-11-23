@@ -14,12 +14,12 @@ class TeamsViewModel: ObservableObject {
 
     // MARK: - Fetch Teams
 
-    func fetchPublicTeams() async {
+    func fetchPublicTeams(region: String = "") async {
         isLoading = true
         errorMessage = nil
 
         do {
-            publicTeams = try await apiClient.getTeams(search: searchText, myTeams: false)
+            publicTeams = try await apiClient.getTeams(search: searchText, region: region.isEmpty ? nil : region, myTeams: false)
             isLoading = false
         } catch {
             isLoading = false
@@ -61,6 +61,7 @@ class TeamsViewModel: ObservableObject {
     func createTeam(
         name: String,
         description: String,
+        region: String? = nil,
         visibility: String,
         iconImage: String? = nil
     ) async throws {
@@ -71,6 +72,7 @@ class TeamsViewModel: ObservableObject {
             name: name,
             description: description,
             iconImage: iconImage,
+            region: region,
             visibility: visibility
         )
 

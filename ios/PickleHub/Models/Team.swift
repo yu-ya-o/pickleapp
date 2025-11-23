@@ -7,6 +7,7 @@ struct Team: Codable, Identifiable, Hashable {
     let name: String
     let description: String
     let iconImage: String?
+    let region: String?
     let visibility: String // "public" or "private"
     let createdAt: String
     let updatedAt: String
@@ -74,6 +75,7 @@ struct CreateTeamRequest: Codable {
     let name: String
     let description: String
     let iconImage: String?
+    let region: String?
     let visibility: String // "public" or "private"
 }
 
@@ -81,6 +83,7 @@ struct UpdateTeamRequest: Codable {
     let name: String?
     let description: String?
     let iconImage: String?
+    let region: String?
     let visibility: String?
 }
 

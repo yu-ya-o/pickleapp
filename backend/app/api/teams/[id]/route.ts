@@ -89,6 +89,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       name: team.name,
       description: team.description,
       iconImage: team.iconImage,
+      region: team.region,
       visibility: team.visibility,
       createdAt: team.createdAt.toISOString(),
       updatedAt: team.updatedAt.toISOString(),
@@ -149,6 +150,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     if (body.name !== undefined) updateData.name = body.name;
     if (body.description !== undefined) updateData.description = body.description;
     if (body.iconImage !== undefined) updateData.iconImage = body.iconImage;
+    if (body.region !== undefined) updateData.region = body.region;
     if (body.visibility !== undefined) updateData.visibility = body.visibility;
 
     const updatedTeam = await prisma.team.update({
@@ -189,6 +191,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       name: updatedTeam.name,
       description: updatedTeam.description,
       iconImage: updatedTeam.iconImage,
+      region: updatedTeam.region,
       visibility: updatedTeam.visibility,
       createdAt: updatedTeam.createdAt.toISOString(),
       updatedAt: updatedTeam.updatedAt.toISOString(),

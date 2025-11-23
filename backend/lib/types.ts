@@ -51,6 +51,7 @@ export interface CreateEventRequest {
   title: string;
   description: string;
   location: string;
+  region?: string;
   startTime: string; // ISO 8601
   endTime: string; // ISO 8601
   maxParticipants: number;
@@ -61,6 +62,7 @@ export interface UpdateEventRequest {
   title?: string;
   description?: string;
   location?: string;
+  region?: string;
   startTime?: string;
   endTime?: string;
   maxParticipants?: number;
@@ -73,6 +75,7 @@ export interface EventResponse {
   title: string;
   description: string;
   location: string;
+  region: string | null;
   startTime: string;
   endTime: string;
   maxParticipants: number;
@@ -156,6 +159,7 @@ export interface CreateTeamRequest {
   name: string;
   description: string;
   iconImage?: string;
+  region?: string;
   visibility: 'public' | 'private';
 }
 
@@ -163,6 +167,7 @@ export interface UpdateTeamRequest {
   name?: string;
   description?: string;
   iconImage?: string;
+  region?: string;
   visibility?: 'public' | 'private';
 }
 
@@ -171,6 +176,7 @@ export interface TeamResponse {
   name: string;
   description: string;
   iconImage: string | null;
+  region: string | null;
   visibility: string;
   createdAt: string;
   updatedAt: string;
