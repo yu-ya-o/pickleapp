@@ -11,22 +11,36 @@ import { CreateEventRequest, EventResponse } from '@/lib/types';
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const status = searchParams.get('status') || 'active';
+    const statusParam = searchParams.get('status');
     const userId = searchParams.get('userId'); // Filter by creator
     const upcoming = searchParams.get('upcoming') === 'true';
 
-    const where: any = {
-      status,
-    };
+    const where: any = {};
 
     if (userId) {
       where.creatorId = userId;
     }
 
+    // Filter logic: Show active events OR closed events that haven't passed yet
     if (upcoming) {
+      // For upcoming: show all events in the future (active or completed)
       where.startTime = {
         gte: new Date(),
       };
+    } else if (statusParam) {
+      // If specific status is requested, use it
+      where.status = statusParam;
+    } else {
+      // Default: show active events OR completed events that are still in the future
+      where.OR = [
+        { status: 'active' },
+        {
+          AND: [
+            { status: 'completed' },
+            { startTime: { gte: new Date() } },
+          ],
+        },
+      ];
     }
 
     const events = await prisma.event.findMany({

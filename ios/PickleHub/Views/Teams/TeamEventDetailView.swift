@@ -318,20 +318,18 @@ struct TeamEventDetailView: View {
                         .cornerRadius(12)
                 }
 
-                // Chat button (for participants and creator)
-                if event.isUserParticipating == true || isCreator {
-                    Button(action: { showingChat = true }) {
-                        HStack {
-                            Image(systemName: "message.fill")
-                            Text("Open Chat")
-                        }
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(12)
+                // Chat button (available for everyone)
+                Button(action: { showingChat = true }) {
+                    HStack {
+                        Image(systemName: "message.fill")
+                        Text("Open Chat")
                     }
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(12)
                 }
 
                 // Join/Leave buttons
