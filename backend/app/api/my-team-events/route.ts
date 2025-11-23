@@ -60,6 +60,7 @@ export async function GET(request: NextRequest) {
             id: true,
             name: true,
             profileImage: true,
+            nickname: true,
           },
         },
         participants: {
@@ -72,6 +73,7 @@ export async function GET(request: NextRequest) {
                 id: true,
                 name: true,
                 profileImage: true,
+                nickname: true,
               },
             },
           },
