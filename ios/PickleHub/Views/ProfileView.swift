@@ -85,65 +85,52 @@ struct ProfileView: View {
                                     .font(.headline)
                                     .padding(.horizontal)
 
-                                VStack(spacing: 0) {
+                                VStack(spacing: Spacing.md) {
                                     if let nickname = user.nickname {
-                                        HStack {
-                                            Label("ニックネーム", systemImage: "person.fill")
-                                                .foregroundColor(.primary)
-                                            Spacer()
-                                            Text(nickname)
-                                                .foregroundColor(.secondary)
-                                        }
-                                        .padding()
-                                        .background(Color(.systemGray6))
+                                        ProfileInfoRow(
+                                            icon: "person.fill",
+                                            label: "ニックネーム",
+                                            value: nickname
+                                        )
+                                    }
 
-                                        Divider()
-                                            .padding(.leading)
+                                    if let region = user.region {
+                                        ProfileInfoRow(
+                                            icon: "mappin.circle.fill",
+                                            label: "地域",
+                                            value: region
+                                        )
                                     }
 
                                     if let experience = user.pickleballExperience {
-                                        HStack {
-                                            Label("ピックルボール歴", systemImage: "clock.fill")
-                                                .foregroundColor(.primary)
-                                            Spacer()
-                                            Text(experience)
-                                                .foregroundColor(.secondary)
-                                        }
-                                        .padding()
-                                        .background(Color(.systemGray6))
-
-                                        Divider()
-                                            .padding(.leading)
+                                        ProfileInfoRow(
+                                            icon: "clock.fill",
+                                            label: "ピックルボール歴",
+                                            value: experience
+                                        )
                                     }
 
                                     if let skillLevel = user.skillLevel {
-                                        HStack {
-                                            Label("レベル", systemImage: "star.fill")
-                                                .foregroundColor(.primary)
-                                            Spacer()
-                                            Text(skillLevel)
-                                                .foregroundColor(.secondary)
-                                        }
-                                        .padding()
-                                        .background(Color(.systemGray6))
-
-                                        Divider()
-                                            .padding(.leading)
+                                        ProfileInfoRow(
+                                            icon: "star.fill",
+                                            label: "レベル",
+                                            value: skillLevel
+                                        )
                                     }
 
                                     if let gender = user.gender {
-                                        HStack {
-                                            Label("性別", systemImage: "person.2.fill")
-                                                .foregroundColor(.primary)
-                                            Spacer()
-                                            Text(gender)
-                                                .foregroundColor(.secondary)
-                                        }
-                                        .padding()
-                                        .background(Color(.systemGray6))
+                                        ProfileInfoRow(
+                                            icon: "person.2.fill",
+                                            label: "性別",
+                                            value: gender
+                                        )
                                     }
                                 }
-                                .cornerRadius(12)
+                                .padding(Spacing.md)
+                                .background(
+                                    RoundedRectangle(cornerRadius: CornerRadius.medium)
+                                        .fill(Color(.systemGray6))
+                                )
                             }
 
                             Divider()
@@ -226,7 +213,33 @@ struct ProfileView: View {
     }
 }
 
+struct ProfileInfoRow: View {
+    let icon: String
+    let label: String
+    let value: String
+
+    var body: some View {
+        HStack(spacing: Spacing.md) {
+            Image(systemName: icon)
+                .foregroundColor(.twitterBlue)
+                .frame(width: 24)
+
+            Text(label)
+                .font(.bodyMedium)
+                .foregroundColor(.secondary)
+                .frame(width: 120, alignment: .leading)
+
+            Text(value)
+                .font(.bodyMedium)
+                .fontWeight(.medium)
+
+            Spacer()
+        }
+    }
+}
+
 #Preview {
     ProfileView()
         .environmentObject(AuthViewModel())
+        .environmentObject(EventsViewModel())
 }
