@@ -326,17 +326,7 @@ struct EventRowView: View {
 
                 Label("\(event.availableSpots)/\(event.maxParticipants) spots", systemImage: "person.2")
                     .font(.caption)
-                    .foregroundColor(event.availableSpots > 0 ? .green : .red)
-            }
-
-            if event.isUserReserved == true {
-                Text("✓ Reserved")
-                    .font(.caption)
-                    .foregroundColor(.green)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color.green.opacity(0.1))
-                    .cornerRadius(4)
+                    .foregroundColor(event.availableSpots > 0 ? .secondary : .red)
             }
         }
         .padding(.vertical, 4)

@@ -214,11 +214,6 @@ struct TeamEventDetailView: View {
                         .buttonStyle(.plain)
                         Text(participant.user.displayName)
                         Spacer()
-                        if participant.user.id == authViewModel.currentUser?.id {
-                            Text("You")
-                                .font(.caption)
-                                .foregroundColor(.green)
-                        }
                     }
                     .padding(.horizontal)
                     .padding(.vertical, 4)
