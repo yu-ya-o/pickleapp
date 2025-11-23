@@ -7,88 +7,118 @@ struct TeamsListView: View {
 
     var body: some View {
         NavigationView {
-            ZStack {
-                if viewModel.isLoading && viewModel.myTeams.isEmpty && viewModel.publicTeams.isEmpty {
-                    ProgressView()
-                } else {
-                    VStack(spacing: 0) {
-                        // Region Filter
-                        HStack {
-                            Image(systemName: "mappin.circle")
-                                .foregroundColor(.gray)
-                            Picker("地域を選択", selection: $selectedRegion) {
-                                Text("すべて").tag("")
-                                ForEach(Prefectures.all, id: \.self) { prefecture in
-                                    Text(prefecture).tag(prefecture)
-                                }
-                            }
-                            .pickerStyle(.menu)
-                            .font(.bodyMedium)
-                        }
-                        .padding(Spacing.sm)
-                        .background(Color(.systemGray6))
-                        .cornerRadius(CornerRadius.medium)
-                        .padding(.horizontal, Spacing.md)
-                        .padding(.vertical, Spacing.sm)
+            VStack(spacing: 0) {
+                // カスタムタイトル
+                Text("PickleHub")
+                    .font(.system(size: 16, weight: .semibold, design: .rounded))
+                    .foregroundColor(.black)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(Color.white)
 
-                    List {
-                        // My Teams Section
-                        if !viewModel.myTeams.isEmpty {
-                            Section(header: Text("My Teams")) {
-                                ForEach(viewModel.myTeams) { team in
-                                    NavigationLink(destination: TeamDetailView(teamId: team.id)) {
-                                        TeamRowView(team: team)
-                                    }
-                                }
-                            }
-                        }
-
-                        // Public Teams Section
-                        Section(header: Text("Discover Teams")) {
-                            if viewModel.publicTeams.isEmpty && !viewModel.searchText.isEmpty {
-                                Text("No teams found")
-                                    .foregroundColor(.secondary)
-                                    .font(.subheadline)
-                            } else {
-                                ForEach(viewModel.publicTeams) { team in
-                                    NavigationLink(destination: TeamDetailView(teamId: team.id)) {
-                                        TeamRowView(team: team)
-                                    }
-                                }
-                            }
+                // Region Filter
+                HStack {
+                    Image(systemName: "mappin.circle")
+                        .foregroundColor(.gray)
+                        .font(.system(size: 14))
+                    Picker("地域", selection: $selectedRegion) {
+                        ForEach(Prefectures.all, id: \.self) { prefecture in
+                            Text(prefecture).tag(prefecture)
                         }
                     }
-                    .searchable(text: $viewModel.searchText, prompt: "Search teams")
-                    .onChange(of: viewModel.searchText) { _, newValue in
-                        viewModel.searchTeams(query: newValue)
-                    }
-                    .onChange(of: selectedRegion) { _, newValue in
-                        Task {
-                            await viewModel.fetchPublicTeams(region: newValue)
-                        }
-                    }
-                    }
+                    .pickerStyle(.menu)
+                    .font(.bodyMedium)
+                    Spacer()
                 }
+                .padding(.horizontal, Spacing.sm)
+                .padding(.vertical, Spacing.xs)
+                .background(Color(.systemGray6))
+                .cornerRadius(CornerRadius.medium)
+                .padding(.horizontal, Spacing.md)
+                .padding(.vertical, Spacing.sm)
+                .background(Color.white)
 
-                if let errorMessage = viewModel.errorMessage {
-                    VStack {
-                        Spacer()
-                        Text(errorMessage)
-                            .foregroundColor(.red)
-                            .padding()
-                            .background(Color(.systemBackground))
-                            .cornerRadius(8)
-                        Spacer()
+                Divider()
+
+                ZStack {
+                    if viewModel.isLoading && viewModel.myTeams.isEmpty && viewModel.publicTeams.isEmpty {
+                        ProgressView()
+                    } else {
+                        List {
+                            // My Teams Section
+                            if !viewModel.myTeams.isEmpty {
+                                Section(header: Text("My Teams")) {
+                                    ForEach(viewModel.myTeams) { team in
+                                        ZStack {
+                                            NavigationLink(destination: TeamDetailView(teamId: team.id)) {
+                                                EmptyView()
+                                            }
+                                            .opacity(0)
+
+                                            TeamRowView(team: team)
+                                        }
+                                        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                        .listRowSeparator(.visible)
+                                    }
+                                }
+                            }
+
+                            // Public Teams Section
+                            Section(header: Text("Discover Teams")) {
+                                if viewModel.publicTeams.isEmpty && !viewModel.searchText.isEmpty {
+                                    Text("No teams found")
+                                        .foregroundColor(.secondary)
+                                        .font(.subheadline)
+                                } else {
+                                    ForEach(viewModel.publicTeams) { team in
+                                        ZStack {
+                                            NavigationLink(destination: TeamDetailView(teamId: team.id)) {
+                                                EmptyView()
+                                            }
+                                            .opacity(0)
+
+                                            TeamRowView(team: team)
+                                        }
+                                        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                        .listRowSeparator(.visible)
+                                    }
+                                }
+                            }
+                        }
+                        .listStyle(.plain)
+                        .searchable(text: $viewModel.searchText, prompt: "Search teams")
+                        .onChange(of: viewModel.searchText) { _, newValue in
+                            viewModel.searchTeams(query: newValue)
+                        }
+                        .onChange(of: selectedRegion) { _, newValue in
+                            Task {
+                                await viewModel.fetchPublicTeams(region: newValue)
+                            }
+                        }
+                    }
+
+                    if let errorMessage = viewModel.errorMessage {
+                        VStack {
+                            Spacer()
+                            Text(errorMessage)
+                                .foregroundColor(.red)
+                                .padding()
+                                .background(Color(.systemBackground))
+                                .cornerRadius(8)
+                            Spacer()
+                        }
                     }
                 }
             }
-            .navigationTitle("Teams")
+            .navigationBarHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
                         showingCreateTeam = true
                     }) {
-                        Image(systemName: "plus")
+                        Image(systemName: "plus.circle.fill")
+                            .foregroundColor(.twitterBlue)
+                            .font(.title2)
                     }
                 }
             }
@@ -100,10 +130,14 @@ struct TeamsListView: View {
                     .environmentObject(viewModel)
             }
             .task {
+                if selectedRegion.isEmpty {
+                    selectedRegion = Prefectures.all.first ?? ""
+                }
                 await viewModel.fetchMyTeams()
                 await viewModel.fetchPublicTeams()
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
@@ -125,10 +159,10 @@ struct TeamRowView: View {
                     case .failure(_), .empty:
                         ZStack {
                             Circle()
-                                .fill(Color.blue.opacity(0.2))
+                                .fill(Color.twitterBlue.opacity(0.2))
                                 .frame(width: 50, height: 50)
                             Image(systemName: "person.3.fill")
-                                .foregroundColor(.blue)
+                                .foregroundColor(.twitterBlue)
                         }
                     @unknown default:
                         EmptyView()
@@ -137,21 +171,21 @@ struct TeamRowView: View {
             } else {
                 ZStack {
                     Circle()
-                        .fill(Color.blue.opacity(0.2))
+                        .fill(Color.twitterBlue.opacity(0.2))
                         .frame(width: 50, height: 50)
 
                     if team.isPrivate {
                         Image(systemName: "lock.fill")
-                            .foregroundColor(.blue)
+                            .foregroundColor(.twitterBlue)
                     } else {
                         Image(systemName: "person.3.fill")
-                            .foregroundColor(.blue)
+                            .foregroundColor(.twitterBlue)
                     }
                 }
             }
 
             VStack(alignment: .leading, spacing: 4) {
-                HStack {
+                HStack(spacing: 6) {
                     Text(team.name)
                         .font(.headline)
 
@@ -172,25 +206,22 @@ struct TeamRowView: View {
                     .lineLimit(2)
 
                 HStack(spacing: 12) {
-                    Label("\(team.memberCount) members", systemImage: "person.2")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-
-                    if team.isUserMember == true {
-                        Text("Member")
+                    HStack(spacing: 4) {
+                        Image(systemName: "person.2.fill")
                             .font(.caption)
-                            .foregroundColor(.green)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 2)
-                            .background(Color.green.opacity(0.1))
-                            .cornerRadius(4)
+                            .foregroundColor(.twitterBlue)
+                        Text("\(team.memberCount) members")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                     }
                 }
             }
 
             Spacer()
         }
-        .padding(.vertical, 4)
+        .padding(.horizontal, Spacing.md)
+        .padding(.vertical, Spacing.sm)
+        .background(Color.white)
     }
 }
 

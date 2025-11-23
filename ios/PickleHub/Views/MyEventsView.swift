@@ -18,36 +18,16 @@ struct MyEventsView: View {
 
     var body: some View {
         NavigationView {
-            List {
-                if !myCreatedEvents.isEmpty {
-                    Section(header: Text("Events I Created")) {
-                        ForEach(myCreatedEvents) { event in
-                            NavigationLink(destination: EventDetailView(event: event)) {
-                                ModernEventRowView(event: event, onProfileTap: {
-                                    selectedUser = event.creator
-                                    showingUserProfile = true
-                                })
-                            }
-                            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-                            .listRowSeparator(.hidden)
-                        }
-                    }
-                }
+            VStack(spacing: 0) {
+                // カスタムタイトル
+                Text("PickleHub")
+                    .font(.system(size: 16, weight: .semibold, design: .rounded))
+                    .foregroundColor(.black)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(Color.white)
 
-                if !myReservedEvents.isEmpty {
-                    Section(header: Text("Events I Joined")) {
-                        ForEach(myReservedEvents) { event in
-                            NavigationLink(destination: EventDetailView(event: event)) {
-                                ModernEventRowView(event: event, onProfileTap: {
-                                    selectedUser = event.creator
-                                    showingUserProfile = true
-                                })
-                            }
-                            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-                            .listRowSeparator(.hidden)
-                        }
-                    }
-                }
+                Divider()
 
                 if myCreatedEvents.isEmpty && myReservedEvents.isEmpty {
                     VStack(spacing: Spacing.lg) {
@@ -62,21 +42,64 @@ struct MyEventsView: View {
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
                     }
-                    .frame(maxWidth: .infinity)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .padding()
+                } else {
+                    List {
+                        if !myCreatedEvents.isEmpty {
+                            Section(header: Text("Events I Created")) {
+                                ForEach(myCreatedEvents) { event in
+                                    ZStack {
+                                        NavigationLink(destination: EventDetailView(event: event)) {
+                                            EmptyView()
+                                        }
+                                        .opacity(0)
+
+                                        ModernEventRowView(event: event, onProfileTap: {
+                                            selectedUser = event.creator
+                                            showingUserProfile = true
+                                        })
+                                    }
+                                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                    .listRowSeparator(.visible)
+                                }
+                            }
+                        }
+
+                        if !myReservedEvents.isEmpty {
+                            Section(header: Text("Events I Joined")) {
+                                ForEach(myReservedEvents) { event in
+                                    ZStack {
+                                        NavigationLink(destination: EventDetailView(event: event)) {
+                                            EmptyView()
+                                        }
+                                        .opacity(0)
+
+                                        ModernEventRowView(event: event, onProfileTap: {
+                                            selectedUser = event.creator
+                                            showingUserProfile = true
+                                        })
+                                    }
+                                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                    .listRowSeparator(.visible)
+                                }
+                            }
+                        }
+                    }
+                    .listStyle(.plain)
+                    .refreshable {
+                        await eventsViewModel.refreshEvents()
+                    }
                 }
             }
-            .listStyle(.plain)
-            .navigationTitle("My Events")
-            .refreshable {
-                await eventsViewModel.refreshEvents()
-            }
+            .navigationBarHidden(true)
             .sheet(isPresented: $showingUserProfile) {
                 if let user = selectedUser {
                     UserProfileView(user: user)
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
