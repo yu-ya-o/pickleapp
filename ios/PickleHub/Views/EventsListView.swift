@@ -153,6 +153,7 @@ struct EventsListView: View {
                 ZStack {
                     if eventsViewModel.isLoading {
                         ProgressView()
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                     } else if selectedSegment == 0 {
                         // 通常イベント（通常イベント + パブリックなチームイベント）
                         if filteredEvents.isEmpty && filteredPublicTeamEvents.isEmpty {
@@ -167,6 +168,7 @@ struct EventsListView: View {
                                     .font(.bodyMedium)
                                     .foregroundColor(.secondary)
                             }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                         } else {
                             List {
                                 // 通常イベント
@@ -222,6 +224,7 @@ struct EventsListView: View {
                                     .font(.bodyMedium)
                                     .foregroundColor(.secondary)
                             }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                         } else {
                             List {
                                 ForEach(filteredTeamEvents) { event in
@@ -270,9 +273,9 @@ struct EventsListView: View {
                 }
             }
             .task {
-                // デフォルトで最初の都道府県を選択
+                // デフォルトでユーザの地域を選択
                 if selectedRegion.isEmpty {
-                    selectedRegion = Prefectures.all.first ?? ""
+                    selectedRegion = authViewModel.currentUser?.region ?? Prefectures.all.first ?? ""
                 }
                 await eventsViewModel.fetchEvents()
                 await eventsViewModel.fetchTeamEvents()
@@ -288,8 +291,8 @@ struct EventsListView: View {
                 }
             }
             .onChange(of: authViewModel.currentUser?.id) { _ in
-                // ユーザーが変更されたらフィルターをリセット
-                selectedRegion = Prefectures.all.first ?? ""
+                // ユーザーが変更されたらフィルターをユーザの地域にリセット
+                selectedRegion = authViewModel.currentUser?.region ?? Prefectures.all.first ?? ""
                 searchText = ""
                 Task {
                     await eventsViewModel.fetchEvents()
