@@ -97,6 +97,7 @@ struct TeamEventDetailView: View {
             Text(event.description)
                 .font(.body)
                 .foregroundColor(.secondary)
+                .padding(.top, 4)
         }
         .padding()
     }
@@ -137,7 +138,6 @@ struct TeamEventDetailView: View {
             Text("Organized by")
                 .font(.headline)
             HStack(spacing: 12) {
-                // Team icon
                 if let iconImageURL = event.team.iconImageURL {
                     AsyncImage(url: iconImageURL) { phase in
                         switch phase {
@@ -230,23 +230,24 @@ struct TeamEventDetailView: View {
     @ViewBuilder
     private var actionButtons: some View {
         VStack(spacing: 12) {
-            // Chat button (for participants and creator)
-            if let event = event, (event.isUserParticipating == true || isCreator) {
-                Button(action: { showingChat = true }) {
-                    HStack {
-                        Image(systemName: "message.fill")
-                        Text("Open Chat")
-                    }
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(12)
-                }
-            }
-
             if let event = event {
+                // Chat button (for participants and creator)
+                if event.isUserParticipating == true || isCreator {
+                    Button(action: { showingChat = true }) {
+                        HStack {
+                            Image(systemName: "message.fill")
+                            Text("Open Chat")
+                        }
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(12)
+                    }
+                }
+
+                // Join/Leave buttons
                 if event.isUserParticipating == true {
                     Button(action: leaveEvent) {
                         Text("Leave Event")

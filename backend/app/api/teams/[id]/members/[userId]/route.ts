@@ -19,7 +19,11 @@ interface RouteParams {
 
 /**
  * PATCH /api/teams/[id]/members/[userId]
- * Update member role (owner only)
+ * Update member role
+ * Permissions:
+ * - Owner: Can change any role (including transferring ownership)
+ * - Admin: Can change admin and member roles only
+ * - Member: Cannot change roles
  */
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
@@ -42,9 +46,18 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       throw new NotFoundError('Team not found');
     }
 
-    // Only owner can change roles
-    if (team.ownerId !== user.id) {
-      throw new ForbiddenError('Only the owner can change member roles');
+    // Find current user's membership
+    const currentUserMember = team.members.find((m) => m.userId === user.id);
+    if (!currentUserMember) {
+      throw new ForbiddenError('You are not a member of this team');
+    }
+
+    const isOwner = team.ownerId === user.id;
+    const isAdmin = currentUserMember.role === 'admin';
+
+    // Check permissions - only owner and admin can change roles
+    if (!isOwner && !isAdmin) {
+      throw new ForbiddenError('You do not have permission to change member roles');
     }
 
     // Find target member
@@ -53,20 +66,81 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       throw new NotFoundError('Member not found');
     }
 
-    // Cannot change owner role
-    if (targetMember.role === 'owner') {
-      throw new BadRequestError('Cannot change owner role');
-    }
-
     const body: UpdateMemberRoleRequest = await request.json();
+    const newRole = body.role;
 
-    if (!['admin', 'member'].includes(body.role)) {
+    if (!['owner', 'admin', 'member'].includes(newRole)) {
       throw new BadRequestError('Invalid role');
     }
 
+    // Permission checks based on current user role
+    if (isAdmin && !isOwner) {
+      // Admin can only change admin and member roles
+      if (targetMember.role === 'owner') {
+        throw new ForbiddenError('Only the owner can change the owner role');
+      }
+      if (newRole === 'owner') {
+        throw new ForbiddenError('Only the owner can transfer ownership');
+      }
+    }
+
+    // If transferring ownership, update team owner
+    if (newRole === 'owner') {
+      if (!isOwner) {
+        throw new ForbiddenError('Only the owner can transfer ownership');
+      }
+
+      // Transfer ownership
+      await prisma.$transaction([
+        // Set current owner to admin
+        prisma.teamMember.update({
+          where: { id: currentUserMember.id },
+          data: { role: 'admin' },
+        }),
+        // Set new owner
+        prisma.teamMember.update({
+          where: { id: targetMember.id },
+          data: { role: 'owner' },
+        }),
+        // Update team owner
+        prisma.team.update({
+          where: { id },
+          data: { ownerId: userId },
+        }),
+      ]);
+
+      const updatedMember = await prisma.teamMember.findUnique({
+        where: { id: targetMember.id },
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              profileImage: true,
+              nickname: true,
+              region: true,
+              pickleballExperience: true,
+              gender: true,
+              skillLevel: true,
+              isProfileComplete: true,
+            },
+          },
+        },
+      });
+
+      return NextResponse.json({
+        id: updatedMember!.id,
+        role: updatedMember!.role,
+        joinedAt: updatedMember!.joinedAt.toISOString(),
+        user: updatedMember!.user,
+      });
+    }
+
+    // Regular role update
     const updatedMember = await prisma.teamMember.update({
       where: { id: targetMember.id },
-      data: { role: body.role },
+      data: { role: newRole },
       include: {
         user: {
           select: {
@@ -74,6 +148,12 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
             name: true,
             email: true,
             profileImage: true,
+            nickname: true,
+            region: true,
+            pickleballExperience: true,
+            gender: true,
+            skillLevel: true,
+            isProfileComplete: true,
           },
         },
       },
