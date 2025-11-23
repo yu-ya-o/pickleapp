@@ -9,10 +9,10 @@ struct NotificationsView: View {
                 // カスタムタイトル
                 Text("PickleHub")
                     .font(.system(size: 20, weight: .bold, design: .rounded))
-                    .foregroundColor(.white)
+                    .foregroundColor(.black)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
-                    .background(Color.black)
+                    .background(Color.white)
 
                 Divider()
 
