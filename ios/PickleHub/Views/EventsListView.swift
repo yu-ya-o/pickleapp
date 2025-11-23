@@ -171,7 +171,12 @@ struct EventsListView: View {
                             List {
                                 // 通常イベント
                                 ForEach(filteredEvents) { event in
-                                    NavigationLink(destination: EventDetailView(event: event)) {
+                                    ZStack {
+                                        NavigationLink(destination: EventDetailView(event: event)) {
+                                            EmptyView()
+                                        }
+                                        .opacity(0)
+
                                         ModernEventRowView(event: event, onProfileTap: {
                                             selectedUser = event.creator
                                             showingUserProfile = true
@@ -179,12 +184,16 @@ struct EventsListView: View {
                                     }
                                     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                                     .listRowSeparator(.visible)
-                                    .buttonStyle(PlainButtonStyle())
                                 }
 
                                 // パブリックなチームイベント
                                 ForEach(filteredPublicTeamEvents) { event in
-                                    NavigationLink(destination: TeamEventDetailView(teamId: event.team.id, eventId: event.id)) {
+                                    ZStack {
+                                        NavigationLink(destination: TeamEventDetailView(teamId: event.team.id, eventId: event.id)) {
+                                            EmptyView()
+                                        }
+                                        .opacity(0)
+
                                         TeamEventRowView(event: event, onProfileTap: {
                                             selectedUser = event.creator.toUser()
                                             showingUserProfile = true
@@ -192,7 +201,6 @@ struct EventsListView: View {
                                     }
                                     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                                     .listRowSeparator(.visible)
-                                    .buttonStyle(PlainButtonStyle())
                                 }
                             }
                             .listStyle(.plain)
@@ -217,7 +225,12 @@ struct EventsListView: View {
                         } else {
                             List {
                                 ForEach(filteredTeamEvents) { event in
-                                    NavigationLink(destination: TeamEventDetailView(teamId: event.team.id, eventId: event.id)) {
+                                    ZStack {
+                                        NavigationLink(destination: TeamEventDetailView(teamId: event.team.id, eventId: event.id)) {
+                                            EmptyView()
+                                        }
+                                        .opacity(0)
+
                                         TeamEventRowView(event: event, onProfileTap: {
                                             selectedUser = event.creator.toUser()
                                             showingUserProfile = true
@@ -225,7 +238,6 @@ struct EventsListView: View {
                                     }
                                     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                                     .listRowSeparator(.visible)
-                                    .buttonStyle(PlainButtonStyle())
                                 }
                             }
                             .listStyle(.plain)
