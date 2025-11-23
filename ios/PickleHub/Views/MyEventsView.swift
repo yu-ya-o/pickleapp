@@ -5,14 +5,38 @@ struct MyEventsView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @State private var selectedUser: User?
     @State private var showingUserProfile = false
+    @State private var selectedTab: EventTimeFilter = .upcoming
+
+    enum EventTimeFilter {
+        case upcoming
+        case past
+    }
 
     var myCreatedEvents: [Event] {
-        eventsViewModel.events.filter { $0.creator.id == authViewModel.currentUser?.id }
+        let allCreated = eventsViewModel.events.filter { $0.creator.id == authViewModel.currentUser?.id }
+        return filterEventsByTime(allCreated)
     }
 
     var myReservedEvents: [Event] {
-        eventsViewModel.events.filter { event in
+        let allReserved = eventsViewModel.events.filter { event in
             event.isUserReserved == true && event.creator.id != authViewModel.currentUser?.id
+        }
+        return filterEventsByTime(allReserved)
+    }
+
+    private func filterEventsByTime(_ events: [Event]) -> [Event] {
+        let now = Date()
+        switch selectedTab {
+        case .upcoming:
+            return events.filter { event in
+                guard let endDate = event.endDate else { return false }
+                return endDate >= now
+            }
+        case .past:
+            return events.filter { event in
+                guard let endDate = event.endDate else { return false }
+                return endDate < now
+            }
         }
     }
 
@@ -30,6 +54,15 @@ struct MyEventsView: View {
                     .background(Color.white)
 
                 Divider()
+
+                // Tab Picker
+                Picker("Time Filter", selection: $selectedTab) {
+                    Text("これから").tag(EventTimeFilter.upcoming)
+                    Text("過去").tag(EventTimeFilter.past)
+                }
+                .pickerStyle(.segmented)
+                .padding(.horizontal)
+                .padding(.vertical, 8)
 
                 if myCreatedEvents.isEmpty && myReservedEvents.isEmpty {
                     VStack(spacing: Spacing.lg) {

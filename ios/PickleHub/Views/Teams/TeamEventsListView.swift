@@ -6,6 +6,7 @@ struct TeamEventsListView: View {
     @State private var showingCreateEvent = false
     @State private var selectedUser: User?
     @State private var showingUserProfile = false
+    @State private var showingTeamDetail = false
 
     init(teamId: String) {
         _viewModel = StateObject(wrappedValue: TeamEventsViewModel(teamId: teamId))
@@ -38,6 +39,8 @@ struct TeamEventsListView: View {
                                 TeamEventRowView(event: event, onProfileTap: {
                                     selectedUser = event.creator.toUser()
                                     showingUserProfile = true
+                                }, onTeamTap: {
+                                    showingTeamDetail = true
                                 })
                             }
                             .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
@@ -78,6 +81,11 @@ struct TeamEventsListView: View {
                     UserProfileView(user: user)
                 }
             }
+            .sheet(isPresented: $showingTeamDetail) {
+                if let team = viewModel.team {
+                    TeamDetailView(teamId: team.id)
+                }
+            }
             .task {
                 await viewModel.loadTeam()
                 await viewModel.loadEvents()
@@ -89,42 +97,48 @@ struct TeamEventsListView: View {
 struct TeamEventRowView: View {
     let event: TeamEvent
     var onProfileTap: (() -> Void)? = nil
+    var onTeamTap: (() -> Void)? = nil
 
     var body: some View {
         HStack(alignment: .top, spacing: Spacing.md) {
-            // Left: Team icon and name
-            VStack(spacing: Spacing.xs) {
-                if let iconImageURL = event.team.iconImageURL {
-                    AsyncImage(url: iconImageURL) { phase in
-                        switch phase {
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 50, height: 50)
-                                .clipShape(Circle())
-                        case .failure(_), .empty:
-                            Image(systemName: "person.3.fill")
-                                .resizable()
-                                .frame(width: 50, height: 50)
-                                .foregroundColor(.twitterBlue)
-                        @unknown default:
-                            EmptyView()
+            // Left: Team icon and name (tappable)
+            Button(action: {
+                onTeamTap?()
+            }) {
+                VStack(spacing: Spacing.xs) {
+                    if let iconImageURL = event.team.iconImageURL {
+                        AsyncImage(url: iconImageURL) { phase in
+                            switch phase {
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                            case .failure(_), .empty:
+                                Image(systemName: "person.3.fill")
+                                    .resizable()
+                                    .frame(width: 50, height: 50)
+                                    .foregroundColor(.twitterBlue)
+                            @unknown default:
+                                EmptyView()
+                            }
                         }
+                    } else {
+                        Image(systemName: "person.3.fill")
+                            .resizable()
+                            .frame(width: 50, height: 50)
+                            .foregroundColor(.twitterBlue)
                     }
-                } else {
-                    Image(systemName: "person.3.fill")
-                        .resizable()
-                        .frame(width: 50, height: 50)
-                        .foregroundColor(.twitterBlue)
-                }
 
-                Text(event.team.name)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .lineLimit(1)
-                    .frame(width: 50)
+                    Text(event.team.name)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .lineLimit(1)
+                        .frame(width: 50)
+                }
             }
+            .buttonStyle(PlainButtonStyle())
 
             // Right: Date, Title, Location
             VStack(alignment: .leading, spacing: Spacing.xs) {
