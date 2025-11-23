@@ -60,7 +60,8 @@ class TeamEventsViewModel: ObservableObject {
         location: String,
         startTime: Date,
         endTime: Date,
-        maxParticipants: Int?
+        maxParticipants: Int?,
+        visibility: String = "private"
     ) async throws {
         isLoading = true
         errorMessage = nil
@@ -73,7 +74,8 @@ class TeamEventsViewModel: ObservableObject {
             location: location,
             startTime: formatter.string(from: startTime),
             endTime: formatter.string(from: endTime),
-            maxParticipants: maxParticipants
+            maxParticipants: maxParticipants,
+            visibility: visibility
         )
 
         do {
@@ -96,7 +98,8 @@ class TeamEventsViewModel: ObservableObject {
         location: String? = nil,
         startTime: Date? = nil,
         endTime: Date? = nil,
-        maxParticipants: Int? = nil
+        maxParticipants: Int? = nil,
+        visibility: String? = nil
     ) async throws {
         let formatter = ISO8601DateFormatter()
 
@@ -106,7 +109,8 @@ class TeamEventsViewModel: ObservableObject {
             location: location,
             startTime: startTime.map { formatter.string(from: $0) },
             endTime: endTime.map { formatter.string(from: $0) },
-            maxParticipants: maxParticipants
+            maxParticipants: maxParticipants,
+            visibility: visibility
         )
 
         do {

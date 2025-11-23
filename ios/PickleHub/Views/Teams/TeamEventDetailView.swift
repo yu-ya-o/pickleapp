@@ -109,38 +109,33 @@ struct TeamEventDetailView: View {
             Text("Organized by")
                 .font(.headline)
             HStack(spacing: 12) {
-                // Creator profile image (tappable)
-                Button(action: {
-                    selectedUser = event.creator.toUser()
-                    showingUserProfile = true
-                }) {
-                    if let profileImageURL = event.creator.profileImageURL {
-                        AsyncImage(url: profileImageURL) { phase in
-                            switch phase {
-                            case .success(let image):
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 40, height: 40)
-                                    .clipShape(Circle())
-                            case .failure(_), .empty:
-                                Image(systemName: "person.circle.fill")
-                                    .resizable()
-                                    .frame(width: 40, height: 40)
-                                    .foregroundColor(.gray)
-                            @unknown default:
-                                EmptyView()
-                            }
+                // Team icon
+                if let iconImageURL = event.team.iconImageURL {
+                    AsyncImage(url: iconImageURL) { phase in
+                        switch phase {
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 40, height: 40)
+                                .clipShape(Circle())
+                        case .failure(_), .empty:
+                            Image(systemName: "person.3.fill")
+                                .resizable()
+                                .frame(width: 40, height: 40)
+                                .foregroundColor(.twitterBlue)
+                        @unknown default:
+                            EmptyView()
                         }
-                    } else {
-                        Image(systemName: "person.circle.fill")
-                            .resizable()
-                            .frame(width: 40, height: 40)
-                            .foregroundColor(.gray)
                     }
+                } else {
+                    Image(systemName: "person.3.fill")
+                        .resizable()
+                        .frame(width: 40, height: 40)
+                        .foregroundColor(.twitterBlue)
                 }
-                .buttonStyle(.plain)
-                Text(event.creator.displayName)
+                Text(event.team.name)
+                    .font(.body)
             }
         }
         .padding(.horizontal)

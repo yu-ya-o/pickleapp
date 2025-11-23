@@ -247,6 +247,12 @@ struct TeamEvent: Codable, Identifiable, Hashable {
 struct TeamEventTeam: Codable, Hashable {
     let id: String
     let name: String
+    let iconImage: String?
+
+    var iconImageURL: URL? {
+        guard let urlString = iconImage else { return nil }
+        return URL(string: urlString)
+    }
 }
 
 struct TeamEventCreator: Codable, Hashable {

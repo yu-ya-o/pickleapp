@@ -92,39 +92,34 @@ struct TeamEventRowView: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: Spacing.md) {
-            // Left: Creator profile image and nickname
+            // Left: Team icon and name
             VStack(spacing: Spacing.xs) {
-                Button(action: {
-                    onProfileTap?()
-                }) {
-                    if let profileImageURL = event.creator.profileImageURL {
-                        AsyncImage(url: profileImageURL) { phase in
-                            switch phase {
-                            case .success(let image):
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 50, height: 50)
-                                    .clipShape(Circle())
-                            case .failure(_), .empty:
-                                Image(systemName: "person.circle.fill")
-                                    .resizable()
-                                    .frame(width: 50, height: 50)
-                                    .foregroundColor(.gray)
-                            @unknown default:
-                                EmptyView()
-                            }
+                if let iconImageURL = event.team.iconImageURL {
+                    AsyncImage(url: iconImageURL) { phase in
+                        switch phase {
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 50, height: 50)
+                                .clipShape(Circle())
+                        case .failure(_), .empty:
+                            Image(systemName: "person.3.fill")
+                                .resizable()
+                                .frame(width: 50, height: 50)
+                                .foregroundColor(.twitterBlue)
+                        @unknown default:
+                            EmptyView()
                         }
-                    } else {
-                        Image(systemName: "person.circle.fill")
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .foregroundColor(.gray)
                     }
+                } else {
+                    Image(systemName: "person.3.fill")
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .foregroundColor(.twitterBlue)
                 }
-                .buttonStyle(.plain)
 
-                Text(event.creator.displayName)
+                Text(event.team.name)
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .lineLimit(1)

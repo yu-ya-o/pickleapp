@@ -34,6 +34,30 @@ struct EventsListView: View {
         return events
     }
 
+    var filteredPublicTeamEvents: [TeamEvent] {
+        var events = eventsViewModel.publicTeamEvents
+        print("🔍 Total public team events: \(events.count), Selected region: '\(selectedRegion)', Search: '\(searchText)'")
+
+        // フリーテキスト検索
+        if !searchText.isEmpty {
+            events = events.filter { event in
+                event.title.localizedCaseInsensitiveContains(searchText) ||
+                event.description.localizedCaseInsensitiveContains(searchText) ||
+                event.location.localizedCaseInsensitiveContains(searchText)
+            }
+            print("📝 After search filter: \(events.count) public team events")
+        }
+
+        // 地域フィルター
+        if !selectedRegion.isEmpty && selectedRegion != "すべて" {
+            events = events.filter { $0.location.contains(selectedRegion) }
+            print("📍 After region filter: \(events.count) public team events")
+        }
+
+        print("✅ Final filtered public team events: \(events.count)")
+        return events
+    }
+
     var filteredTeamEvents: [TeamEvent] {
         var events = eventsViewModel.teamEvents
         print("🔍 Total team events: \(events.count), Selected region: '\(selectedRegion)', Search: '\(searchText)'")
@@ -114,8 +138,8 @@ struct EventsListView: View {
                     if eventsViewModel.isLoading {
                         ProgressView()
                     } else if selectedSegment == 0 {
-                        // 通常イベント
-                        if filteredEvents.isEmpty {
+                        // 通常イベント（通常イベント + パブリックなチームイベント）
+                        if filteredEvents.isEmpty && filteredPublicTeamEvents.isEmpty {
                             VStack(spacing: Spacing.lg) {
                                 Image(systemName: "calendar.badge.exclamationmark")
                                     .font(.system(size: 60))
@@ -129,10 +153,23 @@ struct EventsListView: View {
                             }
                         } else {
                             List {
+                                // 通常イベント
                                 ForEach(filteredEvents) { event in
                                     NavigationLink(destination: EventDetailView(event: event)) {
                                         ModernEventRowView(event: event, onProfileTap: {
                                             selectedUser = event.creator
+                                            showingUserProfile = true
+                                        })
+                                    }
+                                    .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                                    .listRowSeparator(.hidden)
+                                }
+
+                                // パブリックなチームイベント
+                                ForEach(filteredPublicTeamEvents) { event in
+                                    NavigationLink(destination: TeamEventDetailView(teamId: event.team.id, eventId: event.id)) {
+                                        TeamEventRowView(event: event, onProfileTap: {
+                                            selectedUser = event.creator.toUser()
                                             showingUserProfile = true
                                         })
                                     }

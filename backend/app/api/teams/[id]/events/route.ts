@@ -56,6 +56,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
           select: {
             id: true,
             name: true,
+            iconImage: true,
           },
         },
         creator: {
@@ -198,6 +199,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
           select: {
             id: true,
             name: true,
+            iconImage: true,
           },
         },
         creator: {
