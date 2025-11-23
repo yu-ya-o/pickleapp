@@ -213,31 +213,6 @@ struct ProfileView: View {
     }
 }
 
-struct ProfileInfoRow: View {
-    let icon: String
-    let label: String
-    let value: String
-
-    var body: some View {
-        HStack(spacing: Spacing.md) {
-            Image(systemName: icon)
-                .foregroundColor(.twitterBlue)
-                .frame(width: 24)
-
-            Text(label)
-                .font(.bodyMedium)
-                .foregroundColor(.secondary)
-                .frame(width: 120, alignment: .leading)
-
-            Text(value)
-                .font(.bodyMedium)
-                .fontWeight(.medium)
-
-            Spacer()
-        }
-    }
-}
-
 #Preview {
     ProfileView()
         .environmentObject(AuthViewModel())

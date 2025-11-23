@@ -145,7 +145,7 @@ struct ProfileInfoRow: View {
             Text(label)
                 .font(.bodyMedium)
                 .foregroundColor(.secondary)
-                .frame(width: 80, alignment: .leading)
+                .frame(width: 120, alignment: .leading)
 
             Text(value)
                 .font(.bodyMedium)
