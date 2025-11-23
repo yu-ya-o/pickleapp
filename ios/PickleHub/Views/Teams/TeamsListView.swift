@@ -3,6 +3,7 @@ import SwiftUI
 struct TeamsListView: View {
     @StateObject private var viewModel = TeamsViewModel()
     @State private var showingCreateTeam = false
+    @State private var selectedRegion = ""
 
     var body: some View {
         NavigationView {
@@ -10,6 +11,26 @@ struct TeamsListView: View {
                 if viewModel.isLoading && viewModel.myTeams.isEmpty && viewModel.publicTeams.isEmpty {
                     ProgressView()
                 } else {
+                    VStack(spacing: 0) {
+                        // Region Filter
+                        HStack {
+                            Image(systemName: "mappin.circle")
+                                .foregroundColor(.gray)
+                            Picker("地域を選択", selection: $selectedRegion) {
+                                Text("すべて").tag("")
+                                ForEach(Prefectures.all, id: \.self) { prefecture in
+                                    Text(prefecture).tag(prefecture)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .font(.bodyMedium)
+                        }
+                        .padding(Spacing.sm)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(CornerRadius.medium)
+                        .padding(.horizontal, Spacing.md)
+                        .padding(.vertical, Spacing.sm)
+
                     List {
                         // My Teams Section
                         if !viewModel.myTeams.isEmpty {
@@ -40,6 +61,12 @@ struct TeamsListView: View {
                     .searchable(text: $viewModel.searchText, prompt: "Search teams")
                     .onChange(of: viewModel.searchText) { _, newValue in
                         viewModel.searchTeams(query: newValue)
+                    }
+                    .onChange(of: selectedRegion) { _, newValue in
+                        Task {
+                            await viewModel.fetchPublicTeams(region: newValue)
+                        }
+                    }
                     }
                 }
 

@@ -7,6 +7,7 @@ struct EditTeamView: View {
 
     @State private var name: String
     @State private var description: String
+    @State private var region: String
     @State private var visibility: String
     @State private var selectedPhotoItem: PhotosPickerItem?
     @State private var selectedImageData: Data?
@@ -20,6 +21,7 @@ struct EditTeamView: View {
         self.viewModel = viewModel
         _name = State(initialValue: viewModel.team?.name ?? "")
         _description = State(initialValue: viewModel.team?.description ?? "")
+        _region = State(initialValue: viewModel.team?.region ?? "")
         _visibility = State(initialValue: viewModel.team?.visibility ?? "public")
     }
 
@@ -79,6 +81,16 @@ struct EditTeamView: View {
                     TextField("Team Name", text: $name)
                     TextField("Description", text: $description, axis: .vertical)
                         .lineLimit(3...6)
+                }
+
+                Section(header: Text("地域")) {
+                    Picker("都道府県を選択", selection: $region) {
+                        Text("選択してください").tag("")
+                        ForEach(Prefectures.all, id: \.self) { prefecture in
+                            Text(prefecture).tag(prefecture)
+                        }
+                    }
+                    .pickerStyle(.menu)
                 }
 
                 Section(header: Text("Visibility")) {
@@ -169,6 +181,7 @@ struct EditTeamView: View {
                 try await viewModel.updateTeam(
                     name: name.trimmingCharacters(in: .whitespacesAndNewlines),
                     description: description.trimmingCharacters(in: .whitespacesAndNewlines),
+                    region: region.isEmpty ? nil : region,
                     visibility: visibility,
                     iconImage: iconImageURL
                 )

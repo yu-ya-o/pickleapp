@@ -14,12 +14,12 @@ class TeamsViewModel: ObservableObject {
 
     // MARK: - Fetch Teams
 
-    func fetchPublicTeams() async {
+    func fetchPublicTeams(region: String = "") async {
         isLoading = true
         errorMessage = nil
 
         do {
-            publicTeams = try await apiClient.getTeams(search: searchText, myTeams: false)
+            publicTeams = try await apiClient.getTeams(search: searchText, region: region.isEmpty ? nil : region, myTeams: false)
             isLoading = false
         } catch {
             isLoading = false
