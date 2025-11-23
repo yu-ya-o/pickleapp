@@ -112,7 +112,7 @@ struct NotificationsView: View {
             }
             .sheet(isPresented: $showingEventDetail) {
                 if let eventId = selectedEventId {
-                    EventDetailView(eventId: eventId)
+                    EventDetailContainerView(eventId: eventId)
                         .environmentObject(authViewModel)
                 }
             }

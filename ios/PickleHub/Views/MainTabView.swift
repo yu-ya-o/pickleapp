@@ -25,7 +25,7 @@ struct MainTabView: View {
                 .tabItem {
                     Label("通知", systemImage: "bell.fill")
                 }
-                .badge(notificationsViewModel.unreadCount > 0 ? notificationsViewModel.unreadCount : nil)
+                .badge(notificationsViewModel.unreadCount > 0 ? notificationsViewModel.unreadCount : 0)
 
             ProfileView()
                 .environmentObject(eventsViewModel)
