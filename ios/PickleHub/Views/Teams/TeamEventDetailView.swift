@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct TeamEventDetailView: View {
+    @Environment(\.dismiss) var dismiss
     @EnvironmentObject var authViewModel: AuthViewModel
     @StateObject private var viewModel: TeamEventsViewModel
     @State private var event: TeamEvent?
@@ -10,6 +11,7 @@ struct TeamEventDetailView: View {
     @State private var showingChat = false
     @State private var selectedUser: User?
     @State private var showingUserProfile = false
+    @State private var showingDeleteAlert = false
 
     let teamId: String
     let eventId: String
@@ -22,6 +24,17 @@ struct TeamEventDetailView: View {
 
     private var isCreator: Bool {
         event?.creator.id == authViewModel.currentUser?.id
+    }
+
+    private var canDelete: Bool {
+        if isCreator {
+            return true
+        }
+        // Admin or owner can delete
+        if let role = viewModel.team?.userRole {
+            return ["owner", "admin"].contains(role)
+        }
+        return false
     }
 
     var body: some View {
@@ -61,6 +74,14 @@ struct TeamEventDetailView: View {
                 UserProfileView(user: user)
             }
         }
+        .alert("Delete Event", isPresented: $showingDeleteAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Delete", role: .destructive) {
+                deleteEvent()
+            }
+        } message: {
+            Text("Are you sure you want to delete this event? This action cannot be undone.")
+        }
         .task {
             await loadEvent()
         }
@@ -86,6 +107,13 @@ struct TeamEventDetailView: View {
             HStack {
                 Image(systemName: "calendar")
                 Text(event.formattedDate)
+            }
+
+            if let region = event.region {
+                HStack {
+                    Image(systemName: "map")
+                    Text(region)
+                }
             }
 
             HStack {
@@ -218,7 +246,7 @@ struct TeamEventDetailView: View {
                 }
             }
 
-            if let event = event, !isCreator {
+            if let event = event {
                 if event.isUserParticipating == true {
                     Button(action: leaveEvent) {
                         Text("Leave Event")
@@ -247,6 +275,24 @@ struct TeamEventDetailView: View {
                         .padding()
                         .background(Color.gray)
                         .cornerRadius(12)
+                }
+
+                // Delete button (for creator and admin+)
+                if canDelete {
+                    Button(action: {
+                        showingDeleteAlert = true
+                    }) {
+                        HStack {
+                            Spacer()
+                            Text("Delete Event")
+                                .foregroundColor(.red)
+                                .fontWeight(.semibold)
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color.red.opacity(0.1))
+                        .cornerRadius(12)
+                    }
                 }
             }
         }
@@ -288,6 +334,18 @@ struct TeamEventDetailView: View {
                 showingAlert = true
             } catch {
                 alertMessage = "Failed to leave event: \(error.localizedDescription)"
+                showingAlert = true
+            }
+        }
+    }
+
+    private func deleteEvent() {
+        Task {
+            do {
+                try await viewModel.deleteEvent(eventId: eventId)
+                dismiss()
+            } catch {
+                alertMessage = "Failed to delete event: \(error.localizedDescription)"
                 showingAlert = true
             }
         }
