@@ -7,6 +7,7 @@ struct Team: Codable, Identifiable, Hashable {
     let name: String
     let description: String
     let iconImage: String?
+    let headerImage: String?
     let region: String?
     let visibility: String // "public" or "private"
     let createdAt: String
@@ -26,6 +27,11 @@ struct Team: Codable, Identifiable, Hashable {
 
     var iconImageURL: URL? {
         guard let urlString = iconImage else { return nil }
+        return URL(string: urlString)
+    }
+
+    var headerImageURL: URL? {
+        guard let urlString = headerImage else { return nil }
         return URL(string: urlString)
     }
 
@@ -81,6 +87,7 @@ struct CreateTeamRequest: Codable {
     let name: String
     let description: String
     let iconImage: String?
+    let headerImage: String?
     let region: String?
     let visibility: String // "public" or "private"
     let instagramUrl: String?
@@ -93,6 +100,7 @@ struct UpdateTeamRequest: Codable {
     let name: String?
     let description: String?
     let iconImage: String?
+    let headerImage: String?
     let region: String?
     let visibility: String?
     let instagramUrl: String?
@@ -134,6 +142,7 @@ struct TeamJoinRequestTeam: Codable, Hashable {
     let id: String
     let name: String
     let iconImage: String?
+    let headerImage: String?
 }
 
 struct ApproveJoinRequestRequest: Codable {
@@ -193,6 +202,7 @@ struct ValidateInviteTeam: Codable {
     let name: String
     let description: String
     let iconImage: String?
+    let headerImage: String?
     let memberCount: Int
 }
 
@@ -207,6 +217,7 @@ struct TeamEvent: Codable, Identifiable, Hashable {
     let startTime: String
     let endTime: String
     let maxParticipants: Int?
+    let price: Int?
     let visibility: String
     let createdAt: String
     let updatedAt: String
@@ -263,9 +274,15 @@ struct TeamEventTeam: Codable, Hashable {
     let id: String
     let name: String
     let iconImage: String?
+    let headerImage: String?
 
     var iconImageURL: URL? {
         guard let urlString = iconImage else { return nil }
+        return URL(string: urlString)
+    }
+
+    var headerImageURL: URL? {
+        guard let urlString = headerImage else { return nil }
         return URL(string: urlString)
     }
 }
@@ -343,6 +360,7 @@ struct CreateTeamEventRequest: Codable {
     let startTime: String
     let endTime: String
     let maxParticipants: Int?
+    let price: Int?
     let visibility: String?
 }
 
@@ -354,6 +372,7 @@ struct UpdateTeamEventRequest: Codable {
     let startTime: String?
     let endTime: String?
     let maxParticipants: Int?
+    let price: Int?
     let visibility: String?
 }
 

@@ -41,6 +41,33 @@ struct TeamEventDetailView: View {
         ScrollView {
             if let event = event {
                 VStack(alignment: .leading, spacing: 20) {
+                    // Team Header Image
+                    if let headerURL = event.team.headerImageURL {
+                        AsyncImage(url: headerURL) { phase in
+                            switch phase {
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(height: 200)
+                                    .frame(maxWidth: .infinity)
+                                    .clipped()
+                            case .failure(_), .empty:
+                                Rectangle()
+                                    .fill(Color(.systemGray6))
+                                    .frame(height: 200)
+                                    .frame(maxWidth: .infinity)
+                            @unknown default:
+                                EmptyView()
+                            }
+                        }
+                    } else {
+                        Rectangle()
+                            .fill(Color(.systemGray6))
+                            .frame(height: 200)
+                            .frame(maxWidth: .infinity)
+                    }
+
                     headerSection(for: event)
                     Divider()
                     detailsSection(for: event)
@@ -126,6 +153,16 @@ struct TeamEventDetailView: View {
                 Image(systemName: "person.2")
                 Text(event.capacityText)
                     .foregroundColor(event.hasCapacity ? .green : .red)
+            }
+
+            HStack {
+                Image(systemName: "yensign.circle")
+                if let price = event.price {
+                    Text("¥\(price)")
+                } else {
+                    Text("無料")
+                        .foregroundColor(.green)
+                }
             }
         }
         .font(.body)
