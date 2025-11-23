@@ -67,24 +67,13 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     const body: UpdateMemberRoleRequest = await request.json();
-    const newRole = body.role;
+    const newRole = body.role as 'owner' | 'admin' | 'member';
 
     if (!['owner', 'admin', 'member'].includes(newRole)) {
       throw new BadRequestError('Invalid role');
     }
 
-    // Permission checks based on current user role
-    if (isAdmin && !isOwner) {
-      // Admin can only change admin and member roles
-      if (targetMember.role === 'owner') {
-        throw new ForbiddenError('Only the owner can change the owner role');
-      }
-      if (newRole === 'owner') {
-        throw new ForbiddenError('Only the owner can transfer ownership');
-      }
-    }
-
-    // If transferring ownership, update team owner
+    // Check for ownership transfer first
     if (newRole === 'owner') {
       if (!isOwner) {
         throw new ForbiddenError('Only the owner can transfer ownership');
@@ -135,6 +124,14 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         joinedAt: updatedMember!.joinedAt.toISOString(),
         user: updatedMember!.user,
       });
+    }
+
+    // Permission checks for non-owner role changes
+    if (isAdmin && !isOwner) {
+      // Admin can only change admin and member roles (not the owner)
+      if (targetMember.role === 'owner') {
+        throw new ForbiddenError('Only the owner can change the owner role');
+      }
     }
 
     // Regular role update
