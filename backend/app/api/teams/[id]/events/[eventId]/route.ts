@@ -55,6 +55,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
             id: true,
             name: true,
             iconImage: true,
+            headerImage: true,
           },
         },
         creator: {
@@ -119,6 +120,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       startTime: event.startTime.toISOString(),
       endTime: event.endTime.toISOString(),
       maxParticipants: event.maxParticipants,
+      price: event.price,
+      status: event.status,
       visibility: event.visibility,
       createdAt: event.createdAt.toISOString(),
       updatedAt: event.updatedAt.toISOString(),
@@ -199,6 +202,8 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     if (body.region !== undefined) updateData.region = body.region;
     if (body.maxParticipants !== undefined)
       updateData.maxParticipants = body.maxParticipants;
+    if (body.price !== undefined) updateData.price = body.price;
+    if (body.status !== undefined) updateData.status = body.status;
     if (body.visibility !== undefined) updateData.visibility = body.visibility;
 
     if (body.startTime !== undefined) {
@@ -218,6 +223,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
             id: true,
             name: true,
             iconImage: true,
+            headerImage: true,
           },
         },
         creator: {
@@ -274,6 +280,8 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       startTime: updatedEvent.startTime.toISOString(),
       endTime: updatedEvent.endTime.toISOString(),
       maxParticipants: updatedEvent.maxParticipants,
+      price: updatedEvent.price,
+      status: updatedEvent.status,
       visibility: updatedEvent.visibility,
       createdAt: updatedEvent.createdAt.toISOString(),
       updatedAt: updatedEvent.updatedAt.toISOString(),
