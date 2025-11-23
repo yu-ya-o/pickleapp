@@ -60,12 +60,12 @@ export async function findOrCreateUser(payload: GooglePayload) {
       },
     });
   } else {
-    // Update user info if changed
+    // Update user info if changed (but preserve custom profile image)
     user = await prisma.user.update({
       where: { id: user.id },
       data: {
         name: payload.name,
-        profileImage: payload.picture || null,
+        // Don't overwrite custom profile image with Google image
       },
     });
   }
