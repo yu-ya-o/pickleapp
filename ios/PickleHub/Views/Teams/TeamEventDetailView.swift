@@ -37,6 +37,25 @@ struct TeamEventDetailView: View {
         return false
     }
 
+    @ViewBuilder
+    private var defaultHeaderImage: some View {
+        Rectangle()
+            .fill(LinearGradient(
+                gradient: Gradient(colors: [Color.blue.opacity(0.6), Color.purple.opacity(0.6)]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            ))
+            .frame(height: 200)
+            .frame(maxWidth: .infinity)
+            .overlay(
+                VStack {
+                    Image(systemName: "figure.pickleball")
+                        .font(.system(size: 60))
+                        .foregroundColor(.white.opacity(0.9))
+                }
+            )
+    }
+
     var body: some View {
         ScrollView {
             if let event = event {
@@ -53,19 +72,13 @@ struct TeamEventDetailView: View {
                                     .frame(maxWidth: .infinity)
                                     .clipped()
                             case .failure(_), .empty:
-                                Rectangle()
-                                    .fill(Color(.systemGray6))
-                                    .frame(height: 200)
-                                    .frame(maxWidth: .infinity)
+                                defaultHeaderImage
                             @unknown default:
                                 EmptyView()
                             }
                         }
                     } else {
-                        Rectangle()
-                            .fill(Color(.systemGray6))
-                            .frame(height: 200)
-                            .frame(maxWidth: .infinity)
+                        defaultHeaderImage
                     }
 
                     headerSection(for: event)
