@@ -365,8 +365,28 @@ struct TeamMessage: Codable, Identifiable, Hashable {
     var formattedTime: String {
         guard let date = timestamp else { return "" }
         let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
+        formatter.locale = Locale(identifier: "ja_JP")
+
+        let calendar = Calendar.current
+        let now = Date()
+
+        if calendar.isDateInToday(date) {
+            // 今日の場合は時刻のみ
+            formatter.timeStyle = .short
+            return formatter.string(from: date)
+        } else if calendar.isDateInYesterday(date) {
+            // 昨日の場合
+            formatter.timeStyle = .short
+            return "昨日 " + formatter.string(from: date)
+        } else if let daysAgo = calendar.dateComponents([.day], from: date, to: now).day, daysAgo < 7 {
+            // 1週間以内の場合は曜日+時刻
+            formatter.dateFormat = "E HH:mm"
+            return formatter.string(from: date)
+        } else {
+            // それ以外は日付+時刻
+            formatter.dateFormat = "M/d HH:mm"
+            return formatter.string(from: date)
+        }
     }
 }
 
