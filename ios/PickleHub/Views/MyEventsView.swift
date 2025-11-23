@@ -21,11 +21,11 @@ struct MyEventsView: View {
             VStack(spacing: 0) {
                 // カスタムタイトル
                 Text("PickleHub")
-                    .font(.system(size: 16, weight: .semibold, design: .rounded))
-                    .foregroundColor(.black)
+                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                    .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
-                    .background(Color.white)
+                    .background(Color.black)
 
                 Divider()
 
