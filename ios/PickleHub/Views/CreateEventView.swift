@@ -175,7 +175,6 @@ struct CreateEventView: View {
             startTime: formatter.string(from: startDate),
             endTime: formatter.string(from: endDate),
             maxParticipants: maxParticipants,
-            skillLevel: skillLevel,
             visibility: "public" // Default to public for team events
         )
 
