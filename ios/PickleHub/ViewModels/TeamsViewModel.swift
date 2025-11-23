@@ -61,6 +61,7 @@ class TeamsViewModel: ObservableObject {
     func createTeam(
         name: String,
         description: String,
+        region: String? = nil,
         visibility: String,
         iconImage: String? = nil
     ) async throws {
@@ -71,6 +72,7 @@ class TeamsViewModel: ObservableObject {
             name: name,
             description: description,
             iconImage: iconImage,
+            region: region,
             visibility: visibility
         )
 
