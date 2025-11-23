@@ -8,6 +8,8 @@ struct TeamMembersView: View {
     @State private var selectedMember: TeamMember?
     @State private var showingRoleChange = false
     @State private var showingRemoveAlert = false
+    @State private var showingOwnershipTransferAlert = false
+    @State private var memberToPromoteToOwner: TeamMember?
     @State private var selectedUser: User?
     @State private var showingUserProfile = false
 
@@ -89,7 +91,7 @@ struct TeamMembersView: View {
                     .padding(.vertical, 4)
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        if viewModel.isOwner && member.role != "owner" {
+                        if canChangeRole(member) {
                             selectedMember = member
                             showingRoleChange = true
                         }
@@ -120,13 +122,36 @@ struct TeamMembersView: View {
                 isPresented: $showingRoleChange,
                 presenting: selectedMember
             ) { member in
-                if member.role == "member" {
-                    Button("Promote to Admin") {
-                        changeRole(member: member, newRole: "admin")
+                // Owner can do everything
+                if viewModel.isOwner {
+                    if member.role == "member" {
+                        Button("Promote to Admin") {
+                            changeRole(member: member, newRole: "admin")
+                        }
+                        Button("Promote to Owner") {
+                            memberToPromoteToOwner = member
+                            showingOwnershipTransferAlert = true
+                        }
+                    } else if member.role == "admin" {
+                        Button("Promote to Owner") {
+                            memberToPromoteToOwner = member
+                            showingOwnershipTransferAlert = true
+                        }
+                        Button("Demote to Member") {
+                            changeRole(member: member, newRole: "member")
+                        }
                     }
-                } else if member.role == "admin" {
-                    Button("Demote to Member") {
-                        changeRole(member: member, newRole: "member")
+                }
+                // Admin can only change admin and member roles
+                else if viewModel.isAdmin {
+                    if member.role == "member" {
+                        Button("Promote to Admin") {
+                            changeRole(member: member, newRole: "admin")
+                        }
+                    } else if member.role == "admin" {
+                        Button("Demote to Member") {
+                            changeRole(member: member, newRole: "member")
+                        }
                     }
                 }
 
@@ -142,12 +167,35 @@ struct TeamMembersView: View {
             } message: { member in
                 Text("Remove \(member.user.displayName) from the team?")
             }
+            .alert("Transfer Ownership", isPresented: $showingOwnershipTransferAlert, presenting: memberToPromoteToOwner) { member in
+                Button("Cancel", role: .cancel) {}
+                Button("Transfer", role: .destructive) {
+                    changeRole(member: member, newRole: "owner")
+                }
+            } message: { member in
+                Text("Transfer ownership to \(member.user.displayName)? You will become an admin.")
+            }
             .sheet(isPresented: $showingUserProfile) {
                 if let user = selectedUser {
                     UserProfileView(user: user)
                 }
             }
         }
+    }
+
+    private func canChangeRole(_ member: TeamMember) -> Bool {
+        // Owner can change any role except their own
+        if viewModel.isOwner {
+            return member.role != "owner"
+        }
+
+        // Admin can change admin and member roles (not owner)
+        if viewModel.isAdmin {
+            return member.role != "owner"
+        }
+
+        // Members cannot change roles
+        return false
     }
 
     private func canRemoveMember(_ member: TeamMember) -> Bool {
@@ -168,9 +216,13 @@ struct TeamMembersView: View {
         Task {
             do {
                 try await viewModel.updateMemberRole(userId: member.user.id, role: newRole)
+                // Refresh team data to reflect changes (especially for ownership transfer)
+                await viewModel.loadTeam()
+                await viewModel.loadMembers()
             } catch {
                 // Handle error
                 print("Error changing role: \(error)")
+                viewModel.errorMessage = error.localizedDescription
             }
         }
     }
