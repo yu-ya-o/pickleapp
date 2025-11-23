@@ -35,8 +35,8 @@ struct TeamsListView: View {
                         .pickerStyle(.menu)
                         .font(.bodyMedium)
                     }
+                    .frame(height: 36)
                     .padding(.horizontal, Spacing.sm)
-                    .padding(.vertical, Spacing.xs)
                     .background(Color(.systemGray6))
                     .cornerRadius(CornerRadius.medium)
 
@@ -55,8 +55,8 @@ struct TeamsListView: View {
                             }
                         }
                     }
+                    .frame(height: 36)
                     .padding(.horizontal, Spacing.sm)
-                    .padding(.vertical, Spacing.xs)
                     .background(Color(.systemGray6))
                     .cornerRadius(CornerRadius.medium)
                 }

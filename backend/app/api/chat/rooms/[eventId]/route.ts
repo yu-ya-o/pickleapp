@@ -43,6 +43,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
               select: {
                 id: true,
                 name: true,
+                nickname: true,
                 profileImage: true,
               },
             },
