@@ -9,6 +9,7 @@ import {
   BadRequestError,
 } from '@/lib/errors';
 import { UpdateMemberRoleRequest } from '@/lib/types';
+import { notifyTeamRoleChanged, notifyTeamMemberLeft } from '@/lib/notifications';
 
 interface RouteParams {
   params: Promise<{
@@ -118,6 +119,11 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         },
       });
 
+      // Send notification about ownership transfer
+      notifyTeamRoleChanged(userId, team.name, 'owner', id).catch((error) => {
+        console.error('Failed to send team role changed notification:', error);
+      });
+
       return NextResponse.json({
         id: updatedMember!.id,
         role: updatedMember!.role,
@@ -154,6 +160,11 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
           },
         },
       },
+    });
+
+    // Send notification about role change
+    notifyTeamRoleChanged(userId, team.name, newRole, id).catch((error) => {
+      console.error('Failed to send team role changed notification:', error);
     });
 
     return NextResponse.json({
@@ -222,9 +233,22 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       throw new BadRequestError('Cannot remove the owner. Transfer ownership or delete the team instead.');
     }
 
+    // Get user info before deleting
+    const leavingUser = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { name: true },
+    });
+
     await prisma.teamMember.delete({
       where: { id: targetMember.id },
     });
+
+    // Send notification to team owner
+    if (leavingUser) {
+      notifyTeamMemberLeft(id, leavingUser.name, team.name).catch((error) => {
+        console.error('Failed to send team member left notification:', error);
+      });
+    }
 
     return NextResponse.json({
       message: isSelf ? 'Left team successfully' : 'Member removed successfully',

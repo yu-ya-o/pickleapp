@@ -9,6 +9,7 @@ import {
   BadRequestError,
 } from '@/lib/errors';
 import { CreateTeamEventRequest, TeamEventResponse } from '@/lib/types';
+import { notifyTeamEventCreated } from '@/lib/notifications';
 
 interface RouteParams {
   params: Promise<{
@@ -235,6 +236,11 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         },
         participants: true,
       },
+    });
+
+    // Send notification to all team members
+    notifyTeamEventCreated(id, event.title, event.id).catch((error) => {
+      console.error('Failed to send team event created notification:', error);
     });
 
     const response: TeamEventResponse = {

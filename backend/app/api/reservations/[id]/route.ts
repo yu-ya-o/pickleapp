@@ -7,6 +7,7 @@ import {
   NotFoundError,
   ForbiddenError,
 } from '@/lib/errors';
+import { notifyEventCancelled } from '@/lib/notifications';
 
 interface RouteParams {
   params: Promise<{
@@ -30,6 +31,14 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     const reservation = await prisma.reservation.findUnique({
       where: { id },
+      include: {
+        event: {
+          select: {
+            id: true,
+            title: true,
+          },
+        },
+      },
     });
 
     if (!reservation) {
@@ -46,6 +55,17 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       where: { id },
       data: { status: 'cancelled' },
     });
+
+    // Send notification to event creator
+    if (reservation.event) {
+      notifyEventCancelled(
+        reservation.event.id,
+        user.name,
+        reservation.event.title
+      ).catch((error) => {
+        console.error('Failed to send event cancelled notification:', error);
+      });
+    }
 
     return NextResponse.json({ message: 'Reservation cancelled successfully' });
   } catch (error) {

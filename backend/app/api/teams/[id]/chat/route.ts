@@ -9,6 +9,7 @@ import {
   BadRequestError,
 } from '@/lib/errors';
 import { TeamChatRoomResponse, SendTeamMessageRequest, TeamMessageResponse } from '@/lib/types';
+import { notifyTeamChatMessage } from '@/lib/notifications';
 
 interface RouteParams {
   params: Promise<{
@@ -174,6 +175,13 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         },
       },
     });
+
+    // Send notification to all team members
+    notifyTeamChatMessage(id, user.name, team.name, body.content).catch(
+      (error) => {
+        console.error('Failed to send team chat message notification:', error);
+      }
+    );
 
     const response: TeamMessageResponse = {
       id: message.id,

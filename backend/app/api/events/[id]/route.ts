@@ -8,6 +8,7 @@ import {
   ForbiddenError,
 } from '@/lib/errors';
 import { UpdateEventRequest, EventResponse } from '@/lib/types';
+import { notifyEventUpdated, notifyEventCancelledByCreator } from '@/lib/notifications';
 
 interface RouteParams {
   params: Promise<{
@@ -135,23 +136,55 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
     const body: UpdateEventRequest = await request.json();
 
+    // Track changed fields for notifications
+    const changedFields: string[] = [];
+
     // Prepare update data
     const updateData: any = {};
 
-    if (body.title) updateData.title = body.title;
-    if (body.description) updateData.description = body.description;
-    if (body.location) updateData.location = body.location;
-    if (body.region !== undefined) updateData.region = body.region;
-    if (body.skillLevel) updateData.skillLevel = body.skillLevel;
-    if (body.maxParticipants) updateData.maxParticipants = body.maxParticipants;
-    if (body.status) updateData.status = body.status;
+    if (body.title && body.title !== event.title) {
+      updateData.title = body.title;
+      changedFields.push('タイトル');
+    }
+    if (body.description && body.description !== event.description) {
+      updateData.description = body.description;
+      changedFields.push('説明');
+    }
+    if (body.location && body.location !== event.location) {
+      updateData.location = body.location;
+      changedFields.push('場所');
+    }
+    if (body.region !== undefined && body.region !== event.region) {
+      updateData.region = body.region;
+      changedFields.push('地域');
+    }
+    if (body.skillLevel && body.skillLevel !== event.skillLevel) {
+      updateData.skillLevel = body.skillLevel;
+      changedFields.push('レベル');
+    }
+    if (body.maxParticipants && body.maxParticipants !== event.maxParticipants) {
+      updateData.maxParticipants = body.maxParticipants;
+      changedFields.push('定員');
+    }
+    if (body.status && body.status !== event.status) {
+      updateData.status = body.status;
+      changedFields.push('ステータス');
+    }
 
     if (body.startTime) {
-      updateData.startTime = new Date(body.startTime);
+      const newStartTime = new Date(body.startTime);
+      if (newStartTime.getTime() !== event.startTime.getTime()) {
+        updateData.startTime = newStartTime;
+        changedFields.push('開始時間');
+      }
     }
 
     if (body.endTime) {
-      updateData.endTime = new Date(body.endTime);
+      const newEndTime = new Date(body.endTime);
+      if (newEndTime.getTime() !== event.endTime.getTime()) {
+        updateData.endTime = newEndTime;
+        changedFields.push('終了時間');
+      }
     }
 
     const updatedEvent = await prisma.event.update({
@@ -197,6 +230,13 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         },
       },
     });
+
+    // Send notification if important fields changed
+    if (changedFields.length > 0) {
+      notifyEventUpdated(id, updatedEvent.title, changedFields).catch((error) => {
+        console.error('Failed to send event updated notification:', error);
+      });
+    }
 
     const response: EventResponse = {
       id: updatedEvent.id,
@@ -258,6 +298,11 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     if (event.creatorId !== user.id) {
       throw new ForbiddenError('Only the creator can delete this event');
     }
+
+    // Send notification to participants before deleting
+    notifyEventCancelledByCreator(id, event.title).catch((error) => {
+      console.error('Failed to send event cancelled notification:', error);
+    });
 
     await prisma.event.delete({
       where: { id },

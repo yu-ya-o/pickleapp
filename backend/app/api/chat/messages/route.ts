@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { getUserFromAuth } from '@/lib/auth';
 import { errorResponse, UnauthorizedError, BadRequestError, NotFoundError } from '@/lib/errors';
 import { SendMessageRequest, MessageResponse } from '@/lib/types';
+import { notifyEventChatMessage } from '@/lib/notifications';
 
 /**
  * POST /api/chat/messages
@@ -23,9 +24,17 @@ export async function POST(request: NextRequest) {
       throw new BadRequestError('chatRoomId and content are required');
     }
 
-    // Check if chat room exists
+    // Check if chat room exists and get event info
     const chatRoom = await prisma.chatRoom.findUnique({
       where: { id: body.chatRoomId },
+      include: {
+        event: {
+          select: {
+            id: true,
+            title: true,
+          },
+        },
+      },
     });
 
     if (!chatRoom) {
@@ -49,6 +58,18 @@ export async function POST(request: NextRequest) {
         },
       },
     });
+
+    // Send notification to event participants and creator
+    if (chatRoom.event) {
+      notifyEventChatMessage(
+        chatRoom.event.id,
+        user.name,
+        chatRoom.event.title,
+        body.content
+      ).catch((error) => {
+        console.error('Failed to send event chat message notification:', error);
+      });
+    }
 
     const response: MessageResponse = {
       id: message.id,

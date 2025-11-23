@@ -9,6 +9,7 @@ import {
   BadRequestError,
 } from '@/lib/errors';
 import { TeamJoinRequestResponse } from '@/lib/types';
+import { notifyTeamJoinRequest } from '@/lib/notifications';
 
 interface RouteParams {
   params: Promise<{
@@ -223,6 +224,11 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       });
       console.log(`   ✅ Join request created: ID=${joinRequest.id}, Status=${joinRequest.status}`);
     }
+
+    // Send notification to team owner and admins
+    notifyTeamJoinRequest(id, user.name, team.name).catch((error) => {
+      console.error('Failed to send team join request notification:', error);
+    });
 
     const response: TeamJoinRequestResponse = {
       id: joinRequest.id,
