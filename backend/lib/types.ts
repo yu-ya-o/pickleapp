@@ -162,16 +162,26 @@ export interface CreateTeamRequest {
   name: string;
   description: string;
   iconImage?: string;
+  headerImage?: string;
   region?: string;
   visibility: 'public' | 'private';
+  instagramUrl?: string;
+  twitterUrl?: string;
+  tiktokUrl?: string;
+  lineUrl?: string;
 }
 
 export interface UpdateTeamRequest {
   name?: string;
   description?: string;
   iconImage?: string;
+  headerImage?: string;
   region?: string;
   visibility?: 'public' | 'private';
+  instagramUrl?: string;
+  twitterUrl?: string;
+  tiktokUrl?: string;
+  lineUrl?: string;
 }
 
 export interface TeamResponse {
@@ -179,6 +189,7 @@ export interface TeamResponse {
   name: string;
   description: string;
   iconImage: string | null;
+  headerImage: string | null;
   region: string | null;
   visibility: string;
   createdAt: string;
@@ -193,6 +204,10 @@ export interface TeamResponse {
   userRole?: string; // "owner", "admin", "member"
   hasPendingJoinRequest?: boolean;
   members?: TeamMemberResponse[];
+  instagramUrl?: string | null;
+  twitterUrl?: string | null;
+  tiktokUrl?: string | null;
+  lineUrl?: string | null;
 }
 
 export interface TeamMemberResponse {
