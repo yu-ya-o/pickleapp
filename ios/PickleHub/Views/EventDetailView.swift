@@ -105,6 +105,16 @@ struct EventDetailView: View {
                 Text("\(event.availableSpots) of \(event.maxParticipants) spots available")
                     .foregroundColor(event.availableSpots > 0 ? .green : .red)
             }
+
+            HStack {
+                Image(systemName: "yensign.circle")
+                if let price = event.price {
+                    Text("¥\(price)")
+                } else {
+                    Text("無料")
+                        .foregroundColor(.green)
+                }
+            }
         }
         .font(.body)
         .padding(.horizontal)

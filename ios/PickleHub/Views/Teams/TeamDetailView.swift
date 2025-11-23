@@ -25,6 +25,33 @@ struct TeamDetailView: View {
         ScrollView {
             if let team = viewModel.team {
                 VStack(alignment: .leading, spacing: 20) {
+                    // Header Image
+                    if let headerURL = team.headerImageURL {
+                        AsyncImage(url: headerURL) { phase in
+                            switch phase {
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(height: 200)
+                                    .frame(maxWidth: .infinity)
+                                    .clipped()
+                            case .failure(_), .empty:
+                                Rectangle()
+                                    .fill(Color(.systemGray6))
+                                    .frame(height: 200)
+                                    .frame(maxWidth: .infinity)
+                            @unknown default:
+                                EmptyView()
+                            }
+                        }
+                    } else {
+                        Rectangle()
+                            .fill(Color(.systemGray6))
+                            .frame(height: 200)
+                            .frame(maxWidth: .infinity)
+                    }
+
                     // Header
                     VStack(alignment: .leading, spacing: 8) {
                         HStack(alignment: .top, spacing: 16) {

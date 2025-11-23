@@ -11,6 +11,8 @@ struct EditTeamView: View {
     @State private var visibility: String
     @State private var selectedPhotoItem: PhotosPickerItem?
     @State private var selectedImageData: Data?
+    @State private var selectedHeaderPhotoItem: PhotosPickerItem?
+    @State private var selectedHeaderImageData: Data?
     @State private var isLoading = false
     @State private var showingError = false
     @State private var errorMessage = ""
@@ -80,6 +82,63 @@ struct EditTeamView: View {
 
                         PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
                             Label("画像を変更", systemImage: "photo")
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+
+                Section(header: Text("ヘッダー画像")) {
+                    VStack(spacing: 12) {
+                        // Display current, selected, or default header image
+                        if let selectedHeaderImageData, let uiImage = UIImage(data: selectedHeaderImageData) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(height: 150)
+                                .frame(maxWidth: .infinity)
+                                .clipped()
+                                .cornerRadius(8)
+                        } else if let headerURL = viewModel.team?.headerImageURL {
+                            AsyncImage(url: headerURL) { phase in
+                                switch phase {
+                                case .success(let image):
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(height: 150)
+                                        .frame(maxWidth: .infinity)
+                                        .clipped()
+                                        .cornerRadius(8)
+                                case .failure(_), .empty:
+                                    Rectangle()
+                                        .fill(Color(.systemGray6))
+                                        .frame(height: 150)
+                                        .frame(maxWidth: .infinity)
+                                        .cornerRadius(8)
+                                        .overlay(
+                                            Image(systemName: "photo")
+                                                .font(.system(size: 40))
+                                                .foregroundColor(.gray)
+                                        )
+                                @unknown default:
+                                    EmptyView()
+                                }
+                            }
+                        } else {
+                            Rectangle()
+                                .fill(Color(.systemGray6))
+                                .frame(height: 150)
+                                .frame(maxWidth: .infinity)
+                                .cornerRadius(8)
+                                .overlay(
+                                    Image(systemName: "photo")
+                                        .font(.system(size: 40))
+                                        .foregroundColor(.gray)
+                                )
+                        }
+
+                        PhotosPicker(selection: $selectedHeaderPhotoItem, matching: .images) {
+                            Label("ヘッダー画像を変更", systemImage: "photo")
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -176,6 +235,13 @@ struct EditTeamView: View {
                     }
                 }
             }
+            .onChange(of: selectedHeaderPhotoItem) { _, newItem in
+                Task {
+                    if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                        selectedHeaderImageData = data
+                    }
+                }
+            }
         }
     }
 
@@ -195,12 +261,19 @@ struct EditTeamView: View {
                     iconImageURL = try await APIClient.shared.uploadProfileImage(imageData: imageData)
                 }
 
+                // Upload new header image if selected
+                var headerImageURL: String? = viewModel.team?.headerImage
+                if let headerImageData = selectedHeaderImageData {
+                    headerImageURL = try await APIClient.shared.uploadProfileImage(imageData: headerImageData)
+                }
+
                 try await viewModel.updateTeam(
                     name: name.trimmingCharacters(in: .whitespacesAndNewlines),
                     description: description.trimmingCharacters(in: .whitespacesAndNewlines),
                     region: region.isEmpty ? nil : region,
                     visibility: visibility,
                     iconImage: iconImageURL,
+                    headerImage: headerImageURL,
                     instagramUrl: instagramUrl.isEmpty ? nil : instagramUrl,
                     twitterUrl: twitterUrl.isEmpty ? nil : twitterUrl,
                     tiktokUrl: tiktokUrl.isEmpty ? nil : tiktokUrl,

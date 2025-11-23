@@ -70,7 +70,8 @@ class EventsViewModel: ObservableObject {
         startTime: Date,
         endTime: Date,
         maxParticipants: Int,
-        skillLevel: String
+        skillLevel: String,
+        price: Int? = nil
     ) async throws {
         isLoading = true
         errorMessage = nil
@@ -85,7 +86,8 @@ class EventsViewModel: ObservableObject {
             startTime: formatter.string(from: startTime),
             endTime: formatter.string(from: endTime),
             maxParticipants: maxParticipants,
-            skillLevel: skillLevel
+            skillLevel: skillLevel,
+            price: price
         )
 
         do {
@@ -111,6 +113,7 @@ class EventsViewModel: ObservableObject {
         endTime: Date? = nil,
         maxParticipants: Int? = nil,
         skillLevel: String? = nil,
+        price: Int? = nil,
         status: String? = nil
     ) async throws {
         isLoading = true
@@ -127,6 +130,7 @@ class EventsViewModel: ObservableObject {
             endTime: endTime.map { formatter.string(from: $0) },
             maxParticipants: maxParticipants,
             skillLevel: skillLevel,
+            price: price,
             status: status
         )
 

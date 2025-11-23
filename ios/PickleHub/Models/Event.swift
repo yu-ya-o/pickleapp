@@ -10,6 +10,7 @@ struct Event: Codable, Identifiable, Hashable {
     let endTime: String
     let maxParticipants: Int
     let skillLevel: String
+    let price: Int?
     let status: String
     let createdAt: String
     let updatedAt: String
@@ -66,6 +67,7 @@ struct CreateEventRequest: Codable {
     let endTime: String
     let maxParticipants: Int
     let skillLevel: String
+    let price: Int?
 }
 
 struct UpdateEventRequest: Codable {
@@ -77,5 +79,6 @@ struct UpdateEventRequest: Codable {
     let endTime: String?
     let maxParticipants: Int?
     let skillLevel: String?
+    let price: Int?
     let status: String?
 }

@@ -62,6 +62,7 @@ model Event {
   endTime         DateTime
   maxParticipants Int
   skillLevel      String        // "beginner", "intermediate", "advanced", "all"
+  price           Int?          // 料金 (円単位、null = 無料)
   status          String        @default("active") // "active", "cancelled", "completed"
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
@@ -129,6 +130,7 @@ model Team {
   name        String
   description String
   iconImage   String?
+  headerImage String?  // ヘッダー画像
   region      String?
   visibility  String   @default("public") // "public", "private"
   createdAt   DateTime @default(now())
@@ -219,6 +221,7 @@ model TeamEvent {
   startTime       DateTime
   endTime         DateTime
   maxParticipants Int?     // null = unlimited
+  price           Int?     // 料金 (円単位、null = 無料)
   visibility      String   @default("private") // "public" (通常イベントとしても公開), "private" (チームメンバーのみ)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

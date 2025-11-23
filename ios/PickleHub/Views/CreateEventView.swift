@@ -14,6 +14,7 @@ struct CreateEventView: View {
     @State private var endDate = Date().addingTimeInterval(7200) // 2 hours from now
     @State private var maxParticipants = 8
     @State private var skillLevel = "beginner"
+    @State private var priceInput = ""
 
     // Organizer selection
     enum OrganizerType: Hashable {
@@ -97,6 +98,14 @@ struct CreateEventView: View {
                     Stepper("Max Participants: \(maxParticipants)", value: $maxParticipants, in: 2...20)
                 }
 
+                Section(header: Text("料金")) {
+                    HStack {
+                        TextField("無料の場合は空欄", text: $priceInput)
+                            .keyboardType(.numberPad)
+                        Text("円")
+                    }
+                }
+
                 Section(header: Text("Skill Level")) {
                     Picker("Skill Level", selection: $skillLevel) {
                         ForEach(skillLevels, id: \.self) { level in
@@ -161,6 +170,7 @@ struct CreateEventView: View {
                 switch selectedOrganizer {
                 case .personal:
                     // Create personal event
+                    let price = priceInput.isEmpty ? nil : Int(priceInput)
                     try await eventsViewModel.createEvent(
                         title: title,
                         description: description,
@@ -169,7 +179,8 @@ struct CreateEventView: View {
                         startTime: startDate,
                         endTime: endDate,
                         maxParticipants: maxParticipants,
-                        skillLevel: skillLevel
+                        skillLevel: skillLevel,
+                        price: price
                     )
 
                 case .team(let teamId):
@@ -187,6 +198,7 @@ struct CreateEventView: View {
 
     private func createTeamEvent(teamId: String) async throws {
         let formatter = ISO8601DateFormatter()
+        let price = priceInput.isEmpty ? nil : Int(priceInput)
 
         let request = CreateTeamEventRequest(
             title: title,
@@ -196,6 +208,7 @@ struct CreateEventView: View {
             startTime: formatter.string(from: startDate),
             endTime: formatter.string(from: endDate),
             maxParticipants: maxParticipants,
+            price: price,
             visibility: teamEventVisibility
         )
 
