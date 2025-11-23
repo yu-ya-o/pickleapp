@@ -6,6 +6,8 @@ struct EventDetailView: View {
     @State private var showingChat = false
     @State private var showingAlert = false
     @State private var alertMessage = ""
+    @State private var selectedUser: User?
+    @State private var showingUserProfile = false
 
     let event: Event
 
@@ -75,31 +77,37 @@ struct EventDetailView: View {
                     Text("Organized by")
                         .font(.headline)
                     HStack(spacing: 12) {
-                        // Creator profile image
-                        if let profileImageURL = event.creator.profileImageURL {
-                            AsyncImage(url: profileImageURL) { phase in
-                                switch phase {
-                                case .success(let image):
-                                    image
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 40, height: 40)
-                                        .clipShape(Circle())
-                                case .failure(_), .empty:
-                                    Image(systemName: "person.circle.fill")
-                                        .resizable()
-                                        .frame(width: 40, height: 40)
-                                        .foregroundColor(.gray)
-                                @unknown default:
-                                    EmptyView()
+                        // Creator profile image (tappable)
+                        Button(action: {
+                            selectedUser = event.creator
+                            showingUserProfile = true
+                        }) {
+                            if let profileImageURL = event.creator.profileImageURL {
+                                AsyncImage(url: profileImageURL) { phase in
+                                    switch phase {
+                                    case .success(let image):
+                                        image
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 40, height: 40)
+                                            .clipShape(Circle())
+                                    case .failure(_), .empty:
+                                        Image(systemName: "person.circle.fill")
+                                            .resizable()
+                                            .frame(width: 40, height: 40)
+                                            .foregroundColor(.gray)
+                                    @unknown default:
+                                        EmptyView()
+                                    }
                                 }
+                            } else {
+                                Image(systemName: "person.circle.fill")
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .foregroundColor(.gray)
                             }
-                        } else {
-                            Image(systemName: "person.circle.fill")
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .foregroundColor(.gray)
                         }
+                        .buttonStyle(.plain)
                         Text(event.creator.displayName)
                     }
                 }
@@ -114,31 +122,37 @@ struct EventDetailView: View {
 
                         ForEach(event.reservations) { reservation in
                             HStack(spacing: 12) {
-                                // Participant profile image
-                                if let profileImageURL = reservation.user.profileImageURL {
-                                    AsyncImage(url: profileImageURL) { phase in
-                                        switch phase {
-                                        case .success(let image):
-                                            image
-                                                .resizable()
-                                                .scaledToFill()
-                                                .frame(width: 32, height: 32)
-                                                .clipShape(Circle())
-                                        case .failure(_), .empty:
-                                            Image(systemName: "person.circle")
-                                                .resizable()
-                                                .frame(width: 32, height: 32)
-                                                .foregroundColor(.gray)
-                                        @unknown default:
-                                            EmptyView()
+                                // Participant profile image (tappable)
+                                Button(action: {
+                                    selectedUser = reservation.user
+                                    showingUserProfile = true
+                                }) {
+                                    if let profileImageURL = reservation.user.profileImageURL {
+                                        AsyncImage(url: profileImageURL) { phase in
+                                            switch phase {
+                                            case .success(let image):
+                                                image
+                                                    .resizable()
+                                                    .scaledToFill()
+                                                    .frame(width: 32, height: 32)
+                                                    .clipShape(Circle())
+                                            case .failure(_), .empty:
+                                                Image(systemName: "person.circle")
+                                                    .resizable()
+                                                    .frame(width: 32, height: 32)
+                                                    .foregroundColor(.gray)
+                                            @unknown default:
+                                                EmptyView()
+                                            }
                                         }
+                                    } else {
+                                        Image(systemName: "person.circle")
+                                            .resizable()
+                                            .frame(width: 32, height: 32)
+                                            .foregroundColor(.gray)
                                     }
-                                } else {
-                                    Image(systemName: "person.circle")
-                                        .resizable()
-                                        .frame(width: 32, height: 32)
-                                        .foregroundColor(.gray)
                                 }
+                                .buttonStyle(.plain)
                                 Text(reservation.user.displayName)
                                 Spacer()
                                 if reservation.user.id == authViewModel.currentUser?.id {
@@ -218,6 +232,11 @@ struct EventDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingChat) {
             ChatView(eventId: event.id, eventTitle: event.title)
+        }
+        .sheet(isPresented: $showingUserProfile) {
+            if let user = selectedUser {
+                UserProfileView(user: user)
+            }
         }
         .alert("Notification", isPresented: $showingAlert) {
             Button("OK", role: .cancel) {}
