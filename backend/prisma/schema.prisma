@@ -49,6 +49,7 @@ model Event {
   title           String
   description     String
   location        String
+  region          String?
   startTime       DateTime
   endTime         DateTime
   maxParticipants Int
@@ -66,6 +67,7 @@ model Event {
   @@index([creatorId])
   @@index([startTime])
   @@index([status])
+  @@index([region])
 }
 
 model Reservation {
@@ -119,6 +121,7 @@ model Team {
   name        String
   description String
   iconImage   String?
+  region      String?
   visibility  String   @default("public") // "public", "private"
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -135,6 +138,7 @@ model Team {
   @@index([ownerId])
   @@index([visibility])
   @@index([name])
+  @@index([region])
 }
 
 model TeamMember {
