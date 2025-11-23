@@ -64,14 +64,9 @@ struct EventDetailView: View {
     @ViewBuilder
     private var headerSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text(event.title)
-                    .font(.title)
-                    .fontWeight(.bold)
-                Spacer()
-                Text(event.skillLevelEmoji)
-                    .font(.title)
-            }
+            Text(event.title)
+                .font(.title)
+                .fontWeight(.bold)
 
             Text(event.skillLevel.capitalized)
                 .font(.subheadline)

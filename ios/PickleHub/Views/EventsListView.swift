@@ -309,12 +309,8 @@ struct EventRowView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text(event.title)
-                    .font(.headline)
-                Spacer()
-                Text(event.skillLevelEmoji)
-            }
+            Text(event.title)
+                .font(.headline)
 
             Text(event.formattedDate)
                 .font(.subheadline)
