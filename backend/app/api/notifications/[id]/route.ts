@@ -1,56 +1,49 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../../lib/auth';
-import prisma from '../../../../lib/prisma';
+import { prisma } from '@/lib/prisma';
+import { getUserFromAuth } from '@/lib/auth';
+import {
+  errorResponse,
+  UnauthorizedError,
+  NotFoundError,
+  BadRequestError,
+  ForbiddenError,
+} from '@/lib/errors';
+
+interface RouteParams {
+  params: Promise<{
+    id: string;
+  }>;
+}
 
 // PATCH /api/notifications/[id]/read - Mark notification as read
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
-    const session = await getServerSession(authOptions);
-
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
+    const { id } = await params;
+    const authHeader = request.headers.get('authorization');
+    const user = await getUserFromAuth(authHeader);
 
     if (!user) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
+      throw new UnauthorizedError('Authentication required');
     }
 
-    const notificationId = params.id;
     const action = request.nextUrl.searchParams.get('action');
 
     if (action === 'read') {
       // Verify notification belongs to user
       const notification = await prisma.notification.findFirst({
         where: {
-          id: notificationId,
+          id,
           userId: user.id,
         },
       });
 
       if (!notification) {
-        return NextResponse.json(
-          { error: 'Notification not found' },
-          { status: 404 }
-        );
+        throw new NotFoundError('Notification not found');
       }
 
       // Mark as read
       await prisma.notification.update({
-        where: { id: notificationId },
+        where: { id },
         data: { isRead: true },
       });
 
@@ -59,74 +52,43 @@ export async function PATCH(
       });
     }
 
-    return NextResponse.json(
-      { error: 'Invalid action' },
-      { status: 400 }
-    );
+    throw new BadRequestError('Invalid action');
   } catch (error) {
-    console.error('Error updating notification:', error);
-    return NextResponse.json(
-      { error: 'Failed to update notification' },
-      { status: 500 }
-    );
+    return errorResponse(error);
   }
 }
 
 // DELETE /api/notifications/[id] - Delete notification
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
-    const session = await getServerSession(authOptions);
-
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
+    const { id } = await params;
+    const authHeader = request.headers.get('authorization');
+    const user = await getUserFromAuth(authHeader);
 
     if (!user) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
+      throw new UnauthorizedError('Authentication required');
     }
-
-    const notificationId = params.id;
 
     // Verify notification belongs to user and delete
     const notification = await prisma.notification.findFirst({
       where: {
-        id: notificationId,
+        id,
         userId: user.id,
       },
     });
 
     if (!notification) {
-      return NextResponse.json(
-        { error: 'Notification not found' },
-        { status: 404 }
-      );
+      throw new NotFoundError('Notification not found');
     }
 
     await prisma.notification.delete({
-      where: { id: notificationId },
+      where: { id },
     });
 
     return NextResponse.json({
       message: 'Notification deleted',
     });
   } catch (error) {
-    console.error('Error deleting notification:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete notification' },
-      { status: 500 }
-    );
+    return errorResponse(error);
   }
 }
