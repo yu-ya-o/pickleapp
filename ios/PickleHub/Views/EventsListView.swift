@@ -25,7 +25,7 @@ struct EventsListView: View {
         }
 
         // 地域フィルター
-        if !selectedRegion.isEmpty && selectedRegion != "すべて" {
+        if !selectedRegion.isEmpty {
             events = events.filter { $0.region == selectedRegion }
             print("📍 After region filter: \(events.count) events")
         }
@@ -49,7 +49,7 @@ struct EventsListView: View {
         }
 
         // 地域フィルター
-        if !selectedRegion.isEmpty && selectedRegion != "すべて" {
+        if !selectedRegion.isEmpty {
             events = events.filter { $0.region == selectedRegion }
             print("📍 After region filter: \(events.count) public team events")
         }
@@ -73,7 +73,7 @@ struct EventsListView: View {
         }
 
         // 地域フィルター
-        if !selectedRegion.isEmpty && selectedRegion != "すべて" {
+        if !selectedRegion.isEmpty {
             events = events.filter { $0.region == selectedRegion }
             print("📍 After region filter: \(events.count) team events")
         }
@@ -85,44 +85,13 @@ struct EventsListView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // 検索バー
-                VStack(spacing: Spacing.sm) {
-                    // フリーテキスト検索
-                    HStack {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(.gray)
-                        TextField("イベントを検索", text: $searchText)
-                            .font(.bodyMedium)
-                        if !searchText.isEmpty {
-                            Button(action: { searchText = "" }) {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundColor(.gray)
-                            }
-                        }
-                    }
-                    .padding(Spacing.sm)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(CornerRadius.medium)
-
-                    // 地域フィルター
-                    HStack {
-                        Image(systemName: "mappin.circle")
-                            .foregroundColor(.gray)
-                        Picker("地域を選択", selection: $selectedRegion) {
-                            Text("すべて").tag("すべて")
-                            ForEach(Prefectures.all, id: \.self) { prefecture in
-                                Text(prefecture).tag(prefecture)
-                            }
-                        }
-                        .pickerStyle(.menu)
-                        .font(.bodyMedium)
-                    }
-                    .padding(Spacing.sm)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(CornerRadius.medium)
-                }
-                .padding(Spacing.md)
-                .background(Color.white)
+                // カスタムタイトル
+                Text("PickleHub")
+                    .font(.system(size: 16, weight: .semibold, design: .rounded))
+                    .foregroundColor(.black)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(Color.white)
 
                 // セグメントコントロール
                 Picker("イベントタイプ", selection: $selectedSegment) {
@@ -131,7 +100,54 @@ struct EventsListView: View {
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding(.horizontal, Spacing.md)
+                .padding(.vertical, Spacing.sm)
+                .background(Color.white)
+
+                // 検索バー
+                HStack(spacing: Spacing.sm) {
+                    // 都道府県フィルター（左）
+                    HStack {
+                        Image(systemName: "mappin.circle")
+                            .foregroundColor(.gray)
+                            .font(.system(size: 14))
+                        Picker("地域", selection: $selectedRegion) {
+                            ForEach(Prefectures.all, id: \.self) { prefecture in
+                                Text(prefecture).tag(prefecture)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .font(.bodyMedium)
+                    }
+                    .padding(.horizontal, Spacing.sm)
+                    .padding(.vertical, Spacing.xs)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(CornerRadius.medium)
+
+                    // フリーテキスト検索（右）
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.gray)
+                            .font(.system(size: 14))
+                        TextField("イベントを検索", text: $searchText)
+                            .font(.bodyMedium)
+                        if !searchText.isEmpty {
+                            Button(action: { searchText = "" }) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundColor(.gray)
+                                    .font(.system(size: 14))
+                            }
+                        }
+                    }
+                    .padding(.horizontal, Spacing.sm)
+                    .padding(.vertical, Spacing.xs)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(CornerRadius.medium)
+                }
+                .padding(.horizontal, Spacing.md)
                 .padding(.bottom, Spacing.sm)
+                .background(Color.white)
+
+                Divider()
 
                 // イベント一覧
                 ZStack {
@@ -161,8 +177,9 @@ struct EventsListView: View {
                                             showingUserProfile = true
                                         })
                                     }
-                                    .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-                                    .listRowSeparator(.hidden)
+                                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                    .listRowSeparator(.visible)
+                                    .buttonStyle(PlainButtonStyle())
                                 }
 
                                 // パブリックなチームイベント
@@ -173,8 +190,9 @@ struct EventsListView: View {
                                             showingUserProfile = true
                                         })
                                     }
-                                    .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-                                    .listRowSeparator(.hidden)
+                                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                    .listRowSeparator(.visible)
+                                    .buttonStyle(PlainButtonStyle())
                                 }
                             }
                             .listStyle(.plain)
@@ -205,8 +223,9 @@ struct EventsListView: View {
                                             showingUserProfile = true
                                         })
                                     }
-                                    .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-                                    .listRowSeparator(.hidden)
+                                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                    .listRowSeparator(.visible)
+                                    .buttonStyle(PlainButtonStyle())
                                 }
                             }
                             .listStyle(.plain)
@@ -217,8 +236,7 @@ struct EventsListView: View {
                     }
                 }
             }
-            .navigationTitle("イベント")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
@@ -240,9 +258,9 @@ struct EventsListView: View {
                 }
             }
             .task {
-                // デフォルトで「すべて」を選択
+                // デフォルトで最初の都道府県を選択
                 if selectedRegion.isEmpty {
-                    selectedRegion = "すべて"
+                    selectedRegion = Prefectures.all.first ?? ""
                 }
                 await eventsViewModel.fetchEvents()
                 await eventsViewModel.fetchTeamEvents()
@@ -259,7 +277,7 @@ struct EventsListView: View {
             }
             .onChange(of: authViewModel.currentUser?.id) { _ in
                 // ユーザーが変更されたらフィルターをリセット
-                selectedRegion = "すべて"
+                selectedRegion = Prefectures.all.first ?? ""
                 searchText = ""
                 Task {
                     await eventsViewModel.fetchEvents()
@@ -267,6 +285,7 @@ struct EventsListView: View {
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
