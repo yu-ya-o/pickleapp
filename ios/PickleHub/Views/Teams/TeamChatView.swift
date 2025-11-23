@@ -306,7 +306,7 @@ struct TeamMessageBubbleView: View {
     }
 
     var body: some View {
-        HStack(alignment: .bottom, spacing: 8) {
+        HStack(alignment: .top, spacing: 8) {
             if isCurrentUser {
                 Spacer()
             }
