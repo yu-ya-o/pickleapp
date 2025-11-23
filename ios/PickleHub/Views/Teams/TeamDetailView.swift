@@ -85,6 +85,14 @@ struct TeamDetailView: View {
                                     .font(.body)
                                     .foregroundColor(.secondary)
 
+                                // SNS Links
+                                SNSLinksView(
+                                    instagramUrl: team.instagramUrl,
+                                    twitterUrl: team.twitterUrl,
+                                    tiktokUrl: team.tiktokUrl,
+                                    lineUrl: team.lineUrl
+                                )
+
                                 HStack {
                                     Label("\(team.memberCount) members", systemImage: "person.2")
                                     Text("•")

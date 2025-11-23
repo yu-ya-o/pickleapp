@@ -14,7 +14,14 @@ struct Message: Codable, Identifiable, Hashable {
     let user: MessageUser
 
     var timestamp: Date? {
-        ISO8601DateFormatter().date(from: createdAt)
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        if let date = formatter.date(from: createdAt) {
+            return date
+        }
+        // Fallback without fractional seconds
+        formatter.formatOptions = [.withInternetDateTime]
+        return formatter.date(from: createdAt)
     }
 
     var formattedTime: String {

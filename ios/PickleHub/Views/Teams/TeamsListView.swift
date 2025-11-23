@@ -61,7 +61,7 @@ struct TeamsListView: View {
                     .cornerRadius(CornerRadius.medium)
                 }
                 .padding(.horizontal, Spacing.md)
-                .padding(.vertical, Spacing.sm)
+                .padding(.bottom, Spacing.sm)
                 .background(Color.white)
 
                 Divider()
