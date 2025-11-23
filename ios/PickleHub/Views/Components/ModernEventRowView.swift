@@ -85,10 +85,6 @@ struct ModernEventRowView: View {
 
                     Spacer()
 
-                    // Skill level emoji
-                    Text(event.skillLevelEmoji)
-                        .font(.title3)
-
                     // Status badge
                     if event.availableSpots == 0 {
                         Text("満席")
