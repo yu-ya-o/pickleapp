@@ -3,6 +3,8 @@ import SwiftUI
 struct CreateEventView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var eventsViewModel: EventsViewModel
+    @EnvironmentObject var authViewModel: AuthViewModel
+    @StateObject private var teamsViewModel = TeamsViewModel()
 
     @State private var title = ""
     @State private var description = ""
@@ -13,15 +15,41 @@ struct CreateEventView: View {
     @State private var maxParticipants = 8
     @State private var skillLevel = "beginner"
 
+    // Organizer selection
+    enum OrganizerType: Hashable {
+        case personal
+        case team(String) // teamId
+    }
+    @State private var selectedOrganizer: OrganizerType = .personal
+
     @State private var isLoading = false
     @State private var showingError = false
     @State private var errorMessage = ""
 
     let skillLevels = ["beginner", "intermediate", "advanced", "all"]
 
+    // Filter teams where user can create events (owner or admin)
+    var eligibleTeams: [Team] {
+        teamsViewModel.myTeams.filter { team in
+            team.userRole == "owner" || team.userRole == "admin"
+        }
+    }
+
     var body: some View {
         NavigationView {
             Form {
+                // Organizer Section
+                Section(header: Text("主催者")) {
+                    Picker("主催", selection: $selectedOrganizer) {
+                        Text("自分").tag(OrganizerType.personal)
+
+                        ForEach(eligibleTeams, id: \.id) { team in
+                            Text(team.name).tag(OrganizerType.team(team.id))
+                        }
+                    }
+                    .pickerStyle(.menu)
+                }
+
                 Section(header: Text("Event Details")) {
                     TextField("Event Title", text: $title)
                     TextField("Description", text: $description, axis: .vertical)
@@ -91,6 +119,9 @@ struct CreateEventView: View {
             } message: {
                 Text(errorMessage)
             }
+            .task {
+                await teamsViewModel.fetchMyTeams()
+            }
         }
     }
 
@@ -106,16 +137,24 @@ struct CreateEventView: View {
             isLoading = true
 
             do {
-                try await eventsViewModel.createEvent(
-                    title: title,
-                    description: description,
-                    location: location,
-                    region: region.isEmpty ? nil : region,
-                    startTime: startDate,
-                    endTime: endDate,
-                    maxParticipants: maxParticipants,
-                    skillLevel: skillLevel
-                )
+                switch selectedOrganizer {
+                case .personal:
+                    // Create personal event
+                    try await eventsViewModel.createEvent(
+                        title: title,
+                        description: description,
+                        location: location,
+                        region: region.isEmpty ? nil : region,
+                        startTime: startDate,
+                        endTime: endDate,
+                        maxParticipants: maxParticipants,
+                        skillLevel: skillLevel
+                    )
+
+                case .team(let teamId):
+                    // Create team event
+                    try await createTeamEvent(teamId: teamId)
+                }
                 dismiss()
             } catch {
                 errorMessage = error.localizedDescription
@@ -124,9 +163,31 @@ struct CreateEventView: View {
             }
         }
     }
+
+    private func createTeamEvent(teamId: String) async throws {
+        let formatter = ISO8601DateFormatter()
+
+        let request = CreateTeamEventRequest(
+            title: title,
+            description: description,
+            location: location,
+            region: region.isEmpty ? nil : region,
+            startTime: formatter.string(from: startDate),
+            endTime: formatter.string(from: endDate),
+            maxParticipants: maxParticipants,
+            skillLevel: skillLevel,
+            visibility: "public" // Default to public for team events
+        )
+
+        _ = try await APIClient.shared.createTeamEvent(teamId: teamId, request: request)
+
+        // Refresh events list
+        await eventsViewModel.fetchTeamEvents()
+    }
 }
 
 #Preview {
     CreateEventView()
         .environmentObject(EventsViewModel())
+        .environmentObject(AuthViewModel())
 }
