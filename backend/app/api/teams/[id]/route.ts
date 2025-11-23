@@ -89,6 +89,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       name: team.name,
       description: team.description,
       iconImage: team.iconImage,
+      headerImage: team.headerImage,
       region: team.region,
       visibility: team.visibility,
       createdAt: team.createdAt.toISOString(),
@@ -104,6 +105,10 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         joinedAt: m.joinedAt.toISOString(),
         user: m.user,
       })),
+      instagramUrl: team.instagramUrl,
+      twitterUrl: team.twitterUrl,
+      tiktokUrl: team.tiktokUrl,
+      lineUrl: team.lineUrl,
     };
 
     return NextResponse.json(response);
@@ -150,8 +155,13 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     if (body.name !== undefined) updateData.name = body.name;
     if (body.description !== undefined) updateData.description = body.description;
     if (body.iconImage !== undefined) updateData.iconImage = body.iconImage;
+    if (body.headerImage !== undefined) updateData.headerImage = body.headerImage;
     if (body.region !== undefined) updateData.region = body.region;
     if (body.visibility !== undefined) updateData.visibility = body.visibility;
+    if (body.instagramUrl !== undefined) updateData.instagramUrl = body.instagramUrl;
+    if (body.twitterUrl !== undefined) updateData.twitterUrl = body.twitterUrl;
+    if (body.tiktokUrl !== undefined) updateData.tiktokUrl = body.tiktokUrl;
+    if (body.lineUrl !== undefined) updateData.lineUrl = body.lineUrl;
 
     const updatedTeam = await prisma.team.update({
       where: { id },
@@ -191,6 +201,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       name: updatedTeam.name,
       description: updatedTeam.description,
       iconImage: updatedTeam.iconImage,
+      headerImage: updatedTeam.headerImage,
       region: updatedTeam.region,
       visibility: updatedTeam.visibility,
       createdAt: updatedTeam.createdAt.toISOString(),
@@ -199,6 +210,10 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       memberCount: updatedTeam.members.length,
       isUserMember: true,
       userRole: userMembership.role,
+      instagramUrl: updatedTeam.instagramUrl,
+      twitterUrl: updatedTeam.twitterUrl,
+      tiktokUrl: updatedTeam.tiktokUrl,
+      lineUrl: updatedTeam.lineUrl,
     };
 
     return NextResponse.json(response);

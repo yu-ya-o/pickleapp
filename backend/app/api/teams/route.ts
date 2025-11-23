@@ -89,6 +89,7 @@ export async function GET(request: NextRequest) {
         name: team.name,
         description: team.description,
         iconImage: team.iconImage,
+        headerImage: team.headerImage,
         region: team.region,
         visibility: team.visibility,
         createdAt: team.createdAt.toISOString(),
@@ -97,6 +98,10 @@ export async function GET(request: NextRequest) {
         memberCount,
         isUserMember: !!userMembership,
         userRole: userMembership?.role,
+        instagramUrl: team.instagramUrl,
+        twitterUrl: team.twitterUrl,
+        tiktokUrl: team.tiktokUrl,
+        lineUrl: team.lineUrl,
       };
     });
 
@@ -136,8 +141,13 @@ export async function POST(request: NextRequest) {
         name: body.name,
         description: body.description,
         iconImage: body.iconImage || null,
+        headerImage: body.headerImage || null,
         region: body.region || null,
         visibility: body.visibility,
+        instagramUrl: body.instagramUrl || null,
+        twitterUrl: body.twitterUrl || null,
+        tiktokUrl: body.tiktokUrl || null,
+        lineUrl: body.lineUrl || null,
         ownerId: user.id,
         members: {
           create: {
@@ -182,6 +192,7 @@ export async function POST(request: NextRequest) {
       name: team.name,
       description: team.description,
       iconImage: team.iconImage,
+      headerImage: team.headerImage,
       region: team.region,
       visibility: team.visibility,
       createdAt: team.createdAt.toISOString(),
@@ -190,6 +201,10 @@ export async function POST(request: NextRequest) {
       memberCount: team.members.length,
       isUserMember: true,
       userRole: 'owner',
+      instagramUrl: team.instagramUrl,
+      twitterUrl: team.twitterUrl,
+      tiktokUrl: team.tiktokUrl,
+      lineUrl: team.lineUrl,
     };
 
     return NextResponse.json(response, { status: 201 });
