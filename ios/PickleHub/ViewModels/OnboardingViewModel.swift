@@ -4,6 +4,7 @@ import SwiftUI
 @MainActor
 class OnboardingViewModel: ObservableObject {
     @Published var nickname = ""
+    @Published var bio = ""
     @Published var selectedGender = ""
     @Published var selectedRegion = ""
     @Published var selectedExperience = ""
@@ -24,21 +25,27 @@ class OnboardingViewModel: ObservableObject {
 
         do {
             // 1. Upload profile image if selected
+            var finalProfileImageURL: String? = nil
             if let imageData = selectedImageData {
                 print("📤 Uploading profile image...")
-                profileImageURL = try await uploadImage(imageData: imageData)
-                print("✅ Image uploaded: \(profileImageURL ?? "nil")")
+                finalProfileImageURL = try await uploadImage(imageData: imageData)
+                print("✅ Image uploaded: \(finalProfileImageURL ?? "nil")")
+            } else {
+                // If user skipped profile image, explicitly set to empty string to remove Google profile image
+                print("⚠️ No profile image selected, clearing Google profile image")
+                finalProfileImageURL = ""
             }
 
             // 2. Update profile
             print("📝 Updating profile...")
             let request = UpdateProfileRequest(
                 nickname: nickname,
+                bio: bio.isEmpty ? nil : bio,
                 region: selectedRegion,
                 pickleballExperience: selectedExperience,
                 gender: selectedGender,
                 skillLevel: selectedSkillLevel,
-                profileImage: profileImageURL
+                profileImage: finalProfileImageURL
             )
 
             let user = try await apiClient.updateProfile(request: request)

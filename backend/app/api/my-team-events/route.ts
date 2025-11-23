@@ -58,9 +58,16 @@ export async function GET(request: NextRequest) {
         creator: {
           select: {
             id: true,
+            email: true,
             name: true,
             profileImage: true,
             nickname: true,
+            bio: true,
+            region: true,
+            pickleballExperience: true,
+            gender: true,
+            skillLevel: true,
+            isProfileComplete: true,
           },
         },
         participants: {
@@ -71,9 +78,16 @@ export async function GET(request: NextRequest) {
             user: {
               select: {
                 id: true,
+                email: true,
                 name: true,
                 profileImage: true,
                 nickname: true,
+                bio: true,
+                region: true,
+                pickleballExperience: true,
+                gender: true,
+                skillLevel: true,
+                isProfileComplete: true,
               },
             },
           },

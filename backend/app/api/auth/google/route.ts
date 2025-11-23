@@ -35,6 +35,7 @@ export async function POST(request: NextRequest) {
         name: user.name,
         profileImage: user.profileImage,
         nickname: user.nickname,
+        bio: user.bio,
         region: user.region,
         pickleballExperience: user.pickleballExperience,
         gender: user.gender,
