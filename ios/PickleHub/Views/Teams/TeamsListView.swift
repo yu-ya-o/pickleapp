@@ -2,8 +2,10 @@ import SwiftUI
 
 struct TeamsListView: View {
     @StateObject private var viewModel = TeamsViewModel()
+    @EnvironmentObject var authViewModel: AuthViewModel
     @State private var showingCreateTeam = false
     @State private var selectedRegion = ""
+    @State private var searchText = ""
 
     var body: some View {
         NavigationView {
@@ -16,24 +18,46 @@ struct TeamsListView: View {
                     .padding(.vertical, 12)
                     .background(Color.white)
 
-                // Region Filter
-                HStack {
-                    Image(systemName: "mappin.circle")
-                        .foregroundColor(.gray)
-                        .font(.system(size: 14))
-                    Picker("地域", selection: $selectedRegion) {
-                        ForEach(Prefectures.all, id: \.self) { prefecture in
-                            Text(prefecture).tag(prefecture)
+                // 検索バー
+                HStack(spacing: Spacing.sm) {
+                    // 都道府県フィルター（左）
+                    HStack {
+                        Image(systemName: "mappin.circle")
+                            .foregroundColor(.gray)
+                            .font(.system(size: 14))
+                        Picker("地域", selection: $selectedRegion) {
+                            ForEach(Prefectures.all, id: \.self) { prefecture in
+                                Text(prefecture).tag(prefecture)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .font(.bodyMedium)
+                    }
+                    .padding(.horizontal, Spacing.sm)
+                    .padding(.vertical, Spacing.xs)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(CornerRadius.medium)
+
+                    // フリーテキスト検索（右）
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.gray)
+                            .font(.system(size: 14))
+                        TextField("チームを検索", text: $searchText)
+                            .font(.bodyMedium)
+                        if !searchText.isEmpty {
+                            Button(action: { searchText = "" }) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundColor(.gray)
+                                    .font(.system(size: 14))
+                            }
                         }
                     }
-                    .pickerStyle(.menu)
-                    .font(.bodyMedium)
-                    Spacer()
+                    .padding(.horizontal, Spacing.sm)
+                    .padding(.vertical, Spacing.xs)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(CornerRadius.medium)
                 }
-                .padding(.horizontal, Spacing.sm)
-                .padding(.vertical, Spacing.xs)
-                .background(Color(.systemGray6))
-                .cornerRadius(CornerRadius.medium)
                 .padding(.horizontal, Spacing.md)
                 .padding(.vertical, Spacing.sm)
                 .background(Color.white)
@@ -43,6 +67,7 @@ struct TeamsListView: View {
                 ZStack {
                     if viewModel.isLoading && viewModel.myTeams.isEmpty && viewModel.publicTeams.isEmpty {
                         ProgressView()
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                     } else {
                         List {
                             // My Teams Section
@@ -86,8 +111,7 @@ struct TeamsListView: View {
                             }
                         }
                         .listStyle(.plain)
-                        .searchable(text: $viewModel.searchText, prompt: "Search teams")
-                        .onChange(of: viewModel.searchText) { _, newValue in
+                        .onChange(of: searchText) { _, newValue in
                             viewModel.searchTeams(query: newValue)
                         }
                         .onChange(of: selectedRegion) { _, newValue in
@@ -131,7 +155,8 @@ struct TeamsListView: View {
             }
             .task {
                 if selectedRegion.isEmpty {
-                    selectedRegion = Prefectures.all.first ?? ""
+                    // デフォルトでユーザの地域を選択
+                    selectedRegion = authViewModel.currentUser?.region ?? Prefectures.all.first ?? ""
                 }
                 await viewModel.fetchMyTeams()
                 await viewModel.fetchPublicTeams()

@@ -202,11 +202,6 @@ struct EventDetailView: View {
                         .buttonStyle(.plain)
                         Text(reservation.user.displayName)
                         Spacer()
-                        if reservation.user.id == authViewModel.currentUser?.id {
-                            Text("You")
-                                .font(.caption)
-                                .foregroundColor(.green)
-                        }
                     }
                     .padding(.horizontal)
                     .padding(.vertical, 4)
