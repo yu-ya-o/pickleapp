@@ -174,10 +174,8 @@ struct TeamChatView: View {
 
     private func loadUserRole() async {
         do {
-            let team = try await APIClient.shared.getTeamDetail(teamId: teamId)
-            if let currentUserId = authViewModel.currentUser?.id {
-                userRole = team.userRole
-            }
+            let team = try await APIClient.shared.getTeam(id: teamId)
+            userRole = team.userRole
         } catch {
             print("Load user role error: \(error)")
         }
