@@ -250,9 +250,15 @@ struct TeamEventTeam: Codable, Hashable {
 
 struct TeamEventCreator: Codable, Hashable {
     let id: String
+    let email: String
     let name: String
     let profileImage: String?
     let nickname: String?
+    let region: String?
+    let pickleballExperience: String?
+    let gender: String?
+    let skillLevel: String?
+    let isProfileComplete: Bool
 
     var profileImageURL: URL? {
         guard let urlString = profileImage else { return nil }
@@ -261,6 +267,11 @@ struct TeamEventCreator: Codable, Hashable {
 
     var displayName: String {
         nickname ?? name
+    }
+
+    // Convert to User
+    func toUser() -> User {
+        User(id: id, email: email, name: name, profileImage: profileImage, nickname: nickname, region: region, pickleballExperience: pickleballExperience, gender: gender, skillLevel: skillLevel, isProfileComplete: isProfileComplete)
     }
 }
 
@@ -273,9 +284,15 @@ struct TeamEventParticipant: Codable, Identifiable, Hashable {
 
 struct TeamEventParticipantUser: Codable, Hashable {
     let id: String
+    let email: String
     let name: String
     let profileImage: String?
     let nickname: String?
+    let region: String?
+    let pickleballExperience: String?
+    let gender: String?
+    let skillLevel: String?
+    let isProfileComplete: Bool
 
     var profileImageURL: URL? {
         guard let urlString = profileImage else { return nil }
@@ -284,6 +301,11 @@ struct TeamEventParticipantUser: Codable, Hashable {
 
     var displayName: String {
         nickname ?? name
+    }
+
+    // Convert to User
+    func toUser() -> User {
+        User(id: id, email: email, name: name, profileImage: profileImage, nickname: nickname, region: region, pickleballExperience: pickleballExperience, gender: gender, skillLevel: skillLevel, isProfileComplete: isProfileComplete)
     }
 }
 

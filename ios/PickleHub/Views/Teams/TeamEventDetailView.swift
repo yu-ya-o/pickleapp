@@ -8,6 +8,8 @@ struct TeamEventDetailView: View {
     @State private var showingAlert = false
     @State private var alertMessage = ""
     @State private var showingChat = false
+    @State private var selectedUser: User?
+    @State private var showingUserProfile = false
 
     let teamId: String
     let eventId: String
@@ -52,6 +54,11 @@ struct TeamEventDetailView: View {
         .sheet(isPresented: $showingChat) {
             if let event = event {
                 ChatView(eventId: event.id, eventTitle: event.title)
+            }
+        }
+        .sheet(isPresented: $showingUserProfile) {
+            if let user = selectedUser {
+                UserProfileView(user: user)
             }
         }
         .task {
@@ -102,31 +109,37 @@ struct TeamEventDetailView: View {
             Text("Organized by")
                 .font(.headline)
             HStack(spacing: 12) {
-                // Creator profile image
-                if let profileImageURL = event.creator.profileImageURL {
-                    AsyncImage(url: profileImageURL) { phase in
-                        switch phase {
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 40, height: 40)
-                                .clipShape(Circle())
-                        case .failure(_), .empty:
-                            Image(systemName: "person.circle.fill")
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .foregroundColor(.gray)
-                        @unknown default:
-                            EmptyView()
+                // Creator profile image (tappable)
+                Button(action: {
+                    selectedUser = event.creator.toUser()
+                    showingUserProfile = true
+                }) {
+                    if let profileImageURL = event.creator.profileImageURL {
+                        AsyncImage(url: profileImageURL) { phase in
+                            switch phase {
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 40, height: 40)
+                                    .clipShape(Circle())
+                            case .failure(_), .empty:
+                                Image(systemName: "person.circle.fill")
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .foregroundColor(.gray)
+                            @unknown default:
+                                EmptyView()
+                            }
                         }
+                    } else {
+                        Image(systemName: "person.circle.fill")
+                            .resizable()
+                            .frame(width: 40, height: 40)
+                            .foregroundColor(.gray)
                     }
-                } else {
-                    Image(systemName: "person.circle.fill")
-                        .resizable()
-                        .frame(width: 40, height: 40)
-                        .foregroundColor(.gray)
                 }
+                .buttonStyle(.plain)
                 Text(event.creator.displayName)
             }
         }
@@ -145,31 +158,37 @@ struct TeamEventDetailView: View {
 
                 ForEach(event.participants) { participant in
                     HStack(spacing: 12) {
-                        // Participant profile image
-                        if let profileImageURL = participant.user.profileImageURL {
-                            AsyncImage(url: profileImageURL) { phase in
-                                switch phase {
-                                case .success(let image):
-                                    image
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 32, height: 32)
-                                        .clipShape(Circle())
-                                case .failure(_), .empty:
-                                    Image(systemName: "person.circle")
-                                        .resizable()
-                                        .frame(width: 32, height: 32)
-                                        .foregroundColor(.gray)
-                                @unknown default:
-                                    EmptyView()
+                        // Participant profile image (tappable)
+                        Button(action: {
+                            selectedUser = participant.user.toUser()
+                            showingUserProfile = true
+                        }) {
+                            if let profileImageURL = participant.user.profileImageURL {
+                                AsyncImage(url: profileImageURL) { phase in
+                                    switch phase {
+                                    case .success(let image):
+                                        image
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 32, height: 32)
+                                            .clipShape(Circle())
+                                    case .failure(_), .empty:
+                                        Image(systemName: "person.circle")
+                                            .resizable()
+                                            .frame(width: 32, height: 32)
+                                            .foregroundColor(.gray)
+                                    @unknown default:
+                                        EmptyView()
+                                    }
                                 }
+                            } else {
+                                Image(systemName: "person.circle")
+                                    .resizable()
+                                    .frame(width: 32, height: 32)
+                                    .foregroundColor(.gray)
                             }
-                        } else {
-                            Image(systemName: "person.circle")
-                                .resizable()
-                                .frame(width: 32, height: 32)
-                                .foregroundColor(.gray)
                         }
+                        .buttonStyle(.plain)
                         Text(participant.user.displayName)
                         Spacer()
                         if participant.user.id == authViewModel.currentUser?.id {
