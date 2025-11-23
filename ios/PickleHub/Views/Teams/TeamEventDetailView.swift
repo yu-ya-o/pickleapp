@@ -15,6 +15,7 @@ struct TeamEventDetailView: View {
     @State private var showingJoinConfirm = false
     @State private var showingLeaveConfirm = false
     @State private var showingCloseEventAlert = false
+    @State private var showingTeamDetail = false
 
     let teamId: String
     let eventId: String
@@ -121,6 +122,9 @@ struct TeamEventDetailView: View {
                 UserProfileView(user: user)
             }
         }
+        .sheet(isPresented: $showingTeamDetail) {
+            TeamDetailView(teamId: teamId)
+        }
         .alert("Delete Event", isPresented: $showingDeleteAlert) {
             Button("Cancel", role: .cancel) {}
             Button("Delete", role: .destructive) {
@@ -218,34 +222,41 @@ struct TeamEventDetailView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Organized by")
                 .font(.headline)
-            HStack(spacing: 12) {
-                if let iconImageURL = event.team.iconImageURL {
-                    AsyncImage(url: iconImageURL) { phase in
-                        switch phase {
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 40, height: 40)
-                                .clipShape(Circle())
-                        case .failure(_), .empty:
-                            Image(systemName: "person.3.fill")
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .foregroundColor(.twitterBlue)
-                        @unknown default:
-                            EmptyView()
+            Button(action: {
+                showingTeamDetail = true
+            }) {
+                HStack(spacing: 12) {
+                    if let iconImageURL = event.team.iconImageURL {
+                        AsyncImage(url: iconImageURL) { phase in
+                            switch phase {
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 40, height: 40)
+                                    .clipShape(Circle())
+                            case .failure(_), .empty:
+                                Image(systemName: "person.3.fill")
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .foregroundColor(.twitterBlue)
+                            @unknown default:
+                                EmptyView()
+                            }
                         }
+                    } else {
+                        Image(systemName: "person.3.fill")
+                            .resizable()
+                            .frame(width: 40, height: 40)
+                            .foregroundColor(.twitterBlue)
                     }
-                } else {
-                    Image(systemName: "person.3.fill")
-                        .resizable()
-                        .frame(width: 40, height: 40)
-                        .foregroundColor(.twitterBlue)
+                    Text(event.team.name)
+                        .font(.body)
+                        .foregroundColor(.primary)
+                    Spacer()
                 }
-                Text(event.team.name)
-                    .font(.body)
             }
+            .buttonStyle(PlainButtonStyle())
         }
         .padding(.horizontal)
     }
@@ -318,20 +329,18 @@ struct TeamEventDetailView: View {
                         .cornerRadius(12)
                 }
 
-                // Chat button (for participants and creator)
-                if event.isUserParticipating == true || isCreator {
-                    Button(action: { showingChat = true }) {
-                        HStack {
-                            Image(systemName: "message.fill")
-                            Text("Open Chat")
-                        }
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(12)
+                // Chat button (available for everyone)
+                Button(action: { showingChat = true }) {
+                    HStack {
+                        Image(systemName: "message.fill")
+                        Text("Open Chat")
                     }
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(12)
                 }
 
                 // Join/Leave buttons
