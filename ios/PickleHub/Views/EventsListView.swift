@@ -26,7 +26,7 @@ struct EventsListView: View {
 
         // 地域フィルター
         if !selectedRegion.isEmpty && selectedRegion != "すべて" {
-            events = events.filter { $0.location.contains(selectedRegion) }
+            events = events.filter { $0.region == selectedRegion }
             print("📍 After region filter: \(events.count) events")
         }
 
@@ -50,7 +50,7 @@ struct EventsListView: View {
 
         // 地域フィルター
         if !selectedRegion.isEmpty && selectedRegion != "すべて" {
-            events = events.filter { $0.location.contains(selectedRegion) }
+            events = events.filter { $0.region == selectedRegion }
             print("📍 After region filter: \(events.count) public team events")
         }
 
@@ -74,7 +74,7 @@ struct EventsListView: View {
 
         // 地域フィルター
         if !selectedRegion.isEmpty && selectedRegion != "すべて" {
-            events = events.filter { $0.location.contains(selectedRegion) }
+            events = events.filter { $0.region == selectedRegion }
             print("📍 After region filter: \(events.count) team events")
         }
 

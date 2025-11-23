@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct EventDetailView: View {
+    @Environment(\.dismiss) var dismiss
     @EnvironmentObject var eventsViewModel: EventsViewModel
     @EnvironmentObject var authViewModel: AuthViewModel
     @State private var showingChat = false
@@ -8,6 +9,7 @@ struct EventDetailView: View {
     @State private var alertMessage = ""
     @State private var selectedUser: User?
     @State private var showingUserProfile = false
+    @State private var showingDeleteAlert = false
 
     let event: Event
 
@@ -45,6 +47,13 @@ struct EventDetailView: View {
                     HStack {
                         Image(systemName: "calendar")
                         Text(event.formattedDate)
+                    }
+
+                    if let region = event.region {
+                        HStack {
+                            Image(systemName: "map")
+                            Text(region)
+                        }
                     }
 
                     HStack {
@@ -170,40 +179,38 @@ struct EventDetailView: View {
 
                 // Actions
                 VStack(spacing: 12) {
-                    if !isCreator {
-                        if let reservation = userReservation {
-                            Button(action: {
-                                cancelReservation(reservationId: reservation.id)
-                            }) {
-                                Text("Cancel Reservation")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color.red)
-                                    .cornerRadius(12)
-                            }
-                        } else if event.availableSpots > 0 {
-                            Button(action: {
-                                makeReservation()
-                            }) {
-                                Text("Reserve Spot")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color.green)
-                                    .cornerRadius(12)
-                            }
-                        } else {
-                            Text("Event is full")
+                    if let reservation = userReservation {
+                        Button(action: {
+                            cancelReservation(reservationId: reservation.id)
+                        }) {
+                            Text("Cancel Reservation")
                                 .font(.headline)
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(Color.gray)
+                                .background(Color.red)
                                 .cornerRadius(12)
                         }
+                    } else if event.availableSpots > 0 {
+                        Button(action: {
+                            makeReservation()
+                        }) {
+                            Text("Reserve Spot")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.green)
+                                .cornerRadius(12)
+                        }
+                    } else {
+                        Text("Event is full")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.gray)
+                            .cornerRadius(12)
                     }
 
                     // Chat button (for participants and creator)
@@ -220,6 +227,24 @@ struct EventDetailView: View {
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.blue)
+                            .cornerRadius(12)
+                        }
+                    }
+
+                    // Delete button (for creator only)
+                    if isCreator {
+                        Button(action: {
+                            showingDeleteAlert = true
+                        }) {
+                            HStack {
+                                Spacer()
+                                Text("Delete Event")
+                                    .foregroundColor(.red)
+                                    .fontWeight(.semibold)
+                                Spacer()
+                            }
+                            .padding()
+                            .background(Color.red.opacity(0.1))
                             .cornerRadius(12)
                         }
                     }
@@ -242,6 +267,14 @@ struct EventDetailView: View {
             Button("OK", role: .cancel) {}
         } message: {
             Text(alertMessage)
+        }
+        .alert("Delete Event", isPresented: $showingDeleteAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Delete", role: .destructive) {
+                deleteEvent()
+            }
+        } message: {
+            Text("Are you sure you want to delete this event? This action cannot be undone.")
         }
     }
 
@@ -272,6 +305,18 @@ struct EventDetailView: View {
                 showingAlert = true
             } catch {
                 alertMessage = "Failed to cancel reservation: \(error.localizedDescription)"
+                showingAlert = true
+            }
+        }
+    }
+
+    private func deleteEvent() {
+        Task {
+            do {
+                try await eventsViewModel.deleteEvent(id: event.id)
+                dismiss()
+            } catch {
+                alertMessage = "Failed to delete event: \(error.localizedDescription)"
                 showingAlert = true
             }
         }
