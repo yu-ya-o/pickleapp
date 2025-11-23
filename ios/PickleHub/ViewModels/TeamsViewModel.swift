@@ -73,7 +73,11 @@ class TeamsViewModel: ObservableObject {
             description: description,
             iconImage: iconImage,
             region: region,
-            visibility: visibility
+            visibility: visibility,
+            instagramUrl: nil,
+            twitterUrl: nil,
+            tiktokUrl: nil,
+            lineUrl: nil
         )
 
         do {
