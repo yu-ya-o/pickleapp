@@ -7,6 +7,7 @@ struct CreateTeamEventView: View {
     @State private var title = ""
     @State private var description = ""
     @State private var location = ""
+    @State private var region = ""
     @State private var startDate = Date().addingTimeInterval(3600) // 1 hour from now
     @State private var endDate = Date().addingTimeInterval(7200) // 2 hours from now
     @State private var hasCapacityLimit = true
@@ -27,6 +28,16 @@ struct CreateTeamEventView: View {
                     TextField("Description", text: $description, axis: .vertical)
                         .lineLimit(3...6)
                     TextField("Location", text: $location)
+                }
+
+                Section(header: Text("地域")) {
+                    Picker("都道府県を選択", selection: $region) {
+                        Text("選択してください").tag("")
+                        ForEach(Prefectures.all, id: \.self) { prefecture in
+                            Text(prefecture).tag(prefecture)
+                        }
+                    }
+                    .pickerStyle(.menu)
                 }
 
                 Section(header: Text("Date & Time")) {
@@ -117,6 +128,7 @@ struct CreateTeamEventView: View {
                     title: title,
                     description: description,
                     location: location,
+                    region: region.isEmpty ? nil : region,
                     startTime: startDate,
                     endTime: endDate,
                     maxParticipants: hasCapacityLimit ? maxParticipants : nil,
