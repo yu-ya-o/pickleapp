@@ -8,6 +8,8 @@ struct TeamChatView: View {
     @State private var messageText = ""
     @State private var isLoading = false
     @State private var errorMessage: String?
+    @State private var showingEventPicker = false
+    @State private var teamEvents: [TeamEvent] = []
 
     let teamId: String
     let teamName: String
@@ -52,7 +54,18 @@ struct TeamChatView: View {
 
                 // Input area
                 HStack(spacing: 12) {
-                    TextField("Type a message...", text: $messageText, axis: .vertical)
+                    // Event share button
+                    Button(action: {
+                        showingEventPicker = true
+                    }) {
+                        Image(systemName: "calendar.badge.plus")
+                            .foregroundColor(.twitterBlue)
+                            .padding(10)
+                            .background(Color(.systemGray6))
+                            .clipShape(Circle())
+                    }
+
+                    TextField("メッセージを入力...", text: $messageText, axis: .vertical)
                         .textFieldStyle(.roundedBorder)
                         .lineLimit(1...4)
 
@@ -60,7 +73,7 @@ struct TeamChatView: View {
                         Image(systemName: "paperplane.fill")
                             .foregroundColor(.white)
                             .padding(10)
-                            .background(messageText.isEmpty ? Color.gray : Color.blue)
+                            .background(messageText.isEmpty ? Color.gray : Color.twitterBlue)
                             .clipShape(Circle())
                     }
                     .disabled(messageText.isEmpty)
@@ -79,6 +92,16 @@ struct TeamChatView: View {
             }
             .task {
                 await loadMessages()
+                await loadTeamEvents()
+            }
+            .sheet(isPresented: $showingEventPicker) {
+                EventPickerView(
+                    events: teamEvents,
+                    onSelectEvent: { event in
+                        shareEvent(event)
+                        showingEventPicker = false
+                    }
+                )
             }
         }
     }
@@ -114,11 +137,101 @@ struct TeamChatView: View {
         }
     }
 
+    private func loadTeamEvents() async {
+        do {
+            teamEvents = try await APIClient.shared.getTeamEvents(teamId: teamId)
+        } catch {
+            print("Load team events error: \(error)")
+        }
+    }
+
+    private func shareEvent(_ event: TeamEvent) {
+        let eventInfo = """
+📅 イベント共有
+【\(event.title)】
+📍 \(event.location)
+🕐 \(event.formattedDate)
+👥 \(event.participantCount)/\(event.maxParticipants ?? 0)人
+
+イベントID: \(event.id)
+"""
+        Task {
+            do {
+                let newMessage = try await APIClient.shared.sendTeamMessage(teamId: teamId, content: eventInfo)
+                messages.append(newMessage)
+            } catch {
+                errorMessage = error.localizedDescription
+                print("Send event share message error: \(error)")
+            }
+        }
+    }
+
     private func scrollToBottom(proxy: ScrollViewProxy) {
         guard let lastMessage = messages.last else { return }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             withAnimation {
                 proxy.scrollTo(lastMessage.id, anchor: .bottom)
+            }
+        }
+    }
+}
+
+struct EventPickerView: View {
+    @Environment(\.dismiss) var dismiss
+    let events: [TeamEvent]
+    let onSelectEvent: (TeamEvent) -> Void
+
+    var body: some View {
+        NavigationView {
+            List {
+                if events.isEmpty {
+                    VStack(spacing: 20) {
+                        Image(systemName: "calendar.badge.exclamationmark")
+                            .font(.system(size: 50))
+                            .foregroundColor(.gray)
+                        Text("共有できるイベントがありません")
+                            .font(.headline)
+                            .foregroundColor(.secondary)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                } else {
+                    ForEach(events) { event in
+                        Button(action: {
+                            onSelectEvent(event)
+                        }) {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text(event.title)
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+
+                                HStack {
+                                    Image(systemName: "calendar")
+                                    Text(event.formattedDate)
+                                }
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+
+                                HStack {
+                                    Image(systemName: "mappin.circle")
+                                    Text(event.location)
+                                }
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            }
+                            .padding(.vertical, 4)
+                        }
+                    }
+                }
+            }
+            .navigationTitle("イベントを選択")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("キャンセル") {
+                        dismiss()
+                    }
+                }
             }
         }
     }
