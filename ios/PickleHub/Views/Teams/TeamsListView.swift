@@ -12,11 +12,11 @@ struct TeamsListView: View {
             VStack(spacing: 0) {
                 // カスタムタイトル
                 Text("PickleHub")
-                    .font(.system(size: 16, weight: .semibold, design: .rounded))
-                    .foregroundColor(.black)
+                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                    .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
-                    .background(Color.white)
+                    .background(Color.black)
 
                 // 検索バー
                 HStack(spacing: Spacing.sm) {
@@ -135,7 +135,7 @@ struct TeamsListView: View {
                 }
             }
             .navigationBarHidden(true)
-            .overlay(alignment: .bottomLeading) {
+            .overlay(alignment: .bottomTrailing) {
                 Button(action: {
                     showingCreateTeam = true
                 }) {
@@ -147,7 +147,7 @@ struct TeamsListView: View {
                         .clipShape(Circle())
                         .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
                 }
-                .padding(.leading, 16)
+                .padding(.trailing, 16)
                 .padding(.bottom, 16)
             }
             .refreshable {

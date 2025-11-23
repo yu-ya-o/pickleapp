@@ -18,10 +18,10 @@ struct MainTabView: View {
                     Label("チーム", systemImage: "person.3.fill")
                 }
 
-            MyEventsView()
-                .environmentObject(eventsViewModel)
+            NotificationsView()
+                .environmentObject(authViewModel)
                 .tabItem {
-                    Label("マイイベント", systemImage: "star.fill")
+                    Label("通知", systemImage: "bell.fill")
                 }
 
             ProfileView()

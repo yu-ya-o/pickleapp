@@ -4,149 +4,212 @@ struct ProfileView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @State private var showingSignOutAlert = false
     @State private var showingEditProfile = false
+    @State private var showingMyEvents = false
 
     var body: some View {
         NavigationView {
-            List {
-                // Profile Header
-                Section {
-                    HStack(spacing: 16) {
-                        // Profile Image
-                        if let profileImageURL = authViewModel.currentUser?.profileImageURL {
-                            AsyncImage(url: profileImageURL) { phase in
-                                switch phase {
-                                case .success(let image):
-                                    image
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 80, height: 80)
-                                        .clipShape(Circle())
-                                case .failure(let error):
-                                    VStack {
+            VStack(spacing: 0) {
+                // カスタムタイトル
+                Text("PickleHub")
+                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(Color.black)
+
+                ScrollView {
+                    if let user = authViewModel.currentUser {
+                        VStack(alignment: .leading, spacing: 20) {
+                            // Header
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack(alignment: .top, spacing: 16) {
+                                    // Profile Image
+                                    if let profileImageURL = user.profileImageURL {
+                                        AsyncImage(url: profileImageURL) { phase in
+                                            switch phase {
+                                            case .success(let image):
+                                                image
+                                                    .resizable()
+                                                    .scaledToFill()
+                                                    .frame(width: 80, height: 80)
+                                                    .clipShape(Circle())
+                                            case .failure(_), .empty:
+                                                Image(systemName: "person.circle.fill")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 80, height: 80)
+                                                    .foregroundColor(.gray)
+                                                    .background(Color(.systemGray6))
+                                                    .clipShape(Circle())
+                                            @unknown default:
+                                                EmptyView()
+                                            }
+                                        }
+                                    } else {
                                         Image(systemName: "person.circle.fill")
                                             .resizable()
+                                            .scaledToFit()
                                             .frame(width: 80, height: 80)
                                             .foregroundColor(.gray)
+                                            .background(Color(.systemGray6))
+                                            .clipShape(Circle())
                                     }
-                                    .onAppear {
-                                        print("❌ Failed to load profile image from: \(profileImageURL)")
-                                        print("   Error: \(error)")
+
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        Text(user.displayName)
+                                            .font(.title)
+                                            .fontWeight(.bold)
+
+                                        Text(user.email)
+                                            .font(.body)
+                                            .foregroundColor(.secondary)
+
+                                        if let region = user.region {
+                                            HStack {
+                                                Label(region, systemImage: "mappin.circle")
+                                                    .font(.caption)
+                                                    .foregroundColor(.secondary)
+                                            }
+                                        }
                                     }
-                                case .empty:
-                                    ProgressView()
-                                        .frame(width: 80, height: 80)
-                                @unknown default:
-                                    EmptyView()
                                 }
                             }
-                            .onAppear {
-                                print("📷 Loading profile image from: \(profileImageURL)")
-                                print("   User profileImage string: \(authViewModel.currentUser?.profileImage ?? "nil")")
-                            }
-                        } else {
-                            Image(systemName: "person.circle.fill")
-                                .resizable()
-                                .frame(width: 80, height: 80)
-                                .foregroundColor(.gray)
-                                .onAppear {
-                                    print("⚠️ No profile image URL")
-                                    print("   User profileImage string: \(authViewModel.currentUser?.profileImage ?? "nil")")
+                            .padding()
+
+                            Divider()
+
+                            // Profile Details
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("プロフィール情報")
+                                    .font(.headline)
+                                    .padding(.horizontal)
+
+                                VStack(spacing: 0) {
+                                    if let nickname = user.nickname {
+                                        HStack {
+                                            Label("ニックネーム", systemImage: "person.fill")
+                                                .foregroundColor(.primary)
+                                            Spacer()
+                                            Text(nickname)
+                                                .foregroundColor(.secondary)
+                                        }
+                                        .padding()
+                                        .background(Color(.systemGray6))
+
+                                        Divider()
+                                            .padding(.leading)
+                                    }
+
+                                    if let experience = user.pickleballExperience {
+                                        HStack {
+                                            Label("ピックルボール歴", systemImage: "clock.fill")
+                                                .foregroundColor(.primary)
+                                            Spacer()
+                                            Text(experience)
+                                                .foregroundColor(.secondary)
+                                        }
+                                        .padding()
+                                        .background(Color(.systemGray6))
+
+                                        Divider()
+                                            .padding(.leading)
+                                    }
+
+                                    if let skillLevel = user.skillLevel {
+                                        HStack {
+                                            Label("レベル", systemImage: "star.fill")
+                                                .foregroundColor(.primary)
+                                            Spacer()
+                                            Text(skillLevel)
+                                                .foregroundColor(.secondary)
+                                        }
+                                        .padding()
+                                        .background(Color(.systemGray6))
+
+                                        Divider()
+                                            .padding(.leading)
+                                    }
+
+                                    if let gender = user.gender {
+                                        HStack {
+                                            Label("性別", systemImage: "person.2.fill")
+                                                .foregroundColor(.primary)
+                                            Spacer()
+                                            Text(gender)
+                                                .foregroundColor(.secondary)
+                                        }
+                                        .padding()
+                                        .background(Color(.systemGray6))
+                                    }
                                 }
-                        }
-
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(authViewModel.currentUser?.displayName ?? "")
-                                .font(.title2)
-                                .bold()
-                            Text(authViewModel.currentUser?.email ?? "")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                    .padding(.vertical, 8)
-                }
-
-                // Profile Details
-                if let user = authViewModel.currentUser {
-                    Section(header: Text("プロフィール")) {
-                        if let nickname = user.nickname {
-                            HStack {
-                                Label("ニックネーム", systemImage: "person.fill")
-                                Spacer()
-                                Text(nickname)
-                                    .foregroundColor(.secondary)
+                                .cornerRadius(12)
                             }
-                        }
 
-                        if let region = user.region {
-                            HStack {
-                                Label("地域", systemImage: "mappin.circle.fill")
-                                Spacer()
-                                Text(region)
-                                    .foregroundColor(.secondary)
+                            Divider()
+
+                            // Actions
+                            VStack(spacing: 12) {
+                                // My Events
+                                Button(action: { showingMyEvents = true }) {
+                                    HStack {
+                                        Image(systemName: "calendar")
+                                        Text("マイイベント")
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                    }
+                                    .foregroundColor(.primary)
+                                    .padding()
+                                    .background(Color(.systemGray6))
+                                    .cornerRadius(12)
+                                }
+
+                                // Edit Profile
+                                Button(action: { showingEditProfile = true }) {
+                                    HStack {
+                                        Image(systemName: "pencil")
+                                        Text("プロフィールを編集")
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                    }
+                                    .foregroundColor(.primary)
+                                    .padding()
+                                    .background(Color(.systemGray6))
+                                    .cornerRadius(12)
+                                }
+
+                                // Sign Out
+                                Button(action: { showingSignOutAlert = true }) {
+                                    HStack {
+                                        Spacer()
+                                        Text("ログアウト")
+                                            .foregroundColor(.red)
+                                        Spacer()
+                                    }
+                                    .padding()
+                                    .background(Color.red.opacity(0.1))
+                                    .cornerRadius(12)
+                                }
                             }
-                        }
+                            .padding(.horizontal)
 
-                        if let experience = user.pickleballExperience {
-                            HStack {
-                                Label("ピックルボール歴", systemImage: "clock.fill")
-                                Spacer()
-                                Text(experience)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-
-                        if let skillLevel = user.skillLevel {
-                            HStack {
-                                Label("レベル", systemImage: "star.fill")
-                                Spacer()
-                                Text(skillLevel)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-
-                        if let gender = user.gender {
-                            HStack {
-                                Label("性別", systemImage: "person.2.fill")
-                                Spacer()
-                                Text(gender)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                    }
-
-                    Section {
-                        Button(action: {
-                            showingEditProfile = true
-                        }) {
-                            HStack {
-                                Spacer()
-                                Text("プロフィールを編集")
-                                Spacer()
-                            }
-                        }
-                    }
-                }
-
-                Section {
-                    Button(action: {
-                        showingSignOutAlert = true
-                    }) {
-                        HStack {
-                            Spacer()
-                            Text("ログアウト")
-                                .foregroundColor(.red)
                             Spacer()
                         }
+                    } else {
+                        ProgressView()
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
                 }
             }
-            .navigationTitle("プロフィール")
+            .navigationBarHidden(true)
             .sheet(isPresented: $showingEditProfile) {
                 if let user = authViewModel.currentUser {
                     ProfileEditView(user: user)
                         .environmentObject(authViewModel)
                 }
+            }
+            .sheet(isPresented: $showingMyEvents) {
+                MyEventsView()
+                    .environmentObject(authViewModel)
             }
             .alert("ログアウト", isPresented: $showingSignOutAlert) {
                 Button("キャンセル", role: .cancel) {}
@@ -157,6 +220,7 @@ struct ProfileView: View {
                 Text("ログアウトしてもよろしいですか？")
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
