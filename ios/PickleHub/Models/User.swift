@@ -13,6 +13,12 @@ struct User: Codable, Identifiable, Hashable {
     let skillLevel: String?
     let isProfileComplete: Bool
 
+    // SNS Links
+    let instagramUrl: String?
+    let twitterUrl: String?
+    let tiktokUrl: String?
+    let lineUrl: String?
+
     var profileImageURL: URL? {
         guard let urlString = profileImage else { return nil }
         return URL(string: urlString)
@@ -42,6 +48,10 @@ struct UpdateProfileRequest: Codable {
     let gender: String?
     let skillLevel: String?
     let profileImage: String?
+    let instagramUrl: String?
+    let twitterUrl: String?
+    let tiktokUrl: String?
+    let lineUrl: String?
 
     init(nickname: String? = nil,
          bio: String? = nil,
@@ -49,7 +59,11 @@ struct UpdateProfileRequest: Codable {
          pickleballExperience: String? = nil,
          gender: String? = nil,
          skillLevel: String? = nil,
-         profileImage: String? = nil) {
+         profileImage: String? = nil,
+         instagramUrl: String? = nil,
+         twitterUrl: String? = nil,
+         tiktokUrl: String? = nil,
+         lineUrl: String? = nil) {
         self.nickname = nickname
         self.bio = bio
         self.region = region
@@ -57,5 +71,9 @@ struct UpdateProfileRequest: Codable {
         self.gender = gender
         self.skillLevel = skillLevel
         self.profileImage = profileImage
+        self.instagramUrl = instagramUrl
+        self.twitterUrl = twitterUrl
+        self.tiktokUrl = tiktokUrl
+        self.lineUrl = lineUrl
     }
 }
