@@ -547,7 +547,7 @@ class APIClient {
     func markNotificationAsRead(notificationId: String) async throws {
         struct Response: Codable { let message: String }
         let _: Response = try await request(
-            endpoint: "/api/notifications/\(notificationId)/read",
+            endpoint: "/api/notifications/\(notificationId)?action=read",
             method: "PATCH",
             requiresAuth: true
         )
@@ -556,7 +556,7 @@ class APIClient {
     func markAllNotificationsAsRead() async throws {
         struct Response: Codable { let message: String }
         let _: Response = try await request(
-            endpoint: "/api/notifications/read-all",
+            endpoint: "/api/notifications?action=read-all",
             method: "PATCH",
             requiresAuth: true
         )
