@@ -3,6 +3,7 @@ import SwiftUI
 struct MainTabView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @StateObject private var eventsViewModel = EventsViewModel()
+    @StateObject private var notificationsViewModel = NotificationsViewModel()
 
     var body: some View {
         TabView {
@@ -20,15 +21,21 @@ struct MainTabView: View {
 
             NotificationsView()
                 .environmentObject(authViewModel)
+                .environmentObject(notificationsViewModel)
                 .tabItem {
                     Label("通知", systemImage: "bell.fill")
                 }
+                .badge(notificationsViewModel.unreadCount > 0 ? notificationsViewModel.unreadCount : nil)
 
             ProfileView()
                 .environmentObject(eventsViewModel)
                 .tabItem {
                     Label("プロフィール", systemImage: "person.circle")
                 }
+        }
+        .task {
+            // Fetch notifications on tab view load
+            await notificationsViewModel.fetchNotifications()
         }
     }
 }

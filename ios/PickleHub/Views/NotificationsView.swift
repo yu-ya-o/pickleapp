@@ -2,8 +2,12 @@ import SwiftUI
 
 struct NotificationsView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
-    @StateObject private var viewModel = NotificationsViewModel()
+    @EnvironmentObject var viewModel: NotificationsViewModel
     @State private var showingMarkAllAlert = false
+    @State private var selectedEventId: String?
+    @State private var selectedTeamId: String?
+    @State private var showingEventDetail = false
+    @State private var showingTeamDetail = false
 
     var body: some View {
         NavigationView {
@@ -63,12 +67,14 @@ struct NotificationsView: View {
                             NotificationRow(
                                 notification: notification,
                                 onTap: {
+                                    // Mark as read
                                     if !notification.isRead {
                                         Task {
                                             await viewModel.markAsRead(notificationId: notification.id)
                                         }
                                     }
-                                    // TODO: Navigate to related content
+                                    // Navigate to related content
+                                    navigateToDetails(for: notification)
                                 }
                             )
                             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
@@ -104,8 +110,34 @@ struct NotificationsView: View {
             } message: {
                 Text("すべての通知を既読にしますか？")
             }
+            .sheet(isPresented: $showingEventDetail) {
+                if let eventId = selectedEventId {
+                    EventDetailView(eventId: eventId)
+                        .environmentObject(authViewModel)
+                }
+            }
+            .sheet(isPresented: $showingTeamDetail) {
+                if let teamId = selectedTeamId {
+                    TeamDetailView(teamId: teamId)
+                        .environmentObject(authViewModel)
+                }
+            }
         }
         .navigationViewStyle(StackNavigationViewStyle())
+    }
+
+    private func navigateToDetails(for notification: Notification) {
+        guard let relatedId = notification.relatedId else { return }
+
+        switch notification.type {
+        case .eventJoined, .eventCancelled, .eventChatMessage, .eventUpdated, .eventCancelledByCreator, .eventReminder:
+            selectedEventId = relatedId
+            showingEventDetail = true
+
+        case .teamJoinRequest, .teamMemberLeft, .teamJoinApproved, .teamJoinRejected, .teamChatMessage, .teamRoleChanged, .teamEventCreated:
+            selectedTeamId = relatedId
+            showingTeamDetail = true
+        }
     }
 }
 
