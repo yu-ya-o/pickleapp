@@ -19,11 +19,15 @@ struct Event: Codable, Identifiable, Hashable {
 
     // Computed properties
     var startDate: Date? {
-        ISO8601DateFormatter().date(from: startTime)
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return formatter.date(from: startTime)
     }
 
     var endDate: Date? {
-        ISO8601DateFormatter().date(from: endTime)
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return formatter.date(from: endTime)
     }
 
     var formattedDate: String {
