@@ -21,7 +21,9 @@ struct MyEventsView: View {
             VStack(spacing: 0) {
                 // カスタムタイトル
                 Text("PickleHub")
-                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                    .font(.system(size: 28, weight: .black, design: .default))
+                    .italic()
+                    .kerning(-0.5)
                     .foregroundColor(.black)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
