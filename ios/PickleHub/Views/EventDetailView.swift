@@ -24,6 +24,23 @@ struct EventDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
+                // Default Header Image
+                Rectangle()
+                    .fill(LinearGradient(
+                        gradient: Gradient(colors: [Color.blue.opacity(0.6), Color.purple.opacity(0.6)]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ))
+                    .frame(height: 200)
+                    .frame(maxWidth: .infinity)
+                    .overlay(
+                        VStack {
+                            Image(systemName: "figure.pickleball")
+                                .font(.system(size: 60))
+                                .foregroundColor(.white.opacity(0.9))
+                        }
+                    )
+
                 headerSection
                 Divider()
                 detailsSection
