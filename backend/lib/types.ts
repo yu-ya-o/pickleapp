@@ -272,6 +272,7 @@ export interface CreateTeamEventRequest {
   startTime: string;
   endTime: string;
   maxParticipants?: number; // null = unlimited
+  visibility?: 'public' | 'private'; // "public" = 通常イベントとしても公開, "private" = チームメンバーのみ
 }
 
 export interface UpdateTeamEventRequest {
@@ -281,6 +282,7 @@ export interface UpdateTeamEventRequest {
   startTime?: string;
   endTime?: string;
   maxParticipants?: number;
+  visibility?: 'public' | 'private';
 }
 
 export interface TeamEventResponse {
@@ -291,6 +293,7 @@ export interface TeamEventResponse {
   startTime: string;
   endTime: string;
   maxParticipants: number | null;
+  visibility: string;
   createdAt: string;
   updatedAt: string;
   team: {
