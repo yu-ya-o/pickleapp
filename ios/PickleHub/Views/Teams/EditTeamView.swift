@@ -48,7 +48,7 @@ struct EditTeamView: View {
                                 .frame(width: 100, height: 100)
                                 .clipShape(Circle())
                         } else if let iconURL = viewModel.team?.iconImageURL {
-                            AsyncImage(url: iconURL) { phase in
+                            CachedAsyncImagePhase(url: iconURL) { phase in
                                 switch phase {
                                 case .success(let image):
                                     image
@@ -99,7 +99,7 @@ struct EditTeamView: View {
                                 .clipped()
                                 .cornerRadius(8)
                         } else if let headerURL = viewModel.team?.headerImageURL {
-                            AsyncImage(url: headerURL) { phase in
+                            CachedAsyncImagePhase(url: headerURL) { phase in
                                 switch phase {
                                 case .success(let image):
                                     image

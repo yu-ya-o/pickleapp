@@ -16,7 +16,7 @@ struct UserProfileView: View {
                 VStack(spacing: Spacing.lg) {
                     // Profile Image
                     if let profileImageURL = user.profileImageURL {
-                        AsyncImage(url: profileImageURL) { phase in
+                        CachedAsyncImagePhase(url: profileImageURL) { phase in
                             switch phase {
                             case .success(let image):
                                 image
@@ -185,7 +185,7 @@ struct TeamCardRow: View {
         HStack(spacing: Spacing.md) {
             // Team Icon
             if let iconImageURL = team.iconImageURL {
-                AsyncImage(url: iconImageURL) { image in
+                CachedAsyncImage(url: iconImageURL) { image in
                     image
                         .resizable()
                         .scaledToFill()

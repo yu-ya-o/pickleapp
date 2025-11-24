@@ -12,7 +12,7 @@ struct ModernEventRowView: View {
                     onProfileTap?()
                 }) {
                     if let profileImageURL = event.creator.profileImageURL {
-                        AsyncImage(url: profileImageURL) { phase in
+                        CachedAsyncImagePhase(url: profileImageURL) { phase in
                             switch phase {
                             case .success(let image):
                                 image

@@ -88,7 +88,7 @@ struct TeamEventDetailView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     // Team Header Image
                     if let headerURL = event.team.headerImageURL {
-                        AsyncImage(url: headerURL) { phase in
+                        CachedAsyncImagePhase(url: headerURL) { phase in
                             switch phase {
                             case .success(let image):
                                 image
@@ -258,7 +258,7 @@ struct TeamEventDetailView: View {
             }) {
                 HStack(spacing: 12) {
                     if let iconImageURL = event.team.iconImageURL {
-                        AsyncImage(url: iconImageURL) { phase in
+                        CachedAsyncImagePhase(url: iconImageURL) { phase in
                             switch phase {
                             case .success(let image):
                                 image
@@ -310,7 +310,7 @@ struct TeamEventDetailView: View {
                             showingUserProfile = true
                         }) {
                             if let profileImageURL = participant.user.profileImageURL {
-                                AsyncImage(url: profileImageURL) { phase in
+                                CachedAsyncImagePhase(url: profileImageURL) { phase in
                                     switch phase {
                                     case .success(let image):
                                         image

@@ -311,7 +311,7 @@ struct TeamMessageBubbleView: View {
 
             // User icon for other users
             if !isCurrentUser {
-                AsyncImage(url: URL(string: message.user.profileImage ?? "")) { image in
+                CachedAsyncImage(url: URL(string: message.user.profileImage ?? "")) { image in
                     image
                         .resizable()
                         .scaledToFill()
@@ -374,7 +374,7 @@ struct TeamMessageBubbleView: View {
 
             // User icon for current user
             if isCurrentUser {
-                AsyncImage(url: URL(string: message.user.profileImage ?? "")) { image in
+                CachedAsyncImage(url: URL(string: message.user.profileImage ?? "")) { image in
                     image
                         .resizable()
                         .scaledToFill()
