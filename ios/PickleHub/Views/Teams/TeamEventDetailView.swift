@@ -45,6 +45,13 @@ struct TeamEventDetailView: View {
         event?.status == "completed"
     }
 
+    private func formattedTime(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ja_JP")
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
+    }
+
     @ViewBuilder
     private var defaultHeaderImage: some View {
         Rectangle()
@@ -185,10 +192,7 @@ struct TeamEventDetailView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(event.formattedDate)
                     if let endDate = event.endDate {
-                        let formatter = DateFormatter()
-                        formatter.locale = Locale(identifier: "ja_JP")
-                        formatter.timeStyle = .short
-                        Text("〜 \(formatter.string(from: endDate))")
+                        Text("〜 \(formattedTime(endDate))")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
