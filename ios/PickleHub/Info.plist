@@ -13,12 +13,11 @@
             <string>Editor</string>
             <key>CFBundleURLSchemes</key>
             <array>
-                <!-- Replace with your reversed client ID -->
-                <string>com.googleusercontent.apps.YOUR_CLIENT_ID</string>
+                <string>com.googleusercontent.apps.738453907848-foqdf7208fdh9odmttp2i377o0qnf09j</string>
             </array>
         </dict>
     </array>
     <key>GIDClientID</key>
-    <string>YOUR_IOS_CLIENT_ID.apps.googleusercontent.com</string>
+    <string>738453907848-foqdf7208fdh9odmttp2i377o0qnf09j.apps.googleusercontent.com</string>
 </dict>
 </plist>
