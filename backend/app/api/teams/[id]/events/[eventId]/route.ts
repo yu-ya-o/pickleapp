@@ -41,12 +41,6 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       throw new NotFoundError('Team not found');
     }
 
-    // Check if user is a member
-    const isMember = team.members.some((m) => m.userId === user.id);
-    if (!isMember) {
-      throw new ForbiddenError('Only team members can view team events');
-    }
-
     const event = await prisma.teamEvent.findUnique({
       where: { id: eventId },
       include: {
@@ -104,6 +98,14 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     if (event.teamId !== id) {
       throw new ForbiddenError('Event does not belong to this team');
+    }
+
+    // Check access: either user is a member, or event is public
+    const isMember = team.members.some((m) => m.userId === user.id);
+    const isPublicEvent = event.visibility === 'public';
+
+    if (!isMember && !isPublicEvent) {
+      throw new ForbiddenError('Only team members can view private team events');
     }
 
     const participantCount = event.participants.length;

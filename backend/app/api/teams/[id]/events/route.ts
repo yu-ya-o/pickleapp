@@ -44,13 +44,13 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     // Check if user is a member
     const isMember = team.members.some((m) => m.userId === user.id);
-    if (!isMember) {
-      throw new ForbiddenError('Only team members can view team events');
-    }
 
+    // If user is not a member, only show public events
+    // If user is a member, show all events
     const events = await prisma.teamEvent.findMany({
       where: {
         teamId: id,
+        ...(isMember ? {} : { visibility: 'public' }),
       },
       include: {
         team: {

@@ -8,7 +8,7 @@ struct OnboardingContainerView: View {
     @State private var currentPage = 0
     @State private var dragOffset: CGFloat = 0
 
-    private let totalPages = 7
+    private let totalPages = 8
 
     var body: some View {
         ZStack {
@@ -46,8 +46,11 @@ struct OnboardingContainerView: View {
                     OnboardingSkillLevelView(viewModel: viewModel)
                         .tag(5)
 
-                    OnboardingProfileImageView(viewModel: viewModel)
+                    OnboardingDUPRView(viewModel: viewModel)
                         .tag(6)
+
+                    OnboardingProfileImageView(viewModel: viewModel)
+                        .tag(7)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .animation(.spring(response: 0.3, dampingFraction: 0.8), value: currentPage)
@@ -133,7 +136,8 @@ struct OnboardingContainerView: View {
         case 3: return !viewModel.selectedRegion.isEmpty
         case 4: return !viewModel.selectedExperience.isEmpty
         case 5: return !viewModel.selectedSkillLevel.isEmpty
-        case 6: return true  // Profile image is optional
+        case 6: return true  // DUPR is optional
+        case 7: return true  // Profile image is optional
         default: return false
         }
     }

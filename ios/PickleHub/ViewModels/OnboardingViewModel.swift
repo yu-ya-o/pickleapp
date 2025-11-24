@@ -9,6 +9,8 @@ class OnboardingViewModel: ObservableObject {
     @Published var selectedRegion = ""
     @Published var selectedExperience = ""
     @Published var selectedSkillLevel = ""
+    @Published var duprDoublesText = ""
+    @Published var duprSinglesText = ""
     @Published var selectedImageData: Data?
     @Published var profileImageURL: String?
 
@@ -38,6 +40,11 @@ class OnboardingViewModel: ObservableObject {
 
             // 2. Update profile
             print("📝 Updating profile...")
+
+            // Convert DUPR text to Double if valid
+            let duprDoubles = duprDoublesText.isEmpty ? nil : Double(duprDoublesText)
+            let duprSingles = duprSinglesText.isEmpty ? nil : Double(duprSinglesText)
+
             let request = UpdateProfileRequest(
                 nickname: nickname,
                 bio: bio.isEmpty ? nil : bio,
@@ -45,6 +52,8 @@ class OnboardingViewModel: ObservableObject {
                 pickleballExperience: selectedExperience,
                 gender: selectedGender,
                 skillLevel: selectedSkillLevel,
+                duprDoubles: duprDoubles,
+                duprSingles: duprSingles,
                 profileImage: finalProfileImageURL
             )
 
