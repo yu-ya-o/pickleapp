@@ -49,7 +49,7 @@ struct TeamDetailView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     // Header Image
                     if let headerURL = team.headerImageURL {
-                        AsyncImage(url: headerURL) { phase in
+                        CachedAsyncImagePhase(url: headerURL) { phase in
                             switch phase {
                             case .success(let image):
                                 image
@@ -73,7 +73,7 @@ struct TeamDetailView: View {
                         HStack(alignment: .top, spacing: 16) {
                             // Team Icon
                             if let iconURL = team.iconImageURL {
-                                AsyncImage(url: iconURL) { phase in
+                                CachedAsyncImagePhase(url: iconURL) { phase in
                                     switch phase {
                                     case .success(let image):
                                         image

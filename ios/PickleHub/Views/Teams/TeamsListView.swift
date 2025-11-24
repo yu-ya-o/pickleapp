@@ -167,7 +167,7 @@ struct TeamRowView: View {
         HStack(spacing: 12) {
             // Team Icon
             if let iconURL = team.iconImageURL {
-                AsyncImage(url: iconURL) { phase in
+                CachedAsyncImagePhase(url: iconURL) { phase in
                     switch phase {
                     case .success(let image):
                         image

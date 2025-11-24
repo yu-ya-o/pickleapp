@@ -28,7 +28,7 @@ struct ProfileView: View {
                                 HStack(alignment: .top, spacing: 16) {
                                     // Profile Image with blue border
                                     if let profileImageURL = user.profileImageURL {
-                                        AsyncImage(url: profileImageURL) { phase in
+                                        CachedAsyncImagePhase(url: profileImageURL) { phase in
                                             switch phase {
                                             case .success(let image):
                                                 image

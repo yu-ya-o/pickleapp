@@ -219,7 +219,7 @@ struct EventDetailView: View {
                     showingUserProfile = true
                 }) {
                     if let profileImageURL = event.creator.profileImageURL {
-                        AsyncImage(url: profileImageURL) { phase in
+                        CachedAsyncImagePhase(url: profileImageURL) { phase in
                             switch phase {
                             case .success(let image):
                                 image
@@ -268,7 +268,7 @@ struct EventDetailView: View {
                             showingUserProfile = true
                         }) {
                             if let profileImageURL = reservation.user.profileImageURL {
-                                AsyncImage(url: profileImageURL) { phase in
+                                CachedAsyncImagePhase(url: profileImageURL) { phase in
                                     switch phase {
                                     case .success(let image):
                                         image

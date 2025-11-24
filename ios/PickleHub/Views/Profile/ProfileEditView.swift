@@ -55,7 +55,7 @@ struct ProfileEditView: View {
                                 .frame(width: 100, height: 100)
                                 .clipShape(Circle())
                         } else if let profileImageURL, let url = URL(string: profileImageURL) {
-                            AsyncImage(url: url) { image in
+                            CachedAsyncImage(url: url) { image in
                                 image
                                     .resizable()
                                     .scaledToFill()
