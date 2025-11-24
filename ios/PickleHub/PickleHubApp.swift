@@ -4,20 +4,33 @@ import GoogleSignIn
 @main
 struct PickleHubApp: App {
     @StateObject private var authViewModel = AuthViewModel()
+    @State private var showingSplash = true
 
     var body: some Scene {
         WindowGroup {
-            if authViewModel.isAuthenticated {
-                if authViewModel.currentUser?.isProfileComplete == false {
-                    OnboardingContainerView()
-                        .environmentObject(authViewModel)
+            if showingSplash {
+                SplashView()
+                    .onAppear {
+                        // Hide splash screen after 2 seconds
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                            withAnimation {
+                                showingSplash = false
+                            }
+                        }
+                    }
+            } else {
+                if authViewModel.isAuthenticated {
+                    if authViewModel.currentUser?.isProfileComplete == false {
+                        OnboardingContainerView()
+                            .environmentObject(authViewModel)
+                    } else {
+                        MainTabView()
+                            .environmentObject(authViewModel)
+                    }
                 } else {
-                    MainTabView()
+                    LoginView()
                         .environmentObject(authViewModel)
                 }
-            } else {
-                LoginView()
-                    .environmentObject(authViewModel)
             }
         }
     }
