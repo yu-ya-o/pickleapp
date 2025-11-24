@@ -219,6 +219,7 @@ struct CreateEventView: View {
             endTime: formatter.string(from: endDate),
             maxParticipants: maxParticipants,
             price: price,
+            skillLevel: skillLevel,
             visibility: teamEventVisibility
         )
 
