@@ -266,9 +266,9 @@ struct TeamEvent: Codable, Identifiable, Hashable {
 
     var capacityText: String {
         if let max = maxParticipants, let available = availableSpots {
-            return "\(available)/\(max) spots available"
+            return "\(max)人中\(available)人空き"
         }
-        return "\(participantCount) participants"
+        return "\(participantCount)人参加"
     }
 }
 

@@ -90,7 +90,7 @@ struct CreateTeamEventView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {
-                        Text("このイベントは全ユーザーの通常イベント一覧に表示されます")
+                        Text("このイベントは全ユーザーの公開イベント一覧に表示されます")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }

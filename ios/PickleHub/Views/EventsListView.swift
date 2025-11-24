@@ -4,7 +4,7 @@ struct EventsListView: View {
     @EnvironmentObject var eventsViewModel: EventsViewModel
     @EnvironmentObject var authViewModel: AuthViewModel
     @State private var showingCreateEvent = false
-    @State private var selectedSegment = 0  // 0: 通常イベント, 1: チームイベント
+    @State private var selectedSegment = 0  // 0: 公開イベント, 1: チームイベント
     @State private var searchText = ""
     @State private var selectedRegion = ""
     @State private var selectedUser: User?
@@ -97,7 +97,7 @@ struct EventsListView: View {
 
                 // セグメントコントロール
                 Picker("イベントタイプ", selection: $selectedSegment) {
-                    Text("通常イベント").tag(0)
+                    Text("公開イベント").tag(0)
                     Text("チームイベント").tag(1)
                 }
                 .pickerStyle(SegmentedPickerStyle())
@@ -157,7 +157,7 @@ struct EventsListView: View {
                         ProgressView()
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                     } else if selectedSegment == 0 {
-                        // 通常イベント（通常イベント + パブリックなチームイベント）
+                        // 公開イベント（公開イベント + パブリックなチームイベント）
                         if filteredEvents.isEmpty && filteredPublicTeamEvents.isEmpty {
                             VStack(spacing: Spacing.lg) {
                                 Image(systemName: "calendar.badge.exclamationmark")

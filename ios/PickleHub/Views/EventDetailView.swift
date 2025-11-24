@@ -32,6 +32,16 @@ struct EventDetailView: View {
         return formatter.string(from: date)
     }
 
+    private func skillLevelLabel(_ level: String) -> String {
+        switch level {
+        case "beginner": return "初級"
+        case "intermediate": return "中級"
+        case "advanced": return "上級"
+        case "all": return "全レベル"
+        default: return level
+        }
+    }
+
     private var userReservation: Reservation? {
         event.reservations.first { $0.user.id == authViewModel.currentUser?.id }
     }
@@ -126,7 +136,7 @@ struct EventDetailView: View {
                 .font(.title)
                 .fontWeight(.bold)
 
-            Text(event.skillLevel.capitalized)
+            Text(skillLevelLabel(event.skillLevel))
                 .font(.subheadline)
                 .foregroundColor(.secondary)
 
@@ -143,13 +153,10 @@ struct EventDetailView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: "calendar")
-                VStack(alignment: .leading, spacing: 4) {
+                if let endDate = event.endDate {
+                    Text("\(event.formattedDate) 〜 \(formattedTime(endDate))")
+                } else {
                     Text(event.formattedDate)
-                    if let endDate = event.endDate {
-                        Text("〜 \(formattedTime(endDate))")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
                 }
             }
 
