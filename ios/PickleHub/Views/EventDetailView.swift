@@ -61,7 +61,7 @@ struct EventDetailView: View {
                 Spacer()
             }
         }
-        .navigationTitle("Event")
+        .navigationTitle("イベント")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingChat) {
             ChatView(eventId: event.id, eventTitle: event.title)
@@ -71,28 +71,28 @@ struct EventDetailView: View {
                 UserProfileView(user: user)
             }
         }
-        .alert("Notification", isPresented: $showingAlert) {
+        .alert("通知", isPresented: $showingAlert) {
             Button("OK", role: .cancel) {}
         } message: {
             Text(alertMessage)
         }
-        .alert("Delete Event", isPresented: $showingDeleteAlert) {
-            Button("Cancel", role: .cancel) {}
-            Button("Delete", role: .destructive) {
+        .alert("イベント削除", isPresented: $showingDeleteAlert) {
+            Button("キャンセル", role: .cancel) {}
+            Button("削除", role: .destructive) {
                 deleteEvent()
             }
         } message: {
-            Text("Are you sure you want to delete this event? This action cannot be undone.")
+            Text("このイベントを削除してもよろしいですか？この操作は取り消せません。")
         }
-        .alert("Reserve Spot", isPresented: $showingReserveConfirm) {
-            Button("Cancel", role: .cancel) {}
-            Button("Reserve") {
+        .alert("参加予約", isPresented: $showingReserveConfirm) {
+            Button("キャンセル", role: .cancel) {}
+            Button("予約する") {
                 makeReservation()
             }
         } message: {
             Text("このイベントに参加予約しますか？")
         }
-        .alert("Cancel Reservation", isPresented: $showingCancelConfirm) {
+        .alert("予約キャンセル", isPresented: $showingCancelConfirm) {
             Button("キャンセルしない", role: .cancel) {}
             Button("予約をキャンセル", role: .destructive) {
                 if let reservationId = reservationToCancel {
@@ -102,8 +102,8 @@ struct EventDetailView: View {
         } message: {
             Text("予約をキャンセルしてもよろしいですか？")
         }
-        .alert("Close Event", isPresented: $showingCloseEventAlert) {
-            Button("Cancel", role: .cancel) {}
+        .alert("イベント締め切り", isPresented: $showingCloseEventAlert) {
+            Button("キャンセル", role: .cancel) {}
             Button("締め切る", role: .destructive) {
                 closeEvent()
             }
@@ -153,7 +153,7 @@ struct EventDetailView: View {
 
             HStack {
                 Image(systemName: "person.2")
-                Text("\(event.availableSpots) of \(event.maxParticipants) spots available")
+                Text("\(event.maxParticipants)人中\(event.availableSpots)人空き")
                     .foregroundColor(event.availableSpots > 0 ? .green : .red)
             }
 
@@ -174,7 +174,7 @@ struct EventDetailView: View {
     @ViewBuilder
     private var creatorSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Organized by")
+            Text("主催者")
                 .font(.headline)
             HStack(spacing: 12) {
                 Button(action: {
@@ -220,7 +220,7 @@ struct EventDetailView: View {
             Divider()
 
             VStack(alignment: .leading, spacing: 8) {
-                Text("Participants (\(event.reservations.count))")
+                Text("参加者 (\(event.reservations.count))")
                     .font(.headline)
                     .padding(.horizontal)
 
@@ -284,7 +284,7 @@ struct EventDetailView: View {
             Button(action: { showingChat = true }) {
                 HStack {
                     Image(systemName: "message.fill")
-                    Text("Open Chat")
+                    Text("チャットを開く")
                 }
                 .font(.headline)
                 .foregroundColor(.white)
@@ -300,7 +300,7 @@ struct EventDetailView: View {
                     reservationToCancel = reservation.id
                     showingCancelConfirm = true
                 }) {
-                    Text("Cancel Reservation")
+                    Text("予約をキャンセル")
                         .font(.headline)
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -320,7 +320,7 @@ struct EventDetailView: View {
                 Button(action: {
                     showingReserveConfirm = true
                 }) {
-                    Text("Reserve Spot")
+                    Text("参加予約する")
                         .font(.headline)
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -329,7 +329,7 @@ struct EventDetailView: View {
                         .cornerRadius(12)
                 }
             } else {
-                Text("Event is full")
+                Text("満席です")
                     .font(.headline)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -364,7 +364,7 @@ struct EventDetailView: View {
                 }) {
                     HStack {
                         Spacer()
-                        Text("Delete Event")
+                        Text("イベントを削除")
                             .foregroundColor(.red)
                             .fontWeight(.semibold)
                         Spacer()
@@ -383,14 +383,14 @@ struct EventDetailView: View {
                 print("📝 Making reservation for event: \(event.id)")
                 try await eventsViewModel.makeReservation(eventId: event.id)
                 print("✅ Reservation successful!")
-                alertMessage = "Reservation successful!"
+                alertMessage = "予約が完了しました！"
                 showingAlert = true
             } catch {
                 print("❌ Reservation failed: \(error)")
                 if let apiError = error as? APIError {
                     print("❌ API Error: \(apiError.errorDescription ?? "unknown")")
                 }
-                alertMessage = "Failed to make reservation: \(error.localizedDescription)"
+                alertMessage = "予約に失敗しました: \(error.localizedDescription)"
                 showingAlert = true
             }
         }
@@ -400,10 +400,10 @@ struct EventDetailView: View {
         Task {
             do {
                 try await eventsViewModel.cancelReservation(reservationId: reservationId)
-                alertMessage = "Reservation cancelled"
+                alertMessage = "予約をキャンセルしました"
                 showingAlert = true
             } catch {
-                alertMessage = "Failed to cancel reservation: \(error.localizedDescription)"
+                alertMessage = "予約のキャンセルに失敗しました: \(error.localizedDescription)"
                 showingAlert = true
             }
         }
@@ -416,7 +416,7 @@ struct EventDetailView: View {
                 alertMessage = "イベントを締め切りました"
                 showingAlert = true
             } catch {
-                alertMessage = "Failed to close event: \(error.localizedDescription)"
+                alertMessage = "イベントの締め切りに失敗しました: \(error.localizedDescription)"
                 showingAlert = true
             }
         }
@@ -428,7 +428,7 @@ struct EventDetailView: View {
                 try await eventsViewModel.deleteEvent(id: event.id)
                 dismiss()
             } catch {
-                alertMessage = "Failed to delete event: \(error.localizedDescription)"
+                alertMessage = "イベントの削除に失敗しました: \(error.localizedDescription)"
                 showingAlert = true
             }
         }

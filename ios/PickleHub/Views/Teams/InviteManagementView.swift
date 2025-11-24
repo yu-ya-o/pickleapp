@@ -17,7 +17,7 @@ struct InviteManagementView: View {
                             HStack {
                                 Image(systemName: "plus.circle.fill")
                                     .foregroundColor(.blue)
-                                Text("Generate New Invite Link")
+                                Text("新しい招待リンクを生成")
                                     .fontWeight(.semibold)
                                 Spacer()
                             }
@@ -25,7 +25,7 @@ struct InviteManagementView: View {
                     }
 
                     if !viewModel.invites.isEmpty {
-                        Section(header: Text("Active Invites")) {
+                        Section(header: Text("有効な招待")) {
                             ForEach(viewModel.invites.filter { $0.isValid }) { invite in
                                 InviteRowView(invite: invite) {
                                     shareInvite(invite)
@@ -34,7 +34,7 @@ struct InviteManagementView: View {
                         }
 
                         if viewModel.invites.contains(where: { !$0.isValid }) {
-                            Section(header: Text("Expired/Used Invites")) {
+                            Section(header: Text("期限切れ/使用済み招待")) {
                                 ForEach(viewModel.invites.filter { !$0.isValid }) { invite in
                                     InviteRowView(invite: invite, isActive: false)
                                 }
@@ -44,11 +44,11 @@ struct InviteManagementView: View {
                 }
                 .listStyle(.insetGrouped)
             }
-            .navigationTitle("Invite Links")
+            .navigationTitle("招待リンク")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button("完了") {
                         dismiss()
                     }
                 }
@@ -61,10 +61,10 @@ struct InviteManagementView: View {
                     ShareSheet(items: [invite.inviteUrl])
                 }
             }
-            .alert("Invite Link Generated", isPresented: $showingGenerateConfirmation) {
+            .alert("招待リンク生成完了", isPresented: $showingGenerateConfirmation) {
                 Button("OK", role: .cancel) {}
             } message: {
-                Text("A new invite link has been created. It will expire in 24 hours and can only be used once.")
+                Text("新しい招待リンクが作成されました。24時間後に期限切れとなり、1回のみ使用できます。")
             }
         }
     }
@@ -96,21 +96,21 @@ struct InviteRowView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     if invite.isExpired {
-                        Label("Expired", systemImage: "clock.badge.xmark")
+                        Label("期限切れ", systemImage: "clock.badge.xmark")
                             .font(.caption)
                             .foregroundColor(.red)
                     } else if invite.isUsed {
-                        Label("Used", systemImage: "checkmark.circle")
+                        Label("使用済み", systemImage: "checkmark.circle")
                             .font(.caption)
                             .foregroundColor(.green)
                     } else {
-                        Label("Active", systemImage: "checkmark.circle.fill")
+                        Label("有効", systemImage: "checkmark.circle.fill")
                             .font(.caption)
                             .foregroundColor(.green)
                     }
 
                     if let expiresDate = invite.expiresDate {
-                        Text("Expires \(expiresDate, style: .relative)")
+                        Text("期限: \(expiresDate, style: .relative)")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -128,13 +128,13 @@ struct InviteRowView: View {
 
             if !isActive {
                 if let usedBy = invite.usedBy {
-                    Text("Used by: \(usedBy.name)")
+                    Text("使用者: \(usedBy.name)")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
 
-            Text("Created by \(invite.createdBy.name)")
+            Text("作成者: \(invite.createdBy.name)")
                 .font(.caption)
                 .foregroundColor(.secondary)
         }

@@ -22,10 +22,10 @@ struct TeamEventsListView: View {
                         Image(systemName: "calendar.badge.exclamationmark")
                             .font(.system(size: 60))
                             .foregroundColor(.gray)
-                        Text("No Team Events")
+                        Text("チームイベントがありません")
                             .font(.headline)
                             .foregroundColor(.secondary)
-                        Text("Team events will appear here")
+                        Text("チームイベントがここに表示されます")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
@@ -50,11 +50,11 @@ struct TeamEventsListView: View {
                     .listStyle(.plain)
                 }
             }
-            .navigationTitle("Team Events")
+            .navigationTitle("チームイベント")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Done") {
+                    Button("完了") {
                         dismiss()
                     }
                 }

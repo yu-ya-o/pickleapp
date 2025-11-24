@@ -24,7 +24,7 @@ struct ChatView: View {
                 if !viewModel.isConnected {
                     HStack {
                         Image(systemName: "wifi.slash")
-                        Text("Connecting...")
+                        Text("接続中...")
                     }
                     .font(.caption)
                     .foregroundColor(.white)
@@ -57,7 +57,7 @@ struct ChatView: View {
 
                 // Input area
                 HStack(spacing: 12) {
-                    TextField("Type a message...", text: $messageText, axis: .vertical)
+                    TextField("メッセージを入力...", text: $messageText, axis: .vertical)
                         .textFieldStyle(.roundedBorder)
                         .lineLimit(1...4)
 
@@ -77,7 +77,7 @@ struct ChatView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button("完了") {
                         dismiss()
                     }
                 }

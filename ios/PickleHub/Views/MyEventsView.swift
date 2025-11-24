@@ -69,10 +69,10 @@ struct MyEventsView: View {
                         Image(systemName: "star.slash")
                             .font(.system(size: 60))
                             .foregroundColor(.gray)
-                        Text("No events yet")
+                        Text("イベントがありません")
                             .font(.headlineMedium)
                             .foregroundColor(.secondary)
-                        Text("Create or join an event to get started!")
+                        Text("イベントを作成または参加して始めましょう！")
                             .font(.bodyMedium)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
@@ -82,7 +82,7 @@ struct MyEventsView: View {
                 } else {
                     List {
                         if !myCreatedEvents.isEmpty {
-                            Section(header: Text("Events I Created")) {
+                            Section(header: Text("作成したイベント")) {
                                 ForEach(myCreatedEvents) { event in
                                     ZStack {
                                         NavigationLink(destination: EventDetailView(event: event)) {
@@ -102,7 +102,7 @@ struct MyEventsView: View {
                         }
 
                         if !myReservedEvents.isEmpty {
-                            Section(header: Text("Events I Joined")) {
+                            Section(header: Text("参加したイベント")) {
                                 ForEach(myReservedEvents) { event in
                                     ZStack {
                                         NavigationLink(destination: EventDetailView(event: event)) {

@@ -72,11 +72,11 @@ struct CreateEventView: View {
                     }
                 }
 
-                Section(header: Text("Event Details")) {
-                    TextField("Event Title", text: $title)
-                    TextField("Description", text: $description, axis: .vertical)
+                Section(header: Text("イベント詳細")) {
+                    TextField("イベントタイトル", text: $title)
+                    TextField("説明", text: $description, axis: .vertical)
                         .lineLimit(3...6)
-                    TextField("Location", text: $location)
+                    TextField("場所", text: $location)
                 }
 
                 Section(header: Text("地域")) {
@@ -89,13 +89,13 @@ struct CreateEventView: View {
                     .pickerStyle(.menu)
                 }
 
-                Section(header: Text("Date & Time")) {
-                    DatePicker("Start Time", selection: $startDate, in: Date()...)
-                    DatePicker("End Time", selection: $endDate, in: startDate...)
+                Section(header: Text("日時")) {
+                    DatePicker("開始時刻", selection: $startDate, in: Date()...)
+                    DatePicker("終了時刻", selection: $endDate, in: startDate...)
                 }
 
-                Section(header: Text("Participants")) {
-                    Stepper("Max Participants: \(maxParticipants)", value: $maxParticipants, in: 2...20)
+                Section(header: Text("参加者")) {
+                    Stepper("最大参加者数: \(maxParticipants)", value: $maxParticipants, in: 2...20)
                 }
 
                 Section(header: Text("料金")) {
@@ -106,8 +106,8 @@ struct CreateEventView: View {
                     }
                 }
 
-                Section(header: Text("Skill Level")) {
-                    Picker("Skill Level", selection: $skillLevel) {
+                Section(header: Text("スキルレベル")) {
+                    Picker("スキルレベル", selection: $skillLevel) {
                         ForEach(skillLevels, id: \.self) { level in
                             Text(level.capitalized).tag(level)
                         }
@@ -126,7 +126,7 @@ struct CreateEventView: View {
                         } else {
                             HStack {
                                 Spacer()
-                                Text("Create Event")
+                                Text("イベントを作成")
                                     .fontWeight(.semibold)
                                 Spacer()
                             }
@@ -135,16 +135,16 @@ struct CreateEventView: View {
                     .disabled(!isFormValid || isLoading)
                 }
             }
-            .navigationTitle("Create Event")
+            .navigationTitle("イベント作成")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button("キャンセル") {
                         dismiss()
                     }
                 }
             }
-            .alert("Error", isPresented: $showingError) {
+            .alert("エラー", isPresented: $showingError) {
                 Button("OK", role: .cancel) {}
             } message: {
                 Text(errorMessage)

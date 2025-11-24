@@ -74,7 +74,7 @@ struct TeamsListView: View {
                         List {
                             // My Teams Section
                             if !viewModel.myTeams.isEmpty {
-                                Section(header: Text("My Teams")) {
+                                Section(header: Text("マイチーム")) {
                                     ForEach(viewModel.myTeams) { team in
                                         ZStack {
                                             NavigationLink(destination: TeamDetailView(teamId: team.id)) {
@@ -91,9 +91,9 @@ struct TeamsListView: View {
                             }
 
                             // Public Teams Section
-                            Section(header: Text("Discover Teams")) {
+                            Section(header: Text("チームを探す")) {
                                 if viewModel.publicTeams.isEmpty && !viewModel.searchText.isEmpty {
-                                    Text("No teams found")
+                                    Text("チームが見つかりません")
                                         .foregroundColor(.secondary)
                                         .font(.subheadline)
                                 } else {
@@ -241,7 +241,7 @@ struct TeamRowView: View {
                         Image(systemName: "person.2.fill")
                             .font(.caption)
                             .foregroundColor(.twitterBlue)
-                        Text("\(team.memberCount) members")
+                        Text("\(team.memberCount)人")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }

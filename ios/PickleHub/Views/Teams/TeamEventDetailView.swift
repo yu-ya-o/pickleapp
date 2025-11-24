@@ -105,9 +105,9 @@ struct TeamEventDetailView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .navigationTitle("Event")
+        .navigationTitle("イベント")
         .navigationBarTitleDisplayMode(.inline)
-        .alert("Notification", isPresented: $showingAlert) {
+        .alert("通知", isPresented: $showingAlert) {
             Button("OK", role: .cancel) {}
         } message: {
             Text(alertMessage)
@@ -125,23 +125,23 @@ struct TeamEventDetailView: View {
         .sheet(isPresented: $showingTeamDetail) {
             TeamDetailView(teamId: teamId)
         }
-        .alert("Delete Event", isPresented: $showingDeleteAlert) {
-            Button("Cancel", role: .cancel) {}
-            Button("Delete", role: .destructive) {
+        .alert("イベント削除", isPresented: $showingDeleteAlert) {
+            Button("キャンセル", role: .cancel) {}
+            Button("削除", role: .destructive) {
                 deleteEvent()
             }
         } message: {
-            Text("Are you sure you want to delete this event? This action cannot be undone.")
+            Text("このイベントを削除してもよろしいですか？この操作は取り消せません。")
         }
-        .alert("Join Event", isPresented: $showingJoinConfirm) {
-            Button("Cancel", role: .cancel) {}
-            Button("Join") {
+        .alert("イベント参加", isPresented: $showingJoinConfirm) {
+            Button("キャンセル", role: .cancel) {}
+            Button("参加する") {
                 joinEvent()
             }
         } message: {
             Text("このイベントに参加しますか？")
         }
-        .alert("Leave Event", isPresented: $showingLeaveConfirm) {
+        .alert("参加キャンセル", isPresented: $showingLeaveConfirm) {
             Button("キャンセルしない", role: .cancel) {}
             Button("参加をキャンセル", role: .destructive) {
                 leaveEvent()
@@ -149,8 +149,8 @@ struct TeamEventDetailView: View {
         } message: {
             Text("参加をキャンセルしてもよろしいですか？")
         }
-        .alert("Close Event", isPresented: $showingCloseEventAlert) {
-            Button("Cancel", role: .cancel) {}
+        .alert("イベント締め切り", isPresented: $showingCloseEventAlert) {
+            Button("キャンセル", role: .cancel) {}
             Button("締め切る", role: .destructive) {
                 closeEvent()
             }
@@ -220,7 +220,7 @@ struct TeamEventDetailView: View {
     @ViewBuilder
     private func creatorSection(for event: TeamEvent) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Organized by")
+            Text("主催")
                 .font(.headline)
             Button(action: {
                 showingTeamDetail = true
@@ -267,7 +267,7 @@ struct TeamEventDetailView: View {
             Divider()
 
             VStack(alignment: .leading, spacing: 8) {
-                Text("Participants (\(event.participantCount))")
+                Text("参加者 (\(event.participantCount))")
                     .font(.headline)
                     .padding(.horizontal)
 
@@ -333,7 +333,7 @@ struct TeamEventDetailView: View {
                 Button(action: { showingChat = true }) {
                     HStack {
                         Image(systemName: "message.fill")
-                        Text("Open Chat")
+                        Text("チャットを開く")
                     }
                     .font(.headline)
                     .foregroundColor(.white)
@@ -348,7 +348,7 @@ struct TeamEventDetailView: View {
                     Button(action: {
                         showingLeaveConfirm = true
                     }) {
-                        Text("Leave Event")
+                        Text("参加をキャンセル")
                             .font(.headline)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
@@ -368,7 +368,7 @@ struct TeamEventDetailView: View {
                     Button(action: {
                         showingJoinConfirm = true
                     }) {
-                        Text("Join Event")
+                        Text("参加する")
                             .font(.headline)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
@@ -377,7 +377,7 @@ struct TeamEventDetailView: View {
                             .cornerRadius(12)
                     }
                 } else {
-                    Text("Event is full")
+                    Text("満席です")
                         .font(.headline)
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -412,7 +412,7 @@ struct TeamEventDetailView: View {
                     }) {
                         HStack {
                             Spacer()
-                            Text("Delete Event")
+                            Text("イベントを削除")
                                 .foregroundColor(.red)
                                 .fontWeight(.semibold)
                             Spacer()
@@ -435,7 +435,7 @@ struct TeamEventDetailView: View {
                 alertMessage = "イベントを締め切りました"
                 showingAlert = true
             } catch {
-                alertMessage = "Failed to close event: \(error.localizedDescription)"
+                alertMessage = "イベントの締め切りに失敗しました: \(error.localizedDescription)"
                 showingAlert = true
             }
         }
@@ -459,10 +459,10 @@ struct TeamEventDetailView: View {
             do {
                 try await viewModel.joinEvent(eventId: eventId)
                 await loadEvent()
-                alertMessage = "Successfully joined event!"
+                alertMessage = "イベントに参加しました！"
                 showingAlert = true
             } catch {
-                alertMessage = "Failed to join event: \(error.localizedDescription)"
+                alertMessage = "イベント参加に失敗しました: \(error.localizedDescription)"
                 showingAlert = true
             }
         }
@@ -473,10 +473,10 @@ struct TeamEventDetailView: View {
             do {
                 try await viewModel.leaveEvent(eventId: eventId)
                 await loadEvent()
-                alertMessage = "Left event successfully"
+                alertMessage = "イベントから退出しました"
                 showingAlert = true
             } catch {
-                alertMessage = "Failed to leave event: \(error.localizedDescription)"
+                alertMessage = "イベント退出に失敗しました: \(error.localizedDescription)"
                 showingAlert = true
             }
         }
@@ -488,7 +488,7 @@ struct TeamEventDetailView: View {
                 try await viewModel.deleteEvent(eventId: eventId)
                 dismiss()
             } catch {
-                alertMessage = "Failed to delete event: \(error.localizedDescription)"
+                alertMessage = "イベントの削除に失敗しました: \(error.localizedDescription)"
                 showingAlert = true
             }
         }
