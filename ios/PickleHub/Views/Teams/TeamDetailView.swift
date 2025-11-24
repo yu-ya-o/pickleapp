@@ -339,6 +339,13 @@ struct TeamDetailView: View {
         }
         .navigationTitle("チーム")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button("閉じる") {
+                    dismiss()
+                }
+            }
+        }
         .refreshable {
             await viewModel.refresh()
         }
