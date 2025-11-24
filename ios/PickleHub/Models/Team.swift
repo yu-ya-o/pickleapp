@@ -313,7 +313,7 @@ struct TeamEventCreator: Codable, Hashable {
 
     // Convert to User
     func toUser() -> User {
-        User(id: id, email: email, name: name, profileImage: profileImage, nickname: nickname, bio: bio, region: region, pickleballExperience: pickleballExperience, gender: gender, skillLevel: skillLevel, isProfileComplete: isProfileComplete, instagramUrl: nil, twitterUrl: nil, tiktokUrl: nil, lineUrl: nil)
+        User(id: id, email: email, name: name, profileImage: profileImage, nickname: nickname, bio: bio, region: region, pickleballExperience: pickleballExperience, gender: gender, skillLevel: skillLevel, duprDoubles: nil, duprSingles: nil, isProfileComplete: isProfileComplete, instagramUrl: nil, twitterUrl: nil, tiktokUrl: nil, lineUrl: nil)
     }
 }
 
@@ -348,7 +348,7 @@ struct TeamEventParticipantUser: Codable, Hashable {
 
     // Convert to User
     func toUser() -> User {
-        User(id: id, email: email, name: name, profileImage: profileImage, nickname: nickname, bio: bio, region: region, pickleballExperience: pickleballExperience, gender: gender, skillLevel: skillLevel, isProfileComplete: isProfileComplete, instagramUrl: nil, twitterUrl: nil, tiktokUrl: nil, lineUrl: nil)
+        User(id: id, email: email, name: name, profileImage: profileImage, nickname: nickname, bio: bio, region: region, pickleballExperience: pickleballExperience, gender: gender, skillLevel: skillLevel, duprDoubles: nil, duprSingles: nil, isProfileComplete: isProfileComplete, instagramUrl: nil, twitterUrl: nil, tiktokUrl: nil, lineUrl: nil)
     }
 }
 
