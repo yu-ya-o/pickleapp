@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3001",
-    "build": "prisma generate && next build",
+    "build": "npm run db:prepare && prisma generate && next build",
+    "db:prepare": "if [ \"$RESET_DB\" = \"true\" ]; then npx prisma migrate reset --force && echo 'Database reset completed'; else npx prisma migrate deploy && echo 'Migrations applied'; fi",
     "start": "next start -p 3001",
     "start:ws": "tsx server/index.ts",
     "lint": "next lint",
