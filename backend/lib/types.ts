@@ -305,6 +305,7 @@ export interface UpdateTeamEventRequest {
   endTime?: string;
   maxParticipants?: number;
   price?: number;
+  skillLevel?: string;
   status?: string;
   visibility?: 'public' | 'private';
 }
