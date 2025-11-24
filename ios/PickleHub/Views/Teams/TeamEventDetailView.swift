@@ -225,9 +225,9 @@ struct TeamEventDetailView: View {
 
             HStack {
                 Image(systemName: "person.2")
-                if let maxParticipants = event.maxParticipants, let availableSpots = event.availableSpots {
-                    Text("\(maxParticipants)人中\(availableSpots)人空き")
-                        .foregroundColor(availableSpots > 0 ? .green : .red)
+                if let maxParticipants = event.maxParticipants {
+                    Text("\(event.participantCount)/\(maxParticipants)人")
+                        .foregroundColor(event.hasCapacity ? .green : .red)
                 } else {
                     Text("\(event.participantCount)人参加")
                         .foregroundColor(.green)
