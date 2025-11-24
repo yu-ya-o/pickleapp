@@ -190,7 +190,7 @@ struct EventDetailView: View {
 
             HStack {
                 Image(systemName: "person.2")
-                Text("\(event.maxParticipants)人中\(event.availableSpots)人空き")
+                Text("\(event.reservations.count)/\(event.maxParticipants)人")
                     .foregroundColor(event.availableSpots > 0 ? .green : .red)
             }
 

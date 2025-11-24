@@ -149,24 +149,6 @@ struct TeamDetailView: View {
 
                     Divider()
 
-                    // Owner Info
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("オーナー")
-                            .font(.headline)
-                            .padding(.horizontal)
-
-                        HStack {
-                            Image(systemName: "person.circle.fill")
-                                .font(.title2)
-                                .foregroundColor(.yellow)
-                            Text(team.owner.displayName)
-                            Spacer()
-                        }
-                        .padding(.horizontal)
-                    }
-
-                    Divider()
-
                     // Actions
                     VStack(spacing: 12) {
                         // Members
