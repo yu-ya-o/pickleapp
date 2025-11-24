@@ -82,6 +82,7 @@ export interface EventResponse {
   startTime: string;
   endTime: string;
   maxParticipants: number;
+  price: number | null;
   skillLevel: string;
   status: string;
   createdAt: string;

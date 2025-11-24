@@ -28,6 +28,7 @@ struct TeamsListView: View {
                             .foregroundColor(.gray)
                             .font(.system(size: 14))
                         Picker("地域", selection: $selectedRegion) {
+                            Text("全て").tag("")
                             ForEach(Prefectures.all, id: \.self) { prefecture in
                                 Text(prefecture).tag(prefecture)
                             }
@@ -160,10 +161,6 @@ struct TeamsListView: View {
                     .environmentObject(viewModel)
             }
             .task {
-                if selectedRegion.isEmpty {
-                    // デフォルトでユーザの地域を選択
-                    selectedRegion = authViewModel.currentUser?.region ?? Prefectures.all.first ?? ""
-                }
                 await viewModel.fetchMyTeams()
                 await viewModel.fetchPublicTeams()
             }

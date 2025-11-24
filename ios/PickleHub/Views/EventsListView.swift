@@ -329,7 +329,7 @@ struct EventRowView: View {
 
                 Spacer()
 
-                Label("\(event.availableSpots)/\(event.maxParticipants) spots", systemImage: "person.2")
+                Label("\(event.maxParticipants)人中\(event.availableSpots)人空き", systemImage: "person.2")
                     .font(.caption)
                     .foregroundColor(event.availableSpots > 0 ? .secondary : .red)
             }

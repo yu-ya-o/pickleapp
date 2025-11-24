@@ -83,6 +83,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       startTime: event.startTime.toISOString(),
       endTime: event.endTime.toISOString(),
       maxParticipants: event.maxParticipants,
+      price: event.price,
       skillLevel: event.skillLevel,
       status: event.status,
       createdAt: event.createdAt.toISOString(),
