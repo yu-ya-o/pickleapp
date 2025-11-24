@@ -160,6 +160,8 @@ struct EditTeamView: View {
                     .pickerStyle(.menu)
                 }
 
+                // 暫定的にコメントアウト: 招待リンク機能の不具合により非公開設定を無効化
+                /*
                 Section(header: Text("公開設定")) {
                     Picker("誰がこのチームを見つけられますか？", selection: $visibility) {
                         Text("公開").tag("public")
@@ -177,6 +179,7 @@ struct EditTeamView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+                */
 
                 Section {
                     SNSLinksEditor(
