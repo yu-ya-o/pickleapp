@@ -11,8 +11,8 @@ struct PickleHubApp: App {
             if showingSplash {
                 SplashView()
                     .onAppear {
-                        // Hide splash screen after 2 seconds
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                        // Hide splash screen after 2.5 seconds
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
                             withAnimation {
                                 showingSplash = false
                             }
