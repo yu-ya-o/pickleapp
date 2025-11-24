@@ -10,14 +10,6 @@ struct TeamsListView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // カスタムタイトル
-                Text("チーム")
-                    .font(.system(size: 20, weight: .bold, design: .default))
-                    .foregroundColor(.black)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(Color.white)
-
                 // 検索バー
                 HStack(spacing: Spacing.sm) {
                     // 都道府県フィルター（左）
@@ -135,7 +127,8 @@ struct TeamsListView: View {
                     }
                 }
             }
-            .navigationBarHidden(true)
+            .navigationTitle("チーム")
+            .navigationBarTitleDisplayMode(.inline)
             .overlay(alignment: .bottomTrailing) {
                 Button(action: {
                     showingCreateTeam = true

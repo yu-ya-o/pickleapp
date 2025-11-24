@@ -83,7 +83,7 @@ struct TeamEventsListView: View {
             }
             .sheet(isPresented: $showingTeamDetail) {
                 if let team = viewModel.team {
-                    TeamDetailView(teamId: team.id)
+                    TeamDetailView(teamId: team.id, isSheet: true)
                 }
             }
             .task {

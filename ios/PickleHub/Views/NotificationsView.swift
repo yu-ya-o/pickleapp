@@ -12,31 +12,6 @@ struct NotificationsView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // カスタムタイトル
-                HStack {
-                    Text("通知")
-                        .font(.system(size: 20, weight: .bold, design: .default))
-                        .foregroundColor(.black)
-
-                    Spacer()
-
-                    if viewModel.unreadCount > 0 {
-                        Button(action: {
-                            showingMarkAllAlert = true
-                        }) {
-                            Text("すべて既読")
-                                .font(.caption)
-                                .foregroundColor(.twitterBlue)
-                        }
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-                .background(Color.white)
-
-                Divider()
-
                 if viewModel.isLoading {
                     ProgressView()
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -93,7 +68,17 @@ struct NotificationsView: View {
                     }
                 }
             }
-            .navigationBarHidden(true)
+            .navigationTitle("通知")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                if viewModel.unreadCount > 0 {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("すべて既読") {
+                            showingMarkAllAlert = true
+                        }
+                    }
+                }
+            }
             .task {
                 await viewModel.fetchNotifications()
             }

@@ -43,16 +43,6 @@ struct MyEventsView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // カスタムタイトル
-                Text("マイイベント")
-                    .font(.system(size: 20, weight: .bold, design: .default))
-                    .foregroundColor(.black)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(Color.white)
-
-                Divider()
-
                 // Tab Picker
                 Picker("Time Filter", selection: $selectedTab) {
                     Text("これから").tag(EventTimeFilter.upcoming)
@@ -125,7 +115,8 @@ struct MyEventsView: View {
                     }
                 }
             }
-            .navigationBarHidden(true)
+            .navigationTitle("マイイベント")
+            .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showingUserProfile) {
                 if let user = selectedUser {
                     UserProfileView(user: user)
