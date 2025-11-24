@@ -171,6 +171,10 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       updateData.status = body.status;
       changedFields.push('ステータス');
     }
+    if (body.price !== undefined && body.price !== event.price) {
+      updateData.price = body.price;
+      changedFields.push('料金');
+    }
 
     if (body.startTime) {
       const newStartTime = new Date(body.startTime);
@@ -248,6 +252,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       startTime: updatedEvent.startTime.toISOString(),
       endTime: updatedEvent.endTime.toISOString(),
       maxParticipants: updatedEvent.maxParticipants,
+      price: updatedEvent.price,
       skillLevel: updatedEvent.skillLevel,
       status: updatedEvent.status,
       createdAt: updatedEvent.createdAt.toISOString(),

@@ -58,6 +58,7 @@ export interface CreateEventRequest {
   startTime: string; // ISO 8601
   endTime: string; // ISO 8601
   maxParticipants: number;
+  price?: number;
   skillLevel: 'beginner' | 'intermediate' | 'advanced' | 'all';
 }
 
@@ -69,6 +70,7 @@ export interface UpdateEventRequest {
   startTime?: string;
   endTime?: string;
   maxParticipants?: number;
+  price?: number;
   skillLevel?: 'beginner' | 'intermediate' | 'advanced' | 'all';
   status?: 'active' | 'cancelled' | 'completed';
 }
