@@ -12,6 +12,7 @@ struct CreateTeamEventView: View {
     @State private var endDate = Date().addingTimeInterval(7200) // 2 hours from now
     @State private var hasCapacityLimit = true
     @State private var maxParticipants = 8
+    @State private var skillLevel = "all"
     @State private var visibility = "private"
 
     @State private var isLoading = false
@@ -19,6 +20,17 @@ struct CreateTeamEventView: View {
     @State private var errorMessage = ""
 
     let teamId: String
+    let skillLevels = ["beginner", "intermediate", "advanced", "all"]
+
+    func skillLevelLabel(_ level: String) -> String {
+        switch level {
+        case "beginner": return "初級"
+        case "intermediate": return "中級"
+        case "advanced": return "上級"
+        case "all": return "全レベル"
+        default: return level
+        }
+    }
 
     var body: some View {
         NavigationView {
@@ -55,6 +67,15 @@ struct CreateTeamEventView: View {
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
+                }
+
+                Section(header: Text("スキルレベル")) {
+                    Picker("スキルレベル", selection: $skillLevel) {
+                        ForEach(skillLevels, id: \.self) { level in
+                            Text(skillLevelLabel(level)).tag(level)
+                        }
+                    }
+                    .pickerStyle(.segmented)
                 }
 
                 Section(header: Text("公開設定")) {
@@ -132,6 +153,7 @@ struct CreateTeamEventView: View {
                     startTime: startDate,
                     endTime: endDate,
                     maxParticipants: hasCapacityLimit ? maxParticipants : nil,
+                    skillLevel: skillLevel,
                     visibility: visibility
                 )
                 dismiss()

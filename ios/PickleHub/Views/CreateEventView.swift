@@ -32,6 +32,16 @@ struct CreateEventView: View {
 
     let skillLevels = ["beginner", "intermediate", "advanced", "all"]
 
+    func skillLevelLabel(_ level: String) -> String {
+        switch level {
+        case "beginner": return "初級"
+        case "intermediate": return "中級"
+        case "advanced": return "上級"
+        case "all": return "全レベル"
+        default: return level
+        }
+    }
+
     var isTeamEvent: Bool {
         if case .team = selectedOrganizer {
             return true
@@ -109,7 +119,7 @@ struct CreateEventView: View {
                 Section(header: Text("スキルレベル")) {
                     Picker("スキルレベル", selection: $skillLevel) {
                         ForEach(skillLevels, id: \.self) { level in
-                            Text(level.capitalized).tag(level)
+                            Text(skillLevelLabel(level)).tag(level)
                         }
                     }
                     .pickerStyle(.segmented)

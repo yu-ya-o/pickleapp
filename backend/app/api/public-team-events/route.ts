@@ -97,6 +97,7 @@ export async function GET(request: NextRequest) {
         endTime: event.endTime.toISOString(),
         maxParticipants: event.maxParticipants,
         price: event.price,
+        skillLevel: event.skillLevel,
         status: event.status,
         visibility: event.visibility,
         createdAt: event.createdAt.toISOString(),

@@ -218,6 +218,7 @@ struct TeamEvent: Codable, Identifiable, Hashable {
     let endTime: String
     let maxParticipants: Int?
     let price: Int?
+    let skillLevel: String?
     let status: String
     let visibility: String
     let createdAt: String
@@ -362,6 +363,7 @@ struct CreateTeamEventRequest: Codable {
     let endTime: String
     let maxParticipants: Int?
     let price: Int?
+    let skillLevel: String?
     let visibility: String?
 }
 

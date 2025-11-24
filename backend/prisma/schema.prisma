@@ -222,6 +222,7 @@ model TeamEvent {
   endTime         DateTime
   maxParticipants Int?     // null = unlimited
   price           Int?     // 料金 (円単位、null = 無料)
+  skillLevel      String?  @default("all") // "beginner", "intermediate", "advanced", "all"
   status          String   @default("active") // "active", "completed", "cancelled"
   visibility      String   @default("private") // "public" (通常イベントとしても公開), "private" (チームメンバーのみ)
   createdAt       DateTime @default(now())

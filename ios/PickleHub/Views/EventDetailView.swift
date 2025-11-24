@@ -136,7 +136,17 @@ struct EventDetailView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: "calendar")
-                Text(event.formattedDate)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(event.formattedDate)
+                    if let endDate = event.endDate {
+                        let formatter = DateFormatter()
+                        formatter.locale = Locale(identifier: "ja_JP")
+                        formatter.timeStyle = .short
+                        Text("〜 \(formatter.string(from: endDate))")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
             }
 
             if let region = event.region {
