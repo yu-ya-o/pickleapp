@@ -44,10 +44,8 @@ struct MyEventsView: View {
         NavigationView {
             VStack(spacing: 0) {
                 // カスタムタイトル
-                Text("PickleHub")
-                    .font(.system(size: 28, weight: .black, design: .default))
-                    .italic()
-                    .kerning(-0.5)
+                Text("マイイベント")
+                    .font(.system(size: 20, weight: .bold, design: .default))
                     .foregroundColor(.black)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)

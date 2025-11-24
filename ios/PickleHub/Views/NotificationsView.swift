@@ -14,10 +14,8 @@ struct NotificationsView: View {
             VStack(spacing: 0) {
                 // カスタムタイトル
                 HStack {
-                    Text("PickleHub")
-                        .font(.system(size: 28, weight: .black, design: .default))
-                        .italic()
-                        .kerning(-0.5)
+                    Text("通知")
+                        .font(.system(size: 20, weight: .bold, design: .default))
                         .foregroundColor(.black)
 
                     Spacer()
