@@ -51,8 +51,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const token = randomBytes(32).toString('hex');
 
     // Expires in 24 hours
-    const expiresAt = new Date();
-    expiresAt.setHours(expiresAt.getHours() + 24);
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
     const invite = await prisma.teamInviteUrl.create({
       data: {

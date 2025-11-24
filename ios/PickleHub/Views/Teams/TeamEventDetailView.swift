@@ -52,6 +52,17 @@ struct TeamEventDetailView: View {
         return formatter.string(from: date)
     }
 
+    private func skillLevelLabel(_ level: String?) -> String {
+        guard let level = level else { return "全レベル" }
+        switch level {
+        case "beginner": return "初級"
+        case "intermediate": return "中級"
+        case "advanced": return "上級"
+        case "all": return "全レベル"
+        default: return level
+        }
+    }
+
     @ViewBuilder
     private var defaultHeaderImage: some View {
         Rectangle()
@@ -176,6 +187,10 @@ struct TeamEventDetailView: View {
                 .font(.title)
                 .fontWeight(.bold)
 
+            Text(skillLevelLabel(event.skillLevel))
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+
             Text(event.description)
                 .font(.body)
                 .foregroundColor(.secondary)
@@ -189,13 +204,10 @@ struct TeamEventDetailView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: "calendar")
-                VStack(alignment: .leading, spacing: 4) {
+                if let endDate = event.endDate {
+                    Text("\(event.formattedDate) 〜 \(formattedTime(endDate))")
+                } else {
                     Text(event.formattedDate)
-                    if let endDate = event.endDate {
-                        Text("〜 \(formattedTime(endDate))")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
                 }
             }
 

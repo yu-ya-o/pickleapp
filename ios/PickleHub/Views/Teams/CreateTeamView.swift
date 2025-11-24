@@ -65,15 +65,8 @@ struct CreateTeamView: View {
 
                 Section(header: Text("公開設定")) {
                     Picker("誰がこのチームを見つけられますか？", selection: $visibility) {
-                        HStack {
-                            Image(systemName: "globe")
-                            Text("公開")
-                        }.tag("public")
-
-                        HStack {
-                            Image(systemName: "lock.fill")
-                            Text("非公開")
-                        }.tag("private")
+                        Text("公開").tag("public")
+                        Text("非公開").tag("private")
                     }
                     .pickerStyle(.segmented)
 

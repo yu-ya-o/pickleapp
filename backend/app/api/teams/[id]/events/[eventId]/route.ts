@@ -204,6 +204,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     if (body.maxParticipants !== undefined)
       updateData.maxParticipants = body.maxParticipants;
     if (body.price !== undefined) updateData.price = body.price;
+    if (body.skillLevel !== undefined) updateData.skillLevel = body.skillLevel;
     if (body.status !== undefined) updateData.status = body.status;
     if (body.visibility !== undefined) updateData.visibility = body.visibility;
 

@@ -8,6 +8,7 @@ class TeamsViewModel: ObservableObject {
     @Published var searchText = ""
     @Published var isLoading = false
     @Published var errorMessage: String?
+    @Published var currentRegion = ""
 
     private let apiClient = APIClient.shared
     private var searchTask: Task<Void, Never>?
@@ -18,8 +19,13 @@ class TeamsViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
 
+        // Update current region if provided
+        if !region.isEmpty {
+            currentRegion = region
+        }
+
         do {
-            publicTeams = try await apiClient.getTeams(search: searchText, region: region.isEmpty ? nil : region, myTeams: false)
+            publicTeams = try await apiClient.getTeams(search: searchText, region: currentRegion.isEmpty ? nil : currentRegion, myTeams: false)
             isLoading = false
         } catch {
             isLoading = false
