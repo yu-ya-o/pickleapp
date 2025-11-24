@@ -30,6 +30,8 @@ export interface UpdateProfileRequest {
   pickleballExperience?: string;
   gender?: string;
   skillLevel?: string;
+  duprDoubles?: number;
+  duprSingles?: number;
   profileImage?: string;
 }
 
@@ -44,6 +46,8 @@ export interface UserProfileResponse {
   pickleballExperience: string | null;
   gender: string | null;
   skillLevel: string | null;
+  duprDoubles: number | null;
+  duprSingles: number | null;
   isProfileComplete: boolean;
   createdAt: string;
   updatedAt: string;
