@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 import GoogleSignIn
+import AuthenticationServices
 
 @MainActor
 class AuthViewModel: ObservableObject {
@@ -37,6 +38,68 @@ class AuthViewModel: ObservableObject {
             apiClient.setAuthToken(token)
         } else {
             print("⚠️ No saved auth data found")
+        }
+    }
+
+    func handleAppleSignIn(result: Result<ASAuthorization, Error>) async {
+        isLoading = true
+        errorMessage = nil
+
+        do {
+            switch result {
+            case .success(let authorization):
+                guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential else {
+                    throw NSError(domain: "AuthViewModel", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid Apple ID credential"])
+                }
+
+                guard let identityToken = appleIDCredential.identityToken,
+                      let identityTokenString = String(data: identityToken, encoding: .utf8) else {
+                    throw NSError(domain: "AuthViewModel", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to get identity token"])
+                }
+
+                // Get user info (only available on first sign-in)
+                let fullName: String? = {
+                    if let givenName = appleIDCredential.fullName?.givenName,
+                       let familyName = appleIDCredential.fullName?.familyName {
+                        return "\(givenName) \(familyName)"
+                    }
+                    return appleIDCredential.fullName?.givenName
+                }()
+
+                // Send to backend
+                let response = try await apiClient.signInWithApple(
+                    identityToken: identityTokenString,
+                    userIdentifier: appleIDCredential.user,
+                    email: appleIDCredential.email,
+                    fullName: fullName
+                )
+
+                print("📥 Received Apple sign-in response")
+                print("   User ID: \(response.user.id)")
+                print("   User email: \(response.user.email)")
+                print("   User nickname: \(response.user.nickname ?? "nil")")
+
+                // Save auth state
+                self.currentUser = response.user
+                self.authToken = response.token
+                self.isAuthenticated = true
+
+                // Persist to UserDefaults
+                UserDefaults.standard.set(response.token, forKey: "authToken")
+                if let userData = try? JSONEncoder().encode(response.user) {
+                    UserDefaults.standard.set(userData, forKey: "currentUser")
+                    print("💾 Saved user data to UserDefaults")
+                }
+
+                isLoading = false
+
+            case .failure(let error):
+                throw error
+            }
+        } catch {
+            isLoading = false
+            errorMessage = error.localizedDescription
+            print("Apple Sign-In error: \(error)")
         }
     }
 
@@ -108,5 +171,24 @@ class AuthViewModel: ObservableObject {
 
         // Clear API client token
         apiClient.setAuthToken(nil)
+    }
+
+    func deleteAccount() async throws {
+        isLoading = true
+        errorMessage = nil
+
+        do {
+            // Call the delete account API
+            try await apiClient.deleteAccount()
+
+            // Sign out after successful deletion
+            signOut()
+
+            isLoading = false
+        } catch {
+            isLoading = false
+            errorMessage = error.localizedDescription
+            throw error
+        }
     }
 }

@@ -22,6 +22,30 @@ export interface GoogleSignInResponse {
   token: string; // JWT or session token
 }
 
+export interface AppleSignInRequest {
+  identityToken: string;
+  userIdentifier: string;
+  email?: string;
+  fullName?: string;
+}
+
+export interface AppleSignInResponse {
+  user: {
+    id: string;
+    email: string;
+    name: string;
+    profileImage: string | null;
+    nickname: string | null;
+    bio: string | null;
+    region: string | null;
+    pickleballExperience: string | null;
+    gender: string | null;
+    skillLevel: string | null;
+    isProfileComplete: boolean;
+  };
+  token: string; // JWT or session token
+}
+
 // ============= USER PROFILE =============
 export interface UpdateProfileRequest {
   nickname?: string;

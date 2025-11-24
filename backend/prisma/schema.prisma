@@ -13,7 +13,8 @@ model User {
   id            String        @id @default(uuid())
   email         String        @unique
   name          String
-  googleId      String        @unique
+  googleId      String?       @unique
+  appleId       String?       @unique
   profileImage  String?
 
   // Profile fields
@@ -51,6 +52,7 @@ model User {
   notifications       Notification[]
 
   @@index([googleId])
+  @@index([appleId])
   @@index([email])
 }
 

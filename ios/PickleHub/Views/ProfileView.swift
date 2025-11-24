@@ -4,6 +4,7 @@ struct ProfileView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @EnvironmentObject var eventsViewModel: EventsViewModel
     @State private var showingSignOutAlert = false
+    @State private var showingDeleteAccountAlert = false
     @State private var showingEditProfile = false
     @State private var showingMyEvents = false
 
@@ -210,6 +211,24 @@ struct ProfileView: View {
                                     .background(Color.red.opacity(0.1))
                                     .cornerRadius(12)
                                 }
+
+                                // Delete Account
+                                Button(action: { showingDeleteAccountAlert = true }) {
+                                    HStack {
+                                        Spacer()
+                                        Text("アカウントを削除")
+                                            .foregroundColor(.red)
+                                            .font(.caption)
+                                        Spacer()
+                                    }
+                                    .padding()
+                                    .background(Color.white)
+                                    .cornerRadius(12)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(Color.red.opacity(0.3), lineWidth: 1)
+                                    )
+                                }
                             }
                             .padding(.horizontal)
 
@@ -242,6 +261,20 @@ struct ProfileView: View {
                 }
             } message: {
                 Text("ログアウトしてもよろしいですか？")
+            }
+            .alert("アカウントを削除", isPresented: $showingDeleteAccountAlert) {
+                Button("キャンセル", role: .cancel) {}
+                Button("削除", role: .destructive) {
+                    Task {
+                        do {
+                            try await authViewModel.deleteAccount()
+                        } catch {
+                            print("Account deletion error: \(error)")
+                        }
+                    }
+                }
+            } message: {
+                Text("アカウントを削除すると、以下のデータが削除されます：\n\n• 作成したすべてのイベント\n• 今後の予約\n• 通知\n\nチームは残りますが、オーナーの場合は他のメンバーに引き継がれます。メッセージは「削除済みユーザー」として残ります。\n\nこの操作は取り消せません。")
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
