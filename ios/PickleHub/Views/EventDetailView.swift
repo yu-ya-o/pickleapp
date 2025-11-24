@@ -13,6 +13,7 @@ struct EventDetailView: View {
     @State private var showingReserveConfirm = false
     @State private var showingCancelConfirm = false
     @State private var showingCloseEventAlert = false
+    @State private var showingEditEvent = false
     @State private var reservationToCancel: String?
 
     let event: Event
@@ -80,6 +81,21 @@ struct EventDetailView: View {
         }
         .navigationTitle("イベント")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if isCreator {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showingEditEvent = true
+                    } label: {
+                        Text("編集")
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: $showingEditEvent) {
+            EditEventView(event: event)
+                .environmentObject(eventsViewModel)
+        }
         .sheet(isPresented: $showingChat) {
             ChatView(eventId: event.id, eventTitle: event.title)
         }

@@ -12,6 +12,8 @@ struct ProfileEditView: View {
     @State private var selectedExperience: String
     @State private var selectedGender: String
     @State private var selectedSkillLevel: String
+    @State private var duprDoublesText: String
+    @State private var duprSinglesText: String
     @State private var selectedPhotoItem: PhotosPickerItem?
     @State private var selectedImageData: Data?
     @State private var profileImageURL: String?
@@ -32,6 +34,8 @@ struct ProfileEditView: View {
         _selectedExperience = State(initialValue: user.pickleballExperience ?? "")
         _selectedGender = State(initialValue: user.gender ?? "")
         _selectedSkillLevel = State(initialValue: user.skillLevel ?? "")
+        _duprDoublesText = State(initialValue: user.duprDoubles != nil ? String(format: "%.3f", user.duprDoubles!) : "")
+        _duprSinglesText = State(initialValue: user.duprSingles != nil ? String(format: "%.3f", user.duprSingles!) : "")
         _profileImageURL = State(initialValue: user.profileImage)
         _instagramUrl = State(initialValue: user.instagramUrl ?? "")
         _twitterUrl = State(initialValue: user.twitterUrl ?? "")
@@ -128,6 +132,38 @@ struct ProfileEditView: View {
                             Text(level).tag(level)
                         }
                     }
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("DUPR ダブルス")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+
+                        TextField("例: 4.500", text: $duprDoublesText)
+                            .keyboardType(.decimalPad)
+                            .onChange(of: duprDoublesText) { _, newValue in
+                                duprDoublesText = formatDUPRInput(newValue)
+                            }
+
+                        Text("小数点以下3桁まで入力可能（任意）")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("DUPR シングルス")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+
+                        TextField("例: 4.500", text: $duprSinglesText)
+                            .keyboardType(.decimalPad)
+                            .onChange(of: duprSinglesText) { _, newValue in
+                                duprSinglesText = formatDUPRInput(newValue)
+                            }
+
+                        Text("小数点以下3桁まで入力可能（任意）")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
                 }
 
                 Section(header: Text("その他")) {
@@ -188,6 +224,31 @@ struct ProfileEditView: View {
         !selectedSkillLevel.isEmpty
     }
 
+    private func formatDUPRInput(_ input: String) -> String {
+        // Allow empty string
+        if input.isEmpty {
+            return input
+        }
+
+        // Remove any non-numeric characters except decimal point
+        let filtered = input.filter { $0.isNumber || $0 == "." }
+
+        // Split by decimal point
+        let parts = filtered.split(separator: ".", maxSplits: 1, omittingEmptySubsequences: false)
+
+        if parts.count == 1 {
+            // No decimal point
+            return String(parts[0])
+        } else if parts.count == 2 {
+            // Has decimal point
+            let integerPart = String(parts[0])
+            let decimalPart = String(parts[1].prefix(3)) // Limit to 3 decimal places
+            return "\(integerPart).\(decimalPart)"
+        }
+
+        return filtered
+    }
+
     private func saveProfile() {
         Task {
             // Upload image first if selected
@@ -202,6 +263,10 @@ struct ProfileEditView: View {
                 }
             }
 
+            // Convert DUPR text to Double if valid
+            let duprDoubles = duprDoublesText.isEmpty ? nil : Double(duprDoublesText)
+            let duprSingles = duprSinglesText.isEmpty ? nil : Double(duprSinglesText)
+
             await viewModel.updateProfile(
                 nickname: nickname,
                 bio: bio.isEmpty ? nil : bio,
@@ -209,6 +274,8 @@ struct ProfileEditView: View {
                 pickleballExperience: selectedExperience,
                 gender: selectedGender,
                 skillLevel: selectedSkillLevel,
+                duprDoubles: duprDoubles,
+                duprSingles: duprSingles,
                 profileImage: newImageURL,
                 instagramUrl: instagramUrl.isEmpty ? nil : instagramUrl,
                 twitterUrl: twitterUrl.isEmpty ? nil : twitterUrl,
@@ -249,7 +316,7 @@ class ProfileEditViewModel: ObservableObject {
         }
     }
 
-    func updateProfile(nickname: String, bio: String?, region: String, pickleballExperience: String, gender: String, skillLevel: String, profileImage: String?, instagramUrl: String?, twitterUrl: String?, tiktokUrl: String?, lineUrl: String?) async {
+    func updateProfile(nickname: String, bio: String?, region: String, pickleballExperience: String, gender: String, skillLevel: String, duprDoubles: Double?, duprSingles: Double?, profileImage: String?, instagramUrl: String?, twitterUrl: String?, tiktokUrl: String?, lineUrl: String?) async {
         isLoading = true
         errorMessage = nil
 
@@ -261,6 +328,8 @@ class ProfileEditViewModel: ObservableObject {
                 pickleballExperience: pickleballExperience,
                 gender: gender,
                 skillLevel: skillLevel,
+                duprDoubles: duprDoubles,
+                duprSingles: duprSingles,
                 profileImage: profileImage,
                 instagramUrl: instagramUrl,
                 twitterUrl: twitterUrl,

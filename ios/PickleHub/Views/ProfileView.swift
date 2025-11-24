@@ -119,6 +119,20 @@ struct ProfileView: View {
                                         )
                                     }
 
+                                    // DUPR Doubles
+                                    ProfileInfoRow(
+                                        icon: "chart.line.uptrend.xyaxis",
+                                        label: "DUPR ダブルス",
+                                        value: user.duprDoubles != nil ? String(format: "%.3f", user.duprDoubles!) : "-"
+                                    )
+
+                                    // DUPR Singles
+                                    ProfileInfoRow(
+                                        icon: "chart.line.uptrend.xyaxis",
+                                        label: "DUPR シングルス",
+                                        value: user.duprSingles != nil ? String(format: "%.3f", user.duprSingles!) : "-"
+                                    )
+
                                     if let gender = user.gender {
                                         ProfileInfoRow(
                                             icon: "person.2.fill",

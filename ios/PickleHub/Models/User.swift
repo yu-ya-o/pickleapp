@@ -11,6 +11,8 @@ struct User: Codable, Identifiable, Hashable {
     let pickleballExperience: String?
     let gender: String?
     let skillLevel: String?
+    let duprDoubles: Double?
+    let duprSingles: Double?
     let isProfileComplete: Bool
 
     // SNS Links
@@ -47,6 +49,8 @@ struct UpdateProfileRequest: Codable {
     let pickleballExperience: String?
     let gender: String?
     let skillLevel: String?
+    let duprDoubles: Double?
+    let duprSingles: Double?
     let profileImage: String?
     let instagramUrl: String?
     let twitterUrl: String?
@@ -59,6 +63,8 @@ struct UpdateProfileRequest: Codable {
          pickleballExperience: String? = nil,
          gender: String? = nil,
          skillLevel: String? = nil,
+         duprDoubles: Double? = nil,
+         duprSingles: Double? = nil,
          profileImage: String? = nil,
          instagramUrl: String? = nil,
          twitterUrl: String? = nil,
@@ -70,6 +76,8 @@ struct UpdateProfileRequest: Codable {
         self.pickleballExperience = pickleballExperience
         self.gender = gender
         self.skillLevel = skillLevel
+        self.duprDoubles = duprDoubles
+        self.duprSingles = duprSingles
         self.profileImage = profileImage
         self.instagramUrl = instagramUrl
         self.twitterUrl = twitterUrl
