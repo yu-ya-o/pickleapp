@@ -288,6 +288,8 @@ export interface CreateTeamEventRequest {
   startTime: string;
   endTime: string;
   maxParticipants?: number; // null = unlimited
+  price?: number;
+  skillLevel?: string;
   visibility?: 'public' | 'private'; // "public" = 通常イベントとしても公開, "private" = チームメンバーのみ
 }
 
@@ -314,6 +316,7 @@ export interface TeamEventResponse {
   endTime: string;
   maxParticipants: number | null;
   price: number | null;
+  skillLevel?: string | null;
   status: string;
   visibility: string;
   createdAt: string;

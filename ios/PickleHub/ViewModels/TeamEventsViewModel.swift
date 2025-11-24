@@ -62,6 +62,7 @@ class TeamEventsViewModel: ObservableObject {
         startTime: Date,
         endTime: Date,
         maxParticipants: Int?,
+        skillLevel: String? = nil,
         visibility: String = "private"
     ) async throws {
         isLoading = true
@@ -78,6 +79,7 @@ class TeamEventsViewModel: ObservableObject {
             endTime: formatter.string(from: endTime),
             maxParticipants: maxParticipants,
             price: nil,
+            skillLevel: skillLevel,
             visibility: visibility
         )
 
