@@ -17,8 +17,11 @@ struct TeamDetailView: View {
     @State private var showingJoinErrorAlert = false
     @State private var joinErrorMessage = ""
 
-    init(teamId: String) {
+    let isSheet: Bool
+
+    init(teamId: String, isSheet: Bool = false) {
         _viewModel = StateObject(wrappedValue: TeamDetailViewModel(teamId: teamId))
+        self.isSheet = isSheet
     }
 
     @ViewBuilder
@@ -340,9 +343,11 @@ struct TeamDetailView: View {
         .navigationTitle("チーム")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button("閉じる") {
-                    dismiss()
+            if isSheet {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("閉じる") {
+                        dismiss()
+                    }
                 }
             }
         }
