@@ -141,7 +141,9 @@ struct TeamEventDetailView: View {
             }
         }
         .sheet(isPresented: $showingTeamDetail) {
-            TeamDetailView(teamId: teamId)
+            NavigationView {
+                TeamDetailView(teamId: teamId, isSheet: true)
+            }
         }
         .alert("イベント削除", isPresented: $showingDeleteAlert) {
             Button("キャンセル", role: .cancel) {}
