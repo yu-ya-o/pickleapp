@@ -226,7 +226,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     // Send notification to team owner and admins
-    notifyTeamJoinRequest(id, user.name, team.name).catch((error) => {
+    notifyTeamJoinRequest(id, user.nickname || user.name, team.name).catch((error) => {
       console.error('Failed to send team join request notification:', error);
     });
 

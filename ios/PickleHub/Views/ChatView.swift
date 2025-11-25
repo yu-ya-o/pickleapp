@@ -2,56 +2,51 @@ import SwiftUI
 
 struct ChatView: View {
     @Environment(\.dismiss) var dismiss
-    @StateObject private var viewModel: ChatViewModel
     @EnvironmentObject var authViewModel: AuthViewModel
 
+    @State private var messages: [Message] = []
     @State private var messageText = ""
-    @State private var scrollProxy: ScrollViewProxy?
+    @State private var isLoading = false
+    @State private var errorMessage: String?
 
     let eventId: String
     let eventTitle: String
 
-    init(eventId: String, eventTitle: String) {
-        self.eventId = eventId
-        self.eventTitle = eventTitle
-        _viewModel = StateObject(wrappedValue: ChatViewModel(eventId: eventId))
-    }
-
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Connection status
-                if !viewModel.isConnected {
-                    HStack {
-                        Image(systemName: "wifi.slash")
-                        Text("接続中...")
-                    }
-                    .font(.caption)
-                    .foregroundColor(.white)
-                    .padding(.vertical, 8)
-                    .frame(maxWidth: .infinity)
-                    .background(Color.orange)
-                }
-
                 // Messages
                 ScrollViewReader { proxy in
                     ScrollView {
                         LazyVStack(spacing: 12) {
-                            ForEach(viewModel.messages) { message in
-                                MessageBubbleView(
-                                    message: message,
-                                    isCurrentUser: message.user.id == authViewModel.currentUser?.id
-                                )
-                                .id(message.id)
+                            if messages.isEmpty && !isLoading {
+                                VStack(spacing: 20) {
+                                    Image(systemName: "message")
+                                        .font(.system(size: 60))
+                                        .foregroundColor(.gray)
+                                    Text("まだメッセージがありません")
+                                        .font(.headline)
+                                        .foregroundColor(.secondary)
+                                    Text("最初のメッセージを送信しましょう！")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                }
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .padding()
+                            } else {
+                                ForEach(messages) { message in
+                                    MessageBubbleView(
+                                        message: message,
+                                        isCurrentUser: message.user.id == authViewModel.currentUser?.id
+                                    )
+                                    .id(message.id)
+                                }
                             }
                         }
                         .padding()
                     }
-                    .onAppear {
-                        scrollProxy = proxy
-                    }
-                    .onChange(of: viewModel.messages.count) { _, _ in
-                        scrollToBottom()
+                    .onChange(of: messages.count) { _, _ in
+                        scrollToBottom(proxy: proxy)
                     }
                 }
 
@@ -65,7 +60,7 @@ struct ChatView: View {
                         Image(systemName: "paperplane.fill")
                             .foregroundColor(.white)
                             .padding(10)
-                            .background(messageText.isEmpty ? Color.gray : Color.blue)
+                            .background(messageText.isEmpty ? Color.gray : Color.twitterBlue)
                             .clipShape(Circle())
                     }
                     .disabled(messageText.isEmpty)
@@ -83,8 +78,23 @@ struct ChatView: View {
                 }
             }
             .task {
-                await viewModel.loadChat()
+                await loadMessages()
             }
+        }
+    }
+
+    private func loadMessages() async {
+        isLoading = true
+        errorMessage = nil
+
+        do {
+            let chatRoom = try await APIClient.shared.getChatRoom(eventId: eventId)
+            messages = chatRoom.messages
+            isLoading = false
+        } catch {
+            isLoading = false
+            errorMessage = error.localizedDescription
+            print("Load event chat error: \(error)")
         }
     }
 
@@ -92,15 +102,25 @@ struct ChatView: View {
         let text = messageText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
 
-        viewModel.sendMessage(content: text)
-        messageText = ""
+        Task {
+            do {
+                // Get chat room to get chatRoomId
+                let chatRoom = try await APIClient.shared.getChatRoom(eventId: eventId)
+                let newMessage = try await APIClient.shared.sendMessage(chatRoomId: chatRoom.id, content: text)
+                messages.append(newMessage)
+                messageText = ""
+            } catch {
+                errorMessage = error.localizedDescription
+                print("Send message error: \(error)")
+            }
+        }
     }
 
-    private func scrollToBottom() {
-        guard let lastMessage = viewModel.messages.last else { return }
+    private func scrollToBottom(proxy: ScrollViewProxy) {
+        guard let lastMessage = messages.last else { return }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             withAnimation {
-                scrollProxy?.scrollTo(lastMessage.id, anchor: .bottom)
+                proxy.scrollTo(lastMessage.id, anchor: .bottom)
             }
         }
     }
@@ -173,4 +193,9 @@ struct MessageBubbleView: View {
             }
         }
     }
+}
+
+#Preview {
+    ChatView(eventId: "test", eventTitle: "Test Event")
+        .environmentObject(AuthViewModel())
 }

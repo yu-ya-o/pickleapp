@@ -60,7 +60,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     if (reservation.event) {
       notifyEventCancelled(
         reservation.event.id,
-        user.name,
+        user.nickname || user.name,
         reservation.event.title
       ).catch((error) => {
         console.error('Failed to send event cancelled notification:', error);

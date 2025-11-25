@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Send notification to event creator
-    notifyEventJoined(body.eventId, user.name, event.title).catch((error) => {
+    notifyEventJoined(body.eventId, user.nickname || user.name, event.title).catch((error) => {
       console.error('Failed to send event joined notification:', error);
     });
 
