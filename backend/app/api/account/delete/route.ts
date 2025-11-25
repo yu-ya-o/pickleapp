@@ -7,10 +7,11 @@ import { prisma } from '@/lib/prisma';
  * DELETE /api/account/delete
  * Delete user account with specific data handling:
  * - Delete all user-created events
+ * - Delete teams where user is the only member
  * - Remove from teams (ownership not transferred)
  * - Cancel future reservations
  * - Update messages to show "削除済みユーザー"
- * - Prevent deletion if user is the only owner/admin in any team
+ * - Prevent deletion if user is the only owner/admin in teams with other members
  */
 export async function DELETE(request: NextRequest) {
   try {
@@ -36,9 +37,9 @@ export async function DELETE(request: NextRequest) {
         team: {
           include: {
             members: {
-              where: {
-                userId: { not: userId },
-                role: { in: ['owner', 'admin'] },
+              select: {
+                userId: true,
+                role: true,
               },
             },
           },
@@ -47,8 +48,22 @@ export async function DELETE(request: NextRequest) {
     });
 
     // Check if any team would be left without an owner or admin
+    // BUT allow deletion if user is the only member
     const teamsWithoutLeadership = userTeamMemberships.filter(
-      (membership) => membership.team.members.length === 0
+      (membership) => {
+        const team = membership.team;
+        const totalMembers = team.members.length;
+        const otherLeaders = team.members.filter(
+          (m) =>
+            m.userId !== userId && (m.role === 'owner' || m.role === 'admin')
+        ).length;
+
+        // Allow deletion if user is the only member (team will be deleted)
+        if (totalMembers === 1) return false;
+
+        // Block deletion if there are other members but no other leaders
+        return otherLeaders === 0;
+      }
     );
 
     if (teamsWithoutLeadership.length > 0) {
@@ -101,24 +116,46 @@ export async function DELETE(request: NextRequest) {
         },
       });
 
-      // 5. Remove user from all team memberships
+      // 5. Delete teams where user is the only member
+      const soloTeams = await tx.team.findMany({
+        where: {
+          members: {
+            every: {
+              userId: userId,
+            },
+          },
+        },
+        select: { id: true },
+      });
+
+      if (soloTeams.length > 0) {
+        await tx.team.deleteMany({
+          where: {
+            id: {
+              in: soloTeams.map((t) => t.id),
+            },
+          },
+        });
+      }
+
+      // 6. Remove user from all team memberships
       // Teams will remain but user will be removed from membership
       // Team ownership is not transferred
       await tx.teamMember.deleteMany({
         where: { userId: userId },
       });
 
-      // 6. Delete join requests
+      // 7. Delete join requests
       await tx.teamJoinRequest.deleteMany({
         where: { userId: userId },
       });
 
-      // 7. Delete notifications
+      // 8. Delete notifications
       await tx.notification.deleteMany({
         where: { userId: userId },
       });
 
-      // 8. Update user record to mark as deleted
+      // 9. Update user record to mark as deleted
       // Keep messages but change user name to "削除済みユーザー"
       await tx.user.update({
         where: { id: userId },
