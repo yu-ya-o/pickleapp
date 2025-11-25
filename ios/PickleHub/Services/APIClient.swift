@@ -138,6 +138,22 @@ class APIClient {
         return response
     }
 
+    func signInWithApple(identityToken: String, userIdentifier: String, email: String?, fullName: String?) async throws -> AppleSignInResponse {
+        let requestBody = AppleSignInRequest(
+            identityToken: identityToken,
+            userIdentifier: userIdentifier,
+            email: email,
+            fullName: fullName
+        )
+        let response: AppleSignInResponse = try await request(
+            endpoint: "/api/auth/apple",
+            method: "POST",
+            body: requestBody
+        )
+        self.authToken = response.token
+        return response
+    }
+
     // MARK: - Profile API
 
     func getProfile() async throws -> User {
@@ -152,6 +168,15 @@ class APIClient {
             endpoint: "/api/profile",
             method: "PATCH",
             body: request,
+            requiresAuth: true
+        )
+    }
+
+    func deleteAccount() async throws {
+        struct EmptyResponse: Codable { let message: String }
+        let _: EmptyResponse = try await request(
+            endpoint: "/api/account/delete",
+            method: "DELETE",
             requiresAuth: true
         )
     }

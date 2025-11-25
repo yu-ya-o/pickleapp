@@ -41,6 +41,18 @@ struct GoogleSignInResponse: Codable {
     let token: String
 }
 
+struct AppleSignInRequest: Codable {
+    let identityToken: String
+    let userIdentifier: String
+    let email: String?
+    let fullName: String?
+}
+
+struct AppleSignInResponse: Codable {
+    let user: User
+    let token: String
+}
+
 // MARK: - Profile
 struct UpdateProfileRequest: Codable {
     let nickname: String?

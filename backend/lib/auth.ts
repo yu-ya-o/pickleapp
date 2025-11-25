@@ -10,6 +10,11 @@ export interface GooglePayload {
   sub: string; // Google user ID
 }
 
+export interface ApplePayload {
+  email?: string;
+  sub: string; // Apple user ID
+}
+
 /**
  * Verify Google ID token and return user payload
  */
@@ -66,6 +71,65 @@ export async function findOrCreateUser(payload: GooglePayload) {
       data: {
         name: payload.name,
         // Don't overwrite custom profile image with Google image
+      },
+    });
+  }
+
+  return user;
+}
+
+/**
+ * Verify Apple identity token and return user payload
+ * Note: For production, you should verify the token signature using Apple's public keys
+ * For now, we'll decode the JWT without verification for development
+ */
+export async function verifyAppleToken(identityToken: string): Promise<ApplePayload> {
+  try {
+    // Decode the JWT (without verification for development)
+    // In production, verify using Apple's public keys from https://appleid.apple.com/auth/keys
+    const decoded = JSON.parse(
+      Buffer.from(identityToken.split('.')[1], 'base64').toString()
+    );
+
+    if (!decoded.sub) {
+      throw new Error('Missing sub field in token');
+    }
+
+    return {
+      email: decoded.email,
+      sub: decoded.sub,
+    };
+  } catch (error) {
+    console.error('Apple token verification failed:', error);
+    throw new Error('Invalid Apple token');
+  }
+}
+
+/**
+ * Find or create user from Apple payload
+ */
+export async function findOrCreateAppleUser(
+  payload: ApplePayload,
+  email?: string,
+  fullName?: string
+) {
+  let user = await prisma.user.findUnique({
+    where: { appleId: payload.sub },
+  });
+
+  if (!user) {
+    // For new users, use provided email or payload email
+    const userEmail = email || payload.email;
+
+    if (!userEmail) {
+      throw new Error('Email is required for new Apple Sign-In users');
+    }
+
+    user = await prisma.user.create({
+      data: {
+        email: userEmail,
+        name: fullName || userEmail.split('@')[0], // Use email prefix if no name provided
+        appleId: payload.sub,
       },
     });
   }
