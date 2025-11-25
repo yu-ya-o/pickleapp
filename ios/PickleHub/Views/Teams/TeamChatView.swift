@@ -80,6 +80,8 @@ struct TeamChatView: View {
                         .textFieldStyle(.roundedBorder)
                         .lineLimit(1...4)
                         .focused($isTextFieldFocused)
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
 
                     Button(action: sendMessage) {
                         Image(systemName: "paperplane.fill")
@@ -154,17 +156,19 @@ struct TeamChatView: View {
         let text = messageText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
 
-        // Clear text field immediately on main thread
-        DispatchQueue.main.async {
-            messageText = ""
-        }
+        // Clear text field immediately (already on main thread)
+        messageText = ""
 
         Task {
             do {
                 let newMessage = try await APIClient.shared.sendTeamMessage(teamId: teamId, content: text)
-                messages.append(newMessage)
+                await MainActor.run {
+                    messages.append(newMessage)
+                }
             } catch {
-                errorMessage = error.localizedDescription
+                await MainActor.run {
+                    errorMessage = error.localizedDescription
+                }
                 print("Send message error: \(error)")
             }
         }
