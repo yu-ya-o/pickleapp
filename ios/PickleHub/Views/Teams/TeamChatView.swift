@@ -152,11 +152,12 @@ struct TeamChatView: View {
         let text = messageText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
 
+        messageText = "" // Clear immediately
+
         Task {
             do {
                 let newMessage = try await APIClient.shared.sendTeamMessage(teamId: teamId, content: text)
                 messages.append(newMessage)
-                messageText = ""
             } catch {
                 errorMessage = error.localizedDescription
                 print("Send message error: \(error)")

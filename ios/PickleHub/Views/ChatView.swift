@@ -102,13 +102,14 @@ struct ChatView: View {
         let text = messageText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
 
+        messageText = "" // Clear immediately
+
         Task {
             do {
                 // Get chat room to get chatRoomId
                 let chatRoom = try await APIClient.shared.getChatRoom(eventId: eventId)
                 let newMessage = try await APIClient.shared.sendMessage(chatRoomId: chatRoom.id, content: text)
                 messages.append(newMessage)
-                messageText = ""
             } catch {
                 errorMessage = error.localizedDescription
                 print("Send message error: \(error)")
