@@ -249,7 +249,16 @@ struct TeamCardRow: View {
         }
         .buttonStyle(.plain)
         .sheet(isPresented: $showingTeamDetail) {
-            TeamDetailView(teamId: team.id)
+            NavigationView {
+                TeamDetailView(teamId: team.id)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button("閉じる") {
+                                showingTeamDetail = false
+                            }
+                        }
+                    }
+            }
         }
     }
 }
