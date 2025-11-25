@@ -26,6 +26,7 @@ model User {
   skillLevel            String?   // "beginner", "intermediate", "advanced"
   duprDoubles           Float?    // DUPR rating for doubles (up to 3 decimal places)
   duprSingles           Float?    // DUPR rating for singles (up to 3 decimal places)
+  myPaddle              String?   // ユーザーの使用パドル
   isProfileComplete     Boolean   @default(false)
 
   // SNS Links

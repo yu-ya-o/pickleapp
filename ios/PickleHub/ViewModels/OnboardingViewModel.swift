@@ -11,6 +11,7 @@ class OnboardingViewModel: ObservableObject {
     @Published var selectedSkillLevel = ""
     @Published var duprDoublesText = ""
     @Published var duprSinglesText = ""
+    @Published var myPaddle = ""
     @Published var selectedImageData: Data?
     @Published var profileImageURL: String?
 
@@ -54,6 +55,7 @@ class OnboardingViewModel: ObservableObject {
                 skillLevel: selectedSkillLevel,
                 duprDoubles: duprDoubles,
                 duprSingles: duprSingles,
+                myPaddle: myPaddle.isEmpty ? nil : myPaddle,
                 profileImage: finalProfileImageURL
             )
 

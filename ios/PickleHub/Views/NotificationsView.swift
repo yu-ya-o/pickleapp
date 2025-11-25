@@ -6,8 +6,10 @@ struct NotificationsView: View {
     @State private var showingMarkAllAlert = false
     @State private var selectedEventId: String?
     @State private var selectedTeamId: String?
+    @State private var selectedTeamEventIds: (teamId: String, eventId: String)?
     @State private var showingEventDetail = false
     @State private var showingTeamDetail = false
+    @State private var showingTeamEventDetail = false
 
     var body: some View {
         NavigationView {
@@ -114,6 +116,21 @@ struct NotificationsView: View {
                     }
                 }
             }
+            .sheet(isPresented: $showingTeamEventDetail) {
+                if let ids = selectedTeamEventIds {
+                    NavigationView {
+                        TeamEventDetailView(teamId: ids.teamId, eventId: ids.eventId)
+                            .environmentObject(authViewModel)
+                            .toolbar {
+                                ToolbarItem(placement: .navigationBarTrailing) {
+                                    Button("Done") {
+                                        showingTeamEventDetail = false
+                                    }
+                                }
+                            }
+                    }
+                }
+            }
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
@@ -126,7 +143,15 @@ struct NotificationsView: View {
             selectedEventId = relatedId
             showingEventDetail = true
 
-        case .teamJoinRequest, .teamMemberLeft, .teamJoinApproved, .teamJoinRejected, .teamChatMessage, .teamRoleChanged, .teamEventCreated:
+        case .teamEventCreated:
+            // Team events use format "teamId:eventId"
+            let parts = relatedId.split(separator: ":")
+            if parts.count == 2 {
+                selectedTeamEventIds = (teamId: String(parts[0]), eventId: String(parts[1]))
+                showingTeamEventDetail = true
+            }
+
+        case .teamJoinRequest, .teamMemberLeft, .teamJoinApproved, .teamJoinRejected, .teamChatMessage, .teamRoleChanged:
             selectedTeamId = relatedId
             showingTeamDetail = true
         }

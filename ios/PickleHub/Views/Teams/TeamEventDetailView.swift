@@ -16,6 +16,7 @@ struct TeamEventDetailView: View {
     @State private var showingLeaveConfirm = false
     @State private var showingCloseEventAlert = false
     @State private var showingTeamDetail = false
+    @State private var showingEditEvent = false
 
     let teamId: String
     let eventId: String
@@ -35,6 +36,17 @@ struct TeamEventDetailView: View {
             return true
         }
         // Admin or owner can delete
+        if let role = viewModel.team?.userRole {
+            return ["owner", "admin"].contains(role)
+        }
+        return false
+    }
+
+    private var canEdit: Bool {
+        if isCreator {
+            return true
+        }
+        // Admin or owner can edit
         if let role = viewModel.team?.userRole {
             return ["owner", "admin"].contains(role)
         }
@@ -143,6 +155,20 @@ struct TeamEventDetailView: View {
         .sheet(isPresented: $showingTeamDetail) {
             NavigationView {
                 TeamDetailView(teamId: teamId, isSheet: true)
+            }
+        }
+        .sheet(isPresented: $showingEditEvent) {
+            if let event = event {
+                CreateTeamEventView(teamId: teamId, editingEvent: event)
+                    .environmentObject(viewModel)
+            }
+        }
+        .onChange(of: showingEditEvent) { _, newValue in
+            if !newValue {
+                // Sheet was dismissed, reload event to get latest data
+                Task {
+                    await loadEvent()
+                }
             }
         }
         .alert("イベント削除", isPresented: $showingDeleteAlert) {
@@ -417,6 +443,25 @@ struct TeamEventDetailView: View {
                         .padding()
                         .background(Color.gray)
                         .cornerRadius(12)
+                }
+
+                // Edit button (for creator and admin+)
+                if canEdit {
+                    Button(action: {
+                        showingEditEvent = true
+                    }) {
+                        HStack {
+                            Spacer()
+                            Image(systemName: "pencil")
+                            Text("イベントを編集")
+                                .fontWeight(.semibold)
+                            Spacer()
+                        }
+                        .foregroundColor(.blue)
+                        .padding()
+                        .background(Color.blue.opacity(0.1))
+                        .cornerRadius(12)
+                    }
                 }
 
                 // Close event button (for creator only, if event is active)

@@ -375,7 +375,7 @@ export async function notifyTeamEventCreated(
     type: NotificationType.TEAM_EVENT_CREATED,
     title: '新しいチームイベント',
     message: `「${eventTitle}」が作成されました`,
-    relatedId: eventId,
+    relatedId: `${teamId}:${eventId}`, // Format: "teamId:eventId" for team events
   }));
 
   await createBulkNotifications(notifications);

@@ -56,6 +56,7 @@ export interface UpdateProfileRequest {
   skillLevel?: string;
   duprDoubles?: number;
   duprSingles?: number;
+  myPaddle?: string;
   profileImage?: string;
 }
 

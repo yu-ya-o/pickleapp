@@ -18,18 +18,22 @@ struct PickleHubApp: App {
                             }
                         }
                     }
+                    .preferredColorScheme(.light)
             } else {
                 if authViewModel.isAuthenticated {
                     if authViewModel.currentUser?.isProfileComplete == false {
                         OnboardingContainerView()
                             .environmentObject(authViewModel)
+                            .preferredColorScheme(.light)
                     } else {
                         MainTabView()
                             .environmentObject(authViewModel)
+                            .preferredColorScheme(.light)
                     }
                 } else {
                     LoginView()
                         .environmentObject(authViewModel)
+                        .preferredColorScheme(.light)
                 }
             }
         }

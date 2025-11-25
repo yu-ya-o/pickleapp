@@ -14,6 +14,7 @@ struct ProfileEditView: View {
     @State private var selectedSkillLevel: String
     @State private var duprDoublesText: String
     @State private var duprSinglesText: String
+    @State private var myPaddle: String
     @State private var selectedPhotoItem: PhotosPickerItem?
     @State private var selectedImageData: Data?
     @State private var profileImageURL: String?
@@ -36,6 +37,7 @@ struct ProfileEditView: View {
         _selectedSkillLevel = State(initialValue: user.skillLevel ?? "")
         _duprDoublesText = State(initialValue: user.duprDoubles != nil ? String(format: "%.3f", user.duprDoubles!) : "")
         _duprSinglesText = State(initialValue: user.duprSingles != nil ? String(format: "%.3f", user.duprSingles!) : "")
+        _myPaddle = State(initialValue: user.myPaddle ?? "")
         _profileImageURL = State(initialValue: user.profileImage)
         _instagramUrl = State(initialValue: user.instagramUrl ?? "")
         _twitterUrl = State(initialValue: user.twitterUrl ?? "")
@@ -164,6 +166,23 @@ struct ProfileEditView: View {
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("使用パドル")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+
+                        TextField("例: JOOLA Ben Johns Hyperion", text: $myPaddle)
+                            .onChange(of: myPaddle) { _, newValue in
+                                if newValue.count > 100 {
+                                    myPaddle = String(newValue.prefix(100))
+                                }
+                            }
+
+                        Text("任意")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
                 }
 
                 Section(header: Text("その他")) {
@@ -276,6 +295,7 @@ struct ProfileEditView: View {
                 skillLevel: selectedSkillLevel,
                 duprDoubles: duprDoubles,
                 duprSingles: duprSingles,
+                myPaddle: myPaddle.isEmpty ? nil : myPaddle,
                 profileImage: newImageURL,
                 instagramUrl: instagramUrl.isEmpty ? nil : instagramUrl,
                 twitterUrl: twitterUrl.isEmpty ? nil : twitterUrl,
@@ -316,7 +336,7 @@ class ProfileEditViewModel: ObservableObject {
         }
     }
 
-    func updateProfile(nickname: String, bio: String?, region: String, pickleballExperience: String, gender: String, skillLevel: String, duprDoubles: Double?, duprSingles: Double?, profileImage: String?, instagramUrl: String?, twitterUrl: String?, tiktokUrl: String?, lineUrl: String?) async {
+    func updateProfile(nickname: String, bio: String?, region: String, pickleballExperience: String, gender: String, skillLevel: String, duprDoubles: Double?, duprSingles: Double?, myPaddle: String?, profileImage: String?, instagramUrl: String?, twitterUrl: String?, tiktokUrl: String?, lineUrl: String?) async {
         isLoading = true
         errorMessage = nil
 
@@ -330,6 +350,7 @@ class ProfileEditViewModel: ObservableObject {
                 skillLevel: skillLevel,
                 duprDoubles: duprDoubles,
                 duprSingles: duprSingles,
+                myPaddle: myPaddle,
                 profileImage: profileImage,
                 instagramUrl: instagramUrl,
                 twitterUrl: twitterUrl,

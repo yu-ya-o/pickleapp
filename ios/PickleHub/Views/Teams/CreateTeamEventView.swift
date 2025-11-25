@@ -20,7 +20,35 @@ struct CreateTeamEventView: View {
     @State private var errorMessage = ""
 
     let teamId: String
+    let editingEvent: TeamEvent?
     let skillLevels = ["beginner", "intermediate", "advanced", "all"]
+
+    init(teamId: String, editingEvent: TeamEvent? = nil) {
+        self.teamId = teamId
+        self.editingEvent = editingEvent
+
+        // Initialize state from editing event if provided
+        if let event = editingEvent {
+            _title = State(initialValue: event.title)
+            _description = State(initialValue: event.description)
+            _location = State(initialValue: event.location)
+            _region = State(initialValue: event.region ?? "")
+
+            // Parse dates from ISO8601 strings
+            let formatter = ISO8601DateFormatter()
+            if let startTime = formatter.date(from: event.startTime) {
+                _startDate = State(initialValue: startTime)
+            }
+            if let endTime = formatter.date(from: event.endTime) {
+                _endDate = State(initialValue: endTime)
+            }
+
+            _hasCapacityLimit = State(initialValue: event.maxParticipants != nil)
+            _maxParticipants = State(initialValue: event.maxParticipants ?? 8)
+            _skillLevel = State(initialValue: event.skillLevel ?? "all")
+            _visibility = State(initialValue: event.visibility)
+        }
+    }
 
     func skillLevelLabel(_ level: String) -> String {
         switch level {
@@ -97,7 +125,7 @@ struct CreateTeamEventView: View {
                 }
 
                 Section {
-                    Button(action: createEvent) {
+                    Button(action: saveEvent) {
                         if isLoading {
                             HStack {
                                 Spacer()
@@ -107,7 +135,7 @@ struct CreateTeamEventView: View {
                         } else {
                             HStack {
                                 Spacer()
-                                Text("イベントを作成")
+                                Text(editingEvent == nil ? "イベントを作成" : "変更を保存")
                                     .fontWeight(.semibold)
                                 Spacer()
                             }
@@ -116,7 +144,7 @@ struct CreateTeamEventView: View {
                     .disabled(!isFormValid || isLoading)
                 }
             }
-            .navigationTitle("チームイベント作成")
+            .navigationTitle(editingEvent == nil ? "チームイベント作成" : "チームイベント編集")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -140,22 +168,39 @@ struct CreateTeamEventView: View {
         startDate < endDate
     }
 
-    private func createEvent() {
+    private func saveEvent() {
         Task {
             isLoading = true
 
             do {
-                try await viewModel.createEvent(
-                    title: title,
-                    description: description,
-                    location: location,
-                    region: region.isEmpty ? nil : region,
-                    startTime: startDate,
-                    endTime: endDate,
-                    maxParticipants: hasCapacityLimit ? maxParticipants : nil,
-                    skillLevel: skillLevel,
-                    visibility: visibility
-                )
+                if let event = editingEvent {
+                    // Update existing event
+                    try await viewModel.updateEvent(
+                        eventId: event.id,
+                        title: title,
+                        description: description,
+                        location: location,
+                        region: region.isEmpty ? nil : region,
+                        startTime: startDate,
+                        endTime: endDate,
+                        maxParticipants: hasCapacityLimit ? maxParticipants : nil,
+                        skillLevel: skillLevel,
+                        visibility: visibility
+                    )
+                } else {
+                    // Create new event
+                    try await viewModel.createEvent(
+                        title: title,
+                        description: description,
+                        location: location,
+                        region: region.isEmpty ? nil : region,
+                        startTime: startDate,
+                        endTime: endDate,
+                        maxParticipants: hasCapacityLimit ? maxParticipants : nil,
+                        skillLevel: skillLevel,
+                        visibility: visibility
+                    )
+                }
                 dismiss()
             } catch {
                 errorMessage = error.localizedDescription
