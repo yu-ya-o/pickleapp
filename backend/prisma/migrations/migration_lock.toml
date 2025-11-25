@@ -1,0 +1,4 @@
+# Please do not edit.
+# See https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-migrate#migration-lock-file for more information.
+
+provider = "postgresql"
