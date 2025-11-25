@@ -102,6 +102,14 @@ struct UserProfileView: View {
                             value: user.duprSingles != nil ? String(format: "%.3f", user.duprSingles!) : "-"
                         )
 
+                        if let myPaddle = user.myPaddle, !myPaddle.isEmpty {
+                            ProfileInfoRow(
+                                icon: "sportscourt.fill",
+                                label: "使用パドル",
+                                value: myPaddle
+                            )
+                        }
+
                         if let gender = user.gender {
                             ProfileInfoRow(
                                 icon: "person.fill",

@@ -17,6 +17,9 @@ export interface GoogleSignInResponse {
     pickleballExperience: string | null;
     gender: string | null;
     skillLevel: string | null;
+    duprDoubles: number | null;
+    duprSingles: number | null;
+    myPaddle: string | null;
     isProfileComplete: boolean;
   };
   token: string; // JWT or session token
@@ -41,6 +44,9 @@ export interface AppleSignInResponse {
     pickleballExperience: string | null;
     gender: string | null;
     skillLevel: string | null;
+    duprDoubles: number | null;
+    duprSingles: number | null;
+    myPaddle: string | null;
     isProfileComplete: boolean;
   };
   token: string; // JWT or session token
@@ -73,6 +79,7 @@ export interface UserProfileResponse {
   skillLevel: string | null;
   duprDoubles: number | null;
   duprSingles: number | null;
+  myPaddle: string | null;
   isProfileComplete: boolean;
   createdAt: string;
   updatedAt: string;

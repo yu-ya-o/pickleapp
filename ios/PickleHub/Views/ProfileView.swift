@@ -211,8 +211,8 @@ struct ProfileView: View {
                                     HStack {
                                         Spacer()
                                         Text("アカウントを削除")
-                                            .foregroundColor(.red)
-                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                            .font(.headline)
                                         Spacer()
                                     }
                                     .padding()
@@ -220,7 +220,7 @@ struct ProfileView: View {
                                     .cornerRadius(12)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .stroke(Color.red.opacity(0.3), lineWidth: 1)
+                                            .stroke(Color.gray.opacity(0.2), lineWidth: 1)
                                     )
                                 }
                             }
@@ -266,7 +266,7 @@ struct ProfileView: View {
                     }
                 }
             } message: {
-                Text("アカウントを削除すると、以下のデータが削除されます：\n\n• 作成したすべてのイベント\n• 今後の予約\n• 通知\n\nチームは残りますが、オーナーの場合は他のメンバーに引き継がれます。メッセージは「削除済みユーザー」として残ります。\n\nこの操作は取り消せません。")
+                Text("アカウントを削除すると、以下のデータが削除されます：\n\n• 作成したすべてのイベント\n• 今後の予約\n• 通知\n\nチームは残りますが、メッセージは「削除済みユーザー」として残ります。\n\n※オーナーまたはアドミンが他にいないチームがある場合は削除できません。\n\nこの操作は取り消せません。")
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
