@@ -7,9 +7,10 @@ import { prisma } from '@/lib/prisma';
  * DELETE /api/account/delete
  * Delete user account with specific data handling:
  * - Delete all user-created events
- * - Transfer team ownership or remove from teams
+ * - Remove from teams (ownership not transferred)
  * - Cancel future reservations
  * - Update messages to show "削除済みユーザー"
+ * - Prevent deletion if user is the only owner/admin in any team
  */
 export async function DELETE(request: NextRequest) {
   try {
@@ -24,6 +25,43 @@ export async function DELETE(request: NextRequest) {
     }
 
     const userId = user.id;
+
+    // Check if user is owner or admin in any team without other owners/admins
+    const userTeamMemberships = await prisma.teamMember.findMany({
+      where: {
+        userId: userId,
+        role: { in: ['owner', 'admin'] },
+      },
+      include: {
+        team: {
+          include: {
+            members: {
+              where: {
+                userId: { not: userId },
+                role: { in: ['owner', 'admin'] },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    // Check if any team would be left without an owner or admin
+    const teamsWithoutLeadership = userTeamMemberships.filter(
+      (membership) => membership.team.members.length === 0
+    );
+
+    if (teamsWithoutLeadership.length > 0) {
+      const teamNames = teamsWithoutLeadership
+        .map((m) => m.team.name)
+        .join(', ');
+      return NextResponse.json(
+        {
+          error: `以下のチームでオーナーまたはアドミンが他にいないため、アカウントを削除できません: ${teamNames}`,
+        },
+        { status: 400 }
+      );
+    }
 
     // Start a transaction to ensure all operations complete or none do
     await prisma.$transaction(async (tx) => {
@@ -63,64 +101,24 @@ export async function DELETE(request: NextRequest) {
         },
       });
 
-      // 5. Handle team ownership transfer
-      // Find all teams owned by the user
-      const ownedTeams = await tx.team.findMany({
-        where: { ownerId: userId },
-        include: {
-          members: {
-            where: {
-              userId: { not: userId },
-              role: { in: ['admin', 'member'] },
-            },
-            orderBy: [
-              { role: 'asc' }, // admins first
-              { joinedAt: 'asc' }, // then by join date
-            ],
-          },
-        },
-      });
-
-      for (const team of ownedTeams) {
-        if (team.members.length > 0) {
-          // Transfer ownership to the first admin, or first member if no admins
-          const newOwner = team.members[0];
-
-          // Update team owner
-          await tx.team.update({
-            where: { id: team.id },
-            data: { ownerId: newOwner.userId },
-          });
-
-          // Update the new owner's team member role to owner
-          await tx.teamMember.update({
-            where: { id: newOwner.id },
-            data: { role: 'owner' },
-          });
-        } else {
-          // No other members, delete the team
-          await tx.team.delete({
-            where: { id: team.id },
-          });
-        }
-      }
-
-      // 6. Remove user from all team memberships
+      // 5. Remove user from all team memberships
+      // Teams will remain but user will be removed from membership
+      // Team ownership is not transferred
       await tx.teamMember.deleteMany({
         where: { userId: userId },
       });
 
-      // 7. Delete join requests
+      // 6. Delete join requests
       await tx.teamJoinRequest.deleteMany({
         where: { userId: userId },
       });
 
-      // 8. Delete notifications
+      // 7. Delete notifications
       await tx.notification.deleteMany({
         where: { userId: userId },
       });
 
-      // 9. Update user record to mark as deleted
+      // 8. Update user record to mark as deleted
       // Keep messages but change user name to "削除済みユーザー"
       await tx.user.update({
         where: { id: userId },
@@ -142,6 +140,7 @@ export async function DELETE(request: NextRequest) {
           lineUrl: null,
           duprDoubles: null,
           duprSingles: null,
+          myPaddle: null,
           isProfileComplete: false,
         },
       });
