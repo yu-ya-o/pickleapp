@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
     if (chatRoom.event) {
       notifyEventChatMessage(
         chatRoom.event.id,
-        user.name,
+        user.nickname || user.name,
         chatRoom.event.title,
         body.content
       ).catch((error) => {

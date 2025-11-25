@@ -103,7 +103,7 @@ async function handleMessage(clientId: string, data: string) {
         // Get user info
         const user = await prisma.user.findUnique({
           where: { id: userId },
-          select: { id: true, name: true, profileImage: true },
+          select: { id: true, name: true, nickname: true, profileImage: true },
         });
 
         // Notify client they joined
@@ -185,7 +185,7 @@ async function handleMessage(clientId: string, data: string) {
           // Notify others
           const leavingUser = await prisma.user.findUnique({
             where: { id: client.userId },
-            select: { id: true, name: true, profileImage: true },
+            select: { id: true, name: true, nickname: true, profileImage: true },
           });
 
           broadcastToRoom(client.chatRoomId, {
@@ -232,7 +232,7 @@ function handleDisconnect(clientId: string) {
     // Notify others
     prisma.user.findUnique({
       where: { id: client.userId },
-      select: { id: true, name: true, profileImage: true },
+      select: { id: true, name: true, nickname: true, profileImage: true },
     }).then((user) => {
       if (user && client.chatRoomId) {
         broadcastToRoom(client.chatRoomId, {
