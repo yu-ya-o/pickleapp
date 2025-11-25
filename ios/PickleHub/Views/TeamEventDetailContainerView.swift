@@ -14,7 +14,7 @@ struct TeamEventDetailContainerView: View {
                 .environmentObject(authViewModel)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Done") {
+                        Button("閉じる") {
                             dismiss()
                         }
                     }

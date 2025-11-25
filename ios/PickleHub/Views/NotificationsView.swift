@@ -108,7 +108,7 @@ struct NotificationsView: View {
                             .navigationBarTitleDisplayMode(.inline)
                             .toolbar {
                                 ToolbarItem(placement: .navigationBarTrailing) {
-                                    Button("Done") {
+                                    Button("閉じる") {
                                         showingTeamDetail = false
                                     }
                                 }
@@ -123,7 +123,7 @@ struct NotificationsView: View {
                             .environmentObject(authViewModel)
                             .toolbar {
                                 ToolbarItem(placement: .navigationBarTrailing) {
-                                    Button("Done") {
+                                    Button("閉じる") {
                                         showingTeamEventDetail = false
                                     }
                                 }
