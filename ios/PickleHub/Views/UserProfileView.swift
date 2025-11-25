@@ -276,6 +276,7 @@ class UserProfileViewModel: ObservableObject {
         skillLevel: "intermediate",
         duprDoubles: 4.500,
         duprSingles: 4.250,
+        myPaddle: "JOOLA Ben Johns Hyperion",
         isProfileComplete: true,
         instagramUrl: nil,
         twitterUrl: nil,
