@@ -5,6 +5,8 @@ struct ProfileView: View {
     @EnvironmentObject var eventsViewModel: EventsViewModel
     @State private var showingSignOutAlert = false
     @State private var showingDeleteAccountAlert = false
+    @State private var showingDeleteAccountError = false
+    @State private var deleteAccountErrorMessage = ""
     @State private var showingEditProfile = false
     @State private var showingMyEvents = false
 
@@ -280,12 +282,18 @@ struct ProfileView: View {
                         do {
                             try await authViewModel.deleteAccount()
                         } catch {
-                            print("Account deletion error: \(error)")
+                            deleteAccountErrorMessage = error.localizedDescription
+                            showingDeleteAccountError = true
                         }
                     }
                 }
             } message: {
                 Text("アカウントを削除すると、以下のデータが削除されます：\n\n• 作成したすべてのイベント\n• 今後の予約\n• 通知\n\nチームは残りますが、メッセージは「削除済みユーザー」として残ります。\n\n※オーナーまたはアドミンが他にいないチームがある場合は削除できません。\n\nこの操作は取り消せません。")
+            }
+            .alert("削除できませんでした", isPresented: $showingDeleteAccountError) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(deleteAccountErrorMessage)
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
