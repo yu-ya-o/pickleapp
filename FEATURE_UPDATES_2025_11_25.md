@@ -331,10 +331,12 @@ struct TeamCardRow: View {
 - `ios/PickleHub/Views/EventDetailView.swift`
 
 #### 7.2 チャット送信時のテキストフィールドクリア改善
-**目的**: 送信ボタンを押した瞬間にテキストフィールドをクリア
+**目的**: 送信ボタンを押した瞬間にテキストフィールドを確実にクリア
 
 **変更内容**:
 - `messageText = ""` をTask{}の外に移動
+- `DispatchQueue.main.async`を使用してメインスレッドで確実にクリア
+- `@FocusState`を追加してフォーカス管理を改善
 
 **実装ファイル**:
 - `ios/PickleHub/Views/ChatView.swift`
@@ -342,21 +344,44 @@ struct TeamCardRow: View {
 
 **実装例**:
 ```swift
-// 変更前
-Task {
-    do {
-        // メッセージ送信
+// FocusStateの追加
+@FocusState private var isTextFieldFocused: Bool
+
+// TextFieldにfocusedモディファイアを追加
+TextField("メッセージを入力...", text: $messageText, axis: .vertical)
+    .focused($isTextFieldFocused)
+
+// sendMessage関数の改善
+private func sendMessage() {
+    let text = messageText.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard !text.isEmpty else { return }
+
+    // メインスレッドで確実にクリア
+    DispatchQueue.main.async {
         messageText = ""
     }
-}
 
-// 変更後
-messageText = "" // 即座にクリア
-
-Task {
-    do {
-        // メッセージ送信
+    Task {
+        // メッセージ送信処理
     }
+}
+```
+
+#### 7.3 通知からの画面遷移時の「Done」ボタン修正
+**目的**: すべての「Done」ボタンを日本語の「閉じる」に統一
+
+**変更内容**:
+- 通知からチーム詳細を開いた時の「Done」→「閉じる」
+- 通知からチームイベント詳細を開いた時の「Done」→「閉じる」
+
+**実装ファイル**:
+- `ios/PickleHub/Views/NotificationsView.swift`
+- `ios/PickleHub/Views/TeamEventDetailContainerView.swift`
+
+**実装例**:
+```swift
+Button("閉じる") {
+    showingTeamDetail = false
 }
 ```
 
@@ -424,8 +449,10 @@ Task {
 - 処理順序が重要（外部キー制約に注意）
 
 ### 2. チャットのテキストクリアタイミング
-- `messageText = ""`はTask{}の外で実行
-- UIの即座の更新を保証
+- `messageText = ""`は`DispatchQueue.main.async`内で実行
+- メインスレッドでの確実なUI更新を保証
+- `@FocusState`でフォーカス管理を追加
+- SwiftUIのState更新タイミング問題を回避
 - エラー発生時の処理は考慮不要（ユーザーが再送信）
 
 ### 3. NavigationViewの重複に注意
