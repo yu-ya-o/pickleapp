@@ -13,6 +13,7 @@ struct TeamChatView: View {
     @State private var selectedEventToShare: TeamEvent?
     @State private var teamEvents: [TeamEvent] = []
     @State private var userRole: String?
+    @FocusState private var isTextFieldFocused: Bool
 
     let teamId: String
     let teamName: String
@@ -78,6 +79,7 @@ struct TeamChatView: View {
                     TextField("メッセージを入力...", text: $messageText, axis: .vertical)
                         .textFieldStyle(.roundedBorder)
                         .lineLimit(1...4)
+                        .focused($isTextFieldFocused)
 
                     Button(action: sendMessage) {
                         Image(systemName: "paperplane.fill")
@@ -152,7 +154,10 @@ struct TeamChatView: View {
         let text = messageText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
 
-        messageText = "" // Clear immediately
+        // Clear text field immediately on main thread
+        DispatchQueue.main.async {
+            messageText = ""
+        }
 
         Task {
             do {

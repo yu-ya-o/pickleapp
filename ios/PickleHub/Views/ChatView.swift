@@ -8,6 +8,7 @@ struct ChatView: View {
     @State private var messageText = ""
     @State private var isLoading = false
     @State private var errorMessage: String?
+    @FocusState private var isTextFieldFocused: Bool
 
     let eventId: String
     let eventTitle: String
@@ -55,6 +56,7 @@ struct ChatView: View {
                     TextField("メッセージを入力...", text: $messageText, axis: .vertical)
                         .textFieldStyle(.roundedBorder)
                         .lineLimit(1...4)
+                        .focused($isTextFieldFocused)
 
                     Button(action: sendMessage) {
                         Image(systemName: "paperplane.fill")
@@ -102,7 +104,10 @@ struct ChatView: View {
         let text = messageText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
 
-        messageText = "" // Clear immediately
+        // Clear text field immediately on main thread
+        DispatchQueue.main.async {
+            messageText = ""
+        }
 
         Task {
             do {
