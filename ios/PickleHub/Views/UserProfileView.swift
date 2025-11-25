@@ -186,57 +186,71 @@ struct ProfileInfoRow: View {
 
 struct TeamCardRow: View {
     let team: Team
+    @State private var showingTeamDetail = false
 
     var body: some View {
-        HStack(spacing: Spacing.md) {
-            // Team Icon
-            if let iconImageURL = team.iconImageURL {
-                CachedAsyncImage(url: iconImageURL) { image in
-                    image
-                        .resizable()
-                        .scaledToFill()
-                } placeholder: {
-                    Image(systemName: "person.3.fill")
-                        .foregroundColor(.gray)
-                }
-                .frame(width: 40, height: 40)
-                .clipShape(RoundedRectangle(cornerRadius: CornerRadius.small))
-            } else {
-                Image(systemName: "person.3.fill")
-                    .resizable()
-                    .foregroundColor(.gray)
+        Button(action: {
+            showingTeamDetail = true
+        }) {
+            HStack(spacing: Spacing.md) {
+                // Team Icon
+                if let iconImageURL = team.iconImageURL {
+                    CachedAsyncImage(url: iconImageURL) { image in
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    } placeholder: {
+                        Image(systemName: "person.3.fill")
+                            .foregroundColor(.gray)
+                    }
                     .frame(width: 40, height: 40)
-                    .padding(8)
-                    .background(Color(.systemGray5))
-                    .clipShape(RoundedRectangle(cornerRadius: CornerRadius.small))
-            }
+                    .clipShape(Circle())
+                } else {
+                    Image(systemName: "person.3.fill")
+                        .resizable()
+                        .foregroundColor(.gray)
+                        .frame(width: 40, height: 40)
+                        .padding(8)
+                        .background(Color(.systemGray5))
+                        .clipShape(Circle())
+                }
 
-            // Team Info
-            VStack(alignment: .leading, spacing: 4) {
-                Text(team.name)
-                    .font(.bodyMedium)
-                    .fontWeight(.semibold)
+                // Team Info
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(team.name)
+                        .font(.bodyMedium)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.primary)
 
-                HStack(spacing: 8) {
-                    if let region = team.region {
-                        Label(region, systemImage: "mappin.circle.fill")
+                    HStack(spacing: 8) {
+                        if let region = team.region {
+                            Label(region, systemImage: "mappin.circle.fill")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        Label("\(team.memberCount)人", systemImage: "person.fill")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
-
-                    Label("\(team.memberCount)人", systemImage: "person.fill")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
                 }
-            }
 
-            Spacer()
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .foregroundColor(.secondary)
+                    .font(.caption)
+            }
+            .padding(Spacing.md)
+            .background(
+                RoundedRectangle(cornerRadius: CornerRadius.medium)
+                    .fill(Color(.systemGray6))
+            )
         }
-        .padding(Spacing.md)
-        .background(
-            RoundedRectangle(cornerRadius: CornerRadius.medium)
-                .fill(Color(.systemGray6))
-        )
+        .buttonStyle(.plain)
+        .sheet(isPresented: $showingTeamDetail) {
+            TeamDetailView(teamId: team.id)
+        }
     }
 }
 
