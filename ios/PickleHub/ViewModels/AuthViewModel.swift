@@ -94,6 +94,31 @@ class AuthViewModel: ObservableObject {
                 isLoading = false
 
             case .failure(let error):
+                // Handle specific Apple Sign-In errors
+                let nsError = error as NSError
+                print("❌ Apple Sign-In error code: \(nsError.code)")
+                print("   Domain: \(nsError.domain)")
+                print("   Description: \(nsError.localizedDescription)")
+
+                // Error code 1000 = ASAuthorizationErrorUnknown
+                // Common causes:
+                // 1. User cancelled the flow
+                // 2. Missing "Sign in with Apple" capability in Xcode
+                // 3. Bundle ID not configured in Apple Developer Portal
+                if nsError.code == 1000 {
+                    throw NSError(
+                        domain: "AuthViewModel",
+                        code: -1,
+                        userInfo: [NSLocalizedDescriptionKey: "Apple Sign-In設定エラー。Xcodeで「Sign in with Apple」capabilityが有効か確認してください。"]
+                    )
+                } else if nsError.code == 1001 {
+                    // User cancelled
+                    throw NSError(
+                        domain: "AuthViewModel",
+                        code: -1,
+                        userInfo: [NSLocalizedDescriptionKey: "サインインがキャンセルされました"]
+                    )
+                }
                 throw error
             }
         } catch {
