@@ -156,6 +156,9 @@ struct TeamChatView: View {
         let text = messageText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
 
+        // Unfocus text field to reset internal state
+        isTextFieldFocused = false
+
         // Clear text field immediately (already on main thread)
         messageText = ""
 
