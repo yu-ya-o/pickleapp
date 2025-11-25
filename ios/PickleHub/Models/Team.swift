@@ -376,6 +376,7 @@ struct UpdateTeamEventRequest: Codable {
     let endTime: String?
     let maxParticipants: Int?
     let price: Int?
+    let skillLevel: String?
     let status: String?
     let visibility: String?
 }

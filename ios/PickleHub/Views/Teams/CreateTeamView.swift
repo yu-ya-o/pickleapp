@@ -12,36 +12,78 @@ struct CreateTeamView: View {
     @State private var isLoading = false
     @State private var showingError = false
     @State private var errorMessage = ""
-    @State private var selectedPhotoItem: PhotosPickerItem?
-    @State private var selectedImageData: Data?
+    @State private var selectedIconPhotoItem: PhotosPickerItem?
+    @State private var selectedIconImageData: Data?
+    @State private var selectedHeaderPhotoItem: PhotosPickerItem?
+    @State private var selectedHeaderImageData: Data?
 
     let visibilityOptions = ["public", "private"]
 
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("チームアイコン")) {
-                    VStack(spacing: 12) {
-                        // Display selected or default icon
-                        if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
-                            Image(uiImage: uiImage)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 100, height: 100)
-                                .clipShape(Circle())
-                        } else {
-                            Image(systemName: "person.3.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 60, height: 60)
-                                .foregroundColor(.gray)
-                                .frame(width: 100, height: 100)
-                                .background(Color(.systemGray6))
-                                .clipShape(Circle())
+                Section(header: Text("チーム画像")) {
+                    VStack(spacing: 16) {
+                        // Header Image
+                        VStack(spacing: 8) {
+                            Text("ヘッダー画像")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+
+                            if let selectedHeaderImageData, let uiImage = UIImage(data: selectedHeaderImageData) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(height: 120)
+                                    .clipped()
+                                    .cornerRadius(8)
+                            } else {
+                                Rectangle()
+                                    .fill(Color(.systemGray6))
+                                    .frame(height: 120)
+                                    .overlay(
+                                        Image(systemName: "photo")
+                                            .font(.largeTitle)
+                                            .foregroundColor(.gray)
+                                    )
+                                    .cornerRadius(8)
+                            }
+
+                            PhotosPicker(selection: $selectedHeaderPhotoItem, matching: .images) {
+                                Label("ヘッダー画像を選択", systemImage: "photo")
+                                    .font(.caption)
+                            }
                         }
 
-                        PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
-                            Label("画像を選択", systemImage: "photo")
+                        Divider()
+
+                        // Icon Image
+                        VStack(spacing: 8) {
+                            Text("アイコン")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+
+                            if let selectedIconImageData, let uiImage = UIImage(data: selectedIconImageData) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 100, height: 100)
+                                    .clipShape(Circle())
+                            } else {
+                                Image(systemName: "person.3.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 60, height: 60)
+                                    .foregroundColor(.gray)
+                                    .frame(width: 100, height: 100)
+                                    .background(Color(.systemGray6))
+                                    .clipShape(Circle())
+                            }
+
+                            PhotosPicker(selection: $selectedIconPhotoItem, matching: .images) {
+                                Label("アイコンを選択", systemImage: "photo")
+                                    .font(.caption)
+                            }
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -118,10 +160,17 @@ struct CreateTeamView: View {
             } message: {
                 Text(errorMessage)
             }
-            .onChange(of: selectedPhotoItem) { _, newItem in
+            .onChange(of: selectedIconPhotoItem) { _, newItem in
                 Task {
                     if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                        selectedImageData = data
+                        selectedIconImageData = data
+                    }
+                }
+            }
+            .onChange(of: selectedHeaderPhotoItem) { _, newItem in
+                Task {
+                    if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                        selectedHeaderImageData = data
                     }
                 }
             }
@@ -140,8 +189,14 @@ struct CreateTeamView: View {
             do {
                 // Upload icon image if selected
                 var iconImageURL: String? = nil
-                if let imageData = selectedImageData {
+                if let imageData = selectedIconImageData {
                     iconImageURL = try await APIClient.shared.uploadProfileImage(imageData: imageData)
+                }
+
+                // Upload header image if selected
+                var headerImageURL: String? = nil
+                if let imageData = selectedHeaderImageData {
+                    headerImageURL = try await APIClient.shared.uploadProfileImage(imageData: imageData)
                 }
 
                 try await teamsViewModel.createTeam(
@@ -149,7 +204,8 @@ struct CreateTeamView: View {
                     description: description.trimmingCharacters(in: .whitespacesAndNewlines),
                     region: region.isEmpty ? nil : region,
                     visibility: visibility,
-                    iconImage: iconImageURL
+                    iconImage: iconImageURL,
+                    headerImage: headerImageURL
                 )
                 dismiss()
             } catch {

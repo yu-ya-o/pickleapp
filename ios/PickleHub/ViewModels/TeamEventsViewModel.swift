@@ -105,6 +105,7 @@ class TeamEventsViewModel: ObservableObject {
         startTime: Date? = nil,
         endTime: Date? = nil,
         maxParticipants: Int? = nil,
+        skillLevel: String? = nil,
         status: String? = nil,
         visibility: String? = nil
     ) async throws {
@@ -119,6 +120,7 @@ class TeamEventsViewModel: ObservableObject {
             endTime: endTime.map { formatter.string(from: $0) },
             maxParticipants: maxParticipants,
             price: nil,
+            skillLevel: skillLevel,
             status: status,
             visibility: visibility
         )
