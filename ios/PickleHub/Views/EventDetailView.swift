@@ -394,6 +394,25 @@ struct EventDetailView: View {
                 }
             }
 
+            // Edit button (for creator only)
+            if isCreator {
+                Button(action: {
+                    showingEditEvent = true
+                }) {
+                    HStack {
+                        Spacer()
+                        Image(systemName: "pencil")
+                        Text("イベントを編集")
+                            .fontWeight(.semibold)
+                        Spacer()
+                    }
+                    .foregroundColor(.blue)
+                    .padding()
+                    .background(Color.blue.opacity(0.1))
+                    .cornerRadius(12)
+                }
+            }
+
             // Delete button (for creator only)
             if isCreator {
                 Button(action: {
