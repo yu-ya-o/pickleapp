@@ -81,17 +81,6 @@ struct EventDetailView: View {
         }
         .navigationTitle("イベント")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            if isCreator {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        showingEditEvent = true
-                    } label: {
-                        Text("編集")
-                    }
-                }
-            }
-        }
         .sheet(isPresented: $showingEditEvent) {
             EditEventView(event: event)
                 .environmentObject(eventsViewModel)
