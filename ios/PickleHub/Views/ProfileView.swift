@@ -64,9 +64,12 @@ struct ProfileView: View {
                                             .font(.title)
                                             .fontWeight(.bold)
 
-                                        Text(user.email)
-                                            .font(.body)
-                                            .foregroundColor(.secondary)
+                                        if let bio = user.bio, !bio.isEmpty {
+                                            Text(bio)
+                                                .font(.body)
+                                                .foregroundColor(.secondary)
+                                                .lineLimit(3)
+                                        }
 
                                         if let region = user.region {
                                             HStack {
@@ -133,6 +136,14 @@ struct ProfileView: View {
                                         label: "DUPR シングルス",
                                         value: user.duprSingles != nil ? String(format: "%.3f", user.duprSingles!) : "-"
                                     )
+
+                                    if let myPaddle = user.myPaddle, !myPaddle.isEmpty {
+                                        ProfileInfoRow(
+                                            icon: "sportscourt.fill",
+                                            label: "使用パドル",
+                                            value: myPaddle
+                                        )
+                                    }
 
                                     if let gender = user.gender {
                                         ProfileInfoRow(
