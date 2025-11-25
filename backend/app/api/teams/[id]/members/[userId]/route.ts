@@ -236,7 +236,10 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     // Get user info before deleting
     const leavingUser = await prisma.user.findUnique({
       where: { id: userId },
-      select: { name: true },
+      select: {
+        name: true,
+        nickname: true,
+      },
     });
 
     await prisma.teamMember.delete({
@@ -245,7 +248,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     // Send notification to team owner
     if (leavingUser) {
-      notifyTeamMemberLeft(id, leavingUser.name, team.name).catch((error) => {
+      notifyTeamMemberLeft(id, leavingUser.nickname || leavingUser.name, team.name).catch((error) => {
         console.error('Failed to send team member left notification:', error);
       });
     }

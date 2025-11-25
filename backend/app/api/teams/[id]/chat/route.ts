@@ -171,6 +171,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
           select: {
             id: true,
             name: true,
+            nickname: true,
             profileImage: true,
           },
         },
@@ -178,7 +179,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     });
 
     // Send notification to all team members
-    notifyTeamChatMessage(id, user.name, team.name, body.content).catch(
+    notifyTeamChatMessage(id, user.nickname || user.name, team.name, body.content).catch(
       (error) => {
         console.error('Failed to send team chat message notification:', error);
       }
