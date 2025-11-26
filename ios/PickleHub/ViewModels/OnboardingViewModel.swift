@@ -51,7 +51,7 @@ class OnboardingViewModel: ObservableObject {
                 bio: bio.isEmpty ? nil : bio,
                 region: selectedRegion,
                 pickleballExperience: selectedExperience,
-                gender: selectedGender,
+                gender: selectedGender.isEmpty ? "-" : selectedGender,
                 skillLevel: selectedSkillLevel,
                 duprDoubles: duprDoubles,
                 duprSingles: duprSingles,

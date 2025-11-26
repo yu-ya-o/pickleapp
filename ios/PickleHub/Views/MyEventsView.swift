@@ -13,31 +13,17 @@ struct MyEventsView: View {
     }
 
     var myCreatedEvents: [Event] {
-        let allCreated = eventsViewModel.events.filter { $0.creator.id == authViewModel.currentUser?.id }
-        return filterEventsByTime(allCreated)
+        eventsViewModel.events.filter { $0.creator.id == authViewModel.currentUser?.id }
     }
 
     var myReservedEvents: [Event] {
-        let allReserved = eventsViewModel.events.filter { event in
+        eventsViewModel.events.filter { event in
             event.isUserReserved == true && event.creator.id != authViewModel.currentUser?.id
         }
-        return filterEventsByTime(allReserved)
     }
 
-    private func filterEventsByTime(_ events: [Event]) -> [Event] {
-        let now = Date()
-        switch selectedTab {
-        case .upcoming:
-            return events.filter { event in
-                guard let endDate = event.endDate else { return false }
-                return endDate >= now
-            }
-        case .past:
-            return events.filter { event in
-                guard let endDate = event.endDate else { return false }
-                return endDate < now
-            }
-        }
+    var myTeamEvents: [TeamEvent] {
+        eventsViewModel.teamEvents
     }
 
     var body: some View {
@@ -51,8 +37,15 @@ struct MyEventsView: View {
                 .pickerStyle(.segmented)
                 .padding(.horizontal)
                 .padding(.vertical, 8)
+                .onChange(of: selectedTab) { _, newValue in
+                    Task {
+                        let upcoming = (newValue == .upcoming)
+                        await eventsViewModel.fetchEvents(upcoming: upcoming)
+                        await eventsViewModel.fetchTeamEvents(upcoming: upcoming)
+                    }
+                }
 
-                if myCreatedEvents.isEmpty && myReservedEvents.isEmpty {
+                if myCreatedEvents.isEmpty && myReservedEvents.isEmpty && myTeamEvents.isEmpty {
                     VStack(spacing: Spacing.lg) {
                         Image(systemName: "star.slash")
                             .font(.system(size: 60))
@@ -108,10 +101,29 @@ struct MyEventsView: View {
                                 }
                             }
                         }
+
+                        if !myTeamEvents.isEmpty {
+                            Section(header: Text("参加したチームイベント")) {
+                                ForEach(myTeamEvents) { event in
+                                    ZStack {
+                                        NavigationLink(destination: TeamEventDetailContainerView(teamId: event.teamId, eventId: event.id)) {
+                                            EmptyView()
+                                        }
+                                        .opacity(0)
+
+                                        ModernTeamEventRowView(event: event)
+                                    }
+                                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                    .listRowSeparator(.visible)
+                                }
+                            }
+                        }
                     }
                     .listStyle(.plain)
                     .refreshable {
-                        await eventsViewModel.refreshEvents()
+                        let upcoming = (selectedTab == .upcoming)
+                        await eventsViewModel.fetchEvents(upcoming: upcoming)
+                        await eventsViewModel.fetchTeamEvents(upcoming: upcoming)
                     }
                 }
             }
@@ -121,6 +133,11 @@ struct MyEventsView: View {
                 if let user = selectedUser {
                     UserProfileView(user: user)
                 }
+            }
+            .task {
+                let upcoming = (selectedTab == .upcoming)
+                await eventsViewModel.fetchEvents(upcoming: upcoming)
+                await eventsViewModel.fetchTeamEvents(upcoming: upcoming)
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())

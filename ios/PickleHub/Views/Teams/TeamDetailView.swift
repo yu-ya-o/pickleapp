@@ -139,9 +139,7 @@ struct TeamDetailView: View {
                                 HStack {
                                     Label("\(team.memberCount)人", systemImage: "person.2")
                                     Text("•")
-                                    Text(team.visibility.capitalized)
-                                    Text("•")
-                                    Text("作成日: \(team.formattedCreatedDate)")
+                                    Text(team.isPrivate ? "非公開" : "公開")
                                 }
                                 .font(.caption)
                                 .foregroundColor(.secondary)

@@ -62,14 +62,24 @@ struct TeamMembersView: View {
                                 }
                             }
 
-                            HStack {
-                                Text(member.roleDisplay)
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
+                            // Only show role for current user
+                            if member.user.id == authViewModel.currentUser?.id {
+                                HStack {
+                                    Text(member.roleDisplay)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
 
-                                Text("•")
-                                    .foregroundColor(.secondary)
+                                    Text("•")
+                                        .foregroundColor(.secondary)
 
+                                    if let date = member.joinedDate {
+                                        Text("参加日: \(date, style: .date)")
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                    }
+                                }
+                            } else {
+                                // For other members, only show join date
                                 if let date = member.joinedDate {
                                     Text("参加日: \(date, style: .date)")
                                         .font(.caption)
@@ -80,12 +90,15 @@ struct TeamMembersView: View {
 
                         Spacer()
 
-                        if member.role == "owner" {
-                            Image(systemName: "crown.fill")
-                                .foregroundColor(.yellow)
-                        } else if member.role == "admin" {
-                            Image(systemName: "shield.fill")
-                                .foregroundColor(.orange)
+                        // Only show role icons for current user
+                        if member.user.id == authViewModel.currentUser?.id {
+                            if member.role == "owner" {
+                                Image(systemName: "crown.fill")
+                                    .foregroundColor(.yellow)
+                            } else if member.role == "admin" {
+                                Image(systemName: "shield.fill")
+                                    .foregroundColor(.orange)
+                            }
                         }
                     }
                     .padding(.vertical, 4)

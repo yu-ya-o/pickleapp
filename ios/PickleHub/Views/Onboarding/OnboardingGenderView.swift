@@ -3,7 +3,7 @@ import SwiftUI
 struct OnboardingGenderView: View {
     @ObservedObject var viewModel: OnboardingViewModel
 
-    let genders = ["男性", "女性", "その他", "回答しない"]
+    let genders = ["男性", "女性"]
 
     var body: some View {
         VStack(spacing: Spacing.xl) {
@@ -21,6 +21,13 @@ struct OnboardingGenderView: View {
             Text("性別を\n選択してください")
                 .font(.displayMedium)
                 .fontWeight(.bold)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+
+            // Subtitle
+            Text("スキップ可能です")
+                .font(.bodyLarge)
+                .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
 

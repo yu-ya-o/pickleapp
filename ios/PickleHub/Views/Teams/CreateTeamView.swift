@@ -22,68 +22,57 @@ struct CreateTeamView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("チーム画像")) {
-                    VStack(spacing: 16) {
-                        // Header Image
-                        VStack(spacing: 8) {
-                            Text("ヘッダー画像")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-
-                            if let selectedHeaderImageData, let uiImage = UIImage(data: selectedHeaderImageData) {
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(height: 120)
-                                    .clipped()
-                                    .cornerRadius(8)
-                            } else {
-                                Rectangle()
-                                    .fill(Color(.systemGray6))
-                                    .frame(height: 120)
-                                    .overlay(
-                                        Image(systemName: "photo")
-                                            .font(.largeTitle)
-                                            .foregroundColor(.gray)
-                                    )
-                                    .cornerRadius(8)
-                            }
-
-                            PhotosPicker(selection: $selectedHeaderPhotoItem, matching: .images) {
-                                Label("ヘッダー画像を選択", systemImage: "photo")
-                                    .font(.caption)
-                            }
+                Section(header: Text("チームアイコン")) {
+                    VStack(spacing: 8) {
+                        if let selectedIconImageData, let uiImage = UIImage(data: selectedIconImageData) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 100, height: 100)
+                                .clipShape(Circle())
+                        } else {
+                            Image(systemName: "person.3.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 60, height: 60)
+                                .foregroundColor(.gray)
+                                .frame(width: 100, height: 100)
+                                .background(Color(.systemGray6))
+                                .clipShape(Circle())
                         }
 
-                        Divider()
-
-                        // Icon Image
-                        VStack(spacing: 8) {
-                            Text("アイコン")
+                        PhotosPicker(selection: $selectedIconPhotoItem, matching: .images) {
+                            Label("アイコンを選択", systemImage: "photo")
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                }
 
-                            if let selectedIconImageData, let uiImage = UIImage(data: selectedIconImageData) {
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 100, height: 100)
-                                    .clipShape(Circle())
-                            } else {
-                                Image(systemName: "person.3.fill")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 60, height: 60)
-                                    .foregroundColor(.gray)
-                                    .frame(width: 100, height: 100)
-                                    .background(Color(.systemGray6))
-                                    .clipShape(Circle())
-                            }
+                Section(header: Text("ヘッダー画像")) {
+                    VStack(spacing: 8) {
+                        if let selectedHeaderImageData, let uiImage = UIImage(data: selectedHeaderImageData) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(height: 150)
+                                .clipped()
+                                .cornerRadius(8)
+                        } else {
+                            Rectangle()
+                                .fill(Color(.systemGray6))
+                                .frame(height: 150)
+                                .overlay(
+                                    Image(systemName: "photo")
+                                        .font(.largeTitle)
+                                        .foregroundColor(.gray)
+                                )
+                                .cornerRadius(8)
+                        }
 
-                            PhotosPicker(selection: $selectedIconPhotoItem, matching: .images) {
-                                Label("アイコンを選択", systemImage: "photo")
-                                    .font(.caption)
-                            }
+                        PhotosPicker(selection: $selectedHeaderPhotoItem, matching: .images) {
+                            Label("ヘッダー画像を選択", systemImage: "photo")
+                                .font(.caption)
                         }
                     }
                     .frame(maxWidth: .infinity)
