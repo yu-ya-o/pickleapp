@@ -26,6 +26,11 @@ struct EventDetailView: View {
         event.status == "completed"
     }
 
+    private var isEventPast: Bool {
+        guard let startDate = event.startDate else { return false }
+        return startDate < Date()
+    }
+
     private func formattedTime(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ja_JP")
@@ -334,6 +339,14 @@ struct EventDetailView: View {
                         .background(Color.red)
                         .cornerRadius(12)
                 }
+            } else if isEventPast {
+                Text("開始時間が過ぎました")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.gray)
+                    .cornerRadius(12)
             } else if isClosed {
                 Text("予約受付終了")
                     .font(.headline)
@@ -383,8 +396,8 @@ struct EventDetailView: View {
                 }
             }
 
-            // Edit button (for creator only)
-            if isCreator {
+            // Edit button (for creator only, if not past)
+            if isCreator && !isEventPast {
                 Button(action: {
                     showingEditEvent = true
                 }) {

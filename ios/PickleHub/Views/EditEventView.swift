@@ -28,11 +28,17 @@ struct EditEventView: View {
         _description = State(initialValue: event.description)
         _location = State(initialValue: event.location)
         _region = State(initialValue: event.region ?? "")
+        // Use actual event dates, not current date
         _startDate = State(initialValue: event.startDate ?? Date())
-        _endDate = State(initialValue: event.endDate ?? Date())
+        _endDate = State(initialValue: event.endDate ?? Date().addingTimeInterval(3600))
         _maxParticipants = State(initialValue: event.maxParticipants)
         _skillLevel = State(initialValue: event.skillLevel)
         _priceInput = State(initialValue: event.price != nil ? String(event.price!) : "")
+    }
+
+    var isEventPast: Bool {
+        guard let startDate = event.startDate else { return false }
+        return startDate < Date()
     }
 
     func skillLevelLabel(_ level: String) -> String {
@@ -47,7 +53,22 @@ struct EditEventView: View {
 
     var body: some View {
         NavigationView {
-            Form {
+            if isEventPast {
+                VStack(spacing: 20) {
+                    Image(systemName: "clock.fill")
+                        .font(.system(size: 60))
+                        .foregroundColor(.orange)
+                    Text("開始時間が過ぎたイベントは編集できません")
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                    Button("閉じる") {
+                        dismiss()
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+                .padding()
+            } else {
+                Form {
                 Section(header: Text("イベント詳細")) {
                     TextField("イベントタイトル", text: $title)
                     TextField("説明", text: $description, axis: .vertical)
@@ -66,8 +87,8 @@ struct EditEventView: View {
                 }
 
                 Section(header: Text("日時")) {
-                    DatePicker("開始", selection: $startDate, displayedComponents: [.date, .hourAndMinute])
-                    DatePicker("終了", selection: $endDate, displayedComponents: [.date, .hourAndMinute])
+                    DatePicker("開始", selection: $startDate, in: Date()..., displayedComponents: [.date, .hourAndMinute])
+                    DatePicker("終了", selection: $endDate, in: Date()..., displayedComponents: [.date, .hourAndMinute])
                 }
 
                 Section(header: Text("定員")) {
@@ -125,6 +146,7 @@ struct EditEventView: View {
             } message: {
                 Text(errorMessage)
             }
+        }
         }
     }
 
