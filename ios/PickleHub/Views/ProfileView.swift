@@ -84,14 +84,6 @@ struct ProfileView: View {
                                                 .foregroundColor(.secondary)
                                                 .lineLimit(3)
                                         }
-
-                                        if let region = user.region {
-                                            HStack {
-                                                Label(region, systemImage: "mappin.circle")
-                                                    .font(.caption)
-                                                    .foregroundColor(.secondary)
-                                            }
-                                        }
                                     }
                                 }
                             }
