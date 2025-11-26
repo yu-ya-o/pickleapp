@@ -111,7 +111,7 @@ struct MyEventsView: View {
                                         }
                                         .opacity(0)
 
-                                        ModernTeamEventRowView(event: event)
+                                        TeamEventRowView(event: event)
                                     }
                                     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                                     .listRowSeparator(.visible)
