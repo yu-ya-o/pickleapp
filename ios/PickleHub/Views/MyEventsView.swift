@@ -158,7 +158,7 @@ struct MyEventsView: View {
         Section(header: Text("参加したチームイベント")) {
             ForEach(myTeamEvents) { event in
                 ZStack {
-                    NavigationLink(destination: TeamEventDetailContainerView(teamId: event.teamId, eventId: event.id)) {
+                    NavigationLink(destination: TeamEventDetailContainerView(teamId: event.team.id, eventId: event.id)) {
                         EmptyView()
                     }
                     .opacity(0)
