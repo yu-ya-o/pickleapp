@@ -9,7 +9,7 @@ struct OnboardingPaddleView: View {
             Spacer()
 
             // Icon
-            Image(systemName: "sportscourt.fill")
+            Image(systemName: "tennis.racket")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 80, height: 80)

@@ -135,7 +135,7 @@ struct OnboardingContainerView: View {
         switch currentPage {
         case 0: return !viewModel.nickname.isEmpty
         case 1: return true  // Bio is optional
-        case 2: return !viewModel.selectedGender.isEmpty
+        case 2: return true  // Gender is optional
         case 3: return !viewModel.selectedRegion.isEmpty
         case 4: return !viewModel.selectedExperience.isEmpty
         case 5: return !viewModel.selectedSkillLevel.isEmpty
