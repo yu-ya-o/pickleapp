@@ -34,6 +34,12 @@ export async function POST(request: NextRequest) {
             title: true,
           },
         },
+        teamEvent: {
+          select: {
+            id: true,
+            title: true,
+          },
+        },
       },
     });
 
@@ -60,15 +66,26 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Send notification to event participants and creator
+    // Send notification to event participants and creator (excluding sender)
     if (chatRoom.event) {
       notifyEventChatMessage(
         chatRoom.event.id,
+        user.id,
         user.nickname || user.name,
         chatRoom.event.title,
         body.content
       ).catch((error) => {
         console.error('Failed to send event chat message notification:', error);
+      });
+    } else if (chatRoom.teamEvent) {
+      notifyEventChatMessage(
+        chatRoom.teamEvent.id,
+        user.id,
+        user.nickname || user.name,
+        chatRoom.teamEvent.title,
+        body.content
+      ).catch((error) => {
+        console.error('Failed to send team event chat message notification:', error);
       });
     }
 

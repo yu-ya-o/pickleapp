@@ -181,13 +181,15 @@ export async function notifyTeamJoinResponse(
   });
 }
 
-// 6-7. Event chat message notification
+// 6-7. Event chat message notification (supports both Event and TeamEvent)
 export async function notifyEventChatMessage(
   eventId: string,
+  senderId: string,
   senderName: string,
   eventTitle: string,
   messagePreview: string
 ) {
+  // Try regular event first
   const event = await prisma.event.findUnique({
     where: { id: eventId },
     include: {
@@ -199,12 +201,36 @@ export async function notifyEventChatMessage(
     },
   });
 
-  if (!event) return;
-
-  // Notify event creator and all participants (except the sender)
   const userIds = new Set<string>();
-  userIds.add(event.creator.id);
-  event.reservations.forEach((r) => userIds.add(r.userId));
+
+  if (event) {
+    // Regular event: notify creator and participants
+    userIds.add(event.creator.id);
+    event.reservations.forEach((r) => userIds.add(r.userId));
+  } else {
+    // Try team event
+    const teamEvent = await prisma.teamEvent.findUnique({
+      where: { id: eventId },
+      include: {
+        creator: { select: { id: true } },
+        participants: {
+          where: { status: 'confirmed' },
+          select: { userId: true },
+        },
+      },
+    });
+
+    if (!teamEvent) return;
+
+    // Team event: notify creator and participants
+    userIds.add(teamEvent.creator.id);
+    teamEvent.participants.forEach((p) => userIds.add(p.userId));
+  }
+
+  // Remove sender from notification list
+  userIds.delete(senderId);
+
+  if (userIds.size === 0) return;
 
   const notifications = Array.from(userIds).map((userId) => ({
     userId,
@@ -220,6 +246,7 @@ export async function notifyEventChatMessage(
 // 8. Team chat message notification
 export async function notifyTeamChatMessage(
   teamId: string,
+  senderId: string,
   senderName: string,
   teamName: string,
   messagePreview: string
@@ -233,13 +260,16 @@ export async function notifyTeamChatMessage(
 
   if (!team) return;
 
-  const notifications = team.members.map((member) => ({
-    userId: member.userId,
-    type: NotificationType.TEAM_CHAT_MESSAGE,
-    title: 'チームチャット',
-    message: `${senderName}: ${messagePreview.substring(0, 50)}...`,
-    relatedId: teamId,
-  }));
+  // Exclude sender from notifications
+  const notifications = team.members
+    .filter((member) => member.userId !== senderId)
+    .map((member) => ({
+      userId: member.userId,
+      type: NotificationType.TEAM_CHAT_MESSAGE,
+      title: 'チームチャット',
+      message: `${senderName}: ${messagePreview.substring(0, 50)}...`,
+      relatedId: teamId,
+    }));
 
   await createBulkNotifications(notifications);
 }
