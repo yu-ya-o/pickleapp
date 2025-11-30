@@ -270,6 +270,9 @@ struct ProfileEditView: View {
 
     private func saveProfile() {
         Task {
+            // Start loading indicator
+            viewModel.isLoading = true
+
             // Upload image first if selected
             var newImageURL: String? = nil
             if let imageData = selectedImageData {
@@ -337,7 +340,6 @@ class ProfileEditViewModel: ObservableObject {
     }
 
     func updateProfile(nickname: String, bio: String?, region: String, pickleballExperience: String, gender: String, skillLevel: String, duprDoubles: Double?, duprSingles: Double?, myPaddle: String?, profileImage: String?, instagramUrl: String?, twitterUrl: String?, tiktokUrl: String?, lineUrl: String?) async {
-        isLoading = true
         errorMessage = nil
 
         do {
