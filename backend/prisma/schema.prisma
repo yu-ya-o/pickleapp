@@ -107,10 +107,12 @@ model ChatRoom {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
-  // Relations
-  eventId   String    @unique
-  event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  messages  Message[]
+  // Relations - Either eventId or teamEventId should be set
+  eventId     String?    @unique
+  event       Event?     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  teamEventId String?    @unique
+  teamEvent   TeamEvent? @relation(fields: [teamEventId], references: [id], onDelete: Cascade)
+  messages    Message[]
 }
 
 model Message {
@@ -239,6 +241,7 @@ model TeamEvent {
   createdBy   String
   creator     User                    @relation("TeamEventCreator", fields: [createdBy], references: [id], onDelete: Cascade)
   participants TeamEventParticipant[]
+  chatRoom    ChatRoom?
 
   @@index([teamId])
   @@index([createdBy])

@@ -12,7 +12,7 @@ interface RouteParams {
 
 /**
  * GET /api/chat/rooms/[eventId]
- * Get chat room and messages for an event
+ * Get chat room and messages for an event (supports both Event and TeamEvent)
  */
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
@@ -24,18 +24,27 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       throw new UnauthorizedError('Authentication required');
     }
 
-    // Check if event exists
+    // Check if regular event exists
     const event = await prisma.event.findUnique({
       where: { id: eventId },
     });
 
-    if (!event) {
+    // If not found, check if team event exists
+    const teamEvent = !event
+      ? await prisma.teamEvent.findUnique({
+          where: { id: eventId },
+        })
+      : null;
+
+    if (!event && !teamEvent) {
       throw new NotFoundError('Event not found');
     }
 
+    const isTeamEvent = !!teamEvent;
+
     // Get or create chat room
-    let chatRoom = await prisma.chatRoom.findUnique({
-      where: { eventId },
+    let chatRoom = await prisma.chatRoom.findFirst({
+      where: isTeamEvent ? { teamEventId: eventId } : { eventId },
       include: {
         messages: {
           include: {
@@ -58,9 +67,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     if (!chatRoom) {
       chatRoom = await prisma.chatRoom.create({
-        data: {
-          eventId,
-        },
+        data: isTeamEvent ? { teamEventId: eventId } : { eventId },
         include: {
           messages: {
             include: {
@@ -68,6 +75,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
                 select: {
                   id: true,
                   name: true,
+                  nickname: true,
                   profileImage: true,
                 },
               },
@@ -86,7 +94,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     const response: ChatRoomResponse = {
       id: chatRoom.id,
-      eventId: chatRoom.eventId,
+      eventId: chatRoom.eventId || chatRoom.teamEventId || eventId,
       createdAt: chatRoom.createdAt.toISOString(),
       messages,
     };

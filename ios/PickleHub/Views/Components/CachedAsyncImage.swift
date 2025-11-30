@@ -88,6 +88,7 @@ struct CachedAsyncImagePhase<Content: View>: View {
 
     @State private var phase: AsyncImagePhase = .empty
     @State private var isLoading = false
+    @State private var currentURL: URL?
 
     init(url: URL?, @ViewBuilder content: @escaping (AsyncImagePhase) -> Content) {
         self.url = url
@@ -99,10 +100,20 @@ struct CachedAsyncImagePhase<Content: View>: View {
             .onAppear {
                 loadImage()
             }
+            .onChange(of: url) { _, newURL in
+                // URLが変更された場合、画像を再読み込み
+                if newURL != currentURL {
+                    phase = .empty
+                    isLoading = false
+                    loadImage()
+                }
+            }
     }
 
     private func loadImage() {
         guard let url = url, !isLoading else { return }
+
+        currentURL = url
 
         // メモリキャッシュから取得
         if let cachedImage = ImageCache.shared.getFromMemory(url: url) {
