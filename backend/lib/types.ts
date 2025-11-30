@@ -169,6 +169,7 @@ export interface MessageResponse {
   user: {
     id: string;
     name: string;
+    nickname: string | null;
     profileImage: string | null;
   };
 }
