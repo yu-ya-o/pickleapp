@@ -43,6 +43,11 @@ export async function GET(request: NextRequest) {
       where.startTime = {
         gte: new Date(),
       };
+    } else {
+      // Past events: startTime < now
+      where.startTime = {
+        lt: new Date(),
+      };
     }
 
     // Get all events for these teams

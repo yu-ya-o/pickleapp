@@ -13,7 +13,6 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const statusParam = searchParams.get('status');
     const userId = searchParams.get('userId'); // Filter by creator
-    const upcoming = searchParams.get('upcoming') === 'true';
 
     const where: any = {};
 
@@ -21,11 +20,17 @@ export async function GET(request: NextRequest) {
       where.creatorId = userId;
     }
 
-    // Filter logic: Show active events OR closed events that haven't passed yet
-    if (upcoming) {
-      // For upcoming: show all events in the future (active or completed)
+    // Filter logic based on upcoming parameter
+    const upcomingParam = searchParams.get('upcoming');
+    if (upcomingParam === 'true') {
+      // For upcoming: show all events in the future
       where.startTime = {
         gte: new Date(),
+      };
+    } else if (upcomingParam === 'false') {
+      // For past: show all events in the past
+      where.startTime = {
+        lt: new Date(),
       };
     } else if (statusParam) {
       // If specific status is requested, use it
