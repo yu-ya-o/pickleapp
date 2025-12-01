@@ -58,6 +58,10 @@ export async function PATCH(request: NextRequest) {
 
     const body: UpdateProfileRequest = await request.json();
 
+    // Debug: log received body
+    console.log('📝 Profile update request body:', JSON.stringify(body, null, 2));
+    console.log('📝 ageGroup in body:', body.ageGroup, 'type:', typeof body.ageGroup);
+
     // Check if this update completes the profile
     // Note: ageGroup is not required for isProfileComplete to maintain backward compatibility
     // with existing users who don't have ageGroup set
@@ -69,6 +73,9 @@ export async function PATCH(request: NextRequest) {
       (body.skillLevel || user.skillLevel)
     );
 
+    const ageGroupToSave = body.ageGroup !== undefined ? body.ageGroup : user.ageGroup;
+    console.log('📝 ageGroup to save:', ageGroupToSave);
+
     const updatedUser = await prisma.user.update({
       where: { id: user.id },
       data: {
@@ -77,7 +84,7 @@ export async function PATCH(request: NextRequest) {
         region: body.region !== undefined ? body.region : user.region,
         pickleballExperience: body.pickleballExperience !== undefined ? body.pickleballExperience : user.pickleballExperience,
         gender: body.gender !== undefined ? body.gender : user.gender,
-        ageGroup: body.ageGroup !== undefined ? body.ageGroup : user.ageGroup,
+        ageGroup: ageGroupToSave,
         skillLevel: body.skillLevel !== undefined ? body.skillLevel : user.skillLevel,
         duprDoubles: body.duprDoubles !== undefined ? body.duprDoubles : user.duprDoubles,
         duprSingles: body.duprSingles !== undefined ? body.duprSingles : user.duprSingles,
@@ -86,6 +93,8 @@ export async function PATCH(request: NextRequest) {
         isProfileComplete,
       },
     });
+
+    console.log('📝 Updated user ageGroup:', updatedUser.ageGroup);
 
     const response: UserProfileResponse = {
       id: updatedUser.id,
