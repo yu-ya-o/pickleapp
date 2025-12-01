@@ -39,6 +39,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
                 region: true,
                 pickleballExperience: true,
                 gender: true,
+                ageGroup: true,
                 skillLevel: true,
                 isProfileComplete: true,
               },
