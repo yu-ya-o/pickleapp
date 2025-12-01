@@ -354,6 +354,9 @@ class ProfileEditViewModel: ObservableObject {
     func updateProfile(nickname: String, bio: String?, region: String, pickleballExperience: String, gender: String, ageGroup: String, skillLevel: String, duprDoubles: Double?, duprSingles: Double?, myPaddle: String?, profileImage: String?, instagramUrl: String?, twitterUrl: String?, tiktokUrl: String?, lineUrl: String?) async {
         errorMessage = nil
 
+        // Debug: print ageGroup being sent
+        print("📝 ProfileEdit ageGroup: \(ageGroup)")
+
         do {
             let request = UpdateProfileRequest(
                 nickname: nickname,
@@ -373,7 +376,14 @@ class ProfileEditViewModel: ObservableObject {
                 lineUrl: lineUrl
             )
 
+            // Debug: print request JSON
+            if let jsonData = try? JSONEncoder().encode(request),
+               let jsonString = String(data: jsonData, encoding: .utf8) {
+                print("📝 ProfileEdit Request JSON: \(jsonString)")
+            }
+
             let user = try await apiClient.updateProfile(request: request)
+            print("✅ ProfileEdit updated successfully, ageGroup: \(user.ageGroup ?? "nil")")
             updatedUser = user
             isLoading = false
         } catch {
