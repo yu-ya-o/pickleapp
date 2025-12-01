@@ -6,6 +6,7 @@ class OnboardingViewModel: ObservableObject {
     @Published var nickname = ""
     @Published var bio = ""
     @Published var selectedGender = ""
+    @Published var selectedAgeGroup = ""
     @Published var selectedRegion = ""
     @Published var selectedExperience = ""
     @Published var selectedSkillLevel = ""
@@ -51,7 +52,8 @@ class OnboardingViewModel: ObservableObject {
                 bio: bio.isEmpty ? nil : bio,
                 region: selectedRegion,
                 pickleballExperience: selectedExperience,
-                gender: selectedGender.isEmpty ? "-" : selectedGender,
+                gender: selectedGender,
+                ageGroup: selectedAgeGroup,
                 skillLevel: selectedSkillLevel,
                 duprDoubles: duprDoubles,
                 duprSingles: duprSingles,

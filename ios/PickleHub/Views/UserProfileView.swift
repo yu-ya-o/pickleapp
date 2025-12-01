@@ -115,6 +115,14 @@ struct UserProfileView: View {
                                 value: gender
                             )
                         }
+
+                        if let ageGroup = user.ageGroup {
+                            ProfileInfoRow(
+                                icon: "calendar.circle.fill",
+                                label: "年代",
+                                value: ageGroup
+                            )
+                        }
                     }
                     .padding(Spacing.md)
                     .background(
@@ -301,7 +309,8 @@ class UserProfileViewModel: ObservableObject {
         bio: "ピックルボール歴1年です。楽しく練習できる仲間を募集しています！",
         region: "東京都",
         pickleballExperience: "1-2 years",
-        gender: "Male",
+        gender: "男性",
+        ageGroup: "30代",
         skillLevel: "intermediate",
         duprDoubles: 4.500,
         duprSingles: 4.250,

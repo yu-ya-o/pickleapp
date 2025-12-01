@@ -10,6 +10,7 @@ struct User: Codable, Identifiable, Hashable {
     let region: String?
     let pickleballExperience: String?
     let gender: String?
+    let ageGroup: String?
     let skillLevel: String?
     let duprDoubles: Double?
     let duprSingles: Double?
@@ -61,6 +62,7 @@ struct UpdateProfileRequest: Codable {
     let region: String?
     let pickleballExperience: String?
     let gender: String?
+    let ageGroup: String?
     let skillLevel: String?
     let duprDoubles: Double?
     let duprSingles: Double?
@@ -76,6 +78,7 @@ struct UpdateProfileRequest: Codable {
          region: String? = nil,
          pickleballExperience: String? = nil,
          gender: String? = nil,
+         ageGroup: String? = nil,
          skillLevel: String? = nil,
          duprDoubles: Double? = nil,
          duprSingles: Double? = nil,
@@ -90,6 +93,7 @@ struct UpdateProfileRequest: Codable {
         self.region = region
         self.pickleballExperience = pickleballExperience
         self.gender = gender
+        self.ageGroup = ageGroup
         self.skillLevel = skillLevel
         self.duprDoubles = duprDoubles
         self.duprSingles = duprSingles

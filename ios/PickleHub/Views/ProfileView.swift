@@ -144,6 +144,14 @@ struct ProfileView: View {
                                             value: gender
                                         )
                                     }
+
+                                    if let ageGroup = user.ageGroup {
+                                        ProfileInfoRow(
+                                            icon: "calendar.circle.fill",
+                                            label: "年代",
+                                            value: ageGroup
+                                        )
+                                    }
                                 }
                                 .padding(Spacing.md)
                                 .background(
