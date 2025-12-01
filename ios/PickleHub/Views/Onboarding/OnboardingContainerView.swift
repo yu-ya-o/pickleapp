@@ -57,6 +57,13 @@ struct OnboardingContainerView: View {
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .animation(.spring(response: 0.3, dampingFraction: 0.8), value: currentPage)
+                .onChange(of: currentPage) { _, newPage in
+                    // 入力不要なページではキーボードを閉じる
+                    let pagesWithoutKeyboard = [2, 4, 5, 8] // Gender, Experience, SkillLevel, ProfileImage
+                    if pagesWithoutKeyboard.contains(newPage) {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    }
+                }
 
                 // Navigation Buttons
                 HStack(spacing: Spacing.md) {
