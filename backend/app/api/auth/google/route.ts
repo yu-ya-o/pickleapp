@@ -45,6 +45,10 @@ export async function POST(request: NextRequest) {
         duprSingles: user.duprSingles,
         myPaddle: user.myPaddle,
         isProfileComplete: user.isProfileComplete,
+        instagramUrl: user.instagramUrl,
+        twitterUrl: user.twitterUrl,
+        tiktokUrl: user.tiktokUrl,
+        lineUrl: user.lineUrl,
       },
       token,
     };
