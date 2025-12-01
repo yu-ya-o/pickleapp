@@ -33,10 +33,6 @@ export async function GET(request: NextRequest) {
       duprSingles: user.duprSingles,
       myPaddle: user.myPaddle,
       isProfileComplete: user.isProfileComplete,
-      instagramUrl: user.instagramUrl,
-      twitterUrl: user.twitterUrl,
-      tiktokUrl: user.tiktokUrl,
-      lineUrl: user.lineUrl,
       createdAt: user.createdAt.toISOString(),
       updatedAt: user.updatedAt.toISOString(),
     };
@@ -87,10 +83,6 @@ export async function PATCH(request: NextRequest) {
         duprSingles: body.duprSingles !== undefined ? body.duprSingles : user.duprSingles,
         myPaddle: body.myPaddle !== undefined ? body.myPaddle : user.myPaddle,
         profileImage: body.profileImage !== undefined ? (body.profileImage || null) : user.profileImage,
-        instagramUrl: body.instagramUrl !== undefined ? body.instagramUrl : user.instagramUrl,
-        twitterUrl: body.twitterUrl !== undefined ? body.twitterUrl : user.twitterUrl,
-        tiktokUrl: body.tiktokUrl !== undefined ? body.tiktokUrl : user.tiktokUrl,
-        lineUrl: body.lineUrl !== undefined ? body.lineUrl : user.lineUrl,
         isProfileComplete,
       },
     });
@@ -111,10 +103,6 @@ export async function PATCH(request: NextRequest) {
       duprSingles: updatedUser.duprSingles,
       myPaddle: updatedUser.myPaddle,
       isProfileComplete: updatedUser.isProfileComplete,
-      instagramUrl: updatedUser.instagramUrl,
-      twitterUrl: updatedUser.twitterUrl,
-      tiktokUrl: updatedUser.tiktokUrl,
-      lineUrl: updatedUser.lineUrl,
       createdAt: updatedUser.createdAt.toISOString(),
       updatedAt: updatedUser.updatedAt.toISOString(),
     };

@@ -22,10 +22,6 @@ export interface GoogleSignInResponse {
     duprSingles: number | null;
     myPaddle: string | null;
     isProfileComplete: boolean;
-    instagramUrl: string | null;
-    twitterUrl: string | null;
-    tiktokUrl: string | null;
-    lineUrl: string | null;
   };
   token: string; // JWT or session token
 }
@@ -54,10 +50,6 @@ export interface AppleSignInResponse {
     duprSingles: number | null;
     myPaddle: string | null;
     isProfileComplete: boolean;
-    instagramUrl: string | null;
-    twitterUrl: string | null;
-    tiktokUrl: string | null;
-    lineUrl: string | null;
   };
   token: string; // JWT or session token
 }
@@ -75,10 +67,6 @@ export interface UpdateProfileRequest {
   duprSingles?: number;
   myPaddle?: string;
   profileImage?: string;
-  instagramUrl?: string;
-  twitterUrl?: string;
-  tiktokUrl?: string;
-  lineUrl?: string;
 }
 
 export interface UserProfileResponse {
@@ -97,10 +85,6 @@ export interface UserProfileResponse {
   duprSingles: number | null;
   myPaddle: string | null;
   isProfileComplete: boolean;
-  instagramUrl: string | null;
-  twitterUrl: string | null;
-  tiktokUrl: string | null;
-  lineUrl: string | null;
   createdAt: string;
   updatedAt: string;
 }
