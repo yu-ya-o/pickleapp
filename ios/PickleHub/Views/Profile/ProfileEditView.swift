@@ -11,6 +11,7 @@ struct ProfileEditView: View {
     @State private var selectedRegion: String
     @State private var selectedExperience: String
     @State private var selectedGender: String
+    @State private var selectedAgeGroup: String
     @State private var selectedSkillLevel: String
     @State private var duprDoublesText: String
     @State private var duprSinglesText: String
@@ -25,7 +26,8 @@ struct ProfileEditView: View {
 
     let regions = Prefectures.all
     let experiences = ["6ヶ月未満", "6ヶ月〜1年", "1〜2年", "2〜3年", "3年以上"]
-    let genders = ["男性", "女性", "その他", "回答しない"]
+    let genders = ["男性", "女性", "回答しない"]
+    let ageGroups = ["10代", "20代", "30代", "40代", "50代", "60代", "70代", "80代", "90代"]
     let skillLevels = ["初心者", "中級者", "上級者"]
 
     init(user: User) {
@@ -34,6 +36,7 @@ struct ProfileEditView: View {
         _selectedRegion = State(initialValue: user.region ?? "")
         _selectedExperience = State(initialValue: user.pickleballExperience ?? "")
         _selectedGender = State(initialValue: user.gender ?? "")
+        _selectedAgeGroup = State(initialValue: user.ageGroup ?? "")
         _selectedSkillLevel = State(initialValue: user.skillLevel ?? "")
         _duprDoublesText = State(initialValue: user.duprDoubles != nil ? String(format: "%.3f", user.duprDoubles!) : "")
         _duprSinglesText = State(initialValue: user.duprSingles != nil ? String(format: "%.3f", user.duprSingles!) : "")
@@ -192,6 +195,13 @@ struct ProfileEditView: View {
                             Text(gender).tag(gender)
                         }
                     }
+
+                    Picker("年代", selection: $selectedAgeGroup) {
+                        Text("選択してください").tag("")
+                        ForEach(ageGroups, id: \.self) { ageGroup in
+                            Text(ageGroup).tag(ageGroup)
+                        }
+                    }
                 }
 
                 Section {
@@ -240,6 +250,7 @@ struct ProfileEditView: View {
         !selectedRegion.isEmpty &&
         !selectedExperience.isEmpty &&
         !selectedGender.isEmpty &&
+        !selectedAgeGroup.isEmpty &&
         !selectedSkillLevel.isEmpty
     }
 
@@ -295,6 +306,7 @@ struct ProfileEditView: View {
                 region: selectedRegion,
                 pickleballExperience: selectedExperience,
                 gender: selectedGender,
+                ageGroup: selectedAgeGroup,
                 skillLevel: selectedSkillLevel,
                 duprDoubles: duprDoubles,
                 duprSingles: duprSingles,
@@ -339,7 +351,7 @@ class ProfileEditViewModel: ObservableObject {
         }
     }
 
-    func updateProfile(nickname: String, bio: String?, region: String, pickleballExperience: String, gender: String, skillLevel: String, duprDoubles: Double?, duprSingles: Double?, myPaddle: String?, profileImage: String?, instagramUrl: String?, twitterUrl: String?, tiktokUrl: String?, lineUrl: String?) async {
+    func updateProfile(nickname: String, bio: String?, region: String, pickleballExperience: String, gender: String, ageGroup: String, skillLevel: String, duprDoubles: Double?, duprSingles: Double?, myPaddle: String?, profileImage: String?, instagramUrl: String?, twitterUrl: String?, tiktokUrl: String?, lineUrl: String?) async {
         errorMessage = nil
 
         do {
@@ -349,6 +361,7 @@ class ProfileEditViewModel: ObservableObject {
                 region: region,
                 pickleballExperience: pickleballExperience,
                 gender: gender,
+                ageGroup: ageGroup,
                 skillLevel: skillLevel,
                 duprDoubles: duprDoubles,
                 duprSingles: duprSingles,

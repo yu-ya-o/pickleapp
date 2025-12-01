@@ -8,7 +8,7 @@ struct OnboardingContainerView: View {
     @State private var currentPage = 0
     @State private var dragOffset: CGFloat = 0
 
-    private let totalPages = 9
+    private let totalPages = 10
 
     var body: some View {
         ZStack {
@@ -37,29 +37,32 @@ struct OnboardingContainerView: View {
                     OnboardingGenderView(viewModel: viewModel)
                         .tag(2)
 
-                    OnboardingRegionView(viewModel: viewModel)
+                    OnboardingAgeGroupView(viewModel: viewModel)
                         .tag(3)
 
-                    OnboardingExperienceView(viewModel: viewModel)
+                    OnboardingRegionView(viewModel: viewModel)
                         .tag(4)
 
-                    OnboardingSkillLevelView(viewModel: viewModel)
+                    OnboardingExperienceView(viewModel: viewModel)
                         .tag(5)
 
-                    OnboardingDUPRView(viewModel: viewModel)
+                    OnboardingSkillLevelView(viewModel: viewModel)
                         .tag(6)
 
-                    OnboardingPaddleView(viewModel: viewModel)
+                    OnboardingDUPRView(viewModel: viewModel)
                         .tag(7)
 
-                    OnboardingProfileImageView(viewModel: viewModel)
+                    OnboardingPaddleView(viewModel: viewModel)
                         .tag(8)
+
+                    OnboardingProfileImageView(viewModel: viewModel)
+                        .tag(9)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .animation(.spring(response: 0.3, dampingFraction: 0.8), value: currentPage)
                 .onChange(of: currentPage) { _, newPage in
                     // 入力不要なページではキーボードを閉じる
-                    let pagesWithoutKeyboard = [2, 4, 5, 8] // Gender, Experience, SkillLevel, ProfileImage
+                    let pagesWithoutKeyboard = [2, 3, 5, 6, 9] // Gender, AgeGroup, Experience, SkillLevel, ProfileImage
                     if pagesWithoutKeyboard.contains(newPage) {
                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     }
@@ -142,13 +145,14 @@ struct OnboardingContainerView: View {
         switch currentPage {
         case 0: return !viewModel.nickname.isEmpty
         case 1: return true  // Bio is optional
-        case 2: return true  // Gender is optional
-        case 3: return !viewModel.selectedRegion.isEmpty
-        case 4: return !viewModel.selectedExperience.isEmpty
-        case 5: return !viewModel.selectedSkillLevel.isEmpty
-        case 6: return true  // DUPR is optional
-        case 7: return true  // Paddle is optional
-        case 8: return true  // Profile image is optional
+        case 2: return !viewModel.selectedGender.isEmpty  // Gender is required
+        case 3: return !viewModel.selectedAgeGroup.isEmpty  // AgeGroup is required
+        case 4: return !viewModel.selectedRegion.isEmpty
+        case 5: return !viewModel.selectedExperience.isEmpty
+        case 6: return !viewModel.selectedSkillLevel.isEmpty
+        case 7: return true  // DUPR is optional
+        case 8: return true  // Paddle is optional
+        case 9: return true  // Profile image is optional
         default: return false
         }
     }
