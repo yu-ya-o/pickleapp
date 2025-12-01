@@ -59,12 +59,13 @@ export async function PATCH(request: NextRequest) {
     const body: UpdateProfileRequest = await request.json();
 
     // Check if this update completes the profile
+    // Note: ageGroup is not required for isProfileComplete to maintain backward compatibility
+    // with existing users who don't have ageGroup set
     const isProfileComplete = Boolean(
       (body.nickname || user.nickname) &&
       (body.region || user.region) &&
       (body.pickleballExperience || user.pickleballExperience) &&
       (body.gender || user.gender) &&
-      (body.ageGroup || user.ageGroup) &&
       (body.skillLevel || user.skillLevel)
     );
 
