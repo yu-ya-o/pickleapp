@@ -22,7 +22,8 @@ model User {
   bio                   String?   // 自己紹介文
   region                String?
   pickleballExperience  String?   // e.g., "6ヶ月", "1年", "3年以上"
-  gender                String?   // "male", "female", "other", "prefer_not_to_say"
+  gender                String?   // "男性", "女性", "回答しない"
+  ageGroup              String?   // "10代", "20代", ..., "90代"
   skillLevel            String?   // "beginner", "intermediate", "advanced"
   duprDoubles           Float?    // DUPR rating for doubles (up to 3 decimal places)
   duprSingles           Float?    // DUPR rating for singles (up to 3 decimal places)

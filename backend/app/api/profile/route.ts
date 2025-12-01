@@ -27,6 +27,7 @@ export async function GET(request: NextRequest) {
       region: user.region,
       pickleballExperience: user.pickleballExperience,
       gender: user.gender,
+      ageGroup: user.ageGroup,
       skillLevel: user.skillLevel,
       duprDoubles: user.duprDoubles,
       duprSingles: user.duprSingles,
@@ -63,6 +64,7 @@ export async function PATCH(request: NextRequest) {
       (body.region || user.region) &&
       (body.pickleballExperience || user.pickleballExperience) &&
       (body.gender || user.gender) &&
+      (body.ageGroup || user.ageGroup) &&
       (body.skillLevel || user.skillLevel)
     );
 
@@ -74,6 +76,7 @@ export async function PATCH(request: NextRequest) {
         region: body.region !== undefined ? body.region : user.region,
         pickleballExperience: body.pickleballExperience !== undefined ? body.pickleballExperience : user.pickleballExperience,
         gender: body.gender !== undefined ? body.gender : user.gender,
+        ageGroup: body.ageGroup !== undefined ? body.ageGroup : user.ageGroup,
         skillLevel: body.skillLevel !== undefined ? body.skillLevel : user.skillLevel,
         duprDoubles: body.duprDoubles !== undefined ? body.duprDoubles : user.duprDoubles,
         duprSingles: body.duprSingles !== undefined ? body.duprSingles : user.duprSingles,
@@ -93,6 +96,7 @@ export async function PATCH(request: NextRequest) {
       region: updatedUser.region,
       pickleballExperience: updatedUser.pickleballExperience,
       gender: updatedUser.gender,
+      ageGroup: updatedUser.ageGroup,
       skillLevel: updatedUser.skillLevel,
       duprDoubles: updatedUser.duprDoubles,
       duprSingles: updatedUser.duprSingles,

@@ -16,6 +16,7 @@ export interface GoogleSignInResponse {
     region: string | null;
     pickleballExperience: string | null;
     gender: string | null;
+    ageGroup: string | null;
     skillLevel: string | null;
     duprDoubles: number | null;
     duprSingles: number | null;
@@ -43,6 +44,7 @@ export interface AppleSignInResponse {
     region: string | null;
     pickleballExperience: string | null;
     gender: string | null;
+    ageGroup: string | null;
     skillLevel: string | null;
     duprDoubles: number | null;
     duprSingles: number | null;
@@ -59,6 +61,7 @@ export interface UpdateProfileRequest {
   region?: string;
   pickleballExperience?: string;
   gender?: string;
+  ageGroup?: string;
   skillLevel?: string;
   duprDoubles?: number;
   duprSingles?: number;
@@ -76,6 +79,7 @@ export interface UserProfileResponse {
   region: string | null;
   pickleballExperience: string | null;
   gender: string | null;
+  ageGroup: string | null;
   skillLevel: string | null;
   duprDoubles: number | null;
   duprSingles: number | null;

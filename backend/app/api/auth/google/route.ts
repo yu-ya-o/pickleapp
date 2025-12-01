@@ -39,6 +39,7 @@ export async function POST(request: NextRequest) {
         region: user.region,
         pickleballExperience: user.pickleballExperience,
         gender: user.gender,
+        ageGroup: user.ageGroup,
         skillLevel: user.skillLevel,
         duprDoubles: user.duprDoubles,
         duprSingles: user.duprSingles,
