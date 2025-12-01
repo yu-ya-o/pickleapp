@@ -67,10 +67,13 @@ struct ProfileView: View {
                                             .fontWeight(.bold)
 
                                         if let bio = user.bio, !bio.isEmpty {
-                                            Text(bio)
-                                                .font(.body)
-                                                .foregroundColor(.secondary)
-                                                .lineLimit(3)
+                                            ExpandableTextView(
+                                                text: bio,
+                                                lineLimit: 3,
+                                                font: .body,
+                                                foregroundColor: .secondary,
+                                                alignment: .leading
+                                            )
                                         }
                                     }
                                 }
