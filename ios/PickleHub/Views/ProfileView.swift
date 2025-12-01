@@ -147,7 +147,7 @@ struct ProfileView: View {
 
                                     if let ageGroup = user.ageGroup {
                                         ProfileInfoRow(
-                                            icon: "calendar.circle.fill",
+                                            icon: "number.circle.fill",
                                             label: "年代",
                                             value: ageGroup
                                         )

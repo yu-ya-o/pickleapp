@@ -61,13 +61,6 @@ class OnboardingViewModel: ObservableObject {
                 profileImage: finalProfileImageURL
             )
 
-            // Debug: print what we're sending
-            print("📝 selectedAgeGroup: \(selectedAgeGroup)")
-            if let jsonData = try? JSONEncoder().encode(request),
-               let jsonString = String(data: jsonData, encoding: .utf8) {
-                print("📝 Request JSON: \(jsonString)")
-            }
-
             let user = try await apiClient.updateProfile(request: request)
             print("✅ Profile updated successfully")
             updatedUser = user
