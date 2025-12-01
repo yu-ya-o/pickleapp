@@ -9,7 +9,7 @@ struct OnboardingAgeGroupView: View {
         ScrollView {
             VStack(spacing: Spacing.xl) {
                 // Icon
-                Image(systemName: "calendar.circle.fill")
+                Image(systemName: "number.circle.fill")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 80, height: 80)
