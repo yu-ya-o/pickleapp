@@ -209,6 +209,25 @@ struct ProfileView: View {
                                     .cornerRadius(12)
                                 }
 
+                                // Contact / お問い合わせ
+                                Button(action: {
+                                    if let url = URL(string: "https://docs.google.com/forms/d/e/1FAIpQLScti-2AT0gb4oM7gpdvLuKSNYQ9ruulbHXPqcEJraR9BTIRkQ/viewform?usp=header") {
+                                        UIApplication.shared.open(url)
+                                    }
+                                }) {
+                                    HStack {
+                                        Image(systemName: "envelope")
+                                        Text("お問い合わせ")
+                                        Spacer()
+                                        Image(systemName: "arrow.up.right.square")
+                                            .font(.caption)
+                                    }
+                                    .foregroundColor(.primary)
+                                    .padding()
+                                    .background(Color(.systemGray6))
+                                    .cornerRadius(12)
+                                }
+
                                 // Delete Account
                                 Button(action: { showingDeleteAccountAlert = true }) {
                                     HStack {
