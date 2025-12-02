@@ -1,5 +1,22 @@
 # Render Blueprint for PickleHub Backend
 services:
+  # Web Frontend (Static Site)
+  - type: web
+    name: picklehub-web
+    env: static
+    region: oregon
+    plan: free
+    rootDir: web
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_GOOGLE_CLIENT_ID
+        sync: false
+
   # Next.js API Server
   - type: web
     name: picklehub-api
@@ -15,6 +32,8 @@ services:
       - key: DATABASE_URL
         sync: false
       - key: GOOGLE_CLIENT_ID_IOS
+        sync: false
+      - key: GOOGLE_CLIENT_ID_WEB
         sync: false
       - key: NEXT_PUBLIC_API_URL
         sync: false
