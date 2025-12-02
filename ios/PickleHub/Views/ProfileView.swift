@@ -196,19 +196,6 @@ struct ProfileView: View {
                                     .cornerRadius(12)
                                 }
 
-                                // Sign Out
-                                Button(action: { showingSignOutAlert = true }) {
-                                    HStack {
-                                        Spacer()
-                                        Text("ログアウト")
-                                            .foregroundColor(.red)
-                                        Spacer()
-                                    }
-                                    .padding()
-                                    .background(Color.red.opacity(0.1))
-                                    .cornerRadius(12)
-                                }
-
                                 // Contact / お問い合わせ
                                 Button(action: {
                                     if let url = URL(string: "https://docs.google.com/forms/d/e/1FAIpQLScti-2AT0gb4oM7gpdvLuKSNYQ9ruulbHXPqcEJraR9BTIRkQ/viewform?usp=header") {
@@ -225,6 +212,19 @@ struct ProfileView: View {
                                     .foregroundColor(.primary)
                                     .padding()
                                     .background(Color(.systemGray6))
+                                    .cornerRadius(12)
+                                }
+
+                                // Sign Out
+                                Button(action: { showingSignOutAlert = true }) {
+                                    HStack {
+                                        Spacer()
+                                        Text("ログアウト")
+                                            .foregroundColor(.red)
+                                        Spacer()
+                                    }
+                                    .padding()
+                                    .background(Color.red.opacity(0.1))
                                     .cornerRadius(12)
                                 }
 
