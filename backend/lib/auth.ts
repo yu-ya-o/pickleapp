@@ -1,7 +1,9 @@
 import { OAuth2Client } from 'google-auth-library';
 import { prisma } from './prisma';
 
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID_IOS);
+// Support both iOS and Web client IDs
+const clientIOS = new OAuth2Client(process.env.GOOGLE_CLIENT_ID_IOS);
+const clientWeb = new OAuth2Client(process.env.GOOGLE_CLIENT_ID_WEB);
 
 export interface GooglePayload {
   email: string;
@@ -17,34 +19,48 @@ export interface ApplePayload {
 
 /**
  * Verify Google ID token and return user payload
+ * Supports both iOS and Web client IDs
  */
 export async function verifyGoogleToken(idToken: string): Promise<GooglePayload> {
-  try {
-    const ticket = await client.verifyIdToken({
-      idToken,
-      audience: process.env.GOOGLE_CLIENT_ID_IOS,
-    });
+  // Try iOS client first, then Web client
+  const clients = [
+    { client: clientIOS, audience: process.env.GOOGLE_CLIENT_ID_IOS },
+    { client: clientWeb, audience: process.env.GOOGLE_CLIENT_ID_WEB },
+  ];
 
-    const payload = ticket.getPayload();
+  for (const { client, audience } of clients) {
+    if (!audience) continue;
 
-    if (!payload) {
-      throw new Error('Invalid token payload');
+    try {
+      const ticket = await client.verifyIdToken({
+        idToken,
+        audience,
+      });
+
+      const payload = ticket.getPayload();
+
+      if (!payload) {
+        continue;
+      }
+
+      if (!payload.email || !payload.sub) {
+        continue;
+      }
+
+      return {
+        email: payload.email,
+        name: payload.name || payload.email,
+        picture: payload.picture,
+        sub: payload.sub,
+      };
+    } catch (error) {
+      // Try next client
+      continue;
     }
-
-    if (!payload.email || !payload.sub) {
-      throw new Error('Missing required fields in token');
-    }
-
-    return {
-      email: payload.email,
-      name: payload.name || payload.email,
-      picture: payload.picture,
-      sub: payload.sub,
-    };
-  } catch (error) {
-    console.error('Google token verification failed:', error);
-    throw new Error('Invalid Google token');
   }
+
+  console.error('Google token verification failed for all clients');
+  throw new Error('Invalid Google token');
 }
 
 /**
