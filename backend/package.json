@@ -16,24 +16,25 @@
   },
   "dependencies": {
     "@prisma/client": "^5.7.1",
+    "cors": "^2.8.5",
+    "firebase-admin": "^13.6.0",
+    "google-auth-library": "^9.4.1",
     "next": "^15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "google-auth-library": "^9.4.1",
-    "ws": "^8.16.0",
     "uuid": "^9.0.1",
-    "cors": "^2.8.5"
+    "ws": "^8.16.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/ws": "^8.5.10",
     "@types/uuid": "^9.0.7",
-    "@types/cors": "^2.8.17",
-    "typescript": "^5",
+    "@types/ws": "^8.5.10",
     "prisma": "^5.7.1",
     "ts-node": "^10.9.2",
-    "tsx": "^4.7.0"
+    "tsx": "^4.7.0",
+    "typescript": "^5"
   }
 }
