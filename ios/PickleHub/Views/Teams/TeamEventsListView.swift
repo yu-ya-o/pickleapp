@@ -108,30 +108,7 @@ struct TeamEventRowView: View {
                 onTeamTap?()
             }) {
                 VStack(spacing: Spacing.xs) {
-                    if let iconImageURL = event.team.iconImageURL {
-                        AsyncImage(url: iconImageURL) { phase in
-                            switch phase {
-                            case .success(let image):
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 50, height: 50)
-                                    .clipShape(Circle())
-                            case .failure(_), .empty:
-                                Image(systemName: "person.3.fill")
-                                    .resizable()
-                                    .frame(width: 50, height: 50)
-                                    .foregroundColor(.twitterBlue)
-                            @unknown default:
-                                EmptyView()
-                            }
-                        }
-                    } else {
-                        Image(systemName: "person.3.fill")
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .foregroundColor(.twitterBlue)
-                    }
+                    TeamIconView(url: event.team.iconImageURL, size: 50)
 
                     Text(event.team.name)
                         .font(.caption)

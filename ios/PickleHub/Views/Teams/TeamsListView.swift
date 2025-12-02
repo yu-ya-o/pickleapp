@@ -166,41 +166,20 @@ struct TeamRowView: View {
     var body: some View {
         HStack(spacing: 12) {
             // Team Icon
-            if let iconURL = team.iconImageURL {
-                CachedAsyncImagePhase(url: iconURL) { phase in
-                    switch phase {
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 50, height: 50)
-                            .clipShape(Circle())
-                    case .failure(_), .empty:
-                        ZStack {
-                            Circle()
-                                .fill(Color.twitterBlue.opacity(0.2))
-                                .frame(width: 50, height: 50)
-                            Image(systemName: "person.3.fill")
-                                .foregroundColor(.twitterBlue)
-                        }
-                    @unknown default:
-                        EmptyView()
-                    }
-                }
+            if team.iconImageURL != nil {
+                TeamIconView(url: team.iconImageURL, size: 50)
             } else {
-                ZStack {
-                    Circle()
-                        .fill(Color.twitterBlue.opacity(0.2))
-                        .frame(width: 50, height: 50)
-
-                    if team.isPrivate {
-                        Image(systemName: "lock.fill")
-                            .foregroundColor(.twitterBlue)
-                    } else {
-                        Image(systemName: "person.3.fill")
-                            .foregroundColor(.twitterBlue)
-                    }
-                }
+                // デフォルトアイコン（プライベートチームはロックアイコン）
+                Circle()
+                    .fill(Color(.systemGray5))
+                    .frame(width: 50, height: 50)
+                    .overlay(
+                        Image(systemName: team.isPrivate ? "lock.fill" : "person.2.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 25, height: 25)
+                            .foregroundColor(Color(.systemGray3))
+                    )
             }
 
             VStack(alignment: .leading, spacing: 4) {
