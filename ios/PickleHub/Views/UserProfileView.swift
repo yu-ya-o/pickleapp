@@ -182,26 +182,7 @@ struct TeamCardRow: View {
         }) {
             HStack(spacing: Spacing.md) {
                 // Team Icon
-                if let iconImageURL = team.iconImageURL {
-                    CachedAsyncImage(url: iconImageURL) { image in
-                        image
-                            .resizable()
-                            .scaledToFill()
-                    } placeholder: {
-                        Image(systemName: "person.3.fill")
-                            .foregroundColor(.gray)
-                    }
-                    .frame(width: 40, height: 40)
-                    .clipShape(Circle())
-                } else {
-                    Image(systemName: "person.3.fill")
-                        .resizable()
-                        .foregroundColor(.gray)
-                        .frame(width: 40, height: 40)
-                        .padding(8)
-                        .background(Color(.systemGray5))
-                        .clipShape(Circle())
-                }
+                TeamIconView(url: team.iconImageURL, size: 40)
 
                 // Team Info
                 VStack(alignment: .leading, spacing: 4) {
