@@ -105,6 +105,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
 
 // MARK: - Notification Name Extension
 
-extension Notification.Name {
-    static let pushNotificationReceived = Notification.Name("pushNotificationReceived")
+extension Foundation.Notification.Name {
+    static let pushNotificationReceived = Foundation.Notification.Name("pushNotificationReceived")
 }
