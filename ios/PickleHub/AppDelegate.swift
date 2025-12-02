@@ -5,15 +5,26 @@ import UserNotifications
 
 class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNotificationCenterDelegate {
 
+    private var isFirebaseConfigured = false
+
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         // Configure Firebase
-        FirebaseApp.configure()
+        if let path = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist"),
+           let plist = NSDictionary(contentsOfFile: path),
+           let apiKey = plist["API_KEY"] as? String,
+           !apiKey.hasPrefix("YOUR_") {
+            FirebaseApp.configure()
+            isFirebaseConfigured = true
 
-        // Set messaging delegate
-        Messaging.messaging().delegate = self
+            // Set messaging delegate only if Firebase is configured
+            Messaging.messaging().delegate = self
+        } else {
+            print("Warning: GoogleService-Info.plist is missing or contains placeholder values. Firebase not configured.")
+            print("Download GoogleService-Info.plist from Firebase Console: https://console.firebase.google.com/")
+        }
 
         // Set notification center delegate
         UNUserNotificationCenter.current().delegate = self
@@ -47,8 +58,10 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         _ application: UIApplication,
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
     ) {
-        // Pass device token to Firebase
-        Messaging.messaging().apnsToken = deviceToken
+        // Pass device token to Firebase (only if configured)
+        if isFirebaseConfigured {
+            Messaging.messaging().apnsToken = deviceToken
+        }
     }
 
     func application(
