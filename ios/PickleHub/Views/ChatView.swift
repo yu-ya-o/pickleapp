@@ -151,17 +151,7 @@ struct MessageBubbleView: View {
 
             // User icon for other users
             if !isCurrentUser {
-                CachedAsyncImage(url: URL(string: message.user.profileImage ?? "")) { image in
-                    image
-                        .resizable()
-                        .scaledToFill()
-                } placeholder: {
-                    Image(systemName: "person.circle.fill")
-                        .resizable()
-                        .foregroundColor(.gray)
-                }
-                .frame(width: 32, height: 32)
-                .clipShape(Circle())
+                ProfileImageView(url: URL(string: message.user.profileImage ?? ""), size: 32)
             }
 
             VStack(alignment: isCurrentUser ? .trailing : .leading, spacing: 4) {
@@ -188,17 +178,7 @@ struct MessageBubbleView: View {
 
             // User icon for current user
             if isCurrentUser {
-                CachedAsyncImage(url: URL(string: message.user.profileImage ?? "")) { image in
-                    image
-                        .resizable()
-                        .scaledToFill()
-                } placeholder: {
-                    Image(systemName: "person.circle.fill")
-                        .resizable()
-                        .foregroundColor(.gray)
-                }
-                .frame(width: 32, height: 32)
-                .clipShape(Circle())
+                ProfileImageView(url: URL(string: message.user.profileImage ?? ""), size: 32)
             }
 
             if !isCurrentUser {

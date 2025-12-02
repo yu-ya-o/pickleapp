@@ -212,30 +212,7 @@ struct EventDetailView: View {
                     selectedUser = event.creator
                     showingUserProfile = true
                 }) {
-                    if let profileImageURL = event.creator.profileImageURL {
-                        CachedAsyncImagePhase(url: profileImageURL) { phase in
-                            switch phase {
-                            case .success(let image):
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 40, height: 40)
-                                    .clipShape(Circle())
-                            case .failure(_), .empty:
-                                Image(systemName: "person.circle.fill")
-                                    .resizable()
-                                    .frame(width: 40, height: 40)
-                                    .foregroundColor(.gray)
-                            @unknown default:
-                                EmptyView()
-                            }
-                        }
-                    } else {
-                        Image(systemName: "person.circle.fill")
-                            .resizable()
-                            .frame(width: 40, height: 40)
-                            .foregroundColor(.gray)
-                    }
+                    ProfileImageView(url: event.creator.profileImageURL, size: 40)
                 }
                 .buttonStyle(.plain)
                 Text(event.creator.displayName)
@@ -261,30 +238,7 @@ struct EventDetailView: View {
                             selectedUser = reservation.user
                             showingUserProfile = true
                         }) {
-                            if let profileImageURL = reservation.user.profileImageURL {
-                                CachedAsyncImagePhase(url: profileImageURL) { phase in
-                                    switch phase {
-                                    case .success(let image):
-                                        image
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width: 32, height: 32)
-                                            .clipShape(Circle())
-                                    case .failure(_), .empty:
-                                        Image(systemName: "person.circle")
-                                            .resizable()
-                                            .frame(width: 32, height: 32)
-                                            .foregroundColor(.gray)
-                                    @unknown default:
-                                        EmptyView()
-                                    }
-                                }
-                            } else {
-                                Image(systemName: "person.circle")
-                                    .resizable()
-                                    .frame(width: 32, height: 32)
-                                    .foregroundColor(.gray)
-                            }
+                            ProfileImageView(url: reservation.user.profileImageURL, size: 32)
                         }
                         .buttonStyle(.plain)
                         Text(reservation.user.displayName)

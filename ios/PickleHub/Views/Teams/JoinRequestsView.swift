@@ -112,38 +112,10 @@ struct JoinRequestRow: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 12) {
                 // Tappable Profile Image
-                if let profileImageURL = request.user.profileImageURL {
-                    AsyncImage(url: profileImageURL) { phase in
-                        switch phase {
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 50, height: 50)
-                                .clipShape(Circle())
-                        case .failure(_), .empty:
-                            Image(systemName: "person.circle.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 50, height: 50)
-                                .foregroundColor(.blue)
-                        @unknown default:
-                            EmptyView()
-                        }
-                    }
+                ProfileImageView(url: request.user.profileImageURL, size: 50)
                     .onTapGesture {
                         onProfileTap()
                     }
-                } else {
-                    Image(systemName: "person.circle.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 50, height: 50)
-                        .foregroundColor(.blue)
-                        .onTapGesture {
-                            onProfileTap()
-                        }
-                }
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(request.user.displayName)

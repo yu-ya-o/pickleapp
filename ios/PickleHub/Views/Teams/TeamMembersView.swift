@@ -23,30 +23,7 @@ struct TeamMembersView: View {
                             selectedUser = member.user
                             showingUserProfile = true
                         }) {
-                            if let profileImageURL = member.user.profileImageURL {
-                                CachedAsyncImagePhase(url: profileImageURL) { phase in
-                                    switch phase {
-                                    case .success(let image):
-                                        image
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width: 50, height: 50)
-                                            .clipShape(Circle())
-                                    case .failure(_), .empty:
-                                        Image(systemName: "person.circle.fill")
-                                            .resizable()
-                                            .frame(width: 50, height: 50)
-                                            .foregroundColor(.blue)
-                                    @unknown default:
-                                        EmptyView()
-                                    }
-                                }
-                            } else {
-                                Image(systemName: "person.circle.fill")
-                                    .resizable()
-                                    .frame(width: 50, height: 50)
-                                    .foregroundColor(.blue)
-                            }
+                            ProfileImageView(url: member.user.profileImageURL, size: 50)
                         }
                         .buttonStyle(.plain)
 

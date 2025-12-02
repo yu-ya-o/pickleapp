@@ -11,30 +11,7 @@ struct ModernEventRowView: View {
                 Button(action: {
                     onProfileTap?()
                 }) {
-                    if let profileImageURL = event.creator.profileImageURL {
-                        CachedAsyncImagePhase(url: profileImageURL) { phase in
-                            switch phase {
-                            case .success(let image):
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 50, height: 50)
-                                    .clipShape(Circle())
-                            case .failure(_), .empty:
-                                Image(systemName: "person.circle.fill")
-                                    .resizable()
-                                    .frame(width: 50, height: 50)
-                                    .foregroundColor(.gray)
-                            @unknown default:
-                                EmptyView()
-                            }
-                        }
-                    } else {
-                        Image(systemName: "person.circle.fill")
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .foregroundColor(.gray)
-                    }
+                    ProfileImageView(url: event.creator.profileImageURL, size: 50)
                 }
                 .buttonStyle(.plain)
 
