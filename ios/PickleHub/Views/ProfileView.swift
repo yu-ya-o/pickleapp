@@ -30,36 +30,7 @@ struct ProfileView: View {
                             VStack(alignment: .leading, spacing: 8) {
                                 HStack(alignment: .top, spacing: 16) {
                                     // Profile Image
-                                    if let profileImageURL = user.profileImageURL {
-                                        CachedAsyncImagePhase(url: profileImageURL) { phase in
-                                            switch phase {
-                                            case .success(let image):
-                                                image
-                                                    .resizable()
-                                                    .scaledToFill()
-                                                    .frame(width: 80, height: 80)
-                                                    .clipShape(Circle())
-                                            case .failure(_), .empty:
-                                                Image(systemName: "person.circle.fill")
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 80, height: 80)
-                                                    .foregroundColor(.gray)
-                                                    .background(Color(.systemGray6))
-                                                    .clipShape(Circle())
-                                            @unknown default:
-                                                EmptyView()
-                                            }
-                                        }
-                                    } else {
-                                        Image(systemName: "person.circle.fill")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 80, height: 80)
-                                            .foregroundColor(.gray)
-                                            .background(Color(.systemGray6))
-                                            .clipShape(Circle())
-                                    }
+                                    ProfileImageView(url: user.profileImageURL, size: 80)
 
                                     VStack(alignment: .leading, spacing: 8) {
                                         Text(user.displayName)

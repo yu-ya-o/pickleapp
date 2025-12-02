@@ -98,7 +98,7 @@ struct EventsListView: View {
                 // セグメントコントロール
                 Picker("イベントタイプ", selection: $selectedSegment) {
                     Text("公開イベント").tag(0)
-                    Text("チームイベント").tag(1)
+                    Text("マイチームイベント").tag(1)
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding(.horizontal, Spacing.md)

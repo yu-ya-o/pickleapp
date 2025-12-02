@@ -60,22 +60,9 @@ struct ProfileEditView: View {
                                 .frame(width: 100, height: 100)
                                 .clipShape(Circle())
                         } else if let profileImageURL, let url = URL(string: profileImageURL) {
-                            CachedAsyncImage(url: url) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                            } placeholder: {
-                                Image(systemName: "person.circle.fill")
-                                    .resizable()
-                                    .foregroundColor(.gray)
-                            }
-                            .frame(width: 100, height: 100)
-                            .clipShape(Circle())
+                            ProfileImageView(url: url, size: 100)
                         } else {
-                            Image(systemName: "person.circle.fill")
-                                .resizable()
-                                .foregroundColor(.gray)
-                                .frame(width: 100, height: 100)
+                            ProfileImageView(url: nil, size: 100)
                         }
 
                         PhotosPicker(selection: $selectedPhotoItem, matching: .images) {

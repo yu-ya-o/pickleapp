@@ -15,30 +15,7 @@ struct UserProfileView: View {
             ScrollView {
                 VStack(spacing: Spacing.lg) {
                     // Profile Image
-                    if let profileImageURL = user.profileImageURL {
-                        CachedAsyncImagePhase(url: profileImageURL) { phase in
-                            switch phase {
-                            case .success(let image):
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 120, height: 120)
-                                    .clipShape(Circle())
-                            case .failure(_), .empty:
-                                Image(systemName: "person.circle.fill")
-                                    .resizable()
-                                    .frame(width: 120, height: 120)
-                                    .foregroundColor(.gray)
-                            @unknown default:
-                                EmptyView()
-                            }
-                        }
-                    } else {
-                        Image(systemName: "person.circle.fill")
-                            .resizable()
-                            .frame(width: 120, height: 120)
-                            .foregroundColor(.gray)
-                    }
+                    ProfileImageView(url: user.profileImageURL, size: 120)
 
                     // Display Name
                     Text(user.displayName)
