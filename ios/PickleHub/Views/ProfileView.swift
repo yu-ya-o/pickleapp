@@ -67,10 +67,13 @@ struct ProfileView: View {
                                             .fontWeight(.bold)
 
                                         if let bio = user.bio, !bio.isEmpty {
-                                            Text(bio)
-                                                .font(.body)
-                                                .foregroundColor(.secondary)
-                                                .lineLimit(3)
+                                            ExpandableTextView(
+                                                text: bio,
+                                                lineLimit: 3,
+                                                font: .body,
+                                                foregroundColor: .secondary,
+                                                alignment: .leading
+                                            )
                                         }
                                     }
                                 }
@@ -203,6 +206,25 @@ struct ProfileView: View {
                                     }
                                     .padding()
                                     .background(Color.red.opacity(0.1))
+                                    .cornerRadius(12)
+                                }
+
+                                // Contact / お問い合わせ
+                                Button(action: {
+                                    if let url = URL(string: "https://docs.google.com/forms/d/e/1FAIpQLScti-2AT0gb4oM7gpdvLuKSNYQ9ruulbHXPqcEJraR9BTIRkQ/viewform?usp=header") {
+                                        UIApplication.shared.open(url)
+                                    }
+                                }) {
+                                    HStack {
+                                        Image(systemName: "envelope")
+                                        Text("お問い合わせ")
+                                        Spacer()
+                                        Image(systemName: "arrow.up.right.square")
+                                            .font(.caption)
+                                    }
+                                    .foregroundColor(.primary)
+                                    .padding()
+                                    .background(Color(.systemGray6))
                                     .cornerRadius(12)
                                 }
 

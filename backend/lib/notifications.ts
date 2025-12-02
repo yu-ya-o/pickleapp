@@ -1,4 +1,5 @@
 import { prisma } from './prisma';
+import { sendPushNotification, sendPushNotifications } from './pushNotifications';
 
 export enum NotificationType {
   EVENT_JOINED = 'event_joined',
@@ -36,6 +37,17 @@ export async function createNotification(params: CreateNotificationParams) {
         relatedId: params.relatedId,
       },
     });
+
+    // Send push notification
+    sendPushNotification(params.userId, {
+      title: params.title,
+      body: params.message,
+      type: params.type,
+      relatedId: params.relatedId,
+    }).catch((error) => {
+      console.error('Failed to send push notification:', error);
+    });
+
     return notification;
   } catch (error) {
     console.error('Error creating notification:', error);
@@ -57,6 +69,21 @@ export async function createBulkNotifications(
         relatedId: n.relatedId,
       })),
     });
+
+    // Send push notifications to all users
+    // Group by same title/message to send in batches
+    const userIds = notifications.map((n) => n.userId);
+    if (notifications.length > 0) {
+      const firstNotification = notifications[0];
+      sendPushNotifications(userIds, {
+        title: firstNotification.title,
+        body: firstNotification.message,
+        type: firstNotification.type,
+        relatedId: firstNotification.relatedId,
+      }).catch((error) => {
+        console.error('Failed to send bulk push notifications:', error);
+      });
+    }
   } catch (error) {
     console.error('Error creating bulk notifications:', error);
     throw error;

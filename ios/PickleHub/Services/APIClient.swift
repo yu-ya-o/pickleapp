@@ -595,4 +595,26 @@ class APIClient {
             requiresAuth: true
         )
     }
+
+    // MARK: - Device Token API (Push Notifications)
+
+    func registerDeviceToken(fcmToken: String) async throws {
+        struct Request: Codable { let fcmToken: String }
+        struct Response: Codable { let success: Bool }
+        let _: Response = try await request(
+            endpoint: "/api/device-token",
+            method: "POST",
+            body: Request(fcmToken: fcmToken),
+            requiresAuth: true
+        )
+    }
+
+    func unregisterDeviceToken() async throws {
+        struct Response: Codable { let success: Bool }
+        let _: Response = try await request(
+            endpoint: "/api/device-token",
+            method: "DELETE",
+            requiresAuth: true
+        )
+    }
 }

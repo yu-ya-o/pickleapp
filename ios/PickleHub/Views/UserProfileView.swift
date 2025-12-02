@@ -47,11 +47,14 @@ struct UserProfileView: View {
 
                     // Bio
                     if let bio = user.bio, !bio.isEmpty {
-                        Text(bio)
-                            .font(.bodyMedium)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal, Spacing.md)
+                        ExpandableTextView(
+                            text: bio,
+                            lineLimit: 3,
+                            font: .bodyMedium,
+                            foregroundColor: .secondary,
+                            alignment: .center
+                        )
+                        .padding(.horizontal, Spacing.md)
                     }
 
                     // SNS Links

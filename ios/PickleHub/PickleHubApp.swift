@@ -3,6 +3,7 @@ import GoogleSignIn
 
 @main
 struct PickleHubApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var authViewModel = AuthViewModel()
     @State private var showingSplash = true
 

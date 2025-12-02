@@ -8,4 +8,8 @@ target 'PickleHub' do
   # Pods for PickleHub
   pod 'Kingfisher', '~> 7.0'
 
+  # Firebase for Push Notifications
+  pod 'Firebase/Core'
+  pod 'Firebase/Messaging'
+
 end

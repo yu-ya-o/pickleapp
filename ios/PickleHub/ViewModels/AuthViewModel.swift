@@ -36,6 +36,9 @@ class AuthViewModel: ObservableObject {
             self.currentUser = user
             self.isAuthenticated = true
             apiClient.setAuthToken(token)
+
+            // Register push notification token (in case it changed)
+            PushNotificationManager.shared.registerTokenWithBackend()
         } else {
             print("⚠️ No saved auth data found")
         }
@@ -90,6 +93,9 @@ class AuthViewModel: ObservableObject {
                     UserDefaults.standard.set(userData, forKey: "currentUser")
                     print("💾 Saved user data to UserDefaults")
                 }
+
+                // Register push notification token
+                PushNotificationManager.shared.registerTokenWithBackend()
 
                 isLoading = false
 
@@ -175,6 +181,9 @@ class AuthViewModel: ObservableObject {
                 print("❌ Failed to encode user data")
             }
 
+            // Register push notification token
+            PushNotificationManager.shared.registerTokenWithBackend()
+
             isLoading = false
         } catch {
             isLoading = false
@@ -184,6 +193,8 @@ class AuthViewModel: ObservableObject {
     }
 
     func signOut() {
+        // Unregister push notification token
+        PushNotificationManager.shared.unregisterToken()
         GIDSignIn.sharedInstance.signOut()
 
         isAuthenticated = false
