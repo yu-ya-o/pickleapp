@@ -2,7 +2,7 @@ import { forwardRef, type ButtonHTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'gradient';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
 }
@@ -21,25 +21,27 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+      'inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]';
 
     const variants = {
       primary:
-        'bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] focus:ring-[var(--primary)]',
+        'bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] focus:ring-[var(--primary)] shadow-md shadow-[var(--primary)]/25 hover:shadow-lg hover:shadow-[var(--primary)]/30',
       secondary:
-        'bg-[var(--muted)] text-[var(--foreground)] hover:bg-gray-200 focus:ring-gray-400',
+        'bg-[var(--muted)] text-[var(--foreground)] hover:bg-slate-200 focus:ring-slate-400',
       outline:
-        'border-2 border-[var(--border)] bg-transparent hover:bg-[var(--muted)] focus:ring-[var(--primary)]',
+        'border-2 border-[var(--border)] bg-transparent hover:bg-[var(--muted)] hover:border-[var(--primary)] focus:ring-[var(--primary)]',
       ghost:
         'bg-transparent hover:bg-[var(--muted)] focus:ring-[var(--primary)]',
       destructive:
-        'bg-[var(--destructive)] text-white hover:bg-red-600 focus:ring-[var(--destructive)]',
+        'bg-[var(--destructive)] text-white hover:bg-red-600 focus:ring-[var(--destructive)] shadow-md shadow-red-500/25',
+      gradient:
+        'gradient-bg text-white hover:opacity-90 focus:ring-[var(--primary)] shadow-md shadow-purple-500/25 hover:shadow-lg',
     };
 
     const sizes = {
-      sm: 'h-8 px-3 text-sm',
-      md: 'h-10 px-4 text-base',
-      lg: 'h-12 px-6 text-lg',
+      sm: 'h-9 px-4 text-sm',
+      md: 'h-11 px-5 text-base',
+      lg: 'h-13 px-7 text-lg',
     };
 
     return (
