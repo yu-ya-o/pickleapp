@@ -47,7 +47,7 @@ export function ProfilePage() {
     <div className="min-h-screen bg-[var(--muted)]">
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="max-w-2xl mx-auto px-4 py-4">
+        <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold">プロフィール</h1>
             <Button
@@ -63,7 +63,7 @@ export function ProfilePage() {
       </header>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto px-4 py-4 space-y-4">
+      <div className="max-w-4xl mx-auto px-4 py-4 space-y-4">
         {/* Profile Card */}
         <Card>
           <CardContent className="p-6">

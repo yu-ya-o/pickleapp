@@ -80,7 +80,7 @@ export function TeamDetailPage() {
     <div className="min-h-screen bg-[var(--muted)]">
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
           <button
             onClick={() => navigate(-1)}
             className="p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -104,7 +104,7 @@ export function TeamDetailPage() {
       {/* Team Header */}
       <div className="bg-white border-b border-[var(--border)]">
         {team.headerImage && (
-          <div className="h-32 bg-gray-200">
+          <div className="h-32 md:h-48 bg-gray-200">
             <img
               src={team.headerImage}
               alt=""
@@ -112,7 +112,7 @@ export function TeamDetailPage() {
             />
           </div>
         )}
-        <div className="max-w-2xl mx-auto px-4 py-4">
+        <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-start gap-4">
             <Avatar
               src={team.iconImage}
@@ -142,7 +142,7 @@ export function TeamDetailPage() {
       </div>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto px-4 py-4 space-y-4">
+      <div className="max-w-4xl mx-auto px-4 py-4 space-y-4">
         {/* Action Buttons */}
         {isMember ? (
           <div className="grid grid-cols-2 gap-3">
