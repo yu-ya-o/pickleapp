@@ -111,7 +111,7 @@ export function EventDetailPage() {
     <div className="min-h-screen bg-[var(--muted)]">
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
           <button
             onClick={() => navigate(-1)}
             className="p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -141,7 +141,7 @@ export function EventDetailPage() {
       </header>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto px-4 py-4 space-y-4">
+      <div className="max-w-4xl mx-auto px-4 py-4 space-y-4">
         {/* Event Info Card */}
         <Card>
           <CardContent className="p-4 space-y-4">
@@ -254,8 +254,8 @@ export function EventDetailPage() {
       </div>
 
       {/* Bottom Action Bar */}
-      <div className="fixed bottom-16 left-0 right-0 bg-white border-t border-[var(--border)] p-4 z-30">
-        <div className="max-w-2xl mx-auto flex gap-3">
+      <div className="fixed bottom-16 md:bottom-0 left-0 right-0 md:left-64 lg:left-72 bg-white border-t border-[var(--border)] p-4 z-30">
+        <div className="max-w-4xl mx-auto flex gap-3">
           <Button
             variant="outline"
             className="flex-1"

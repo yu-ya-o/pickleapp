@@ -48,7 +48,7 @@ export function EventsListPage() {
     <div className="min-h-screen bg-[var(--muted)]">
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="max-w-2xl mx-auto px-4 py-4">
+        <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-2xl font-bold">イベント</h1>
             <Button
@@ -61,51 +61,54 @@ export function EventsListPage() {
             </Button>
           </div>
 
-          {/* Search */}
-          <div className="relative mb-3">
-            <Search
-              size={18}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-            />
-            <Input
-              placeholder="イベントを検索..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
-          </div>
+          {/* Search and Filter Row */}
+          <div className="flex flex-col md:flex-row md:items-center gap-3">
+            {/* Search */}
+            <div className="relative flex-1 md:max-w-md">
+              <Search
+                size={18}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              />
+              <Input
+                placeholder="イベントを検索..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
 
-          {/* Region Filter */}
-          <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
-            <button
-              onClick={() => setSelectedRegion('')}
-              className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                !selectedRegion
-                  ? 'bg-[var(--primary)] text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              全国
-            </button>
-            {PREFECTURES.slice(0, 10).map((pref) => (
+            {/* Region Filter */}
+            <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
               <button
-                key={pref}
-                onClick={() => setSelectedRegion(pref)}
+                onClick={() => setSelectedRegion('')}
                 className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                  selectedRegion === pref
+                  !selectedRegion
                     ? 'bg-[var(--primary)] text-white'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
-                {pref}
+                全国
               </button>
-            ))}
+              {PREFECTURES.slice(0, 10).map((pref) => (
+                <button
+                  key={pref}
+                  onClick={() => setSelectedRegion(pref)}
+                  className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                    selectedRegion === pref
+                      ? 'bg-[var(--primary)] text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {pref}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </header>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto px-4 py-4">
+      <div className="max-w-6xl mx-auto px-4 py-4">
         {isLoading ? (
           <div className="flex justify-center py-12">
             <Loading size="lg" />
@@ -116,10 +119,10 @@ export function EventsListPage() {
             <p className="text-gray-500">イベントがありません</p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredEvents.map((event) => (
               <Link key={event.id} to={`/events/${event.id}`}>
-                <Card className="hover:shadow-md transition-shadow">
+                <Card className="hover:shadow-md transition-shadow h-full">
                   <CardContent className="p-4">
                     <div className="flex gap-3">
                       <Avatar

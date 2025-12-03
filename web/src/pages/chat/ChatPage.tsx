@@ -102,7 +102,7 @@ export function ChatPage() {
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center">
+        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center">
           <button
             onClick={() => navigate(-1)}
             className="p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -172,8 +172,8 @@ export function ChatPage() {
       </div>
 
       {/* Input */}
-      <div className="border-t border-[var(--border)] bg-white p-4 pb-20">
-        <div className="max-w-2xl mx-auto flex gap-2">
+      <div className="border-t border-[var(--border)] bg-white p-4 pb-20 md:pb-4">
+        <div className="max-w-4xl mx-auto flex gap-2">
           <Input
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}

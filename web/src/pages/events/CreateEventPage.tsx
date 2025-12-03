@@ -63,7 +63,7 @@ export function CreateEventPage() {
     <div className="min-h-screen bg-[var(--muted)]">
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center">
+        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center">
           <button
             onClick={() => navigate(-1)}
             className="p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -75,7 +75,7 @@ export function CreateEventPage() {
       </header>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto px-4 py-4">
+      <div className="max-w-4xl mx-auto px-4 py-4">
         <Card>
           <CardContent className="p-4">
             <form onSubmit={handleSubmit} className="space-y-4">
