@@ -62,6 +62,7 @@ class TeamEventsViewModel: ObservableObject {
         startTime: Date,
         endTime: Date,
         maxParticipants: Int?,
+        price: Int? = nil,
         skillLevel: String? = nil,
         visibility: String = "private"
     ) async throws {
@@ -78,7 +79,7 @@ class TeamEventsViewModel: ObservableObject {
             startTime: formatter.string(from: startTime),
             endTime: formatter.string(from: endTime),
             maxParticipants: maxParticipants,
-            price: nil,
+            price: price,
             skillLevel: skillLevel,
             visibility: visibility
         )
@@ -105,6 +106,7 @@ class TeamEventsViewModel: ObservableObject {
         startTime: Date? = nil,
         endTime: Date? = nil,
         maxParticipants: Int? = nil,
+        price: Int? = nil,
         skillLevel: String? = nil,
         status: String? = nil,
         visibility: String? = nil
@@ -119,7 +121,7 @@ class TeamEventsViewModel: ObservableObject {
             startTime: startTime.map { formatter.string(from: $0) },
             endTime: endTime.map { formatter.string(from: $0) },
             maxParticipants: maxParticipants,
-            price: nil,
+            price: price,
             skillLevel: skillLevel,
             status: status,
             visibility: visibility

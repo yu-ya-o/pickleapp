@@ -13,6 +13,7 @@ struct CreateTeamEventView: View {
     @State private var hasCapacityLimit = true
     @State private var maxParticipants = 8
     @State private var skillLevel = "all"
+    @State private var priceInput = ""
     @State private var visibility = "private"
 
     @State private var isLoading = false
@@ -46,6 +47,7 @@ struct CreateTeamEventView: View {
             _hasCapacityLimit = State(initialValue: event.maxParticipants != nil)
             _maxParticipants = State(initialValue: event.maxParticipants ?? 8)
             _skillLevel = State(initialValue: event.skillLevel ?? "all")
+            _priceInput = State(initialValue: event.price != nil ? String(event.price!) : "")
             _visibility = State(initialValue: event.visibility)
         }
     }
@@ -94,6 +96,14 @@ struct CreateTeamEventView: View {
                         Text("参加人数無制限")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
+                    }
+                }
+
+                Section(header: Text("料金")) {
+                    HStack {
+                        TextField("無料の場合は空欄", text: $priceInput)
+                            .keyboardType(.numberPad)
+                        Text("円")
                     }
                 }
 
@@ -173,6 +183,8 @@ struct CreateTeamEventView: View {
             isLoading = true
 
             do {
+                let price = priceInput.isEmpty ? nil : Int(priceInput)
+
                 if let event = editingEvent {
                     // Update existing event
                     try await viewModel.updateEvent(
@@ -184,6 +196,7 @@ struct CreateTeamEventView: View {
                         startTime: startDate,
                         endTime: endDate,
                         maxParticipants: hasCapacityLimit ? maxParticipants : nil,
+                        price: price,
                         skillLevel: skillLevel,
                         visibility: visibility
                     )
@@ -197,6 +210,7 @@ struct CreateTeamEventView: View {
                         startTime: startDate,
                         endTime: endDate,
                         maxParticipants: hasCapacityLimit ? maxParticipants : nil,
+                        price: price,
                         skillLevel: skillLevel,
                         visibility: visibility
                     )

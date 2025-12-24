@@ -12,6 +12,7 @@ struct CreateEventView: View {
     @State private var region = ""
     @State private var startDate = Date().addingTimeInterval(3600) // 1 hour from now
     @State private var endDate = Date().addingTimeInterval(7200) // 2 hours from now
+    @State private var hasCapacityLimit = true
     @State private var maxParticipants = 8
     @State private var skillLevel = "beginner"
     @State private var priceInput = ""
@@ -105,7 +106,15 @@ struct CreateEventView: View {
                 }
 
                 Section(header: Text("参加者")) {
-                    Stepper("最大参加者数: \(maxParticipants)", value: $maxParticipants, in: 2...20)
+                    Toggle("参加人数制限を設定", isOn: $hasCapacityLimit)
+
+                    if hasCapacityLimit {
+                        Stepper("最大参加者数: \(maxParticipants)", value: $maxParticipants, in: 2...50)
+                    } else {
+                        Text("参加人数無制限")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
                 }
 
                 Section(header: Text("料金")) {
@@ -188,7 +197,7 @@ struct CreateEventView: View {
                         region: region.isEmpty ? nil : region,
                         startTime: startDate,
                         endTime: endDate,
-                        maxParticipants: maxParticipants,
+                        maxParticipants: hasCapacityLimit ? maxParticipants : 999,
                         skillLevel: skillLevel,
                         price: price
                     )
@@ -217,7 +226,7 @@ struct CreateEventView: View {
             region: region.isEmpty ? nil : region,
             startTime: formatter.string(from: startDate),
             endTime: formatter.string(from: endDate),
-            maxParticipants: maxParticipants,
+            maxParticipants: hasCapacityLimit ? maxParticipants : nil,
             price: price,
             skillLevel: skillLevel,
             visibility: teamEventVisibility
