@@ -23,7 +23,10 @@ class EventsViewModel: ObservableObject {
             async let publicEvents = apiClient.getPublicTeamEvents(upcoming: upcoming)
 
             events = try await regularEvents
-            publicTeamEvents = try await publicEvents
+            let fetchedPublicTeamEvents = try await publicEvents
+
+            // Filter to only include public visibility team events
+            publicTeamEvents = fetchedPublicTeamEvents.filter { $0.visibility == "public" }
 
             print("✅ Fetched \(events.count) regular events and \(publicTeamEvents.count) public team events")
             print("📝 Regular Events: \(events.map { $0.title })")
