@@ -101,8 +101,8 @@ struct CreateEventView: View {
                 }
 
                 Section(header: Text("日時")) {
-                    DatePicker("開始時刻", selection: $startDate, in: Date()..., minuteInterval: 5)
-                    DatePicker("終了時刻", selection: $endDate, in: startDate..., minuteInterval: 5)
+                    DatePicker("開始時刻", selection: $startDate, in: Date()...)
+                    DatePicker("終了時刻", selection: $endDate, in: startDate...)
                 }
 
                 Section(header: Text("参加者")) {
