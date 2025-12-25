@@ -35,13 +35,25 @@ struct CreateTeamEventView: View {
             _location = State(initialValue: event.location)
             _region = State(initialValue: event.region ?? "")
 
-            // Parse dates from ISO8601 strings
+            // Parse dates from ISO8601 strings with proper format options
             let formatter = ISO8601DateFormatter()
+            formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
             if let startTime = formatter.date(from: event.startTime) {
                 _startDate = State(initialValue: startTime)
+            } else {
+                // Fallback: try without fractional seconds
+                formatter.formatOptions = [.withInternetDateTime]
+                _startDate = State(initialValue: formatter.date(from: event.startTime) ?? Date().addingTimeInterval(3600))
             }
+
+            formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
             if let endTime = formatter.date(from: event.endTime) {
                 _endDate = State(initialValue: endTime)
+            } else {
+                // Fallback: try without fractional seconds
+                formatter.formatOptions = [.withInternetDateTime]
+                _endDate = State(initialValue: formatter.date(from: event.endTime) ?? Date().addingTimeInterval(7200))
             }
 
             _hasCapacityLimit = State(initialValue: event.maxParticipants != nil)
