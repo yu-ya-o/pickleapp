@@ -19,6 +19,11 @@ struct MainTabView: View {
                     Label("チーム", systemImage: "person.3.fill")
                 }
 
+            RankingsView()
+                .tabItem {
+                    Label("ランキング", systemImage: "trophy.fill")
+                }
+
             NotificationsView()
                 .environmentObject(authViewModel)
                 .environmentObject(notificationsViewModel)
