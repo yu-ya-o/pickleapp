@@ -19,10 +19,8 @@ class TeamsViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
 
-        // Update current region if provided
-        if !region.isEmpty {
-            currentRegion = region
-        }
+        // Update current region (empty string clears the filter)
+        currentRegion = region
 
         do {
             publicTeams = try await apiClient.getTeams(search: searchText, region: currentRegion.isEmpty ? nil : currentRegion, myTeams: false)
