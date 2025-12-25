@@ -87,8 +87,8 @@ struct EditEventView: View {
                 }
 
                 Section(header: Text("日時")) {
-                    DatePicker("開始", selection: $startDate, in: Date()..., displayedComponents: [.date, .hourAndMinute])
-                    DatePicker("終了", selection: $endDate, in: Date()..., displayedComponents: [.date, .hourAndMinute])
+                    DatePicker("開始", selection: $startDate, in: Date()..., displayedComponents: [.date, .hourAndMinute], minuteInterval: 5)
+                    DatePicker("終了", selection: $endDate, in: Date()..., displayedComponents: [.date, .hourAndMinute], minuteInterval: 5)
                 }
 
                 Section(header: Text("定員")) {
