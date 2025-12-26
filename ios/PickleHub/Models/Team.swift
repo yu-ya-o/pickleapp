@@ -449,3 +449,65 @@ struct TeamMessageUser: Codable, Hashable {
 struct SendTeamMessageRequest: Codable {
     let content: String
 }
+
+// MARK: - Team Ranking
+
+struct TeamRanking: Codable, Identifiable, Hashable {
+    let id: String
+    let name: String
+    let description: String
+    let iconImage: String?
+    let headerImage: String?
+    let region: String?
+    let visibility: String
+    let createdAt: String
+    let updatedAt: String
+    let owner: TeamOwner
+    let memberCount: Int
+    let publicEventCount: Int
+    let rank: Int
+
+    // SNS Links
+    let instagramUrl: String?
+    let twitterUrl: String?
+    let tiktokUrl: String?
+    let lineUrl: String?
+
+    var iconImageURL: URL? {
+        guard let urlString = iconImage else { return nil }
+        return URL(string: urlString)
+    }
+
+    var headerImageURL: URL? {
+        guard let urlString = headerImage else { return nil }
+        return URL(string: urlString)
+    }
+
+    var isTopThree: Bool {
+        rank <= 3
+    }
+
+    var rankColor: (start: Color, end: Color) {
+        switch rank {
+        case 1:
+            return (Color(red: 1.0, green: 0.84, blue: 0.0), Color(red: 0.85, green: 0.65, blue: 0.13)) // Gold
+        case 2:
+            return (Color(red: 0.75, green: 0.75, blue: 0.75), Color(red: 0.6, green: 0.6, blue: 0.6)) // Silver
+        case 3:
+            return (Color(red: 0.8, green: 0.5, blue: 0.2), Color(red: 0.65, green: 0.4, blue: 0.15)) // Bronze
+        default:
+            return (Color.white, Color.white)
+        }
+    }
+
+    var rankEmoji: String {
+        switch rank {
+        case 1: return "🥇"
+        case 2: return "🥈"
+        case 3: return "🥉"
+        default: return ""
+        }
+    }
+}
+
+import SwiftUI

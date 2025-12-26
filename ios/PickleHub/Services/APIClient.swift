@@ -617,4 +617,13 @@ class APIClient {
             requiresAuth: true
         )
     }
+
+    // MARK: - Team Rankings API
+
+    func getTeamRankings(type: String = "members") async throws -> [TeamRanking] {
+        return try await request(
+            endpoint: "/api/teams/rankings?type=\(type)",
+            requiresAuth: false
+        )
+    }
 }
