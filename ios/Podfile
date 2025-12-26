@@ -12,4 +12,7 @@ target 'PickleHub' do
   pod 'Firebase/Core'
   pod 'Firebase/Messaging'
 
+  # Firebase Dynamic Links
+  pod 'Firebase/DynamicLinks'
+
 end

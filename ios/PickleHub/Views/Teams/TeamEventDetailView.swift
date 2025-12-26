@@ -137,6 +137,26 @@ struct TeamEventDetailView: View {
         }
         .navigationTitle("イベント")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                if let shareURL = DynamicLinkManager.shared.generateTeamEventLink(teamId: teamId, eventId: eventId) {
+                    ShareLink(
+                        item: shareURL,
+                        subject: Text("PickleHub チームイベント"),
+                        message: Text(event?.title.map { "「\($0)」に参加しませんか？" } ?? "チームイベントに参加しませんか？")
+                    ) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                } else {
+                    Button(action: {
+                        alertMessage = "共有リンクの生成に失敗しました。Config.swiftでDynamic Link設定を確認してください。"
+                        showingAlert = true
+                    }) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                }
+            }
+        }
         .alert("通知", isPresented: $showingAlert) {
             Button("OK", role: .cancel) {}
         } message: {

@@ -1,6 +1,7 @@
 import UIKit
 import FirebaseCore
 import FirebaseMessaging
+import FirebaseDynamicLinks
 import UserNotifications
 
 class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNotificationCenterDelegate {
@@ -114,10 +115,85 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
 
         completionHandler()
     }
+
+    // MARK: - Dynamic Links
+
+    // Handle Universal Links
+    func application(
+        _ application: UIApplication,
+        continue userActivity: NSUserActivity,
+        restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void
+    ) -> Bool {
+        guard isFirebaseConfigured else { return false }
+
+        if let incomingURL = userActivity.webpageURL {
+            let handled = DynamicLinks.dynamicLinks().handleUniversalLink(incomingURL) { dynamicLink, error in
+                if let error = error {
+                    print("Dynamic Link error: \(error.localizedDescription)")
+                    return
+                }
+
+                if let dynamicLink = dynamicLink, let url = dynamicLink.url {
+                    self.handleDynamicLink(url)
+                }
+            }
+            return handled
+        }
+        return false
+    }
+
+    // Handle Custom URL Scheme
+    func application(
+        _ app: UIApplication,
+        open url: URL,
+        options: [UIApplication.OpenURLOptionsKey : Any] = [:]
+    ) -> Bool {
+        guard isFirebaseConfigured else { return false }
+
+        if let dynamicLink = DynamicLinks.dynamicLinks().dynamicLink(fromCustomSchemeURL: url) {
+            if let url = dynamicLink.url {
+                handleDynamicLink(url)
+            }
+            return true
+        }
+        return false
+    }
+
+    private func handleDynamicLink(_ url: URL) {
+        print("📱 Dynamic Link received: \(url)")
+
+        // Parse URL path
+        let pathComponents = url.pathComponents
+
+        // Handle /events/{eventId}
+        if pathComponents.count >= 3 && pathComponents[1] == "events" {
+            let eventId = pathComponents[2]
+            print("🎯 Opening event: \(eventId)")
+
+            NotificationCenter.default.post(
+                name: .dynamicLinkReceived,
+                object: nil,
+                userInfo: ["type": "event", "eventId": eventId]
+            )
+        }
+        // Handle /teams/{teamId}/events/{eventId}
+        else if pathComponents.count >= 5 && pathComponents[1] == "teams" && pathComponents[3] == "events" {
+            let teamId = pathComponents[2]
+            let eventId = pathComponents[4]
+            print("🎯 Opening team event: teamId=\(teamId), eventId=\(eventId)")
+
+            NotificationCenter.default.post(
+                name: .dynamicLinkReceived,
+                object: nil,
+                userInfo: ["type": "teamEvent", "teamId": teamId, "eventId": eventId]
+            )
+        }
+    }
 }
 
 // MARK: - Notification Name Extension
 
 extension Foundation.Notification.Name {
     static let pushNotificationReceived = Foundation.Notification.Name("pushNotificationReceived")
+    static let dynamicLinkReceived = Foundation.Notification.Name("dynamicLinkReceived")
 }

@@ -86,6 +86,26 @@ struct EventDetailView: View {
         }
         .navigationTitle("イベント")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                if let shareURL = DynamicLinkManager.shared.generateEventLink(eventId: event.id) {
+                    ShareLink(
+                        item: shareURL,
+                        subject: Text("PickleHub イベント"),
+                        message: Text("「\(event.title)」に参加しませんか？")
+                    ) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                } else {
+                    Button(action: {
+                        alertMessage = "共有リンクの生成に失敗しました。Config.swiftでDynamic Link設定を確認してください。"
+                        showingAlert = true
+                    }) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                }
+            }
+        }
         .sheet(isPresented: $showingEditEvent) {
             EditEventView(event: event)
                 .environmentObject(eventsViewModel)
