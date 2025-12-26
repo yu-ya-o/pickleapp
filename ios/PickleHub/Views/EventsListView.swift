@@ -286,6 +286,12 @@ struct EventsListView: View {
                 await eventsViewModel.fetchEvents()
                 await eventsViewModel.fetchTeamEvents()
             }
+            .onAppear {
+                // ビューが表示されるたびにチームイベントをリフレッシュ
+                Task {
+                    await eventsViewModel.fetchTeamEvents()
+                }
+            }
             .onChange(of: selectedSegment) { newValue in
                 // セグメントが変更されたら対応するイベントを取得
                 Task {
