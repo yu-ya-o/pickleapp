@@ -13,8 +13,8 @@ struct SNSLinksView: View {
     var body: some View {
         if hasAnySNS {
             HStack(spacing: 16) {
-                if let instagram = instagramUrl, !instagram.isEmpty {
-                    Link(destination: URL(string: instagram)!) {
+                if let instagram = instagramUrl, !instagram.isEmpty, let url = URL(string: instagram) {
+                    Link(destination: url) {
                         Image(systemName: "camera.fill")
                             .font(.system(size: 24))
                             .foregroundColor(Color(red: 0.89, green: 0.21, blue: 0.54)) // Instagram pink/purple
@@ -24,8 +24,8 @@ struct SNSLinksView: View {
                     }
                 }
 
-                if let twitter = twitterUrl, !twitter.isEmpty {
-                    Link(destination: URL(string: twitter)!) {
+                if let twitter = twitterUrl, !twitter.isEmpty, let url = URL(string: twitter) {
+                    Link(destination: url) {
                         Image(systemName: "bird.fill")
                             .font(.system(size: 20))
                             .foregroundColor(Color(red: 0.11, green: 0.63, blue: 0.95)) // Twitter blue
@@ -35,8 +35,8 @@ struct SNSLinksView: View {
                     }
                 }
 
-                if let tiktok = tiktokUrl, !tiktok.isEmpty {
-                    Link(destination: URL(string: tiktok)!) {
+                if let tiktok = tiktokUrl, !tiktok.isEmpty, let url = URL(string: tiktok) {
+                    Link(destination: url) {
                         Image(systemName: "music.note")
                             .font(.system(size: 20))
                             .foregroundColor(.black)
@@ -46,8 +46,8 @@ struct SNSLinksView: View {
                     }
                 }
 
-                if let line = lineUrl, !line.isEmpty {
-                    Link(destination: URL(string: line)!) {
+                if let line = lineUrl, !line.isEmpty, let url = URL(string: line) {
+                    Link(destination: url) {
                         Image(systemName: "message.fill")
                             .font(.system(size: 20))
                             .foregroundColor(Color(red: 0.00, green: 0.75, blue: 0.24)) // LINE green
