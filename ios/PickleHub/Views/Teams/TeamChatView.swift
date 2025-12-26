@@ -287,6 +287,7 @@ struct EventPickerView: View {
 }
 
 struct TeamMessageBubbleView: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
     let message: TeamMessage
     let isCurrentUser: Bool
     let teamId: String
@@ -387,6 +388,7 @@ struct TeamMessageBubbleView: View {
         .sheet(isPresented: $showingEventDetail) {
             if let eventId = eventId {
                 TeamEventDetailContainerView(teamId: teamId, eventId: eventId)
+                    .environmentObject(authViewModel)
             }
         }
     }
