@@ -5,6 +5,13 @@ struct MainTabView: View {
     @StateObject private var eventsViewModel = EventsViewModel()
     @StateObject private var notificationsViewModel = NotificationsViewModel()
 
+    // Dynamic Link handling
+    @State private var showingEventDetail = false
+    @State private var selectedEventId: String?
+    @State private var showingTeamEventDetail = false
+    @State private var selectedTeamId: String?
+    @State private var selectedTeamEventId: String?
+
     var body: some View {
         TabView {
             EventsListView()
@@ -41,6 +48,36 @@ struct MainTabView: View {
         .task {
             // Fetch notifications on tab view load
             await notificationsViewModel.fetchNotifications()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .dynamicLinkReceived)) { notification in
+            guard let userInfo = notification.userInfo,
+                  let type = userInfo["type"] as? String else { return }
+
+            if type == "event", let eventId = userInfo["eventId"] as? String {
+                print("📱 Opening event from Dynamic Link: \(eventId)")
+                selectedEventId = eventId
+                showingEventDetail = true
+            } else if type == "teamEvent",
+                      let teamId = userInfo["teamId"] as? String,
+                      let eventId = userInfo["eventId"] as? String {
+                print("📱 Opening team event from Dynamic Link: teamId=\(teamId), eventId=\(eventId)")
+                selectedTeamId = teamId
+                selectedTeamEventId = eventId
+                showingTeamEventDetail = true
+            }
+        }
+        .sheet(isPresented: $showingEventDetail) {
+            if let eventId = selectedEventId {
+                EventDetailContainerView(eventId: eventId)
+                    .environmentObject(authViewModel)
+                    .environmentObject(eventsViewModel)
+            }
+        }
+        .sheet(isPresented: $showingTeamEventDetail) {
+            if let teamId = selectedTeamId, let eventId = selectedTeamEventId {
+                TeamEventDetailContainerView(teamId: teamId, eventId: eventId)
+                    .environmentObject(authViewModel)
+            }
         }
     }
 }
