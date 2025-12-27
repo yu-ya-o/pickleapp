@@ -3,9 +3,9 @@ import Foundation
 enum Config {
     // MARK: - API Configuration
     #if DEBUG
-    // 開発環境（一時的に本番環境を使用）
-    static let apiBaseURL = "https://pickleapp.onrender.com"
-    static let websocketURL = "wss://pickleapp-websocket.onrender.com"
+    // 開発環境
+    static let apiBaseURL = "https://pickleapp-dev.onrender.com"
+    static let websocketURL = "wss://pickleapp-dev-websocket.onrender.com"
     #else
     // 本番環境
     static let apiBaseURL = "https://pickleapp.onrender.com"

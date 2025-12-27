@@ -29,34 +29,23 @@ class RankingsViewModel: ObservableObject {
 
     func initialLoad() async {
         // 初回ロードのみ実行
-        print("🔵 initialLoad called, hasLoadedInitially: \(hasLoadedInitially)")
-        guard !hasLoadedInitially else {
-            print("⚠️ Already loaded, skipping")
-            return
-        }
+        guard !hasLoadedInitially else { return }
         hasLoadedInitially = true
         await fetchRankings()
     }
 
     func fetchRankings() async {
         // 既にロード中の場合は新しいリクエストを開始しない
-        print("🟢 fetchRankings called, isLoading: \(isLoading)")
-        guard !isLoading else {
-            print("⚠️ Already loading, skipping")
-            return
-        }
+        guard !isLoading else { return }
 
         isLoading = true
         errorMessage = nil
 
         do {
-            print("📡 Starting API request...")
             let newRankings = try await apiClient.getTeamRankings(type: selectedType.rawValue)
-            print("✅ API request succeeded, got \(newRankings.count) rankings")
             rankings = newRankings
             isLoading = false
         } catch {
-            print("❌ API request failed: \(error)")
             isLoading = false
             errorMessage = error.localizedDescription
             print("❌ Fetch rankings error: \(error)")
@@ -64,12 +53,8 @@ class RankingsViewModel: ObservableObject {
     }
 
     func refresh() async {
-        print("🔄 Refresh called, isLoading: \(isLoading)")
         // 既にロード中の場合は何もしない
-        guard !isLoading else {
-            print("⚠️ Already loading, skipping refresh")
-            return
-        }
+        guard !isLoading else { return }
         await fetchRankings()
     }
 
