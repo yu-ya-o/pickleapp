@@ -85,10 +85,10 @@ struct RankingsView: View {
                             }
                         }
                         .listStyle(.plain)
-                        .refreshable {
-                            await viewModel.refresh()
-                        }
                     }
+                }
+                .refreshable {
+                    await viewModel.refresh()
                 }
             }
             .navigationTitle("ランキング")
