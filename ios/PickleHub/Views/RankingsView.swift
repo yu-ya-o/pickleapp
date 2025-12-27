@@ -27,10 +27,7 @@ struct RankingsView: View {
 
                 // Rankings List
                 ZStack {
-                    if viewModel.isLoading {
-                        ProgressView()
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    } else if let errorMessage = viewModel.errorMessage {
+                    if let errorMessage = viewModel.errorMessage {
                         VStack(spacing: Spacing.lg) {
                             Image(systemName: "exclamationmark.triangle")
                                 .font(.system(size: 60))
@@ -51,7 +48,7 @@ struct RankingsView: View {
                             .buttonStyle(.borderedProminent)
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    } else if viewModel.rankings.isEmpty {
+                    } else if viewModel.rankings.isEmpty && !viewModel.isLoading {
                         VStack(spacing: Spacing.lg) {
                             Image(systemName: "trophy")
                                 .font(.system(size: 60))
@@ -85,7 +82,19 @@ struct RankingsView: View {
                             }
                         }
                         .listStyle(.plain)
+                        .overlay(
+                            Group {
+                                if viewModel.isLoading && viewModel.rankings.isEmpty {
+                                    ProgressView()
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        .background(Color.white)
+                                }
+                            }
+                        )
                     }
+                }
+                .refreshable {
+                    await viewModel.refresh()
                 }
             }
             .navigationTitle("ランキング")
