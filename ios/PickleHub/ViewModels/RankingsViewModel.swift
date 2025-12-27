@@ -27,6 +27,9 @@ class RankingsViewModel: ObservableObject {
     // MARK: - Fetch Rankings
 
     func fetchRankings() async {
+        // 既にロード中の場合は新しいリクエストを開始しない
+        guard !isLoading else { return }
+
         isLoading = true
         errorMessage = nil
 
