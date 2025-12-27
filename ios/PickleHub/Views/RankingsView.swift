@@ -93,8 +93,10 @@ struct RankingsView: View {
             }
             .navigationTitle("ランキング")
             .navigationBarTitleDisplayMode(.inline)
-            .task {
-                await viewModel.initialLoad()
+            .onAppear {
+                Task {
+                    await viewModel.initialLoad()
+                }
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
