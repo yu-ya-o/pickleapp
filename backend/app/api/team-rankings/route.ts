@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { errorResponse } from '@/lib/errors';
 
 /**
- * GET /api/teams/rankings?type=members|events
+ * GET /api/team-rankings?type=members|events
  * Get team rankings by member count or public event count
  */
 export async function GET(request: NextRequest) {
