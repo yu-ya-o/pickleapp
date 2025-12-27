@@ -57,6 +57,13 @@ struct TeamEventDetailView: View {
         event?.status == "completed"
     }
 
+    private var shareMessage: String {
+        if let title = event?.title {
+            return "「\(title)」に参加しませんか？"
+        }
+        return "チームイベントに参加しませんか？"
+    }
+
     private func formattedTime(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ja_JP")
@@ -143,7 +150,7 @@ struct TeamEventDetailView: View {
                     ShareLink(
                         item: shareURL,
                         subject: Text("PickleHub チームイベント"),
-                        message: Text(event?.title.map { "「\($0)」に参加しませんか？" } ?? "チームイベントに参加しませんか？")
+                        message: Text(shareMessage)
                     ) {
                         Image(systemName: "square.and.arrow.up")
                     }
