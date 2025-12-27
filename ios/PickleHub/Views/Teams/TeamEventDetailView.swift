@@ -139,7 +139,7 @@ struct TeamEventDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                if let shareURL = DynamicLinkManager.shared.generateTeamEventLink(teamId: teamId, eventId: eventId) {
+                if let shareURL = DeepLinkManager.shared.generateTeamEventLink(teamId: teamId, eventId: eventId) {
                     ShareLink(
                         item: shareURL,
                         subject: Text("PickleHub チームイベント"),
@@ -149,7 +149,7 @@ struct TeamEventDetailView: View {
                     }
                 } else {
                     Button(action: {
-                        alertMessage = "共有リンクの生成に失敗しました。Config.swiftでDynamic Link設定を確認してください。"
+                        alertMessage = "共有リンクの生成に失敗しました。"
                         showingAlert = true
                     }) {
                         Image(systemName: "square.and.arrow.up")

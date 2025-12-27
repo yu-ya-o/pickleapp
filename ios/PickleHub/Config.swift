@@ -15,11 +15,9 @@ enum Config {
     // MARK: - Google Sign-In
     static let googleClientID = "738453907848-foqdf7208fdh9odmttp2i377o0qnf09j.apps.googleusercontent.com"
 
-    // MARK: - Dynamic Links
-    // TODO: Set this to your Firebase Dynamic Links domain from Firebase Console
-    // Example: "picklehub.page.link" or "your-custom-domain.com"
-    static let dynamicLinkDomain = "YOUR_DYNAMIC_LINK_DOMAIN"
-    static let appStoreID = "YOUR_APP_STORE_ID" // Replace with your App Store ID when published
+    // MARK: - Deep Links (Custom URL Scheme)
+    // This is the URL scheme for sharing events (e.g., picklehub://events/123)
+    static let urlScheme = "picklehub"
 
     // MARK: - API Endpoints
     enum Endpoint {
