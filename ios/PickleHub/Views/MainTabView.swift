@@ -5,7 +5,7 @@ struct MainTabView: View {
     @StateObject private var eventsViewModel = EventsViewModel()
     @StateObject private var notificationsViewModel = NotificationsViewModel()
 
-    // Dynamic Link handling
+    // Deep Link handling (Custom URL Scheme)
     @State private var showingEventDetail = false
     @State private var selectedEventId: String?
     @State private var showingTeamEventDetail = false
@@ -44,18 +44,18 @@ struct MainTabView: View {
             // Fetch notifications on tab view load
             await notificationsViewModel.fetchNotifications()
         }
-        .onReceive(NotificationCenter.default.publisher(for: .dynamicLinkReceived)) { notification in
+        .onReceive(NotificationCenter.default.publisher(for: .deepLinkReceived)) { notification in
             guard let userInfo = notification.userInfo,
                   let type = userInfo["type"] as? String else { return }
 
             if type == "event", let eventId = userInfo["eventId"] as? String {
-                print("📱 Opening event from Dynamic Link: \(eventId)")
+                print("📱 Opening event from deep link: \(eventId)")
                 selectedEventId = eventId
                 showingEventDetail = true
             } else if type == "teamEvent",
                       let teamId = userInfo["teamId"] as? String,
                       let eventId = userInfo["eventId"] as? String {
-                print("📱 Opening team event from Dynamic Link: teamId=\(teamId), eventId=\(eventId)")
+                print("📱 Opening team event from deep link: teamId=\(teamId), eventId=\(eventId)")
                 selectedTeamId = teamId
                 selectedTeamEventId = eventId
                 showingTeamEventDetail = true
