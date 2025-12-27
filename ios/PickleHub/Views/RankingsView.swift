@@ -27,6 +27,27 @@ struct RankingsView: View {
                     if viewModel.isLoading {
                         ProgressView()
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else if let errorMessage = viewModel.errorMessage {
+                        VStack(spacing: Spacing.lg) {
+                            Image(systemName: "exclamationmark.triangle")
+                                .font(.system(size: 60))
+                                .foregroundColor(.red)
+                            Text("エラーが発生しました")
+                                .font(.headlineMedium)
+                                .foregroundColor(.secondary)
+                            Text(errorMessage)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal, Spacing.lg)
+                            Button("再試行") {
+                                Task {
+                                    await viewModel.fetchRankings()
+                                }
+                            }
+                            .buttonStyle(.borderedProminent)
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                     } else if viewModel.rankings.isEmpty {
                         VStack(spacing: Spacing.lg) {
                             Image(systemName: "trophy")
