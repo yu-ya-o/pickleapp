@@ -9,6 +9,7 @@ class RankingsViewModel: ObservableObject {
     @Published var selectedType: RankingType = .members
 
     private let apiClient = APIClient.shared
+    private var hasLoadedInitially = false
 
     enum RankingType: String, CaseIterable {
         case members = "members"
@@ -25,6 +26,13 @@ class RankingsViewModel: ObservableObject {
     }
 
     // MARK: - Fetch Rankings
+
+    func initialLoad() async {
+        // 初回ロードのみ実行
+        guard !hasLoadedInitially else { return }
+        hasLoadedInitially = true
+        await fetchRankings()
+    }
 
     func fetchRankings() async {
         // 既にロード中の場合は新しいリクエストを開始しない

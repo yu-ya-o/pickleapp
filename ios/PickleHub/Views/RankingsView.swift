@@ -16,8 +16,11 @@ struct RankingsView: View {
                 .padding(.horizontal, Spacing.md)
                 .padding(.vertical, Spacing.sm)
                 .background(Color.white)
-                .onChange(of: viewModel.selectedType) { _, newValue in
-                    viewModel.changeRankingType(newValue)
+                .onChange(of: viewModel.selectedType) { oldValue, newValue in
+                    // 値が実際に変わった時のみリクエストを送信
+                    if oldValue != newValue {
+                        viewModel.changeRankingType(newValue)
+                    }
                 }
 
                 Divider()
@@ -91,7 +94,7 @@ struct RankingsView: View {
             .navigationTitle("ランキング")
             .navigationBarTitleDisplayMode(.inline)
             .task {
-                await viewModel.fetchRankings()
+                await viewModel.initialLoad()
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
