@@ -87,9 +87,6 @@ struct RankingsView: View {
                         .listStyle(.plain)
                     }
                 }
-                .refreshable {
-                    await viewModel.refresh()
-                }
             }
             .navigationTitle("ランキング")
             .navigationBarTitleDisplayMode(.inline)
