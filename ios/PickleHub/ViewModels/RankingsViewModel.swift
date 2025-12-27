@@ -51,8 +51,9 @@ class RankingsViewModel: ObservableObject {
 
         do {
             print("📡 Starting API request...")
-            rankings = try await apiClient.getTeamRankings(type: selectedType.rawValue)
-            print("✅ API request succeeded, got \(rankings.count) rankings")
+            let newRankings = try await apiClient.getTeamRankings(type: selectedType.rawValue)
+            print("✅ API request succeeded, got \(newRankings.count) rankings")
+            rankings = newRankings
             isLoading = false
         } catch {
             print("❌ API request failed: \(error)")
@@ -63,6 +64,12 @@ class RankingsViewModel: ObservableObject {
     }
 
     func refresh() async {
+        print("🔄 Refresh called, isLoading: \(isLoading)")
+        // 既にロード中の場合は何もしない
+        guard !isLoading else {
+            print("⚠️ Already loading, skipping refresh")
+            return
+        }
         await fetchRankings()
     }
 
