@@ -56,6 +56,8 @@ class APIClient {
             throw APIError.invalidURL
         }
 
+        print("🌐 API Request: \(method) \(url.absoluteString)")
+
         var request = URLRequest(url: url)
         request.httpMethod = method
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
