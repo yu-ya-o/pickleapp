@@ -104,6 +104,12 @@ struct CreateTeamEventView: View {
     }
 
     private func adjustDateToTomorrow(from originalDate: Date) -> Date {
+        // If the original date is in the future, keep it as is
+        if originalDate > Date() {
+            return originalDate
+        }
+
+        // If the original date is in the past, adjust to tomorrow at the same time
         let calendar = Calendar.current
         let tomorrow = calendar.date(byAdding: .day, value: 1, to: Date())!
 
