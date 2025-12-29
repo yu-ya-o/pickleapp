@@ -153,11 +153,9 @@ struct EventDetailView: View {
             if let event = event {
                 CreateEventView(duplicatingEvent: event) { newEvent in
                     print("✅ Duplicate event created: \(newEvent.id)")
-                    print("🔄 Setting currentEventId from \(currentEventId) to \(newEvent.id)")
                     // Switch to the new duplicated event
                     currentEventId = newEvent.id
                     showingDuplicateEvent = false
-                    print("✅ currentEventId set to \(currentEventId)")
                 }
                 .environmentObject(eventsViewModel)
                 .environmentObject(authViewModel)
