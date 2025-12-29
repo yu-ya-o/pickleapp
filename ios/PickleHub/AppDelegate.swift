@@ -115,7 +115,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         completionHandler()
     }
 
-    // MARK: - Custom URL Scheme
+    // MARK: - Custom URL Scheme and Universal Links
 
     // Handle Custom URL Scheme (e.g., picklehub://events/123)
     func application(
@@ -127,34 +127,61 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         return true
     }
 
+    // Handle Universal Links (e.g., https://pickleapp.onrender.com/events/123)
+    func application(
+        _ application: UIApplication,
+        continue userActivity: NSUserActivity,
+        restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void
+    ) -> Bool {
+        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+              let url = userActivity.webpageURL else {
+            return false
+        }
+
+        print("📱 Universal Link received: \(url)")
+        handleDeepLink(url)
+        return true
+    }
+
     private func handleDeepLink(_ url: URL) {
         print("📱 Deep Link received: \(url)")
+        print("   Scheme: \(url.scheme ?? "nil")")
+        print("   Host: \(url.host ?? "nil")")
+        print("   Path: \(url.path)")
 
         // Parse URL path
         let pathComponents = url.pathComponents
 
-        // Handle picklehub://events/{eventId}
-        if url.scheme == Config.urlScheme && pathComponents.count >= 2 && pathComponents[0] == "/" && url.host == "events" {
-            let eventId = pathComponents[1]
-            print("🎯 Opening event: \(eventId)")
+        // Handle picklehub://events/{eventId} or https://pickleapp.onrender.com/events/{eventId}
+        if pathComponents.contains("events") {
+            if let eventIndex = pathComponents.firstIndex(of: "events"),
+               eventIndex + 1 < pathComponents.count {
+                let eventId = pathComponents[eventIndex + 1]
+                print("🎯 Opening event: \(eventId)")
 
-            NotificationCenter.default.post(
-                name: .deepLinkReceived,
-                object: nil,
-                userInfo: ["type": "event", "eventId": eventId]
-            )
+                NotificationCenter.default.post(
+                    name: .deepLinkReceived,
+                    object: nil,
+                    userInfo: ["type": "event", "eventId": eventId]
+                )
+            }
         }
-        // Handle picklehub://teams/{teamId}/events/{eventId}
-        else if url.scheme == Config.urlScheme && url.host == "teams" && pathComponents.count >= 4 && pathComponents[2] == "events" {
-            let teamId = pathComponents[1]
-            let eventId = pathComponents[3]
-            print("🎯 Opening team event: teamId=\(teamId), eventId=\(eventId)")
+        // Handle picklehub://teams/{teamId}/events/{eventId} or https://pickleapp.onrender.com/teams/{teamId}/events/{eventId}
+        else if pathComponents.contains("teams") && pathComponents.contains("events") {
+            if let teamsIndex = pathComponents.firstIndex(of: "teams"),
+               teamsIndex + 1 < pathComponents.count,
+               let eventsIndex = pathComponents.firstIndex(of: "events"),
+               eventsIndex + 1 < pathComponents.count {
+                let teamId = pathComponents[teamsIndex + 1]
+                let eventId = pathComponents[eventsIndex + 1]
+                print("🎯 Opening team event: teamId=\(teamId), eventId=\(eventId)")
 
-            NotificationCenter.default.post(
-                name: .deepLinkReceived,
-                object: nil,
-                userInfo: ["type": "teamEvent", "teamId": teamId, "eventId": eventId]
-            )
+                NotificationCenter.default.post(
+                    name: .deepLinkReceived,
+                    object: nil,
+                    userInfo: ["type": "teamEvent", "teamId": teamId, "eventId": eventId]
+                )
+            }
         }
     }
 }
