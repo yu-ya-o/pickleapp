@@ -18,9 +18,16 @@ struct TeamEventDetailView: View {
     @State private var showingTeamDetail = false
     @State private var showingEditEvent = false
     @State private var showingDuplicateEvent = false
+    @State private var currentEventId: String
 
     let teamId: String
     let eventId: String
+
+    init(teamId: String, eventId: String) {
+        self.teamId = teamId
+        self.eventId = eventId
+        self._currentEventId = State(initialValue: eventId)
+    }
 
     private var isCreator: Bool {
         event?.creator.id == authViewModel.currentUser?.id
@@ -188,18 +195,19 @@ struct TeamEventDetailView: View {
         .sheet(isPresented: $showingDuplicateEvent) {
             if let event = event {
                 CreateTeamEventView(teamId: teamId, duplicatingEvent: event) { newEvent in
-                    print("🔄 Duplicate event created: \(newEvent.id)")
-                    // Close sheet and detail view first
+                    print("✅ Duplicate event created: \(newEvent.id)")
+                    // Switch to the new duplicated event
+                    currentEventId = newEvent.id
                     showingDuplicateEvent = false
-                    dismiss()
-                    // After navigation completes, set the navigation target
-                    // This ensures we're back at the list before pushing the new event
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        print("✅ Setting navigateToTeamEvent after dismiss: \(newEvent.id)")
-                        viewModel.navigateToTeamEvent = newEvent
-                    }
                 }
                 .environmentObject(viewModel)
+            }
+        }
+        .onChange(of: currentEventId) { _, newId in
+            print("🔄 currentEventId changed to: \(newId)")
+            // Reload the event when currentEventId changes
+            Task {
+                await loadEvent()
             }
         }
         .onChange(of: showingEditEvent) { _, newValue in
@@ -581,7 +589,7 @@ struct TeamEventDetailView: View {
         isLoading = true
 
         do {
-            event = try await APIClient.shared.getTeamEvent(teamId: teamId, eventId: eventId)
+            event = try await APIClient.shared.getTeamEvent(teamId: teamId, eventId: currentEventId)
             isLoading = false
         } catch {
             isLoading = false
