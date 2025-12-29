@@ -114,7 +114,9 @@ struct EventDetailView: View {
         .sheet(isPresented: $showingDuplicateEvent) {
             CreateEventView(duplicatingEvent: event) { newEvent in
                 // Set the navigation target first, then close the current event detail
+                print("🔄 Setting navigateToEvent: \(newEvent.id)")
                 eventsViewModel.navigateToEvent = newEvent
+                print("✅ navigateToEvent set, now dismissing")
                 dismiss()
             }
             .environmentObject(eventsViewModel)
