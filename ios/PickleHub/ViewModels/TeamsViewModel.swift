@@ -68,7 +68,11 @@ class TeamsViewModel: ObservableObject {
         region: String? = nil,
         visibility: String,
         iconImage: String? = nil,
-        headerImage: String? = nil
+        headerImage: String? = nil,
+        instagramUrl: String? = nil,
+        twitterUrl: String? = nil,
+        tiktokUrl: String? = nil,
+        lineUrl: String? = nil
     ) async throws {
         isLoading = true
         errorMessage = nil
@@ -80,10 +84,10 @@ class TeamsViewModel: ObservableObject {
             headerImage: headerImage,
             region: region,
             visibility: visibility,
-            instagramUrl: nil,
-            twitterUrl: nil,
-            tiktokUrl: nil,
-            lineUrl: nil
+            instagramUrl: instagramUrl,
+            twitterUrl: twitterUrl,
+            tiktokUrl: tiktokUrl,
+            lineUrl: lineUrl
         )
 
         do {

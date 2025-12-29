@@ -9,6 +9,10 @@ struct CreateTeamView: View {
     @State private var description = ""
     @State private var region = ""
     @State private var visibility = "public"
+    @State private var instagramUrl = ""
+    @State private var twitterUrl = ""
+    @State private var tiktokUrl = ""
+    @State private var lineUrl = ""
     @State private var isLoading = false
     @State private var showingError = false
     @State private var errorMessage = ""
@@ -92,6 +96,40 @@ struct CreateTeamView: View {
                         }
                     }
                     .pickerStyle(.menu)
+                }
+
+                Section(header: Text("SNS（任意）")) {
+                    HStack {
+                        Image(systemName: "camera.fill")
+                            .foregroundColor(.purple)
+                        TextField("Instagram URL", text: $instagramUrl)
+                            .textContentType(.URL)
+                            .autocapitalization(.none)
+                    }
+
+                    HStack {
+                        Image(systemName: "bird.fill")
+                            .foregroundColor(.blue)
+                        TextField("Twitter URL", text: $twitterUrl)
+                            .textContentType(.URL)
+                            .autocapitalization(.none)
+                    }
+
+                    HStack {
+                        Image(systemName: "music.note")
+                            .foregroundColor(.black)
+                        TextField("TikTok URL", text: $tiktokUrl)
+                            .textContentType(.URL)
+                            .autocapitalization(.none)
+                    }
+
+                    HStack {
+                        Image(systemName: "message.fill")
+                            .foregroundColor(.green)
+                        TextField("LINE URL", text: $lineUrl)
+                            .textContentType(.URL)
+                            .autocapitalization(.none)
+                    }
                 }
 
                 // 暫定的にコメントアウト: 招待リンク機能の不具合により非公開設定を無効化
@@ -194,7 +232,11 @@ struct CreateTeamView: View {
                     region: region.isEmpty ? nil : region,
                     visibility: visibility,
                     iconImage: iconImageURL,
-                    headerImage: headerImageURL
+                    headerImage: headerImageURL,
+                    instagramUrl: instagramUrl.isEmpty ? nil : instagramUrl,
+                    twitterUrl: twitterUrl.isEmpty ? nil : twitterUrl,
+                    tiktokUrl: tiktokUrl.isEmpty ? nil : tiktokUrl,
+                    lineUrl: lineUrl.isEmpty ? nil : lineUrl
                 )
                 dismiss()
             } catch {
