@@ -101,19 +101,10 @@ struct EventDetailView: View {
             }
             }
             .onChange(of: currentEvent.id) { _, newId in
-                print("🔄 currentEvent.id changed to: \(newId)")
+                print("🔄 Scrolling to top for event: \(newId)")
                 // Scroll to top immediately
                 withAnimation {
                     proxy.scrollTo("top", anchor: .top)
-                }
-                // Fetch the new event
-                Task {
-                    do {
-                        let newEvent = try await APIClient.shared.getEvent(id: newId)
-                        currentEvent = newEvent
-                    } catch {
-                        print("❌ Failed to load event: \(error)")
-                    }
                 }
             }
         }
