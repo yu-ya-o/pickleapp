@@ -188,23 +188,18 @@ struct TeamEventDetailView: View {
         .sheet(isPresented: $showingDuplicateEvent) {
             if let event = event {
                 CreateTeamEventView(teamId: teamId, duplicatingEvent: event) { newEvent in
-                    print("🔄 Setting navigateToTeamEvent: \(newEvent.id)")
-                    viewModel.navigateToTeamEvent = newEvent
-                    print("✅ navigateToTeamEvent set")
+                    print("🔄 Duplicate event created: \(newEvent.id)")
+                    // Close sheet and detail view first
+                    showingDuplicateEvent = false
+                    dismiss()
+                    // After navigation completes, set the navigation target
+                    // This ensures we're back at the list before pushing the new event
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        print("✅ Setting navigateToTeamEvent after dismiss: \(newEvent.id)")
+                        viewModel.navigateToTeamEvent = newEvent
+                    }
                 }
                 .environmentObject(viewModel)
-            }
-        }
-        .onChange(of: viewModel.navigateToTeamEvent) { _, newEvent in
-            if newEvent != nil {
-                print("🚀 navigateToTeamEvent changed, dismissing TeamEventDetailView")
-                // Close the duplicate event sheet first
-                showingDuplicateEvent = false
-                // Then dismiss this detail view to go back to the list
-                // The navigationDestination in TeamEventsListView will then push the new event
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    dismiss()
-                }
             }
         }
         .onChange(of: showingEditEvent) { _, newValue in
