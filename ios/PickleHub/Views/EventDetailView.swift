@@ -113,11 +113,9 @@ struct EventDetailView: View {
         }
         .sheet(isPresented: $showingDuplicateEvent) {
             CreateEventView(duplicatingEvent: event) { newEvent in
-                // Close the current event detail and navigate to the new event via ViewModel
+                // Set the navigation target first, then close the current event detail
+                eventsViewModel.navigateToEvent = newEvent
                 dismiss()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    eventsViewModel.navigateToEvent = newEvent
-                }
             }
             .environmentObject(eventsViewModel)
             .environmentObject(authViewModel)
