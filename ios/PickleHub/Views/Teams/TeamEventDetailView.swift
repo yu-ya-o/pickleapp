@@ -104,11 +104,15 @@ struct TeamEventDetailView: View {
     }
 
     var body: some View {
-        ScrollView {
-            if let event = event {
-                VStack(alignment: .leading, spacing: 20) {
-                    // Team Header Image
-                    if let headerURL = event.team.headerImageURL {
+        ScrollViewReader { proxy in
+            ScrollView {
+                if let event = event {
+                    VStack(alignment: .leading, spacing: 20) {
+                        Color.clear
+                            .frame(height: 1)
+                            .id("top")
+                        // Team Header Image
+                        if let headerURL = event.team.headerImageURL {
                         CachedAsyncImagePhase(url: headerURL) { phase in
                             switch phase {
                             case .success(let image):
@@ -142,6 +146,18 @@ struct TeamEventDetailView: View {
             } else if isLoading {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            }
+            .onChange(of: currentEventId) { _, newId in
+                print("🔄 currentEventId changed to: \(newId)")
+                // Scroll to top immediately
+                withAnimation {
+                    proxy.scrollTo("top", anchor: .top)
+                }
+                // Then reload the event
+                Task {
+                    await loadEvent()
+                }
             }
         }
         .navigationTitle("イベント")
@@ -201,13 +217,6 @@ struct TeamEventDetailView: View {
                     showingDuplicateEvent = false
                 }
                 .environmentObject(viewModel)
-            }
-        }
-        .onChange(of: currentEventId) { _, newId in
-            print("🔄 currentEventId changed to: \(newId)")
-            // Reload the event when currentEventId changes
-            Task {
-                await loadEvent()
             }
         }
         .onChange(of: showingEditEvent) { _, newValue in
