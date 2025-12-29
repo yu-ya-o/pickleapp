@@ -98,38 +98,13 @@ struct CreateTeamView: View {
                     .pickerStyle(.menu)
                 }
 
-                Section(header: Text("SNS（任意）")) {
-                    HStack {
-                        Image(systemName: "camera.fill")
-                            .foregroundColor(.purple)
-                        TextField("Instagram URL", text: $instagramUrl)
-                            .textContentType(.URL)
-                            .autocapitalization(.none)
-                    }
-
-                    HStack {
-                        Image(systemName: "bird.fill")
-                            .foregroundColor(.blue)
-                        TextField("Twitter URL", text: $twitterUrl)
-                            .textContentType(.URL)
-                            .autocapitalization(.none)
-                    }
-
-                    HStack {
-                        Image(systemName: "music.note")
-                            .foregroundColor(.black)
-                        TextField("TikTok URL", text: $tiktokUrl)
-                            .textContentType(.URL)
-                            .autocapitalization(.none)
-                    }
-
-                    HStack {
-                        Image(systemName: "message.fill")
-                            .foregroundColor(.green)
-                        TextField("LINE URL", text: $lineUrl)
-                            .textContentType(.URL)
-                            .autocapitalization(.none)
-                    }
+                Section {
+                    SNSLinksEditor(
+                        instagramUrl: $instagramUrl,
+                        twitterUrl: $twitterUrl,
+                        tiktokUrl: $tiktokUrl,
+                        lineUrl: $lineUrl
+                    )
                 }
 
                 // 暫定的にコメントアウト: 招待リンク機能の不具合により非公開設定を無効化
