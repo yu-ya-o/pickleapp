@@ -2,10 +2,10 @@ import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 
 interface TeamEventPageProps {
-  params: {
+  params: Promise<{
     teamId: string;
     eventId: string;
-  };
+  }>;
 }
 
 async function getTeamEvent(teamId: string, eventId: string) {
@@ -48,13 +48,14 @@ async function getTeamEvent(teamId: string, eventId: string) {
 }
 
 export default async function TeamEventPage({ params }: TeamEventPageProps) {
-  const event = await getTeamEvent(params.teamId, params.eventId);
+  const { teamId, eventId } = await params;
+  const event = await getTeamEvent(teamId, eventId);
 
   if (!event || !event.team) {
     notFound();
   }
 
-  const deepLink = `picklehub://teams/${params.teamId}/events/${params.eventId}`;
+  const deepLink = `picklehub://teams/${teamId}/events/${eventId}`;
   const eventDate = new Date(event.eventDate);
   const formattedDate = eventDate.toLocaleDateString('ja-JP', {
     year: 'numeric',

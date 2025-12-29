@@ -2,9 +2,9 @@ import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 
 interface EventPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 async function getEvent(id: string) {
@@ -43,13 +43,14 @@ async function getEvent(id: string) {
 }
 
 export default async function EventPage({ params }: EventPageProps) {
-  const event = await getEvent(params.id);
+  const { id } = await params;
+  const event = await getEvent(id);
 
   if (!event) {
     notFound();
   }
 
-  const deepLink = `picklehub://events/${params.id}`;
+  const deepLink = `picklehub://events/${id}`;
   const eventDate = new Date(event.eventDate);
   const formattedDate = eventDate.toLocaleDateString('ja-JP', {
     year: 'numeric',
