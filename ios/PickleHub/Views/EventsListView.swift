@@ -278,6 +278,11 @@ struct EventsListView: View {
                     UserProfileView(user: user)
                 }
             }
+            .navigationDestination(item: $eventsViewModel.navigateToEvent) { event in
+                EventDetailView(event: event)
+                    .environmentObject(eventsViewModel)
+                    .environmentObject(authViewModel)
+            }
             .task {
                 // デフォルトでユーザの地域を選択
                 if selectedRegion.isEmpty {

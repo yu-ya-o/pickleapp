@@ -18,7 +18,6 @@ struct TeamEventDetailView: View {
     @State private var showingTeamDetail = false
     @State private var showingEditEvent = false
     @State private var showingDuplicateEvent = false
-    @State private var navigateToNewEvent: TeamEvent? = nil
 
     let teamId: String
     let eventId: String
@@ -195,17 +194,14 @@ struct TeamEventDetailView: View {
         .sheet(isPresented: $showingDuplicateEvent) {
             if let event = event {
                 CreateTeamEventView(teamId: teamId, duplicatingEvent: event) { newEvent in
-                    // Close the current event detail and navigate to the new event
+                    // Close the current event detail and navigate to the new event via ViewModel
                     dismiss()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        navigateToNewEvent = newEvent
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        viewModel.navigateToTeamEvent = newEvent
                     }
                 }
                 .environmentObject(viewModel)
             }
-        }
-        .navigationDestination(item: $navigateToNewEvent) { newEvent in
-            TeamEventDetailView(teamId: teamId, eventId: newEvent.id)
         }
         .onChange(of: showingEditEvent) { _, newValue in
             if !newValue {
