@@ -3,7 +3,7 @@
     "apps": [],
     "details": [
       {
-        "appID": "YOUR_TEAM_ID.YOUR_BUNDLE_ID",
+        "appID": "D4K335K466.com.yuyaoono.pickleapp",
         "paths": [
           "/events/*",
           "/teams/*/events/*"
@@ -13,7 +13,7 @@
   },
   "webcredentials": {
     "apps": [
-      "YOUR_TEAM_ID.YOUR_BUNDLE_ID"
+      "D4K335K466.com.yuyaoono.pickleapp"
     ]
   }
 }
