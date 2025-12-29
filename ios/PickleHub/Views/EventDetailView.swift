@@ -153,11 +153,18 @@ struct EventDetailView: View {
             if let event = event {
                 CreateEventView(duplicatingEvent: event) { newEvent in
                     print("✅ Duplicate event created: \(newEvent.id)")
-                    print("🔄 Setting currentEventId from \(currentEventId) to \(newEvent.id)")
-                    // Switch to the new duplicated event
-                    currentEventId = newEvent.id
-                    showingDuplicateEvent = false
-                    print("✅ currentEventId set to \(currentEventId)")
+                    // Close the sheet first, then update the event
+                    DispatchQueue.main.async {
+                        print("🔄 Closing duplicate sheet")
+                        showingDuplicateEvent = false
+
+                        // Wait a bit for the sheet to close, then navigate
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            print("🔄 Setting currentEventId from \(currentEventId) to \(newEvent.id)")
+                            currentEventId = newEvent.id
+                            print("✅ currentEventId set to \(currentEventId)")
+                        }
+                    }
                 }
                 .environmentObject(eventsViewModel)
                 .environmentObject(authViewModel)
