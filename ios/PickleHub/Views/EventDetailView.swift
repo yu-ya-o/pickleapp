@@ -118,6 +118,10 @@ struct EventDetailView: View {
                     print("🌐 Loading event with ID: \(newId)")
                     await loadEvent()
                     print("✅ Event loaded successfully")
+                    // Refresh events list in background to include the new event
+                    if oldId != newId {
+                        await eventsViewModel.fetchEvents()
+                    }
                 }
             }
         }

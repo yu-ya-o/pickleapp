@@ -75,7 +75,8 @@ class EventsViewModel: ObservableObject {
         endTime: Date,
         maxParticipants: Int,
         skillLevel: String,
-        price: Int? = nil
+        price: Int? = nil,
+        skipArrayInsertion: Bool = false
     ) async throws -> Event {
         isLoading = true
         errorMessage = nil
@@ -96,7 +97,10 @@ class EventsViewModel: ObservableObject {
 
         do {
             let newEvent = try await apiClient.createEvent(request: request)
-            events.insert(newEvent, at: 0)
+            // Only insert into array if not duplicating (to avoid NavigationLink invalidation)
+            if !skipArrayInsertion {
+                events.insert(newEvent, at: 0)
+            }
             isLoading = false
             return newEvent
         } catch {

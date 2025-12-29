@@ -251,7 +251,8 @@ struct CreateEventView: View {
                         endTime: endDate,
                         maxParticipants: hasCapacityLimit ? maxParticipants : 999,
                         skillLevel: skillLevel,
-                        price: price
+                        price: price,
+                        skipArrayInsertion: onEventCreated != nil
                     )
 
                 case .team(let teamId):
