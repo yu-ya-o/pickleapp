@@ -12,19 +12,12 @@ async function getEvent(id: string) {
     const event = await prisma.event.findUnique({
       where: { id },
       include: {
-        organizer: {
+        creator: {
           select: {
             id: true,
             name: true,
             nickname: true,
             profileImage: true,
-          },
-        },
-        team: {
-          select: {
-            id: true,
-            name: true,
-            iconImage: true,
           },
         },
         _count: {
@@ -51,8 +44,8 @@ export default async function EventPage({ params }: EventPageProps) {
   }
 
   const deepLink = `picklehub://events/${id}`;
-  const eventDate = new Date(event.eventDate);
-  const formattedDate = eventDate.toLocaleDateString('ja-JP', {
+  const startTime = new Date(event.startTime);
+  const formattedDate = startTime.toLocaleDateString('ja-JP', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -63,33 +56,9 @@ export default async function EventPage({ params }: EventPageProps) {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6 bg-gradient-to-b from-blue-50 to-white">
       <div className="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-8">
-        {/* Event Header Image */}
-        {event.headerImage && (
-          <div className="mb-6 rounded-xl overflow-hidden">
-            <img
-              src={event.headerImage}
-              alt={event.title}
-              className="w-full h-64 object-cover"
-            />
-          </div>
-        )}
-
         {/* Event Info */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-4 text-gray-900">{event.title}</h1>
-
-          {event.team && (
-            <div className="flex items-center gap-3 mb-4">
-              {event.team.iconImage && (
-                <img
-                  src={event.team.iconImage}
-                  alt={event.team.name}
-                  className="w-10 h-10 rounded-full"
-                />
-              )}
-              <span className="text-lg text-gray-700">{event.team.name}</span>
-            </div>
-          )}
 
           <div className="space-y-3 text-gray-600">
             <div className="flex items-center gap-2">
