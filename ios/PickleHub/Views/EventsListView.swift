@@ -279,11 +279,11 @@ struct EventsListView: View {
                 }
             }
             .navigationDestination(item: $eventsViewModel.navigateToEvent) { event in
-                print("🎯 navigationDestination triggered for event: \(event.id)")
                 EventDetailView(event: event)
                     .environmentObject(eventsViewModel)
                     .environmentObject(authViewModel)
                     .onAppear {
+                        print("🎯 navigationDestination triggered for event: \(event.id)")
                         print("📱 New EventDetailView appeared for event: \(event.id)")
                     }
             }
