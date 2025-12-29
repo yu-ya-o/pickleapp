@@ -7,6 +7,7 @@ class TeamEventsViewModel: ObservableObject {
     @Published var team: Team?
     @Published var isLoading = false
     @Published var errorMessage: String?
+    @Published var navigateToTeamEvent: TeamEvent? = nil
 
     private let apiClient = APIClient.shared
     let teamId: String

@@ -8,6 +8,7 @@ class EventsViewModel: ObservableObject {
     @Published var publicTeamEvents: [TeamEvent] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
+    @Published var navigateToEvent: Event? = nil
 
     private let apiClient = APIClient.shared
 

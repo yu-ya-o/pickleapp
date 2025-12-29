@@ -88,6 +88,9 @@ struct TeamEventsListView: View {
                     }
                 }
             }
+            .navigationDestination(item: $viewModel.navigateToTeamEvent) { event in
+                TeamEventDetailView(teamId: viewModel.teamId, eventId: event.id)
+            }
             .task {
                 await viewModel.loadTeam()
                 await viewModel.loadEvents()
