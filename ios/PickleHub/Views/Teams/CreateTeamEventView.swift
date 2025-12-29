@@ -24,11 +24,13 @@ struct CreateTeamEventView: View {
     let editingEvent: TeamEvent?
     let duplicatingEvent: TeamEvent?
     let skillLevels = ["beginner", "intermediate", "advanced", "all"]
+    var onEventCreated: ((TeamEvent) -> Void)? = nil
 
-    init(teamId: String, editingEvent: TeamEvent? = nil, duplicatingEvent: TeamEvent? = nil) {
+    init(teamId: String, editingEvent: TeamEvent? = nil, duplicatingEvent: TeamEvent? = nil, onEventCreated: ((TeamEvent) -> Void)? = nil) {
         self.teamId = teamId
         self.editingEvent = editingEvent
         self.duplicatingEvent = duplicatingEvent
+        self.onEventCreated = onEventCreated
 
         // Initialize state from editing event if provided
         if let event = editingEvent {
@@ -258,6 +260,7 @@ struct CreateTeamEventView: View {
 
             do {
                 let price = priceInput.isEmpty ? nil : Int(priceInput)
+                var createdEvent: TeamEvent?
 
                 if let event = editingEvent {
                     // Update existing event
@@ -276,7 +279,7 @@ struct CreateTeamEventView: View {
                     )
                 } else {
                     // Create new event
-                    try await viewModel.createEvent(
+                    createdEvent = try await viewModel.createEvent(
                         title: title,
                         description: description,
                         location: location,
@@ -289,7 +292,13 @@ struct CreateTeamEventView: View {
                         visibility: visibility
                     )
                 }
+
                 dismiss()
+
+                // Call the callback with the created event
+                if let event = createdEvent {
+                    onEventCreated?(event)
+                }
             } catch {
                 errorMessage = error.localizedDescription
                 showingError = true

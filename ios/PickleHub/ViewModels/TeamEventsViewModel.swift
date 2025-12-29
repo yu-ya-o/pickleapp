@@ -65,7 +65,7 @@ class TeamEventsViewModel: ObservableObject {
         price: Int? = nil,
         skillLevel: String? = nil,
         visibility: String = "private"
-    ) async throws {
+    ) async throws -> TeamEvent {
         isLoading = true
         errorMessage = nil
 
@@ -88,6 +88,7 @@ class TeamEventsViewModel: ObservableObject {
             let newEvent = try await apiClient.createTeamEvent(teamId: teamId, request: request)
             events.insert(newEvent, at: 0)
             isLoading = false
+            return newEvent
         } catch {
             isLoading = false
             errorMessage = error.localizedDescription

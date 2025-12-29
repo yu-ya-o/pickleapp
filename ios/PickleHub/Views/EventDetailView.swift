@@ -15,6 +15,7 @@ struct EventDetailView: View {
     @State private var showingCloseEventAlert = false
     @State private var showingEditEvent = false
     @State private var showingDuplicateEvent = false
+    @State private var navigateToNewEvent: Event? = nil
     @State private var reservationToCancel: String?
 
     let event: Event
@@ -112,7 +113,18 @@ struct EventDetailView: View {
                 .environmentObject(eventsViewModel)
         }
         .sheet(isPresented: $showingDuplicateEvent) {
-            CreateEventView(duplicatingEvent: event)
+            CreateEventView(duplicatingEvent: event) { newEvent in
+                // Close the current event detail and navigate to the new event
+                dismiss()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    navigateToNewEvent = newEvent
+                }
+            }
+            .environmentObject(eventsViewModel)
+            .environmentObject(authViewModel)
+        }
+        .navigationDestination(item: $navigateToNewEvent) { newEvent in
+            EventDetailView(event: newEvent)
                 .environmentObject(eventsViewModel)
                 .environmentObject(authViewModel)
         }
