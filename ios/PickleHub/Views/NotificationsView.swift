@@ -118,17 +118,8 @@ struct NotificationsView: View {
             }
             .sheet(isPresented: $showingTeamEventDetail) {
                 if let ids = selectedTeamEventIds {
-                    NavigationView {
-                        TeamEventDetailView(teamId: ids.teamId, eventId: ids.eventId)
-                            .environmentObject(authViewModel)
-                            .toolbar {
-                                ToolbarItem(placement: .navigationBarTrailing) {
-                                    Button("閉じる") {
-                                        showingTeamEventDetail = false
-                                    }
-                                }
-                            }
-                    }
+                    TeamEventDetailContainerView(teamId: ids.teamId, eventId: ids.eventId)
+                        .environmentObject(authViewModel)
                 }
             }
         }
