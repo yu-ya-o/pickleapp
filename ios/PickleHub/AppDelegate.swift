@@ -174,26 +174,9 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         // Parse URL path
         let pathComponents = url.pathComponents
 
-        // Handle picklehub://events/{eventId} or https://pickleapp.onrender.com/events/{eventId}
-        if pathComponents.contains("events") {
-            if let eventIndex = pathComponents.firstIndex(of: "events"),
-               eventIndex + 1 < pathComponents.count {
-                let eventId = pathComponents[eventIndex + 1]
-                print("🎯 Opening event: \(eventId)")
-
-                // Save to UserDefaults for later (in case MainTabView is not loaded yet)
-                UserDefaults.standard.set(eventId, forKey: "pendingEventId")
-
-                // Also send notification for immediate handling
-                NotificationCenter.default.post(
-                    name: .deepLinkReceived,
-                    object: nil,
-                    userInfo: ["type": "event", "eventId": eventId]
-                )
-            }
-        }
         // Handle picklehub://teams/{teamId}/events/{eventId} or https://pickleapp.onrender.com/teams/{teamId}/events/{eventId}
-        else if pathComponents.contains("teams") && pathComponents.contains("events") {
+        // Check for team events FIRST (before regular events)
+        if pathComponents.contains("teams") && pathComponents.contains("events") {
             if let teamsIndex = pathComponents.firstIndex(of: "teams"),
                teamsIndex + 1 < pathComponents.count,
                let eventsIndex = pathComponents.firstIndex(of: "events"),
@@ -211,6 +194,24 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                     name: .deepLinkReceived,
                     object: nil,
                     userInfo: ["type": "teamEvent", "teamId": teamId, "eventId": eventId]
+                )
+            }
+        }
+        // Handle picklehub://events/{eventId} or https://pickleapp.onrender.com/events/{eventId}
+        else if pathComponents.contains("events") {
+            if let eventIndex = pathComponents.firstIndex(of: "events"),
+               eventIndex + 1 < pathComponents.count {
+                let eventId = pathComponents[eventIndex + 1]
+                print("🎯 Opening event: \(eventId)")
+
+                // Save to UserDefaults for later (in case MainTabView is not loaded yet)
+                UserDefaults.standard.set(eventId, forKey: "pendingEventId")
+
+                // Also send notification for immediate handling
+                NotificationCenter.default.post(
+                    name: .deepLinkReceived,
+                    object: nil,
+                    userInfo: ["type": "event", "eventId": eventId]
                 )
             }
         }
