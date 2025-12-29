@@ -3,12 +3,17 @@
     "apps": [],
     "details": [
       {
-        "appID": "TEAM_ID.com.yourcompany.picklehub",
+        "appID": "YOUR_TEAM_ID.YOUR_BUNDLE_ID",
         "paths": [
           "/events/*",
           "/teams/*/events/*"
         ]
       }
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "YOUR_TEAM_ID.YOUR_BUNDLE_ID"
     ]
   }
 }
