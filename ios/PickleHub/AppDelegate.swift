@@ -125,6 +125,26 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         open url: URL,
         options: [UIApplication.OpenURLOptionsKey : Any] = [:]
     ) -> Bool {
+        // Show alert for debugging
+        DispatchQueue.main.async {
+            let alert = UIAlertController(
+                title: "URL Received!",
+                message: "URL: \(url.absoluteString)",
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+
+            if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = scene.windows.first,
+               let rootVC = window.rootViewController {
+                var topVC = rootVC
+                while let presented = topVC.presentedViewController {
+                    topVC = presented
+                }
+                topVC.present(alert, animated: true)
+            }
+        }
+
         handleDeepLink(url)
         return true
     }
