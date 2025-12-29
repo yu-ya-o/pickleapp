@@ -127,26 +127,6 @@ struct EventDetailView: View {
         }
         .navigationTitle("イベント")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                if let shareURL = DeepLinkManager.shared.generateEventLink(eventId: currentEventId) {
-                    ShareLink(
-                        item: shareURL,
-                        subject: Text("PickleHub イベント"),
-                        message: Text("「\(event?.title ?? "イベント")」に参加しませんか？")
-                    ) {
-                        Image(systemName: "square.and.arrow.up")
-                    }
-                } else {
-                    Button(action: {
-                        alertMessage = "共有リンクの生成に失敗しました。"
-                        showingAlert = true
-                    }) {
-                        Image(systemName: "square.and.arrow.up")
-                    }
-                }
-            }
-        }
         .sheet(isPresented: $showingEditEvent) {
             if let event = event {
                 EditEventView(event: event)
