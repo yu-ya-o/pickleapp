@@ -50,5 +50,6 @@ struct OnboardingGenderView: View {
                     .frame(height: Spacing.xl * 3)
             }
         }
+        .disabled(false) // ScrollViewのインタラクションを有効化
     }
 }

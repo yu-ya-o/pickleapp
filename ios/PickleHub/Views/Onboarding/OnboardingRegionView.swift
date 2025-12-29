@@ -81,6 +81,7 @@ struct OnboardingRegionView: View {
                 }
                 .padding(.horizontal, Spacing.xl)
             }
+            .disabled(false) // ScrollViewのインタラクションを有効化
         }
     }
 }

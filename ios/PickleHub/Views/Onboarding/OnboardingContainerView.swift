@@ -59,20 +59,8 @@ struct OnboardingContainerView: View {
                         .tag(9)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
+                .disabled(true) // TabViewのページングを完全に無効化（子ビューで再度有効化）
                 .animation(.spring(response: 0.3, dampingFraction: 0.8), value: currentPage)
-                .simultaneousGesture(
-                    // 横方向のスワイプのみを無効化、縦スクロールは許可
-                    DragGesture(minimumDistance: 0)
-                        .onChanged { value in
-                            let horizontalAmount = abs(value.translation.width)
-                            let verticalAmount = abs(value.translation.height)
-
-                            // 横方向のドラッグを検出したら何もしない（ブロックする）
-                            if horizontalAmount > verticalAmount {
-                                // 横方向のドラッグをブロック
-                            }
-                        }
-                )
                 .onChange(of: currentPage) { oldPage, newPage in
                     // 必須項目が入力されていない場合は元のページに戻す
                     if newPage > oldPage && !canProceedFromPage(oldPage) {
