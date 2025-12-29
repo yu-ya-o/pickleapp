@@ -60,7 +60,7 @@ struct OnboardingContainerView: View {
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .animation(.spring(response: 0.3, dampingFraction: 0.8), value: currentPage)
-                .gesture(DragGesture()) // スワイプジェスチャーを無効化
+                .highPriorityGesture(DragGesture()) // スワイプジェスチャーを完全に無効化
                 .onChange(of: currentPage) { oldPage, newPage in
                     // 必須項目が入力されていない場合は元のページに戻す
                     if newPage > oldPage && !canProceedFromPage(oldPage) {
