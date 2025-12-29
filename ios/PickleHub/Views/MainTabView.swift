@@ -53,8 +53,8 @@ struct MainTabView: View {
             // Check if there's a pending deep link
             checkPendingDeepLink()
         }
-        .onReceive(NotificationCenter.default.publisher(for: .deepLinkReceived)) { notification in
-            handleDeepLink(notification)
+        .onReceive(NotificationCenter.default.publisher(for: .deepLinkReceived)) { output in
+            handleDeepLink(output)
         }
         .sheet(isPresented: $showingEventDetail) {
             if let eventId = selectedEventId {
@@ -97,8 +97,8 @@ struct MainTabView: View {
         }
     }
 
-    private func handleDeepLink(_ notification: Notification) {
-        guard let userInfo = notification.userInfo,
+    private func handleDeepLink(_ output: NotificationCenter.Publisher.Output) {
+        guard let userInfo = output.userInfo,
               let type = userInfo["type"] as? String else { return }
 
         if type == "event", let eventId = userInfo["eventId"] as? String {
