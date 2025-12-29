@@ -194,11 +194,9 @@ struct TeamEventDetailView: View {
         .sheet(isPresented: $showingDuplicateEvent) {
             if let event = event {
                 CreateTeamEventView(teamId: teamId, duplicatingEvent: event) { newEvent in
-                    // Close the current event detail and navigate to the new event via ViewModel
+                    // Set the navigation target first, then close the current event detail
+                    viewModel.navigateToTeamEvent = newEvent
                     dismiss()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        viewModel.navigateToTeamEvent = newEvent
-                    }
                 }
                 .environmentObject(viewModel)
             }
