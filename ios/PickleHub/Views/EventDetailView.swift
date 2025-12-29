@@ -16,30 +16,29 @@ struct EventDetailView: View {
     @State private var showingEditEvent = false
     @State private var showingDuplicateEvent = false
     @State private var reservationToCancel: String?
-    @State private var currentEvent: Event
+    @State private var currentEventId: String
+    @State private var event: Event?
+    @State private var isLoading = true
 
     let initialEvent: Event
 
     init(event: Event) {
         self.initialEvent = event
-        self._currentEvent = State(initialValue: event)
-    }
-
-    // Use currentEvent as the active event
-    private var event: Event {
-        currentEvent
+        self._currentEventId = State(initialValue: event.id)
+        self._event = State(initialValue: event)
+        self._isLoading = State(initialValue: false)
     }
 
     private var isCreator: Bool {
-        currentEvent.creator.id == authViewModel.currentUser?.id
+        event?.creator.id == authViewModel.currentUser?.id ?? false
     }
 
     private var isClosed: Bool {
-        currentEvent.status == "completed"
+        event?.status == "completed" ?? false
     }
 
     private var isEventPast: Bool {
-        guard let startDate = event.startDate else { return false }
+        guard let event = event, let startDate = event.startDate else { return false }
         return startDate < Date()
     }
 
@@ -61,18 +60,19 @@ struct EventDetailView: View {
     }
 
     private var userReservation: Reservation? {
-        event.reservations.first { $0.user.id == authViewModel.currentUser?.id }
+        event?.reservations.first { $0.user.id == authViewModel.currentUser?.id }
     }
 
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    Color.clear
-                        .frame(height: 1)
-                        .id("top")
-                    // Default Header Image
-                    Rectangle()
+                if let event = event {
+                    VStack(alignment: .leading, spacing: 20) {
+                        Color.clear
+                            .frame(height: 1)
+                            .id("top")
+                        // Default Header Image
+                        Rectangle()
                     .fill(LinearGradient(
                         gradient: Gradient(colors: [Color.blue.opacity(0.6), Color.purple.opacity(0.6)]),
                         startPoint: .topLeading,
@@ -97,14 +97,22 @@ struct EventDetailView: View {
                 Divider()
                 actionButtons
                     .padding(.horizontal)
-                Spacer()
+                    Spacer()
+                }
+            } else if isLoading {
+                ProgressView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             }
-            .onChange(of: currentEvent.id) { _, newId in
-                print("🔄 Scrolling to top for event: \(newId)")
+            .onChange(of: currentEventId) { _, newId in
+                print("🔄 currentEventId changed to: \(newId)")
                 // Scroll to top immediately
                 withAnimation {
                     proxy.scrollTo("top", anchor: .top)
+                }
+                // Reload the event
+                Task {
+                    await loadEvent()
                 }
             }
         }
@@ -112,11 +120,11 @@ struct EventDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                if let shareURL = DeepLinkManager.shared.generateEventLink(eventId: event.id) {
+                if let shareURL = DeepLinkManager.shared.generateEventLink(eventId: currentEventId) {
                     ShareLink(
                         item: shareURL,
                         subject: Text("PickleHub イベント"),
-                        message: Text("「\(event.title)」に参加しませんか？")
+                        message: Text("「\(event?.title ?? "イベント")」に参加しませんか？")
                     ) {
                         Image(systemName: "square.and.arrow.up")
                     }
@@ -131,21 +139,27 @@ struct EventDetailView: View {
             }
         }
         .sheet(isPresented: $showingEditEvent) {
-            EditEventView(event: event)
-                .environmentObject(eventsViewModel)
+            if let event = event {
+                EditEventView(event: event)
+                    .environmentObject(eventsViewModel)
+            }
         }
         .sheet(isPresented: $showingDuplicateEvent) {
-            CreateEventView(duplicatingEvent: event) { newEvent in
-                print("✅ Duplicate event created: \(newEvent.id)")
-                // Switch to the new duplicated event
-                currentEvent = newEvent
-                showingDuplicateEvent = false
+            if let event = event {
+                CreateEventView(duplicatingEvent: event) { newEvent in
+                    print("✅ Duplicate event created: \(newEvent.id)")
+                    // Switch to the new duplicated event
+                    currentEventId = newEvent.id
+                    showingDuplicateEvent = false
+                }
+                .environmentObject(eventsViewModel)
+                .environmentObject(authViewModel)
             }
-            .environmentObject(eventsViewModel)
-            .environmentObject(authViewModel)
         }
         .sheet(isPresented: $showingChat) {
-            ChatView(eventId: event.id, eventTitle: event.title)
+            if let event = event {
+                ChatView(eventId: event.id, eventTitle: event.title)
+            }
         }
         .sheet(isPresented: $showingUserProfile) {
             if let user = selectedUser {
@@ -497,7 +511,7 @@ struct EventDetailView: View {
     private func closeEvent() {
         Task {
             do {
-                try await eventsViewModel.updateEvent(id: event.id, status: "completed")
+                try await eventsViewModel.updateEvent(id: currentEventId, status: "completed")
                 alertMessage = "イベントを締め切りました"
                 showingAlert = true
             } catch {
@@ -510,12 +524,25 @@ struct EventDetailView: View {
     private func deleteEvent() {
         Task {
             do {
-                try await eventsViewModel.deleteEvent(id: event.id)
+                try await eventsViewModel.deleteEvent(id: currentEventId)
                 dismiss()
             } catch {
                 alertMessage = "イベントの削除に失敗しました: \(error.localizedDescription)"
                 showingAlert = true
             }
+        }
+    }
+
+    private func loadEvent() async {
+        isLoading = true
+
+        do {
+            event = try await APIClient.shared.getEvent(id: currentEventId)
+            isLoading = false
+        } catch {
+            isLoading = false
+            alertMessage = error.localizedDescription
+            showingAlert = true
         }
     }
 }
