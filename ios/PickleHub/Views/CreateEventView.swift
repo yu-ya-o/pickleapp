@@ -259,12 +259,12 @@ struct CreateEventView: View {
                     try await createTeamEvent(teamId: teamId)
                 }
 
-                dismiss()
-
-                // Call the callback with the created event
+                // Call the callback BEFORE dismissing
                 if let event = createdEvent {
                     onEventCreated?(event)
                 }
+
+                dismiss()
             } catch {
                 errorMessage = error.localizedDescription
                 showingError = true
