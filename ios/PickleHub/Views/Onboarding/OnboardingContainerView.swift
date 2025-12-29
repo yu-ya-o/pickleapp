@@ -29,33 +29,43 @@ struct OnboardingContainerView: View {
                 // Content
                 TabView(selection: $currentPage) {
                     OnboardingNicknameView(viewModel: viewModel)
+                        .disabled(false) // ページ内のインタラクションを有効化
                         .tag(0)
 
                     OnboardingBioView(viewModel: viewModel)
+                        .disabled(false) // ページ内のインタラクションを有効化
                         .tag(1)
 
                     OnboardingGenderView(viewModel: viewModel)
+                        .disabled(false) // ページ内のインタラクションを有効化
                         .tag(2)
 
                     OnboardingAgeGroupView(viewModel: viewModel)
+                        .disabled(false) // ページ内のインタラクションを有効化
                         .tag(3)
 
                     OnboardingRegionView(viewModel: viewModel)
+                        .disabled(false) // ページ内のインタラクションを有効化
                         .tag(4)
 
                     OnboardingExperienceView(viewModel: viewModel)
+                        .disabled(false) // ページ内のインタラクションを有効化
                         .tag(5)
 
                     OnboardingSkillLevelView(viewModel: viewModel)
+                        .disabled(false) // ページ内のインタラクションを有効化
                         .tag(6)
 
                     OnboardingDUPRView(viewModel: viewModel)
+                        .disabled(false) // ページ内のインタラクションを有効化
                         .tag(7)
 
                     OnboardingPaddleView(viewModel: viewModel)
+                        .disabled(false) // ページ内のインタラクションを有効化
                         .tag(8)
 
                     OnboardingProfileImageView(viewModel: viewModel)
+                        .disabled(false) // ページ内のインタラクションを有効化
                         .tag(9)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
