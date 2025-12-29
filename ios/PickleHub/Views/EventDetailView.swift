@@ -16,15 +16,26 @@ struct EventDetailView: View {
     @State private var showingEditEvent = false
     @State private var showingDuplicateEvent = false
     @State private var reservationToCancel: String?
+    @State private var currentEvent: Event
 
-    let event: Event
+    let initialEvent: Event
+
+    init(event: Event) {
+        self.initialEvent = event
+        self._currentEvent = State(initialValue: event)
+    }
+
+    // Use currentEvent as the active event
+    private var event: Event {
+        currentEvent
+    }
 
     private var isCreator: Bool {
-        event.creator.id == authViewModel.currentUser?.id
+        currentEvent.creator.id == authViewModel.currentUser?.id
     }
 
     private var isClosed: Bool {
-        event.status == "completed"
+        currentEvent.status == "completed"
     }
 
     private var isEventPast: Bool {
@@ -54,10 +65,14 @@ struct EventDetailView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                // Default Header Image
-                Rectangle()
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    Color.clear
+                        .frame(height: 1)
+                        .id("top")
+                    // Default Header Image
+                    Rectangle()
                     .fill(LinearGradient(
                         gradient: Gradient(colors: [Color.blue.opacity(0.6), Color.purple.opacity(0.6)]),
                         startPoint: .topLeading,
@@ -83,6 +98,23 @@ struct EventDetailView: View {
                 actionButtons
                     .padding(.horizontal)
                 Spacer()
+            }
+            }
+            .onChange(of: currentEvent.id) { _, newId in
+                print("🔄 currentEvent.id changed to: \(newId)")
+                // Scroll to top immediately
+                withAnimation {
+                    proxy.scrollTo("top", anchor: .top)
+                }
+                // Fetch the new event
+                Task {
+                    do {
+                        let newEvent = try await APIClient.shared.getEvent(id: newId)
+                        currentEvent = newEvent
+                    } catch {
+                        print("❌ Failed to load event: \(error)")
+                    }
+                }
             }
         }
         .navigationTitle("イベント")
@@ -113,16 +145,10 @@ struct EventDetailView: View {
         }
         .sheet(isPresented: $showingDuplicateEvent) {
             CreateEventView(duplicatingEvent: event) { newEvent in
-                print("🔄 Duplicate event created: \(newEvent.id)")
-                // Close sheet and detail view first
+                print("✅ Duplicate event created: \(newEvent.id)")
+                // Switch to the new duplicated event
+                currentEvent = newEvent
                 showingDuplicateEvent = false
-                dismiss()
-                // After navigation completes, set the navigation target
-                // This ensures we're back at the list before pushing the new event
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    print("✅ Setting navigateToEvent after dismiss: \(newEvent.id)")
-                    eventsViewModel.navigateToEvent = newEvent
-                }
             }
             .environmentObject(eventsViewModel)
             .environmentObject(authViewModel)
