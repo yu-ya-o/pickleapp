@@ -30,7 +30,8 @@ struct EventDetailView: View {
     }
 
     private var isCreator: Bool {
-        event?.creator.id == authViewModel.currentUser?.id ?? false
+        guard let event = event else { return false }
+        return event.creator.id == authViewModel.currentUser?.id
     }
 
     private var isClosed: Bool {
@@ -88,14 +89,14 @@ struct EventDetailView: View {
                         }
                     )
 
-                headerSection
+                headerSection(for: event)
                 Divider()
-                detailsSection
+                detailsSection(for: event)
                 Divider()
-                creatorSection
-                participantsSection
+                creatorSection(for: event)
+                participantsSection(for: event)
                 Divider()
-                actionButtons
+                actionButtons(for: event)
                     .padding(.horizontal)
                     Spacer()
                 }
@@ -208,7 +209,7 @@ struct EventDetailView: View {
     }
 
     @ViewBuilder
-    private var headerSection: some View {
+    private func headerSection(for event: Event) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(event.title)
                 .font(.title)
@@ -227,7 +228,7 @@ struct EventDetailView: View {
     }
 
     @ViewBuilder
-    private var detailsSection: some View {
+    private func detailsSection(for event: Event) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: "calendar")
@@ -271,7 +272,7 @@ struct EventDetailView: View {
     }
 
     @ViewBuilder
-    private var creatorSection: some View {
+    private func creatorSection(for event: Event) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("主催者")
                 .font(.headline)
@@ -291,7 +292,7 @@ struct EventDetailView: View {
     }
 
     @ViewBuilder
-    private var participantsSection: some View {
+    private func participantsSection(for event: Event) -> some View {
         if !event.reservations.isEmpty {
             Divider()
 
@@ -320,7 +321,7 @@ struct EventDetailView: View {
     }
 
     @ViewBuilder
-    private var actionButtons: some View {
+    private func actionButtons(for event: Event) -> some View {
         VStack(spacing: 12) {
             // Closed event banner
             if isClosed {
