@@ -14,6 +14,7 @@ struct EventDetailView: View {
     @State private var showingCancelConfirm = false
     @State private var showingCloseEventAlert = false
     @State private var showingEditEvent = false
+    @State private var showingDuplicateEvent = false
     @State private var reservationToCancel: String?
 
     let event: Event
@@ -109,6 +110,11 @@ struct EventDetailView: View {
         .sheet(isPresented: $showingEditEvent) {
             EditEventView(event: event)
                 .environmentObject(eventsViewModel)
+        }
+        .sheet(isPresented: $showingDuplicateEvent) {
+            CreateEventView(duplicatingEvent: event)
+                .environmentObject(eventsViewModel)
+                .environmentObject(authViewModel)
         }
         .sheet(isPresented: $showingChat) {
             ChatView(eventId: event.id, eventTitle: event.title)
@@ -385,6 +391,25 @@ struct EventDetailView: View {
                     .foregroundColor(.blue)
                     .padding()
                     .background(Color.blue.opacity(0.1))
+                    .cornerRadius(12)
+                }
+            }
+
+            // Duplicate button (for creator only)
+            if isCreator {
+                Button(action: {
+                    showingDuplicateEvent = true
+                }) {
+                    HStack {
+                        Spacer()
+                        Image(systemName: "doc.on.doc")
+                        Text("イベントを複製")
+                            .fontWeight(.semibold)
+                        Spacer()
+                    }
+                    .foregroundColor(.green)
+                    .padding()
+                    .background(Color.green.opacity(0.1))
                     .cornerRadius(12)
                 }
             }
