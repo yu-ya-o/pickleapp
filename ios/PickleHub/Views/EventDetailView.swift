@@ -137,9 +137,12 @@ struct EventDetailView: View {
         .sheet(isPresented: $showingDuplicateEvent) {
             CreateEventView(duplicatingEvent: event) { newEvent in
                 print("✅ Duplicate event created: \(newEvent.id)")
-                // Switch to the new duplicated event
-                currentEvent = newEvent
                 showingDuplicateEvent = false
+                // Delay slightly to ensure sheet is closed before updating
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    print("🔄 Updating currentEvent to: \(newEvent.id)")
+                    currentEvent = newEvent
+                }
             }
             .environmentObject(eventsViewModel)
             .environmentObject(authViewModel)
