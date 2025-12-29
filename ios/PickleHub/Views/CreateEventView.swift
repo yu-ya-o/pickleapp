@@ -259,12 +259,15 @@ struct CreateEventView: View {
                     try await createTeamEvent(teamId: teamId)
                 }
 
-                // Call the callback BEFORE dismissing
+                // Call the callback BEFORE potentially dismissing
                 if let event = createdEvent {
                     onEventCreated?(event)
                 }
 
-                dismiss()
+                // Only dismiss if no callback was provided (parent will handle dismissal)
+                if onEventCreated == nil {
+                    dismiss()
+                }
             } catch {
                 errorMessage = error.localizedDescription
                 showingError = true

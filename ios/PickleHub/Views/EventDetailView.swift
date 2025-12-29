@@ -156,6 +156,7 @@ struct EventDetailView: View {
                     print("🔄 Setting currentEventId from \(currentEventId) to \(newEvent.id)")
                     // Switch to the new duplicated event
                     currentEventId = newEvent.id
+                    showingDuplicateEvent = false
                     print("✅ currentEventId set to \(currentEventId)")
                 }
                 .environmentObject(eventsViewModel)
