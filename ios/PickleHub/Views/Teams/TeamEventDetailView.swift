@@ -194,8 +194,9 @@ struct TeamEventDetailView: View {
         .sheet(isPresented: $showingDuplicateEvent) {
             if let event = event {
                 CreateTeamEventView(teamId: teamId, duplicatingEvent: event) { newEvent in
-                    // Set the navigation target first, then close the current event detail
+                    print("🔄 Setting navigateToTeamEvent: \(newEvent.id)")
                     viewModel.navigateToTeamEvent = newEvent
+                    print("✅ navigateToTeamEvent set, now dismissing")
                     dismiss()
                 }
                 .environmentObject(viewModel)

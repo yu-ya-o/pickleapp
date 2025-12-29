@@ -90,6 +90,11 @@ struct TeamEventsListView: View {
             }
             .navigationDestination(item: $viewModel.navigateToTeamEvent) { event in
                 TeamEventDetailView(teamId: viewModel.teamId, eventId: event.id)
+                    .environmentObject(viewModel)
+                    .onAppear {
+                        print("🎯 navigationDestination triggered for team event: \(event.id)")
+                        print("📱 New TeamEventDetailView appeared for event: \(event.id)")
+                    }
             }
             .task {
                 await viewModel.loadTeam()
