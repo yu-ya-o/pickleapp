@@ -33,8 +33,10 @@ struct CreateEventView: View {
 
     let duplicatingEvent: Event?
     let skillLevels = ["beginner", "intermediate", "advanced", "all"]
+    var onEventCreated: ((Event) -> Void)? = nil
 
-    init(duplicatingEvent: Event? = nil) {
+    init(duplicatingEvent: Event? = nil, onEventCreated: ((Event) -> Void)? = nil) {
+        self.onEventCreated = onEventCreated
         self.duplicatingEvent = duplicatingEvent
 
         // Initialize state from duplicating event if provided
@@ -235,11 +237,12 @@ struct CreateEventView: View {
             isLoading = true
 
             do {
+                var createdEvent: Event?
                 switch selectedOrganizer {
                 case .personal:
                     // Create personal event
                     let price = priceInput.isEmpty ? nil : Int(priceInput)
-                    try await eventsViewModel.createEvent(
+                    createdEvent = try await eventsViewModel.createEvent(
                         title: title,
                         description: description,
                         location: location,
@@ -255,7 +258,13 @@ struct CreateEventView: View {
                     // Create team event
                     try await createTeamEvent(teamId: teamId)
                 }
+
                 dismiss()
+
+                // Call the callback with the created event
+                if let event = createdEvent {
+                    onEventCreated?(event)
+                }
             } catch {
                 errorMessage = error.localizedDescription
                 showingError = true

@@ -75,7 +75,7 @@ class EventsViewModel: ObservableObject {
         maxParticipants: Int,
         skillLevel: String,
         price: Int? = nil
-    ) async throws {
+    ) async throws -> Event {
         isLoading = true
         errorMessage = nil
 
@@ -97,6 +97,7 @@ class EventsViewModel: ObservableObject {
             let newEvent = try await apiClient.createEvent(request: request)
             events.insert(newEvent, at: 0)
             isLoading = false
+            return newEvent
         } catch {
             isLoading = false
             errorMessage = error.localizedDescription
