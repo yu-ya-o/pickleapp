@@ -29,48 +29,43 @@ struct OnboardingContainerView: View {
                 // Content
                 TabView(selection: $currentPage) {
                     OnboardingNicknameView(viewModel: viewModel)
-                        .disabled(false) // ページ内のインタラクションを有効化
                         .tag(0)
 
                     OnboardingBioView(viewModel: viewModel)
-                        .disabled(false) // ページ内のインタラクションを有効化
                         .tag(1)
 
                     OnboardingGenderView(viewModel: viewModel)
-                        .disabled(false) // ページ内のインタラクションを有効化
                         .tag(2)
 
                     OnboardingAgeGroupView(viewModel: viewModel)
-                        .disabled(false) // ページ内のインタラクションを有効化
                         .tag(3)
 
                     OnboardingRegionView(viewModel: viewModel)
-                        .disabled(false) // ページ内のインタラクションを有効化
                         .tag(4)
 
                     OnboardingExperienceView(viewModel: viewModel)
-                        .disabled(false) // ページ内のインタラクションを有効化
                         .tag(5)
 
                     OnboardingSkillLevelView(viewModel: viewModel)
-                        .disabled(false) // ページ内のインタラクションを有効化
                         .tag(6)
 
                     OnboardingDUPRView(viewModel: viewModel)
-                        .disabled(false) // ページ内のインタラクションを有効化
                         .tag(7)
 
                     OnboardingPaddleView(viewModel: viewModel)
-                        .disabled(false) // ページ内のインタラクションを有効化
                         .tag(8)
 
                     OnboardingProfileImageView(viewModel: viewModel)
-                        .disabled(false) // ページ内のインタラクションを有効化
                         .tag(9)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
-                .disabled(true) // TabViewのページングを完全に無効化（子ビューで再度有効化）
                 .animation(.spring(response: 0.3, dampingFraction: 0.8), value: currentPage)
+                .gesture(
+                    // 空のドラッグジェスチャーでTabViewのスワイプを完全にブロック
+                    DragGesture()
+                        .onChanged { _ in }
+                        .onEnded { _ in }
+                )
                 .onChange(of: currentPage) { oldPage, newPage in
                     // 必須項目が入力されていない場合は元のページに戻す
                     if newPage > oldPage && !canProceedFromPage(oldPage) {
