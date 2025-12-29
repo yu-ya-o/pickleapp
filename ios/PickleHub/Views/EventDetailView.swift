@@ -113,14 +113,24 @@ struct EventDetailView: View {
         }
         .sheet(isPresented: $showingDuplicateEvent) {
             CreateEventView(duplicatingEvent: event) { newEvent in
-                // Set the navigation target first, then close the current event detail
                 print("🔄 Setting navigateToEvent: \(newEvent.id)")
                 eventsViewModel.navigateToEvent = newEvent
-                print("✅ navigateToEvent set, now dismissing")
-                dismiss()
+                print("✅ navigateToEvent set")
             }
             .environmentObject(eventsViewModel)
             .environmentObject(authViewModel)
+        }
+        .onChange(of: eventsViewModel.navigateToEvent) { _, newEvent in
+            if newEvent != nil {
+                print("🚀 navigateToEvent changed, dismissing EventDetailView")
+                // Close the duplicate event sheet first
+                showingDuplicateEvent = false
+                // Then dismiss this detail view to go back to the list
+                // The navigationDestination in EventsListView will then push the new event
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    dismiss()
+                }
+            }
         }
         .sheet(isPresented: $showingChat) {
             ChatView(eventId: event.id, eventTitle: event.title)
