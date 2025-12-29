@@ -56,7 +56,6 @@ struct OnboardingNicknameView: View {
                     .frame(height: Spacing.xl * 3)
             }
         }
-        .disabled(false) // ScrollViewのインタラクションを有効化
         .scrollDismissesKeyboard(.interactively)
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {

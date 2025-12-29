@@ -60,21 +60,7 @@ struct OnboardingContainerView: View {
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .animation(.spring(response: 0.3, dampingFraction: 0.8), value: currentPage)
-                .gesture(
-                    // 空のドラッグジェスチャーでTabViewのスワイプを完全にブロック
-                    DragGesture()
-                        .onChanged { _ in }
-                        .onEnded { _ in }
-                )
-                .onChange(of: currentPage) { oldPage, newPage in
-                    // 必須項目が入力されていない場合は元のページに戻す
-                    if newPage > oldPage && !canProceedFromPage(oldPage) {
-                        DispatchQueue.main.async {
-                            currentPage = oldPage
-                        }
-                        return
-                    }
-
+                .onChange(of: currentPage) { _, newPage in
                     // 入力不要なページではキーボードを閉じる
                     let pagesWithoutKeyboard = [2, 3, 5, 6, 9] // Gender, AgeGroup, Experience, SkillLevel, ProfileImage
                     if pagesWithoutKeyboard.contains(newPage) {
@@ -156,11 +142,7 @@ struct OnboardingContainerView: View {
     }
 
     private func canProceedToNext() -> Bool {
-        return canProceedFromPage(currentPage)
-    }
-
-    private func canProceedFromPage(_ page: Int) -> Bool {
-        switch page {
+        switch currentPage {
         case 0: return !viewModel.nickname.isEmpty
         case 1: return true  // Bio is optional
         case 2: return !viewModel.selectedGender.isEmpty  // Gender is required
