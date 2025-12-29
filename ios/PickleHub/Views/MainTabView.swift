@@ -49,22 +49,12 @@ struct MainTabView: View {
             // Fetch notifications on tab view load
             await notificationsViewModel.fetchNotifications()
         }
+        .onAppear {
+            // Check if there's a pending deep link
+            checkPendingDeepLink()
+        }
         .onReceive(NotificationCenter.default.publisher(for: .deepLinkReceived)) { notification in
-            guard let userInfo = notification.userInfo,
-                  let type = userInfo["type"] as? String else { return }
-
-            if type == "event", let eventId = userInfo["eventId"] as? String {
-                print("📱 Opening event from deep link: \(eventId)")
-                selectedEventId = eventId
-                showingEventDetail = true
-            } else if type == "teamEvent",
-                      let teamId = userInfo["teamId"] as? String,
-                      let eventId = userInfo["eventId"] as? String {
-                print("📱 Opening team event from deep link: teamId=\(teamId), eventId=\(eventId)")
-                selectedTeamId = teamId
-                selectedTeamEventId = eventId
-                showingTeamEventDetail = true
-            }
+            handleDeepLink(notification)
         }
         .sheet(isPresented: $showingEventDetail) {
             if let eventId = selectedEventId {
@@ -78,6 +68,50 @@ struct MainTabView: View {
                 TeamEventDetailContainerView(teamId: teamId, eventId: eventId)
                     .environmentObject(authViewModel)
             }
+        }
+    }
+
+    private func checkPendingDeepLink() {
+        // Check UserDefaults for pending deep link
+        if let eventId = UserDefaults.standard.string(forKey: "pendingEventId") {
+            print("📱 Found pending event deep link: \(eventId)")
+            UserDefaults.standard.removeObject(forKey: "pendingEventId")
+
+            // Open event with a slight delay to ensure view is fully loaded
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                selectedEventId = eventId
+                showingEventDetail = true
+            }
+        } else if let teamId = UserDefaults.standard.string(forKey: "pendingTeamId"),
+                  let eventId = UserDefaults.standard.string(forKey: "pendingTeamEventId") {
+            print("📱 Found pending team event deep link: teamId=\(teamId), eventId=\(eventId)")
+            UserDefaults.standard.removeObject(forKey: "pendingTeamId")
+            UserDefaults.standard.removeObject(forKey: "pendingTeamEventId")
+
+            // Open team event with a slight delay
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                selectedTeamId = teamId
+                selectedTeamEventId = eventId
+                showingTeamEventDetail = true
+            }
+        }
+    }
+
+    private func handleDeepLink(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let type = userInfo["type"] as? String else { return }
+
+        if type == "event", let eventId = userInfo["eventId"] as? String {
+            print("📱 Opening event from deep link: \(eventId)")
+            selectedEventId = eventId
+            showingEventDetail = true
+        } else if type == "teamEvent",
+                  let teamId = userInfo["teamId"] as? String,
+                  let eventId = userInfo["eventId"] as? String {
+            print("📱 Opening team event from deep link: teamId=\(teamId), eventId=\(eventId)")
+            selectedTeamId = teamId
+            selectedTeamEventId = eventId
+            showingTeamEventDetail = true
         }
     }
 }

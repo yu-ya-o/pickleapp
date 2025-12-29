@@ -159,6 +159,10 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                 let eventId = pathComponents[eventIndex + 1]
                 print("🎯 Opening event: \(eventId)")
 
+                // Save to UserDefaults for later (in case MainTabView is not loaded yet)
+                UserDefaults.standard.set(eventId, forKey: "pendingEventId")
+
+                // Also send notification for immediate handling
                 NotificationCenter.default.post(
                     name: .deepLinkReceived,
                     object: nil,
@@ -176,6 +180,11 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                 let eventId = pathComponents[eventsIndex + 1]
                 print("🎯 Opening team event: teamId=\(teamId), eventId=\(eventId)")
 
+                // Save to UserDefaults for later
+                UserDefaults.standard.set(teamId, forKey: "pendingTeamId")
+                UserDefaults.standard.set(eventId, forKey: "pendingTeamEventId")
+
+                // Also send notification for immediate handling
                 NotificationCenter.default.post(
                     name: .deepLinkReceived,
                     object: nil,
