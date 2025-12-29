@@ -22,11 +22,13 @@ struct CreateTeamEventView: View {
 
     let teamId: String
     let editingEvent: TeamEvent?
+    let duplicatingEvent: TeamEvent?
     let skillLevels = ["beginner", "intermediate", "advanced", "all"]
 
-    init(teamId: String, editingEvent: TeamEvent? = nil) {
+    init(teamId: String, editingEvent: TeamEvent? = nil, duplicatingEvent: TeamEvent? = nil) {
         self.teamId = teamId
         self.editingEvent = editingEvent
+        self.duplicatingEvent = duplicatingEvent
 
         // Initialize state from editing event if provided
         if let event = editingEvent {
@@ -61,7 +63,61 @@ struct CreateTeamEventView: View {
             _skillLevel = State(initialValue: event.skillLevel ?? "all")
             _priceInput = State(initialValue: event.price != nil ? String(event.price!) : "")
             _visibility = State(initialValue: event.visibility)
+        } else if let event = duplicatingEvent {
+            // Initialize state from duplicating event
+            _title = State(initialValue: event.title)
+            _description = State(initialValue: event.description)
+            _location = State(initialValue: event.location)
+            _region = State(initialValue: event.region ?? "")
+
+            // Parse dates and adjust to tomorrow
+            let formatter = ISO8601DateFormatter()
+            formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
+            var originalStartDate = formatter.date(from: event.startTime)
+            if originalStartDate == nil {
+                // Fallback: try without fractional seconds
+                formatter.formatOptions = [.withInternetDateTime]
+                originalStartDate = formatter.date(from: event.startTime)
+            }
+
+            formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+            var originalEndDate = formatter.date(from: event.endTime)
+            if originalEndDate == nil {
+                // Fallback: try without fractional seconds
+                formatter.formatOptions = [.withInternetDateTime]
+                originalEndDate = formatter.date(from: event.endTime)
+            }
+
+            // Adjust dates to tomorrow at the same time
+            if let startTime = originalStartDate, let endTime = originalEndDate {
+                _startDate = State(initialValue: adjustDateToTomorrow(from: startTime))
+                _endDate = State(initialValue: adjustDateToTomorrow(from: endTime))
+            }
+
+            _hasCapacityLimit = State(initialValue: event.maxParticipants != nil)
+            _maxParticipants = State(initialValue: event.maxParticipants ?? 8)
+            _skillLevel = State(initialValue: event.skillLevel ?? "all")
+            _priceInput = State(initialValue: event.price != nil ? String(event.price!) : "")
+            _visibility = State(initialValue: event.visibility)
         }
+    }
+
+    private func adjustDateToTomorrow(from originalDate: Date) -> Date {
+        let calendar = Calendar.current
+        let tomorrow = calendar.date(byAdding: .day, value: 1, to: Date())!
+
+        let timeComponents = calendar.dateComponents([.hour, .minute], from: originalDate)
+        let tomorrowComponents = calendar.dateComponents([.year, .month, .day], from: tomorrow)
+
+        var newComponents = DateComponents()
+        newComponents.year = tomorrowComponents.year
+        newComponents.month = tomorrowComponents.month
+        newComponents.day = tomorrowComponents.day
+        newComponents.hour = timeComponents.hour
+        newComponents.minute = timeComponents.minute
+
+        return calendar.date(from: newComponents) ?? tomorrow
     }
 
     func skillLevelLabel(_ level: String) -> String {
@@ -157,7 +213,7 @@ struct CreateTeamEventView: View {
                         } else {
                             HStack {
                                 Spacer()
-                                Text(editingEvent == nil ? "イベントを作成" : "変更を保存")
+                                Text(editingEvent != nil ? "変更を保存" : "イベントを作成")
                                     .fontWeight(.semibold)
                                 Spacer()
                             }
@@ -166,7 +222,7 @@ struct CreateTeamEventView: View {
                     .disabled(!isFormValid || isLoading)
                 }
             }
-            .navigationTitle(editingEvent == nil ? "チームイベント作成" : "チームイベント編集")
+            .navigationTitle(editingEvent != nil ? "チームイベント編集" : "チームイベント作成")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

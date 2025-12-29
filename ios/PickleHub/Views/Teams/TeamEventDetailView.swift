@@ -17,6 +17,7 @@ struct TeamEventDetailView: View {
     @State private var showingCloseEventAlert = false
     @State private var showingTeamDetail = false
     @State private var showingEditEvent = false
+    @State private var showingDuplicateEvent = false
 
     let teamId: String
     let eventId: String
@@ -187,6 +188,12 @@ struct TeamEventDetailView: View {
         .sheet(isPresented: $showingEditEvent) {
             if let event = event {
                 CreateTeamEventView(teamId: teamId, editingEvent: event)
+                    .environmentObject(viewModel)
+            }
+        }
+        .sheet(isPresented: $showingDuplicateEvent) {
+            if let event = event {
+                CreateTeamEventView(teamId: teamId, duplicatingEvent: event)
                     .environmentObject(viewModel)
             }
         }
@@ -487,6 +494,25 @@ struct TeamEventDetailView: View {
                         .foregroundColor(.blue)
                         .padding()
                         .background(Color.blue.opacity(0.1))
+                        .cornerRadius(12)
+                    }
+                }
+
+                // Duplicate button (for creator only)
+                if isCreator {
+                    Button(action: {
+                        showingDuplicateEvent = true
+                    }) {
+                        HStack {
+                            Spacer()
+                            Image(systemName: "doc.on.doc")
+                            Text("イベントを複製")
+                                .fontWeight(.semibold)
+                            Spacer()
+                        }
+                        .foregroundColor(.green)
+                        .padding()
+                        .background(Color.green.opacity(0.1))
                         .cornerRadius(12)
                     }
                 }

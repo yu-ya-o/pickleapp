@@ -31,7 +31,50 @@ struct CreateEventView: View {
     @State private var showingError = false
     @State private var errorMessage = ""
 
+    let duplicatingEvent: Event?
     let skillLevels = ["beginner", "intermediate", "advanced", "all"]
+
+    init(duplicatingEvent: Event? = nil) {
+        self.duplicatingEvent = duplicatingEvent
+
+        // Initialize state from duplicating event if provided
+        if let event = duplicatingEvent {
+            _title = State(initialValue: event.title)
+            _description = State(initialValue: event.description)
+            _location = State(initialValue: event.location)
+            _region = State(initialValue: event.region ?? "")
+            _maxParticipants = State(initialValue: event.maxParticipants)
+            _skillLevel = State(initialValue: event.skillLevel)
+            _priceInput = State(initialValue: event.price != nil ? String(event.price!) : "")
+
+            // Force personal event for duplication
+            _selectedOrganizer = State(initialValue: .personal)
+
+            // Adjust dates to tomorrow at the same time
+            if let originalStartDate = event.startDate,
+               let originalEndDate = event.endDate {
+                _startDate = State(initialValue: adjustDateToTomorrow(from: originalStartDate))
+                _endDate = State(initialValue: adjustDateToTomorrow(from: originalEndDate))
+            }
+        }
+    }
+
+    private func adjustDateToTomorrow(from originalDate: Date) -> Date {
+        let calendar = Calendar.current
+        let tomorrow = calendar.date(byAdding: .day, value: 1, to: Date())!
+
+        let timeComponents = calendar.dateComponents([.hour, .minute], from: originalDate)
+        let tomorrowComponents = calendar.dateComponents([.year, .month, .day], from: tomorrow)
+
+        var newComponents = DateComponents()
+        newComponents.year = tomorrowComponents.year
+        newComponents.month = tomorrowComponents.month
+        newComponents.day = tomorrowComponents.day
+        newComponents.hour = timeComponents.hour
+        newComponents.minute = timeComponents.minute
+
+        return calendar.date(from: newComponents) ?? tomorrow
+    }
 
     func skillLevelLabel(_ level: String) -> String {
         switch level {
