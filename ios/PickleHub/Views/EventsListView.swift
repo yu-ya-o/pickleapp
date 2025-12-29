@@ -193,7 +193,7 @@ struct EventsListView: View {
                                 // パブリックなチームイベント
                                 ForEach(filteredPublicTeamEvents) { event in
                                     ZStack {
-                                        NavigationLink(destination: TeamEventDetailView(teamId: event.team.id, eventId: event.id)) {
+                                        NavigationLink(destination: TeamEventDetailViewWithViewModel(teamId: event.team.id, eventId: event.id)) {
                                             EmptyView()
                                         }
                                         .opacity(0)
@@ -231,7 +231,7 @@ struct EventsListView: View {
                             List {
                                 ForEach(filteredTeamEvents) { event in
                                     ZStack {
-                                        NavigationLink(destination: TeamEventDetailView(teamId: event.team.id, eventId: event.id)) {
+                                        NavigationLink(destination: TeamEventDetailViewWithViewModel(teamId: event.team.id, eventId: event.id)) {
                                             EmptyView()
                                         }
                                         .opacity(0)
@@ -350,6 +350,27 @@ struct EventRowView: View {
             }
         }
         .padding(.vertical, 4)
+    }
+}
+
+// Helper view to provide TeamEventsViewModel to TeamEventDetailView
+private struct TeamEventDetailViewWithViewModel: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
+    @StateObject private var viewModel: TeamEventsViewModel
+
+    let teamId: String
+    let eventId: String
+
+    init(teamId: String, eventId: String) {
+        self.teamId = teamId
+        self.eventId = eventId
+        _viewModel = StateObject(wrappedValue: TeamEventsViewModel(teamId: teamId))
+    }
+
+    var body: some View {
+        TeamEventDetailView(teamId: teamId, eventId: eventId)
+            .environmentObject(authViewModel)
+            .environmentObject(viewModel)
     }
 }
 

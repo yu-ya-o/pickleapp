@@ -3,7 +3,7 @@ import SwiftUI
 struct TeamEventDetailView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var authViewModel: AuthViewModel
-    @StateObject private var viewModel: TeamEventsViewModel
+    @EnvironmentObject var viewModel: TeamEventsViewModel
     @State private var event: TeamEvent?
     @State private var isLoading = true
     @State private var showingAlert = false
@@ -21,12 +21,6 @@ struct TeamEventDetailView: View {
 
     let teamId: String
     let eventId: String
-
-    init(teamId: String, eventId: String) {
-        self.teamId = teamId
-        self.eventId = eventId
-        _viewModel = StateObject(wrappedValue: TeamEventsViewModel(teamId: teamId))
-    }
 
     private var isCreator: Bool {
         event?.creator.id == authViewModel.currentUser?.id

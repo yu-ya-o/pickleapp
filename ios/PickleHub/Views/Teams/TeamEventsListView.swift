@@ -35,7 +35,9 @@ struct TeamEventsListView: View {
                             NavigationLink(destination: TeamEventDetailView(
                                 teamId: viewModel.teamId,
                                 eventId: event.id
-                            )) {
+                            )
+                            .environmentObject(viewModel)
+                            ) {
                                 TeamEventRowView(event: event, onProfileTap: {
                                     selectedUser = event.creator.toUser()
                                     showingUserProfile = true
