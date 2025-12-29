@@ -35,7 +35,8 @@ struct EventDetailView: View {
     }
 
     private var isClosed: Bool {
-        event?.status == "completed" ?? false
+        guard let event = event else { return false }
+        return event.status == "completed"
     }
 
     private var isEventPast: Bool {
@@ -480,6 +481,7 @@ struct EventDetailView: View {
     private func makeReservation() {
         Task {
             do {
+                guard let event = event else { return }
                 print("📝 Making reservation for event: \(event.id)")
                 try await eventsViewModel.makeReservation(eventId: event.id)
                 print("✅ Reservation successful!")
