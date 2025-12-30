@@ -9,6 +9,7 @@ struct CreateEventView: View {
     @State private var title = ""
     @State private var description = ""
     @State private var location = ""
+    @State private var selectedLocation: LocationData?
     @State private var region = ""
     @State private var startDate = Date().addingTimeInterval(3600) // 1 hour from now
     @State private var endDate = Date().addingTimeInterval(7200) // 2 hours from now
@@ -138,7 +139,7 @@ struct CreateEventView: View {
                     TextField("イベントタイトル", text: $title)
                     TextField("説明", text: $description, axis: .vertical)
                         .lineLimit(3...6)
-                    TextField("場所", text: $location)
+                    LocationSearchView(locationName: $location, selectedLocation: $selectedLocation)
                 }
 
                 Section(header: Text("地域")) {
@@ -246,6 +247,9 @@ struct CreateEventView: View {
                         title: title,
                         description: description,
                         location: location,
+                        address: selectedLocation?.address,
+                        latitude: selectedLocation?.latitude,
+                        longitude: selectedLocation?.longitude,
                         region: region.isEmpty ? nil : region,
                         startTime: startDate,
                         endTime: endDate,
@@ -285,6 +289,9 @@ struct CreateEventView: View {
             title: title,
             description: description,
             location: location,
+            address: selectedLocation?.address,
+            latitude: selectedLocation?.latitude,
+            longitude: selectedLocation?.longitude,
             region: region.isEmpty ? nil : region,
             startTime: formatter.string(from: startDate),
             endTime: formatter.string(from: endDate),

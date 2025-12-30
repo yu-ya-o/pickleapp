@@ -213,6 +213,9 @@ struct TeamEvent: Codable, Identifiable, Hashable {
     let title: String
     let description: String
     let location: String
+    let address: String?
+    let latitude: Double?
+    let longitude: Double?
     let region: String?
     let startTime: String
     let endTime: String
@@ -358,6 +361,9 @@ struct CreateTeamEventRequest: Codable {
     let title: String
     let description: String
     let location: String
+    let address: String?
+    let latitude: Double?
+    let longitude: Double?
     let region: String?
     let startTime: String
     let endTime: String
@@ -371,6 +377,9 @@ struct UpdateTeamEventRequest: Codable {
     let title: String?
     let description: String?
     let location: String?
+    let address: String?
+    let latitude: Double?
+    let longitude: Double?
     let region: String?
     let startTime: String?
     let endTime: String?
