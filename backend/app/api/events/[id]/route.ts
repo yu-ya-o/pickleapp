@@ -87,6 +87,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       title: event.title,
       description: event.description,
       location: event.location,
+      address: event.address,
+      latitude: event.latitude,
+      longitude: event.longitude,
       region: event.region,
       startTime: event.startTime.toISOString(),
       endTime: event.endTime.toISOString(),
@@ -162,6 +165,15 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     if (body.location && body.location !== event.location) {
       updateData.location = body.location;
       changedFields.push('場所');
+    }
+    if (body.address !== undefined && body.address !== event.address) {
+      updateData.address = body.address;
+    }
+    if (body.latitude !== undefined && body.latitude !== event.latitude) {
+      updateData.latitude = body.latitude;
+    }
+    if (body.longitude !== undefined && body.longitude !== event.longitude) {
+      updateData.longitude = body.longitude;
     }
     if (body.region !== undefined && body.region !== event.region) {
       updateData.region = body.region;
@@ -264,6 +276,9 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       title: updatedEvent.title,
       description: updatedEvent.description,
       location: updatedEvent.location,
+      address: updatedEvent.address,
+      latitude: updatedEvent.latitude,
+      longitude: updatedEvent.longitude,
       region: updatedEvent.region,
       startTime: updatedEvent.startTime.toISOString(),
       endTime: updatedEvent.endTime.toISOString(),
