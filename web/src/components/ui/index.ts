@@ -7,3 +7,5 @@ export { Avatar } from './Avatar';
 export { Modal } from './Modal';
 export { Loading, LoadingPage } from './Loading';
 export { Badge } from './Badge';
+export { LocationAutocomplete } from './LocationAutocomplete';
+export { GoogleMap } from './GoogleMap';

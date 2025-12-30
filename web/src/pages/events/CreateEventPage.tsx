@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { api } from '@/services/api';
-import { Button, Input, Textarea, Select, Card, CardContent } from '@/components/ui';
+import { Button, Input, Textarea, Select, Card, CardContent, LocationAutocomplete } from '@/components/ui';
 import { PREFECTURE_OPTIONS } from '@/lib/prefectures';
 
 const SKILL_LEVELS = [
@@ -18,6 +18,9 @@ export function CreateEventPage() {
     title: '',
     description: '',
     location: '',
+    address: '',
+    latitude: null as number | null,
+    longitude: null as number | null,
     region: '',
     startTime: '',
     endTime: '',
@@ -35,6 +38,21 @@ export function CreateEventPage() {
     }));
   };
 
+  const handleLocationChange = (locationData: {
+    name: string;
+    address: string;
+    latitude: number;
+    longitude: number;
+  }) => {
+    setFormData((prev) => ({
+      ...prev,
+      location: locationData.name,
+      address: locationData.address,
+      latitude: locationData.latitude,
+      longitude: locationData.longitude,
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -44,6 +62,9 @@ export function CreateEventPage() {
         title: formData.title,
         description: formData.description,
         location: formData.location,
+        address: formData.address || undefined,
+        latitude: formData.latitude || undefined,
+        longitude: formData.longitude || undefined,
         region: formData.region,
         startTime: new Date(formData.startTime).toISOString(),
         endTime: new Date(formData.endTime).toISOString(),
@@ -96,12 +117,12 @@ export function CreateEventPage() {
                 placeholder="イベントの詳細を入力..."
               />
 
-              <Input
+              <LocationAutocomplete
                 label="場所"
-                name="location"
                 value={formData.location}
-                onChange={handleChange}
-                placeholder="開催場所"
+                onChange={handleLocationChange}
+                onInputChange={(value) => setFormData((prev) => ({ ...prev, location: value }))}
+                placeholder="開催場所を検索..."
                 required
               />
 

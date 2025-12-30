@@ -28,6 +28,9 @@ export interface Event {
   title: string;
   description: string;
   location: string;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
   region: string;
   startTime: string;
   endTime: string;
@@ -95,6 +98,9 @@ export interface TeamEvent {
   title: string;
   description: string;
   location: string;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
   region: string;
   startTime: string;
   endTime: string;

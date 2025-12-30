@@ -94,6 +94,9 @@ export interface CreateEventRequest {
   title: string;
   description: string;
   location: string;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
   region?: string;
   startTime: string; // ISO 8601
   endTime: string; // ISO 8601
@@ -106,6 +109,9 @@ export interface UpdateEventRequest {
   title?: string;
   description?: string;
   location?: string;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
   region?: string;
   startTime?: string;
   endTime?: string;
@@ -120,6 +126,9 @@ export interface EventResponse {
   title: string;
   description: string;
   location: string;
+  address?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
   region: string | null;
   startTime: string;
   endTime: string;
@@ -328,6 +337,9 @@ export interface CreateTeamEventRequest {
   title: string;
   description: string;
   location: string;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
   region?: string;
   startTime: string;
   endTime: string;
@@ -341,6 +353,9 @@ export interface UpdateTeamEventRequest {
   title?: string;
   description?: string;
   location?: string;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
   region?: string;
   startTime?: string;
   endTime?: string;
@@ -356,6 +371,9 @@ export interface TeamEventResponse {
   title: string;
   description: string;
   location: string;
+  address?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
   region?: string | null;
   startTime: string;
   endTime: string;

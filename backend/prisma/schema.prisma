@@ -66,6 +66,9 @@ model Event {
   title           String
   description     String
   location        String
+  address         String?       // 詳細な住所
+  latitude        Float?        // 緯度
+  longitude       Float?        // 経度
   region          String?
   startTime       DateTime
   endTime         DateTime
@@ -228,6 +231,9 @@ model TeamEvent {
   title           String
   description     String
   location        String
+  address         String?  // 詳細な住所
+  latitude        Float?   // 緯度
+  longitude       Float?   // 経度
   region          String?
   startTime       DateTime
   endTime         DateTime

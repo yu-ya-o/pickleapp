@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
-import { Button, Card, CardContent, Avatar, Loading, Modal } from '@/components/ui';
+import { Button, Card, CardContent, Avatar, Loading, Modal, GoogleMap } from '@/components/ui';
 import {
   formatDateTime,
   getSkillLevelEmoji,
@@ -160,11 +160,25 @@ export function EventDetailPage() {
 
               <div className="flex items-center gap-3 text-gray-600">
                 <MapPin size={20} />
-                <div>
+                <div className="flex-1">
                   <p className="font-medium">{event.location}</p>
+                  {event.address && (
+                    <p className="text-sm text-gray-500">{event.address}</p>
+                  )}
                   <p className="text-sm text-gray-400">{event.region}</p>
                 </div>
               </div>
+
+              {/* Google Map */}
+              {event.latitude && event.longitude && (
+                <div className="pt-2">
+                  <GoogleMap
+                    latitude={event.latitude}
+                    longitude={event.longitude}
+                    title={event.location}
+                  />
+                </div>
+              )}
 
               <div className="flex items-center gap-3 text-gray-600">
                 <Users size={20} />
