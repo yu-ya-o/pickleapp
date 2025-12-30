@@ -234,9 +234,27 @@ struct EventDetailView: View {
                 }
             }
 
-            HStack {
+            HStack(alignment: .top) {
                 Image(systemName: "mappin.circle")
-                Text(event.location)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(event.location)
+                    if let address = event.address {
+                        Text(address)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+
+            // Google Map
+            if let latitude = event.latitude, let longitude = event.longitude {
+                GoogleMapView(
+                    latitude: latitude,
+                    longitude: longitude,
+                    title: event.location
+                )
+                .frame(height: 200)
+                .cornerRadius(12)
             }
 
             HStack {

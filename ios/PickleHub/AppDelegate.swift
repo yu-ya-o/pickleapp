@@ -2,6 +2,8 @@ import UIKit
 import FirebaseCore
 import FirebaseMessaging
 import UserNotifications
+import GoogleMaps
+import GooglePlaces
 
 class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNotificationCenterDelegate {
 
@@ -12,6 +14,10 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         print("🚀 App launched with options: \(String(describing: launchOptions))")
+
+        // Configure Google Maps
+        GMSServices.provideAPIKey(Config.googleMapsAPIKey)
+        GMSPlacesClient.provideAPIKey(Config.googleMapsAPIKey)
 
         // Configure Firebase
         if let path = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist"),
