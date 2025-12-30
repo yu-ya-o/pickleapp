@@ -19,7 +19,7 @@ enum Config {
     // TODO: Replace with your actual Google Maps API key
     // You can get an API key from: https://console.cloud.google.com/
     // Required APIs: Maps SDK for iOS, Places API
-    static let googleMapsAPIKey = "YOUR_GOOGLE_MAPS_API_KEY"
+    static let googleMapsAPIKey = "AIzaSyDvDEIGImbCrkgYIvuccyo6WiyEsxKUhtY"
 
     // MARK: - Deep Links (Custom URL Scheme)
     // This is the URL scheme for sharing events (e.g., picklehub://events/123)
