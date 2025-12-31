@@ -628,4 +628,40 @@ class APIClient {
             requiresAuth: false
         )
     }
+
+    // MARK: - Courts API
+
+    func getCourts(region: String? = nil, search: String? = nil, indoorOutdoor: String? = nil) async throws -> [Court] {
+        var queryItems: [String] = []
+
+        if let region = region, region != "全国" {
+            queryItems.append("region=\(region)")
+        }
+        if let search = search, !search.isEmpty {
+            queryItems.append("search=\(search.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")")
+        }
+        if let indoorOutdoor = indoorOutdoor {
+            queryItems.append("indoorOutdoor=\(indoorOutdoor)")
+        }
+
+        let queryString = queryItems.isEmpty ? "" : "?" + queryItems.joined(separator: "&")
+        return try await request(
+            endpoint: "/api/courts\(queryString)",
+            requiresAuth: false
+        )
+    }
+
+    func getCourt(id: String) async throws -> Court {
+        return try await request(
+            endpoint: "/api/courts/\(id)",
+            requiresAuth: false
+        )
+    }
+
+    func getCourtEvents(courtId: String) async throws -> [Event] {
+        return try await request(
+            endpoint: "/api/courts/\(courtId)/events",
+            requiresAuth: false
+        )
+    }
 }

@@ -21,6 +21,11 @@ struct MainTabView: View {
                     Label("イベント", systemImage: "calendar")
                 }
 
+            CourtsListView()
+                .tabItem {
+                    Label("コート", systemImage: "building.2.fill")
+                }
+
             TeamsListView()
                 .tabItem {
                     Label("チーム", systemImage: "person.3.fill")

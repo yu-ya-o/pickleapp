@@ -85,10 +85,15 @@ model Event {
   reservations    Reservation[]
   chatRoom        ChatRoom?
 
+  // Court relation (optional)
+  courtId         String?
+  court           Court?        @relation(fields: [courtId], references: [id], onDelete: SetNull)
+
   @@index([creatorId])
   @@index([startTime])
   @@index([status])
   @@index([region])
+  @@index([courtId])
 }
 
 model Reservation {
@@ -253,10 +258,15 @@ model TeamEvent {
   participants TeamEventParticipant[]
   chatRoom    ChatRoom?
 
+  // Court relation (optional)
+  courtId     String?
+  court       Court?                  @relation(fields: [courtId], references: [id], onDelete: SetNull)
+
   @@index([teamId])
   @@index([createdBy])
   @@index([startTime])
   @@index([visibility])
+  @@index([courtId])
 }
 
 model TeamEventParticipant {
@@ -321,4 +331,68 @@ model Notification {
   @@index([isRead])
   @@index([createdAt])
   @@index([userId, isRead])
+}
+
+// ============= COURT MODEL =============
+
+model Court {
+  id          String   @id @default(uuid())
+
+  // Basic information
+  name        String
+  description String   @db.Text
+
+  // Images (required)
+  imageUrl    String                    // Main image URL (Cloudinary)
+  imageUrls   String[]   @default([])   // Additional images
+
+  // Location
+  region      String                    // Prefecture
+  address     String
+  latitude    Float?
+  longitude   Float?
+
+  // Contact
+  phoneNumber String?
+  websiteUrl  String?
+  email       String?
+
+  // Court details
+  courtsCount   Int?
+  indoorOutdoor String?                 // "indoor" | "outdoor" | "both"
+  surface       String?                 // Court surface type
+
+  // Amenities
+  amenities     String[]   @default([]) // ["parking", "locker", "shower", "rental", "shop", "vending", "wifi", "ac"]
+
+  // Operating info
+  operatingHours String?  @db.Text
+  priceInfo      String?  @db.Text
+
+  // Listing management
+  status        CourtStatus @default(ACTIVE)
+  listingPlan   ListingPlan @default(FREE)
+  freeUntil     DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  events      Event[]
+  teamEvents  TeamEvent[]
+
+  @@index([region])
+  @@index([status])
+  @@index([indoorOutdoor])
+}
+
+enum CourtStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum ListingPlan {
+  FREE
+  BASIC
+  PREMIUM
 }
