@@ -104,10 +104,10 @@ struct TeamsListView: View {
                             }
                         }
                         .listStyle(.plain)
-                        .onChange(of: searchText) { _, newValue in
+                        .onChange(of: searchText) { newValue in
                             viewModel.searchTeams(query: newValue)
                         }
-                        .onChange(of: selectedRegion) { _, newValue in
+                        .onChange(of: selectedRegion) { newValue in
                             Task {
                                 await viewModel.fetchPublicTeams(region: newValue)
                             }

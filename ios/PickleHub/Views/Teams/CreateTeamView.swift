@@ -151,7 +151,7 @@ struct CreateTeamView: View {
             .navigationTitle("チーム作成")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItemGroup(placement: .navigationBarLeading) {
                     Button("キャンセル") {
                         dismiss()
                     }
