@@ -210,25 +210,21 @@ struct ProfileEditView: View {
             }
             .navigationTitle("プロフィール編集")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItemGroup(placement: .navigationBarLeading) {
-                    Button("キャンセル") {
-                        dismiss()
+            .navigationBarBackButtonHidden(true)
+            .navigationBarItems(
+                leading: Button("キャンセル") {
+                    dismiss()
+                },
+                trailing: Button(action: saveProfile) {
+                    if viewModel.isLoading {
+                        ProgressView()
+                    } else {
+                        Text("保存")
+                            .bold()
                     }
                 }
-
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    Button(action: saveProfile) {
-                        if viewModel.isLoading {
-                            ProgressView()
-                        } else {
-                            Text("保存")
-                                .bold()
-                        }
-                    }
-                    .disabled(!isFormValid || viewModel.isLoading)
-                }
-            }
+                .disabled(!isFormValid || viewModel.isLoading)
+            )
         }
     }
 
