@@ -20,6 +20,17 @@ struct LocationSearchView: View {
             HStack {
                 TextField("場所を検索...", text: $locationName)
                     .textFieldStyle(.roundedBorder)
+                    .onSubmit {
+                        if !locationName.isEmpty {
+                            showingPlacesPicker = true
+                        }
+                    }
+                    .onChange(of: locationName) { newValue in
+                        // Clear selected location when user types manually
+                        if selectedLocation != nil && newValue != selectedLocation?.name {
+                            selectedLocation = nil
+                        }
+                    }
 
                 Button(action: {
                     showingPlacesPicker = true
