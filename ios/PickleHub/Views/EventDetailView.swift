@@ -17,6 +17,7 @@ struct EventDetailView: View {
     @State private var showingDuplicateEvent = false
     @State private var reservationToCancel: String?
     @State private var currentEventId: String
+    @State private var previousEventId: String = ""
     @State private var event: Event?
     @State private var isLoading = true
 
@@ -107,7 +108,7 @@ struct EventDetailView: View {
             }
             }
             .onChange(of: currentEventId) { newId in
-                print("🔄 currentEventId changed from \(oldId) to: \(newId)")
+                print("🔄 currentEventId changed from \(previousEventId) to: \(newId)")
                 // Scroll to top immediately
                 withAnimation {
                     print("📜 Scrolling to top")
@@ -119,9 +120,10 @@ struct EventDetailView: View {
                     await loadEvent()
                     print("✅ Event loaded successfully")
                     // Refresh events list in background to include the new event
-                    if oldId != newId {
+                    if previousEventId != newId {
                         await eventsViewModel.fetchEvents()
                     }
+                    previousEventId = newId
                 }
             }
         }
