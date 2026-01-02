@@ -113,7 +113,7 @@ struct CachedAsyncImagePhase<Content: View>: View {
             .onAppear {
                 loadImage()
             }
-            .onChange(of: url) { _, newURL in
+            .onChange(of: url) { newURL in
                 // URLが変更された場合、画像を再読み込み
                 if newURL != currentURL {
                     // 新しいURLのメモリキャッシュをチェック

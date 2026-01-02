@@ -60,7 +60,7 @@ struct OnboardingContainerView: View {
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .animation(.spring(response: 0.3, dampingFraction: 0.8), value: currentPage)
-                .onChange(of: currentPage) { _, newPage in
+                .onChange(of: currentPage) { newPage in
                     // 入力不要なページではキーボードを閉じる
                     let pagesWithoutKeyboard = [2, 3, 5, 6, 9] // Gender, AgeGroup, Experience, SkillLevel, ProfileImage
                     if pagesWithoutKeyboard.contains(newPage) {
