@@ -106,7 +106,7 @@ struct EventDetailView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             }
-            .onChange(of: currentEventId) { oldId, newId in
+            .onChange(of: currentEventId) { newId in
                 print("🔄 currentEventId changed from \(oldId) to: \(newId)")
                 // Scroll to top immediately
                 withAnimation {

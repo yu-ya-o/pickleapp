@@ -132,7 +132,7 @@ struct ProfileEditView: View {
 
                         TextField("例: 4.500", text: $duprDoublesText)
                             .keyboardType(.decimalPad)
-                            .onChange(of: duprDoublesText) { _, newValue in
+                            .onChange(of: duprDoublesText) { newValue in
                                 duprDoublesText = formatDUPRInput(newValue)
                             }
 
@@ -148,7 +148,7 @@ struct ProfileEditView: View {
 
                         TextField("例: 4.500", text: $duprSinglesText)
                             .keyboardType(.decimalPad)
-                            .onChange(of: duprSinglesText) { _, newValue in
+                            .onChange(of: duprSinglesText) { newValue in
                                 duprSinglesText = formatDUPRInput(newValue)
                             }
 
@@ -163,7 +163,7 @@ struct ProfileEditView: View {
                             .foregroundColor(.secondary)
 
                         TextField("例: JOOLA Ben Johns Hyperion", text: $myPaddle)
-                            .onChange(of: myPaddle) { _, newValue in
+                            .onChange(of: myPaddle) { newValue in
                                 if newValue.count > 100 {
                                     myPaddle = String(newValue.prefix(100))
                                 }
