@@ -282,9 +282,45 @@ struct TeamEventDetailView: View {
                 }
             }
 
-            HStack {
+            HStack(alignment: .top) {
                 Image(systemName: "mappin.circle")
-                Text(event.location)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(event.location)
+                    if let address = event.address {
+                        Text(address)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+
+            // Google Map
+            if let latitude = event.latitude, let longitude = event.longitude {
+                VStack(alignment: .leading, spacing: 8) {
+                    GoogleMapView(
+                        latitude: latitude,
+                        longitude: longitude,
+                        title: event.location
+                    )
+                    .frame(height: 200)
+                    .cornerRadius(12)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.blue.opacity(0.3), lineWidth: 2)
+                    )
+                    .onTapGesture {
+                        openInGoogleMaps(latitude: latitude, longitude: longitude, name: event.location)
+                    }
+
+                    HStack {
+                        Image(systemName: "hand.tap.fill")
+                            .foregroundColor(.blue)
+                            .font(.caption)
+                        Text("タップしてGoogle Mapsで開く")
+                            .font(.caption)
+                            .foregroundColor(.blue)
+                    }
+                }
             }
 
             HStack {
@@ -623,6 +659,21 @@ struct TeamEventDetailView: View {
             } catch {
                 alertMessage = "イベントの削除に失敗しました: \(error.localizedDescription)"
                 showingAlert = true
+            }
+        }
+    }
+
+    private func openInGoogleMaps(latitude: Double, longitude: Double, name: String) {
+        // Try to open in Google Maps app first
+        let googleMapsURL = "comgooglemaps://?q=\(latitude),\(longitude)&zoom=15"
+
+        if let url = URL(string: googleMapsURL), UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        } else {
+            // Fallback to web version
+            let webURL = "https://www.google.com/maps/search/?api=1&query=\(latitude),\(longitude)"
+            if let url = URL(string: webURL) {
+                UIApplication.shared.open(url)
             }
         }
     }
