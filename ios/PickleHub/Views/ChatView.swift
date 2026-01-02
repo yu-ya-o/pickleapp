@@ -46,7 +46,7 @@ struct ChatView: View {
                         }
                         .padding()
                     }
-                    .onChange(of: messages.count) { _, _ in
+                    .onChange(of: messages.count) { _ in
                         scrollToBottom(proxy: proxy)
                     }
                 }
@@ -75,7 +75,7 @@ struct ChatView: View {
             .navigationTitle(eventTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button("完了") {
                         dismiss()
                     }
