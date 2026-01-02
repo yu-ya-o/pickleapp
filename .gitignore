@@ -1,0 +1,39 @@
+# Xcode
+*.xcuserstate
+*.xcuserdatad
+xcuserdata/
+DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# CocoaPods
+Pods/
+
+# Workspace (CocoaPods generates this)
+*.xcworkspace
+!*.xcworkspace/contents.xcworkspacedata
+
+# Project workspace
+ios/PickleHub.xcodeproj/project.xcworkspace/
+ios/PickleHub.xcodeproj/xcuserdata/
+
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
