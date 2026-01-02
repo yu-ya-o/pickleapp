@@ -22,14 +22,14 @@ struct LocationSearchView: View {
             }) {
                 HStack {
                     if selectedLocation == nil {
-                        Text("場所を検索...")
-                            .foregroundColor(.secondary)
+                        Text("会場をMapで選ぶ")
+                            .foregroundColor(.blue)
                     } else {
                         Text(locationName)
                             .foregroundColor(.primary)
                     }
                     Spacer()
-                    Image(systemName: "magnifyingglass.circle.fill")
+                    Image(systemName: "map.circle.fill")
                         .foregroundColor(.blue)
                         .font(.title2)
                 }
