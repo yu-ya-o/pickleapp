@@ -7,6 +7,7 @@ struct CreateTeamEventView: View {
     @State private var title = ""
     @State private var description = ""
     @State private var location = ""
+    @State private var selectedLocation: LocationData?
     @State private var region = ""
     @State private var startDate = Date().addingTimeInterval(3600) // 1 hour from now
     @State private var endDate = Date().addingTimeInterval(7200) // 2 hours from now
@@ -38,6 +39,16 @@ struct CreateTeamEventView: View {
             _description = State(initialValue: event.description)
             _location = State(initialValue: event.location)
             _region = State(initialValue: event.region ?? "")
+
+            // Initialize location data if available
+            if let lat = event.latitude, let lon = event.longitude, let addr = event.address {
+                _selectedLocation = State(initialValue: LocationData(
+                    name: event.location,
+                    address: addr,
+                    latitude: lat,
+                    longitude: lon
+                ))
+            }
 
             // Parse dates from ISO8601 strings with proper format options
             let formatter = ISO8601DateFormatter()
@@ -71,6 +82,16 @@ struct CreateTeamEventView: View {
             _description = State(initialValue: event.description)
             _location = State(initialValue: event.location)
             _region = State(initialValue: event.region ?? "")
+
+            // Initialize location data if available
+            if let lat = event.latitude, let lon = event.longitude, let addr = event.address {
+                _selectedLocation = State(initialValue: LocationData(
+                    name: event.location,
+                    address: addr,
+                    latitude: lat,
+                    longitude: lon
+                ))
+            }
 
             // Parse dates and adjust to tomorrow
             let formatter = ISO8601DateFormatter()
@@ -145,7 +166,11 @@ struct CreateTeamEventView: View {
                     TextField("イベントタイトル", text: $title)
                     TextField("説明", text: $description, axis: .vertical)
                         .lineLimit(3...6)
-                    TextField("場所", text: $location)
+
+                    LocationSearchView(
+                        locationName: $location,
+                        selectedLocation: $selectedLocation
+                    )
                 }
 
                 Section(header: Text("地域")) {
@@ -268,6 +293,9 @@ struct CreateTeamEventView: View {
                         title: title,
                         description: description,
                         location: location,
+                        address: selectedLocation?.address,
+                        latitude: selectedLocation?.latitude,
+                        longitude: selectedLocation?.longitude,
                         region: region.isEmpty ? nil : region,
                         startTime: startDate,
                         endTime: endDate,
@@ -282,6 +310,9 @@ struct CreateTeamEventView: View {
                         title: title,
                         description: description,
                         location: location,
+                        address: selectedLocation?.address,
+                        latitude: selectedLocation?.latitude,
+                        longitude: selectedLocation?.longitude,
                         region: region.isEmpty ? nil : region,
                         startTime: startDate,
                         endTime: endDate,
