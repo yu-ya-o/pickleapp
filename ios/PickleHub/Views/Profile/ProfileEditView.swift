@@ -211,13 +211,13 @@ struct ProfileEditView: View {
             .navigationTitle("プロフィール編集")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItemGroup(placement: .navigationBarLeading) {
                     Button("キャンセル") {
                         dismiss()
                     }
                 }
 
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button(action: saveProfile) {
                         if viewModel.isLoading {
                             ProgressView()
