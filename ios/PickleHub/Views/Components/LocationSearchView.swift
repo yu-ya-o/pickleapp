@@ -17,31 +17,27 @@ struct LocationSearchView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                TextField("場所を検索...", text: $locationName)
-                    .textFieldStyle(.roundedBorder)
-                    .onSubmit {
-                        if !locationName.isEmpty {
-                            showingPlacesPicker = true
-                        }
+            Button(action: {
+                showingPlacesPicker = true
+            }) {
+                HStack {
+                    if selectedLocation == nil {
+                        Text("場所を検索...")
+                            .foregroundColor(.secondary)
+                    } else {
+                        Text(locationName)
+                            .foregroundColor(.primary)
                     }
-                    .onChange(of: locationName) { newValue in
-                        // Clear selected location when user types manually
-                        if selectedLocation != nil && newValue != selectedLocation?.name {
-                            selectedLocation = nil
-                        }
-                    }
-
-                Button(action: {
-                    showingPlacesPicker = true
-                }) {
-                    Image(systemName: "magnifyingglass")
+                    Spacer()
+                    Image(systemName: "magnifyingglass.circle.fill")
                         .foregroundColor(.blue)
-                        .padding(8)
-                        .background(Color.blue.opacity(0.1))
-                        .cornerRadius(8)
+                        .font(.title2)
                 }
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
             }
+            .buttonStyle(.plain)
 
             if let location = selectedLocation {
                 VStack(alignment: .leading, spacing: 4) {
