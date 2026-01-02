@@ -162,14 +162,14 @@ struct CreateTeamView: View {
             } message: {
                 Text(errorMessage)
             }
-            .onChange(of: selectedIconPhotoItem) { _, newItem in
+            .onChange(of: selectedIconPhotoItem) { newItem in
                 Task {
                     if let data = try? await newItem?.loadTransferable(type: Data.self) {
                         selectedIconImageData = data
                     }
                 }
             }
-            .onChange(of: selectedHeaderPhotoItem) { _, newItem in
+            .onChange(of: selectedHeaderPhotoItem) { newItem in
                 Task {
                     if let data = try? await newItem?.loadTransferable(type: Data.self) {
                         selectedHeaderImageData = data

@@ -224,14 +224,14 @@ struct EditTeamView: View {
             } message: {
                 Text(errorMessage)
             }
-            .onChange(of: selectedPhotoItem) { _, newItem in
+            .onChange(of: selectedPhotoItem) { newItem in
                 Task {
                     if let data = try? await newItem?.loadTransferable(type: Data.self) {
                         selectedImageData = data
                     }
                 }
             }
-            .onChange(of: selectedHeaderPhotoItem) { _, newItem in
+            .onChange(of: selectedHeaderPhotoItem) { newItem in
                 Task {
                     if let data = try? await newItem?.loadTransferable(type: Data.self) {
                         selectedHeaderImageData = data

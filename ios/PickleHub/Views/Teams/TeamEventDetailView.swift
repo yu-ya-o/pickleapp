@@ -148,7 +148,7 @@ struct TeamEventDetailView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             }
-            .onChange(of: currentEventId) { _, newId in
+            .onChange(of: currentEventId) { newId in
                 print("🔄 currentEventId changed to: \(newId)")
                 // Scroll to top immediately
                 withAnimation {
@@ -199,7 +199,7 @@ struct TeamEventDetailView: View {
                 .environmentObject(viewModel)
             }
         }
-        .onChange(of: showingEditEvent) { _, newValue in
+        .onChange(of: showingEditEvent) { newValue in
             if !newValue {
                 // Sheet was dismissed, reload event to get latest data
                 Task {

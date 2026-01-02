@@ -56,7 +56,7 @@ struct TeamChatView: View {
                         }
                         .padding()
                     }
-                    .onChange(of: messages.count) { _, _ in
+                    .onChange(of: messages.count) { _ in
                         scrollToBottom(proxy: proxy)
                     }
                 }
