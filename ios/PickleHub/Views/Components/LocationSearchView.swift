@@ -2,7 +2,7 @@ import SwiftUI
 import GooglePlaces
 
 // MARK: - Location Data
-struct LocationData {
+struct LocationData: Equatable {
     let name: String
     let address: String
     let latitude: Double
