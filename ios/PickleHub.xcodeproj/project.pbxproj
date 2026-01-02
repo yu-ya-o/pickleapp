@@ -5,10 +5,797 @@
 	};
 	objectVersion = 56;
 	objects = {
-		/* This is a placeholder Xcode project file */
-		/* In production, generate this using Xcode: File > New > Project > iOS > App */
-		/* For Swift Package Dependencies, add: */
-		/* - GoogleSignIn: https://github.com/google/GoogleSignIn-iOS */
+
+/* Begin PBXBuildFile section */
+		1A0000010000000000000001 /* PickleHubApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000001 /* PickleHubApp.swift */; };
+		1A0000010000000000000002 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000002 /* AppDelegate.swift */; };
+		1A0000010000000000000003 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000003 /* Config.swift */; };
+		1A0000010000000000000004 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000004 /* User.swift */; };
+		1A0000010000000000000005 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000005 /* Event.swift */; };
+		1A0000010000000000000006 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000006 /* Notification.swift */; };
+		1A0000010000000000000007 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000007 /* Reservation.swift */; };
+		1A0000010000000000000008 /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000008 /* Chat.swift */; };
+		1A0000010000000000000009 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000009 /* Team.swift */; };
+		1A0000010000000000000010 /* DeepLinkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000010 /* DeepLinkManager.swift */; };
+		1A0000010000000000000011 /* PushNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000011 /* PushNotificationManager.swift */; };
+		1A0000010000000000000012 /* WebSocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000012 /* WebSocketClient.swift */; };
+		1A0000010000000000000013 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000013 /* APIClient.swift */; };
+		1A0000010000000000000014 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000014 /* ImageCache.swift */; };
+		1A0000010000000000000015 /* Prefectures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000015 /* Prefectures.swift */; };
+		1A0000010000000000000016 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000016 /* DesignSystem.swift */; };
+		1A0000010000000000000017 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000017 /* OnboardingViewModel.swift */; };
+		1A0000010000000000000018 /* NotificationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000018 /* NotificationsViewModel.swift */; };
+		1A0000010000000000000019 /* RankingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000019 /* RankingsViewModel.swift */; };
+		1A0000010000000000000020 /* TeamsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000020 /* TeamsViewModel.swift */; };
+		1A0000010000000000000021 /* TeamDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000021 /* TeamDetailViewModel.swift */; };
+		1A0000010000000000000022 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000022 /* AuthViewModel.swift */; };
+		1A0000010000000000000023 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000023 /* ChatViewModel.swift */; };
+		1A0000010000000000000024 /* EventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000024 /* EventsViewModel.swift */; };
+		1A0000010000000000000025 /* TeamEventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000025 /* TeamEventsViewModel.swift */; };
+		1A0000010000000000000026 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000026 /* MainTabView.swift */; };
+		1A0000010000000000000027 /* MyEventsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000027 /* MyEventsView.swift */; };
+		1A0000010000000000000028 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000028 /* ProfileView.swift */; };
+		1A0000010000000000000029 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000029 /* LoginView.swift */; };
+		1A0000010000000000000030 /* EditEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000030 /* EditEventView.swift */; };
+		1A0000010000000000000031 /* TeamEventDetailContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000031 /* TeamEventDetailContainerView.swift */; };
+		1A0000010000000000000032 /* CreateEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000032 /* CreateEventView.swift */; };
+		1A0000010000000000000033 /* RankingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000033 /* RankingsView.swift */; };
+		1A0000010000000000000034 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000034 /* ChatView.swift */; };
+		1A0000010000000000000035 /* OnboardingSkillLevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000035 /* OnboardingSkillLevelView.swift */; };
+		1A0000010000000000000036 /* OnboardingRegionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000036 /* OnboardingRegionView.swift */; };
+		1A0000010000000000000037 /* OnboardingPaddleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000037 /* OnboardingPaddleView.swift */; };
+		1A0000010000000000000038 /* OnboardingDUPRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000038 /* OnboardingDUPRView.swift */; };
+		1A0000010000000000000039 /* OnboardingAgeGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000039 /* OnboardingAgeGroupView.swift */; };
+		1A0000010000000000000040 /* SelectionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000040 /* SelectionCard.swift */; };
+		1A0000010000000000000041 /* OnboardingExperienceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000041 /* OnboardingExperienceView.swift */; };
+		1A0000010000000000000042 /* OnboardingContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000042 /* OnboardingContainerView.swift */; };
+		1A0000010000000000000043 /* OnboardingNicknameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000043 /* OnboardingNicknameView.swift */; };
+		1A0000010000000000000044 /* OnboardingGenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000044 /* OnboardingGenderView.swift */; };
+		1A0000010000000000000045 /* OnboardingProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000045 /* OnboardingProfileImageView.swift */; };
+		1A0000010000000000000046 /* OnboardingBioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000046 /* OnboardingBioView.swift */; };
+		1A0000010000000000000047 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000047 /* UserProfileView.swift */; };
+		1A0000010000000000000048 /* CachedAsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000048 /* CachedAsyncImage.swift */; };
+		1A0000010000000000000049 /* TeamIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000049 /* TeamIconView.swift */; };
+		1A0000010000000000000050 /* ProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000050 /* ProfileImageView.swift */; };
+		1A0000010000000000000051 /* ModernEventRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000051 /* ModernEventRowView.swift */; };
+		1A0000010000000000000052 /* ExpandableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000052 /* ExpandableTextView.swift */; };
+		1A0000010000000000000053 /* SNSLinksEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000053 /* SNSLinksEditor.swift */; };
+		1A0000010000000000000054 /* LocationSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000054 /* LocationSearchView.swift */; };
+		1A0000010000000000000055 /* GoogleMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000055 /* GoogleMapView.swift */; };
+		1A0000010000000000000056 /* SNSLinksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000056 /* SNSLinksView.swift */; };
+		1A0000010000000000000057 /* EventsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000057 /* EventsListView.swift */; };
+		1A0000010000000000000058 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000058 /* NotificationsView.swift */; };
+		1A0000010000000000000059 /* EventDetailContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000059 /* EventDetailContainerView.swift */; };
+		1A0000010000000000000060 /* EventDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000060 /* EventDetailView.swift */; };
+		1A0000010000000000000061 /* TeamChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000061 /* TeamChatView.swift */; };
+		1A0000010000000000000062 /* TeamEventDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000062 /* TeamEventDetailView.swift */; };
+		1A0000010000000000000063 /* EditTeamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000063 /* EditTeamView.swift */; };
+		1A0000010000000000000064 /* TeamEventsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000064 /* TeamEventsListView.swift */; };
+		1A0000010000000000000065 /* InviteManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000065 /* InviteManagementView.swift */; };
+		1A0000010000000000000066 /* TeamDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000066 /* TeamDetailView.swift */; };
+		1A0000010000000000000067 /* CreateTeamEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000067 /* CreateTeamEventView.swift */; };
+		1A0000010000000000000068 /* TeamMembersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000068 /* TeamMembersView.swift */; };
+		1A0000010000000000000069 /* JoinRequestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000069 /* JoinRequestsView.swift */; };
+		1A0000010000000000000070 /* CreateTeamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000070 /* CreateTeamView.swift */; };
+		1A0000010000000000000071 /* TeamsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000071 /* TeamsListView.swift */; };
+		1A0000010000000000000072 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000072 /* SplashView.swift */; };
+		1A0000010000000000000073 /* ProfileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000073 /* ProfileEditView.swift */; };
+		1A0000010000000000000074 /* ProfileSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000074 /* ProfileSetupView.swift */; };
+		3A0000010000000000000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A0000010000000000000001 /* Assets.xcassets */; };
+		3A0000010000000000000002 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4A0000010000000000000002 /* GoogleService-Info.plist */; };
+		F596E4E8D42BE8470C6E0E27 /* Pods_PickleHub.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58D912B91FCC83B77CC2A05F /* Pods_PickleHub.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		2A0000010000000000000001 /* PickleHubApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickleHubApp.swift; sourceTree = "<group>"; };
+		2A0000010000000000000002 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		2A0000010000000000000003 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		2A0000010000000000000004 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		2A0000010000000000000005 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		2A0000010000000000000006 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
+		2A0000010000000000000007 /* Reservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reservation.swift; sourceTree = "<group>"; };
+		2A0000010000000000000008 /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
+		2A0000010000000000000009 /* Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
+		2A0000010000000000000010 /* DeepLinkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkManager.swift; sourceTree = "<group>"; };
+		2A0000010000000000000011 /* PushNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationManager.swift; sourceTree = "<group>"; };
+		2A0000010000000000000012 /* WebSocketClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketClient.swift; sourceTree = "<group>"; };
+		2A0000010000000000000013 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		2A0000010000000000000014 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		2A0000010000000000000015 /* Prefectures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prefectures.swift; sourceTree = "<group>"; };
+		2A0000010000000000000016 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
+		2A0000010000000000000017 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
+		2A0000010000000000000018 /* NotificationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewModel.swift; sourceTree = "<group>"; };
+		2A0000010000000000000019 /* RankingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingsViewModel.swift; sourceTree = "<group>"; };
+		2A0000010000000000000020 /* TeamsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamsViewModel.swift; sourceTree = "<group>"; };
+		2A0000010000000000000021 /* TeamDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamDetailViewModel.swift; sourceTree = "<group>"; };
+		2A0000010000000000000022 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		2A0000010000000000000023 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
+		2A0000010000000000000024 /* EventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewModel.swift; sourceTree = "<group>"; };
+		2A0000010000000000000025 /* TeamEventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamEventsViewModel.swift; sourceTree = "<group>"; };
+		2A0000010000000000000026 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000027 /* MyEventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyEventsView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000028 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000029 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000030 /* EditEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEventView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000031 /* TeamEventDetailContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamEventDetailContainerView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000032 /* CreateEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000033 /* RankingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingsView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000034 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000035 /* OnboardingSkillLevelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSkillLevelView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000036 /* OnboardingRegionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRegionView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000037 /* OnboardingPaddleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPaddleView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000038 /* OnboardingDUPRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDUPRView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000039 /* OnboardingAgeGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingAgeGroupView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000040 /* SelectionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionCard.swift; sourceTree = "<group>"; };
+		2A0000010000000000000041 /* OnboardingExperienceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingExperienceView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000042 /* OnboardingContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContainerView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000043 /* OnboardingNicknameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNicknameView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000044 /* OnboardingGenderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingGenderView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000045 /* OnboardingProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingProfileImageView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000046 /* OnboardingBioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingBioView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000047 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000048 /* CachedAsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedAsyncImage.swift; sourceTree = "<group>"; };
+		2A0000010000000000000049 /* TeamIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamIconView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000050 /* ProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000051 /* ModernEventRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModernEventRowView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000052 /* ExpandableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableTextView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000053 /* SNSLinksEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNSLinksEditor.swift; sourceTree = "<group>"; };
+		2A0000010000000000000054 /* LocationSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000055 /* GoogleMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMapView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000056 /* SNSLinksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNSLinksView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000057 /* EventsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsListView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000058 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000059 /* EventDetailContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailContainerView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000060 /* EventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000061 /* TeamChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamChatView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000062 /* TeamEventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamEventDetailView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000063 /* EditTeamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTeamView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000064 /* TeamEventsListView.swift */ = {isa = PBXFileType = sourcecode.swift; path = TeamEventsListView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000065 /* InviteManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteManagementView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000066 /* TeamDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamDetailView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000067 /* CreateTeamEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTeamEventView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000068 /* TeamMembersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamMembersView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000069 /* JoinRequestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinRequestsView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000070 /* CreateTeamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTeamView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000071 /* TeamsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamsListView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000072 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000073 /* ProfileEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000074 /* ProfileSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupView.swift; sourceTree = "<group>"; };
+		4A0000010000000000000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4A0000010000000000000002 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		58D912B91FCC83B77CC2A05F /* Pods_PickleHub.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PickleHub.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A0000010000000000000001 /* PickleHub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PickleHub.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A0000010000000000000002 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7D4B1307D0BC1E815139F0C0 /* Pods-PickleHub.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PickleHub.debug.xcconfig"; path = "Target Support Files/Pods-PickleHub/Pods-PickleHub.debug.xcconfig"; sourceTree = "<group>"; };
+		D24A0F63CA5C22858337FCB7 /* Pods-PickleHub.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PickleHub.release.xcconfig"; path = "Target Support Files/Pods-PickleHub/Pods-PickleHub.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6A0000010000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F596E4E8D42BE8470C6E0E27 /* Pods_PickleHub.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0A0000010000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				0A0000010000000000000002 /* PickleHub */,
+				0A0000010000000000000003 /* Products */,
+				C9E9DB3E5C5E4A13A44D7F38 /* Pods */,
+				D4F0F6EC0BF48CB969A3DCD0 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		0A0000010000000000000002 /* PickleHub */ = {
+			isa = PBXGroup;
+			children = (
+				2A0000010000000000000001 /* PickleHubApp.swift */,
+				2A0000010000000000000002 /* AppDelegate.swift */,
+				2A0000010000000000000003 /* Config.swift */,
+				0A0000010000000000000004 /* Models */,
+				0A0000010000000000000005 /* Views */,
+				0A0000010000000000000006 /* ViewModels */,
+				0A0000010000000000000007 /* Services */,
+				0A0000010000000000000008 /* Utilities */,
+				0A0000010000000000000009 /* Utils */,
+				0A0000010000000000000010 /* Design */,
+				4A0000010000000000000001 /* Assets.xcassets */,
+				4A0000010000000000000002 /* GoogleService-Info.plist */,
+				5A0000010000000000000002 /* Info.plist */,
+			);
+			path = PickleHub;
+			sourceTree = "<group>";
+		};
+		0A0000010000000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5A0000010000000000000001 /* PickleHub.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0A0000010000000000000004 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				2A0000010000000000000004 /* User.swift */,
+				2A0000010000000000000005 /* Event.swift */,
+				2A0000010000000000000006 /* Notification.swift */,
+				2A0000010000000000000007 /* Reservation.swift */,
+				2A0000010000000000000008 /* Chat.swift */,
+				2A0000010000000000000009 /* Team.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		0A0000010000000000000005 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2A0000010000000000000026 /* MainTabView.swift */,
+				2A0000010000000000000027 /* MyEventsView.swift */,
+				2A0000010000000000000028 /* ProfileView.swift */,
+				2A0000010000000000000029 /* LoginView.swift */,
+				2A0000010000000000000030 /* EditEventView.swift */,
+				2A0000010000000000000031 /* TeamEventDetailContainerView.swift */,
+				2A0000010000000000000032 /* CreateEventView.swift */,
+				2A0000010000000000000033 /* RankingsView.swift */,
+				2A0000010000000000000034 /* ChatView.swift */,
+				2A0000010000000000000047 /* UserProfileView.swift */,
+				2A0000010000000000000057 /* EventsListView.swift */,
+				2A0000010000000000000058 /* NotificationsView.swift */,
+				2A0000010000000000000059 /* EventDetailContainerView.swift */,
+				2A0000010000000000000060 /* EventDetailView.swift */,
+				2A0000010000000000000072 /* SplashView.swift */,
+				0A0000010000000000000011 /* Onboarding */,
+				0A0000010000000000000012 /* Components */,
+				0A0000010000000000000013 /* Teams */,
+				0A0000010000000000000014 /* Profile */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		0A0000010000000000000006 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				2A0000010000000000000017 /* OnboardingViewModel.swift */,
+				2A0000010000000000000018 /* NotificationsViewModel.swift */,
+				2A0000010000000000000019 /* RankingsViewModel.swift */,
+				2A0000010000000000000020 /* TeamsViewModel.swift */,
+				2A0000010000000000000021 /* TeamDetailViewModel.swift */,
+				2A0000010000000000000022 /* AuthViewModel.swift */,
+				2A0000010000000000000023 /* ChatViewModel.swift */,
+				2A0000010000000000000024 /* EventsViewModel.swift */,
+				2A0000010000000000000025 /* TeamEventsViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		0A0000010000000000000007 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				2A0000010000000000000010 /* DeepLinkManager.swift */,
+				2A0000010000000000000011 /* PushNotificationManager.swift */,
+				2A0000010000000000000012 /* WebSocketClient.swift */,
+				2A0000010000000000000013 /* APIClient.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		0A0000010000000000000008 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				2A0000010000000000000014 /* ImageCache.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		0A0000010000000000000009 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				2A0000010000000000000015 /* Prefectures.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		0A0000010000000000000010 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				2A0000010000000000000016 /* DesignSystem.swift */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
+		0A0000010000000000000011 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				2A0000010000000000000035 /* OnboardingSkillLevelView.swift */,
+				2A0000010000000000000036 /* OnboardingRegionView.swift */,
+				2A0000010000000000000037 /* OnboardingPaddleView.swift */,
+				2A0000010000000000000038 /* OnboardingDUPRView.swift */,
+				2A0000010000000000000039 /* OnboardingAgeGroupView.swift */,
+				2A0000010000000000000040 /* SelectionCard.swift */,
+				2A0000010000000000000041 /* OnboardingExperienceView.swift */,
+				2A0000010000000000000042 /* OnboardingContainerView.swift */,
+				2A0000010000000000000043 /* OnboardingNicknameView.swift */,
+				2A0000010000000000000044 /* OnboardingGenderView.swift */,
+				2A0000010000000000000045 /* OnboardingProfileImageView.swift */,
+				2A0000010000000000000046 /* OnboardingBioView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		0A0000010000000000000012 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				2A0000010000000000000048 /* CachedAsyncImage.swift */,
+				2A0000010000000000000049 /* TeamIconView.swift */,
+				2A0000010000000000000050 /* ProfileImageView.swift */,
+				2A0000010000000000000051 /* ModernEventRowView.swift */,
+				2A0000010000000000000052 /* ExpandableTextView.swift */,
+				2A0000010000000000000053 /* SNSLinksEditor.swift */,
+				2A0000010000000000000054 /* LocationSearchView.swift */,
+				2A0000010000000000000055 /* GoogleMapView.swift */,
+				2A0000010000000000000056 /* SNSLinksView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		0A0000010000000000000013 /* Teams */ = {
+			isa = PBXGroup;
+			children = (
+				2A0000010000000000000061 /* TeamChatView.swift */,
+				2A0000010000000000000062 /* TeamEventDetailView.swift */,
+				2A0000010000000000000063 /* EditTeamView.swift */,
+				2A0000010000000000000064 /* TeamEventsListView.swift */,
+				2A0000010000000000000065 /* InviteManagementView.swift */,
+				2A0000010000000000000066 /* TeamDetailView.swift */,
+				2A0000010000000000000067 /* CreateTeamEventView.swift */,
+				2A0000010000000000000068 /* TeamMembersView.swift */,
+				2A0000010000000000000069 /* JoinRequestsView.swift */,
+				2A0000010000000000000070 /* CreateTeamView.swift */,
+				2A0000010000000000000071 /* TeamsListView.swift */,
+			);
+			path = Teams;
+			sourceTree = "<group>";
+		};
+		0A0000010000000000000014 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				2A0000010000000000000073 /* ProfileEditView.swift */,
+				2A0000010000000000000074 /* ProfileSetupView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		C9E9DB3E5C5E4A13A44D7F38 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7D4B1307D0BC1E815139F0C0 /* Pods-PickleHub.debug.xcconfig */,
+				D24A0F63CA5C22858337FCB7 /* Pods-PickleHub.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		D4F0F6EC0BF48CB969A3DCD0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				58D912B91FCC83B77CC2A05F /* Pods_PickleHub.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7A0000010000000000000001 /* PickleHub */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8A0000010000000000000001 /* Build configuration list for PBXNativeTarget "PickleHub" */;
+			buildPhases = (
+				B8C59D67F09D7F8D2A1E3B45 /* [CP] Check Pods Manifest.lock */,
+				7A0000010000000000000002 /* Sources */,
+				6A0000010000000000000001 /* Frameworks */,
+				7A0000010000000000000003 /* Resources */,
+				1C1E8E5DF3DD6A0B9C3AD9BB /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PickleHub;
+			productName = PickleHub;
+			productReference = 5A0000010000000000000001 /* PickleHub.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9A0000010000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					7A0000010000000000000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = 9A0000010000000000000002 /* Build configuration list for PBXProject "PickleHub" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 0A0000010000000000000001;
+			productRefGroup = 0A0000010000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7A0000010000000000000001 /* PickleHub */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7A0000010000000000000003 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A0000010000000000000001 /* Assets.xcassets in Resources */,
+				3A0000010000000000000002 /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1C1E8E5DF3DD6A0B9C3AD9BB /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PickleHub/Pods-PickleHub-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PickleHub/Pods-PickleHub-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PickleHub/Pods-PickleHub-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B8C59D67F09D7F8D2A1E3B45 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PickleHub-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7A0000010000000000000002 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A0000010000000000000001 /* PickleHubApp.swift in Sources */,
+				1A0000010000000000000002 /* AppDelegate.swift in Sources */,
+				1A0000010000000000000003 /* Config.swift in Sources */,
+				1A0000010000000000000004 /* User.swift in Sources */,
+				1A0000010000000000000005 /* Event.swift in Sources */,
+				1A0000010000000000000006 /* Notification.swift in Sources */,
+				1A0000010000000000000007 /* Reservation.swift in Sources */,
+				1A0000010000000000000008 /* Chat.swift in Sources */,
+				1A0000010000000000000009 /* Team.swift in Sources */,
+				1A0000010000000000000010 /* DeepLinkManager.swift in Sources */,
+				1A0000010000000000000011 /* PushNotificationManager.swift in Sources */,
+				1A0000010000000000000012 /* WebSocketClient.swift in Sources */,
+				1A0000010000000000000013 /* APIClient.swift in Sources */,
+				1A0000010000000000000014 /* ImageCache.swift in Sources */,
+				1A0000010000000000000015 /* Prefectures.swift in Sources */,
+				1A0000010000000000000016 /* DesignSystem.swift in Sources */,
+				1A0000010000000000000017 /* OnboardingViewModel.swift in Sources */,
+				1A0000010000000000000018 /* NotificationsViewModel.swift in Sources */,
+				1A0000010000000000000019 /* RankingsViewModel.swift in Sources */,
+				1A0000010000000000000020 /* TeamsViewModel.swift in Sources */,
+				1A0000010000000000000021 /* TeamDetailViewModel.swift in Sources */,
+				1A0000010000000000000022 /* AuthViewModel.swift in Sources */,
+				1A0000010000000000000023 /* ChatViewModel.swift in Sources */,
+				1A0000010000000000000024 /* EventsViewModel.swift in Sources */,
+				1A0000010000000000000025 /* TeamEventsViewModel.swift in Sources */,
+				1A0000010000000000000026 /* MainTabView.swift in Sources */,
+				1A0000010000000000000027 /* MyEventsView.swift in Sources */,
+				1A0000010000000000000028 /* ProfileView.swift in Sources */,
+				1A0000010000000000000029 /* LoginView.swift in Sources */,
+				1A0000010000000000000030 /* EditEventView.swift in Sources */,
+				1A0000010000000000000031 /* TeamEventDetailContainerView.swift in Sources */,
+				1A0000010000000000000032 /* CreateEventView.swift in Sources */,
+				1A0000010000000000000033 /* RankingsView.swift in Sources */,
+				1A0000010000000000000034 /* ChatView.swift in Sources */,
+				1A0000010000000000000035 /* OnboardingSkillLevelView.swift in Sources */,
+				1A0000010000000000000036 /* OnboardingRegionView.swift in Sources */,
+				1A0000010000000000000037 /* OnboardingPaddleView.swift in Sources */,
+				1A0000010000000000000038 /* OnboardingDUPRView.swift in Sources */,
+				1A0000010000000000000039 /* OnboardingAgeGroupView.swift in Sources */,
+				1A0000010000000000000040 /* SelectionCard.swift in Sources */,
+				1A0000010000000000000041 /* OnboardingExperienceView.swift in Sources */,
+				1A0000010000000000000042 /* OnboardingContainerView.swift in Sources */,
+				1A0000010000000000000043 /* OnboardingNicknameView.swift in Sources */,
+				1A0000010000000000000044 /* OnboardingGenderView.swift in Sources */,
+				1A0000010000000000000045 /* OnboardingProfileImageView.swift in Sources */,
+				1A0000010000000000000046 /* OnboardingBioView.swift in Sources */,
+				1A0000010000000000000047 /* UserProfileView.swift in Sources */,
+				1A0000010000000000000048 /* CachedAsyncImage.swift in Sources */,
+				1A0000010000000000000049 /* TeamIconView.swift in Sources */,
+				1A0000010000000000000050 /* ProfileImageView.swift in Sources */,
+				1A0000010000000000000051 /* ModernEventRowView.swift in Sources */,
+				1A0000010000000000000052 /* ExpandableTextView.swift in Sources */,
+				1A0000010000000000000053 /* SNSLinksEditor.swift in Sources */,
+				1A0000010000000000000054 /* LocationSearchView.swift in Sources */,
+				1A0000010000000000000055 /* GoogleMapView.swift in Sources */,
+				1A0000010000000000000056 /* SNSLinksView.swift in Sources */,
+				1A0000010000000000000057 /* EventsListView.swift in Sources */,
+				1A0000010000000000000058 /* NotificationsView.swift in Sources */,
+				1A0000010000000000000059 /* EventDetailContainerView.swift in Sources */,
+				1A0000010000000000000060 /* EventDetailView.swift in Sources */,
+				1A0000010000000000000061 /* TeamChatView.swift in Sources */,
+				1A0000010000000000000062 /* TeamEventDetailView.swift in Sources */,
+				1A0000010000000000000063 /* EditTeamView.swift in Sources */,
+				1A0000010000000000000064 /* TeamEventsListView.swift in Sources */,
+				1A0000010000000000000065 /* InviteManagementView.swift in Sources */,
+				1A0000010000000000000066 /* TeamDetailView.swift in Sources */,
+				1A0000010000000000000067 /* CreateTeamEventView.swift in Sources */,
+				1A0000010000000000000068 /* TeamMembersView.swift in Sources */,
+				1A0000010000000000000069 /* JoinRequestsView.swift in Sources */,
+				1A0000010000000000000070 /* CreateTeamView.swift in Sources */,
+				1A0000010000000000000071 /* TeamsListView.swift in Sources */,
+				1A0000010000000000000072 /* SplashView.swift in Sources */,
+				1A0000010000000000000073 /* ProfileEditView.swift in Sources */,
+				1A0000010000000000000074 /* ProfileSetupView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		8A0000010000000000000002 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7D4B1307D0BC1E815139F0C0 /* Pods-PickleHub.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = PickleHub/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PickleHub;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.picklehub.PickleHub;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8A0000010000000000000003 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D24A0F63CA5C22858337FCB7 /* Pods-PickleHub.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = PickleHub/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PickleHub;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.picklehub.PickleHub;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		9A0000010000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		9A0000010000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8A0000010000000000000001 /* Build configuration list for PBXNativeTarget "PickleHub" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8A0000010000000000000002 /* Debug */,
+				8A0000010000000000000003 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9A0000010000000000000002 /* Build configuration list for PBXProject "PickleHub" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A0000010000000000000003 /* Debug */,
+				9A0000010000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
 	};
-	rootObject = PLACEHOLDER;
+	rootObject = 9A0000010000000000000001 /* Project object */;
 }

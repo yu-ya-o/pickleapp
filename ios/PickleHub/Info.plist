@@ -2,10 +2,50 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>CFBundleIdentifier</key>
+    <string>com.picklehub.PickleHub</string>
     <key>CFBundleName</key>
     <string>PickleHub</string>
     <key>CFBundleDisplayName</key>
     <string>PickleHub</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+    <key>UIRequiredDeviceCapabilities</key>
+    <array>
+        <string>armv7</string>
+    </array>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+    </array>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationPortraitUpsideDown</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>UILaunchScreen</key>
+    <dict/>
+    <key>UIApplicationSceneManifest</key>
+    <dict>
+        <key>UIApplicationSupportsMultipleScenes</key>
+        <true/>
+    </dict>
+    <key>NSCameraUsageDescription</key>
+    <string>This app requires camera access to upload profile pictures and event photos.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>This app requires photo library access to select profile pictures and event photos.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app requires location access to show nearby pickleball events and courts.</string>
     <key>CFBundleURLTypes</key>
     <array>
         <dict>
@@ -27,5 +67,9 @@
     </array>
     <key>GIDClientID</key>
     <string>738453907848-foqdf7208fdh9odmttp2i377o0qnf09j.apps.googleusercontent.com</string>
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>remote-notification</string>
+    </array>
 </dict>
 </plist>
