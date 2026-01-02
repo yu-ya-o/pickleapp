@@ -282,20 +282,21 @@ struct TeamEventDetailView: View {
                 }
             }
 
-            HStack(alignment: .top) {
-                Image(systemName: "mappin.circle")
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(event.location)
-                    if let address = event.address {
-                        Text(address)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(alignment: .top) {
+                    Image(systemName: "mappin.circle")
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(event.location)
+                        if let address = event.address {
+                            Text(address)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
                     }
                 }
-            }
 
-            // Google Map
-            if let latitude = event.latitude, let longitude = event.longitude {
+                // Google Map
+                if let latitude = event.latitude, let longitude = event.longitude {
                 VStack(alignment: .leading, spacing: 8) {
                     GoogleMapView(
                         latitude: latitude,
@@ -320,6 +321,7 @@ struct TeamEventDetailView: View {
                             .font(.caption)
                             .foregroundColor(.blue)
                     }
+                }
                 }
             }
 
