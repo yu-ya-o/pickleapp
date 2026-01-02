@@ -153,6 +153,7 @@ struct EditEventView: View {
     private var isFormValid: Bool {
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
         !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+        !region.isEmpty &&
         startDate < endDate
     }
 

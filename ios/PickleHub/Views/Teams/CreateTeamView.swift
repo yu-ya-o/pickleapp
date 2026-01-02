@@ -181,7 +181,8 @@ struct CreateTeamView: View {
 
     private var isFormValid: Bool {
         !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-        !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+        !region.isEmpty
     }
 
     private func createTeam() {

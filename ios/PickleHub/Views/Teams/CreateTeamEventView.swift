@@ -275,6 +275,7 @@ struct CreateTeamEventView: View {
     private var isFormValid: Bool {
         !title.isEmpty &&
         !description.isEmpty &&
+        !region.isEmpty &&
         startDate < endDate
     }
 
