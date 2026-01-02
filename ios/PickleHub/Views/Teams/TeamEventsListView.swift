@@ -90,14 +90,18 @@ struct TeamEventsListView: View {
                     }
                 }
             }
-            .navigationDestination(item: $viewModel.navigateToTeamEvent) { event in
-                TeamEventDetailView(teamId: viewModel.teamId, eventId: event.id)
-                    .environmentObject(viewModel)
-                    .onAppear {
-                        print("🎯 navigationDestination triggered for team event: \(event.id)")
-                        print("📱 New TeamEventDetailView appeared for event: \(event.id)")
-                    }
-            }
+            .background(
+                NavigationLink(
+                    destination: viewModel.navigateToTeamEvent.map { event in
+                        TeamEventDetailView(teamId: viewModel.teamId, eventId: event.id)
+                            .environmentObject(viewModel)
+                    },
+                    isActive: Binding(
+                        get: { viewModel.navigateToTeamEvent != nil },
+                        set: { if !$0 { viewModel.navigateToTeamEvent = nil } }
+                    )
+                ) { EmptyView() }
+            )
             .onChange(of: viewModel.navigateToTeamEvent) { newValue in
                 print("🔍 navigateToTeamEvent changed in TeamEventsListView")
                 print("   New: \(newValue?.id ?? "nil")")
