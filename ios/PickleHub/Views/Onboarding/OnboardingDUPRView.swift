@@ -54,7 +54,7 @@ struct OnboardingDUPRView: View {
                                     .fill(Color.twitterGray)
                             )
                             .focused($focusedField, equals: .doubles)
-                            .onChange(of: viewModel.duprDoublesText) { _, newValue in
+                            .onChange(of: viewModel.duprDoublesText) { newValue in
                                 viewModel.duprDoublesText = formatDUPRInput(newValue)
                             }
 
@@ -79,7 +79,7 @@ struct OnboardingDUPRView: View {
                                     .fill(Color.twitterGray)
                             )
                             .focused($focusedField, equals: .singles)
-                            .onChange(of: viewModel.duprSinglesText) { _, newValue in
+                            .onChange(of: viewModel.duprSinglesText) { newValue in
                                 viewModel.duprSinglesText = formatDUPRInput(newValue)
                             }
 

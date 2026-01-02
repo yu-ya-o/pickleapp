@@ -16,11 +16,8 @@ struct RankingsView: View {
                 .padding(.horizontal, Spacing.md)
                 .padding(.vertical, Spacing.sm)
                 .background(Color.white)
-                .onChange(of: viewModel.selectedType) { oldValue, newValue in
-                    // 値が実際に変わった時のみリクエストを送信
-                    if oldValue != newValue {
-                        viewModel.changeRankingType(newValue)
-                    }
+                .onChange(of: viewModel.selectedType) { newValue in
+                    viewModel.changeRankingType(newValue)
                 }
 
                 Divider()

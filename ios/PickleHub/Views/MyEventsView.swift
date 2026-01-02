@@ -57,7 +57,7 @@ struct MyEventsView: View {
         .pickerStyle(.segmented)
         .padding(.horizontal)
         .padding(.vertical, 8)
-        .onChange(of: selectedTab) { _, newValue in
+        .onChange(of: selectedTab) { newValue in
             Task {
                 let upcoming = (newValue == .upcoming)
                 await eventsViewModel.fetchEvents(upcoming: upcoming)
