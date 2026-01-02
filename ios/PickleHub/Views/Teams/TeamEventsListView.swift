@@ -100,7 +100,6 @@ struct TeamEventsListView: View {
             }
             .onChange(of: viewModel.navigateToTeamEvent) { newValue in
                 print("🔍 navigateToTeamEvent changed in TeamEventsListView")
-                print("   Old: \(oldValue?.id ?? "nil")")
                 print("   New: \(newValue?.id ?? "nil")")
             }
             .task {
