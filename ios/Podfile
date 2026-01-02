@@ -16,4 +16,7 @@ target 'PickleHub' do
   pod 'GoogleMaps', '~> 8.0'
   pod 'GooglePlaces', '~> 8.0'
 
+  # Google Sign-In
+  pod 'GoogleSignIn', '~> 7.0'
+
 end
