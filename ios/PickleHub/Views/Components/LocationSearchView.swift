@@ -55,6 +55,9 @@ struct LocationSearchView: View {
         .sheet(isPresented: $showingPlacesPicker) {
             PlacesPickerView(selectedLocation: $selectedLocation, locationName: $locationName)
         }
+        .onChange(of: selectedLocation) { newValue in
+            print("📍 LocationSearchView: selectedLocation changed to \(newValue?.name ?? "nil")")
+        }
     }
 }
 
@@ -100,8 +103,17 @@ struct PlacesPickerView: UIViewControllerRepresentable {
                 longitude: place.coordinate.longitude
             )
 
+            print("📍 Location selected from Google Places:")
+            print("   Name: \(locationData.name)")
+            print("   Address: \(locationData.address)")
+            print("   Latitude: \(locationData.latitude)")
+            print("   Longitude: \(locationData.longitude)")
+
             parent.selectedLocation = locationData
             parent.locationName = place.name ?? ""
+
+            print("📍 After setting: selectedLocation is \(parent.selectedLocation != nil ? "set" : "nil")")
+
             parent.dismiss()
         }
 

@@ -208,6 +208,12 @@ struct CreateEventView: View {
             }
             .navigationTitle("イベント作成")
             .navigationBarTitleDisplayMode(.inline)
+            .onChange(of: selectedLocation) { newValue in
+                print("📍 CreateEventView: selectedLocation changed")
+                print("   Name: \(newValue?.name ?? "nil")")
+                print("   Address: \(newValue?.address ?? "nil")")
+                print("   Lat: \(newValue?.latitude ?? 0), Lon: \(newValue?.longitude ?? 0)")
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("キャンセル") {
@@ -235,6 +241,14 @@ struct CreateEventView: View {
     private func createEvent() {
         Task {
             isLoading = true
+
+            // Debug logging
+            print("📍 Creating event with location data:")
+            print("   locationName: \(location)")
+            print("   selectedLocation: \(selectedLocation?.name ?? "nil")")
+            print("   address: \(selectedLocation?.address ?? "nil")")
+            print("   latitude: \(selectedLocation?.latitude ?? 0)")
+            print("   longitude: \(selectedLocation?.longitude ?? 0)")
 
             do {
                 var createdEvent: Event?
