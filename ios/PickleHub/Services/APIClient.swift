@@ -492,10 +492,18 @@ class APIClient {
     }
 
     func getTeamEvent(teamId: String, eventId: String) async throws -> TeamEvent {
-        return try await request(
+        let event: TeamEvent = try await request(
             endpoint: "/api/teams/\(teamId)/events/\(eventId)",
             requiresAuth: true
         )
+        print("🗺️ getTeamEvent response:")
+        print("   Event ID: \(event.id)")
+        print("   Title: \(event.title)")
+        print("   Location: \(event.location)")
+        print("   Address: \(event.address ?? "nil")")
+        print("   Latitude: \(event.latitude?.description ?? "nil")")
+        print("   Longitude: \(event.longitude?.description ?? "nil")")
+        return event
     }
 
     func createTeamEvent(teamId: String, request: CreateTeamEventRequest) async throws -> TeamEvent {
