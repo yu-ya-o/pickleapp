@@ -150,7 +150,7 @@
 		2A0000010000000000000061 /* TeamChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamChatView.swift; sourceTree = "<group>"; };
 		2A0000010000000000000062 /* TeamEventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamEventDetailView.swift; sourceTree = "<group>"; };
 		2A0000010000000000000063 /* EditTeamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTeamView.swift; sourceTree = "<group>"; };
-		2A0000010000000000000064 /* TeamEventsListView.swift */ = {isa = PBXFileType = sourcecode.swift; path = TeamEventsListView.swift; sourceTree = "<group>"; };
+		2A0000010000000000000064 /* TeamEventsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamEventsListView.swift; sourceTree = "<group>"; };
 		2A0000010000000000000065 /* InviteManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteManagementView.swift; sourceTree = "<group>"; };
 		2A0000010000000000000066 /* TeamDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamDetailView.swift; sourceTree = "<group>"; };
 		2A0000010000000000000067 /* CreateTeamEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTeamEventView.swift; sourceTree = "<group>"; };
@@ -401,6 +401,7 @@
 				6A0000010000000000000001 /* Frameworks */,
 				7A0000010000000000000003 /* Resources */,
 				1C1E8E5DF3DD6A0B9C3AD9BB /* [CP] Embed Pods Frameworks */,
+				DF19BD3452D6F7BA0EDE3D50 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -494,6 +495,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DF19BD3452D6F7BA0EDE3D50 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PickleHub/Pods-PickleHub-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PickleHub/Pods-PickleHub-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PickleHub/Pods-PickleHub-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
