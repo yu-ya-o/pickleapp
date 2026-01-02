@@ -235,6 +235,7 @@ struct CreateEventView: View {
     private var isFormValid: Bool {
         !title.isEmpty &&
         !description.isEmpty &&
+        !region.isEmpty &&
         startDate < endDate
     }
 
