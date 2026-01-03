@@ -362,6 +362,7 @@ class CourtFormViewModel: ObservableObject {
                 name: name,
                 description: description,
                 imageUrl: imageUrl,
+                imageUrls: nil,
                 region: region,
                 address: address,
                 latitude: latitude.isEmpty ? nil : Double(latitude),
@@ -378,7 +379,7 @@ class CourtFormViewModel: ObservableObject {
             )
 
             print("📝 Creating court...")
-            _ = try await apiClient.createCourt(request: request)
+            _ = try await apiClient.createCourt(court: request)
             print("✅ Court created successfully")
 
             isLoading = false
