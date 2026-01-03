@@ -21,10 +21,11 @@ struct MainTabView: View {
                     Label("イベント", systemImage: "calendar")
                 }
 
-            CourtsListView()
-                .tabItem {
-                    Label("コート", systemImage: "sportscourt.fill")
-                }
+            // TODO: コート機能は準備中のため一時的に非表示
+            // CourtsListView()
+            //     .tabItem {
+            //         Label("コート", systemImage: "sportscourt.fill")
+            //     }
 
             TeamsListView()
                 .tabItem {
