@@ -23,7 +23,7 @@ struct MainTabView: View {
 
             CourtsListView()
                 .tabItem {
-                    Label("コート", systemImage: "building.2.fill")
+                    Label("コート", systemImage: "sportscourt.fill")
                 }
 
             TeamsListView()
