@@ -37,7 +37,7 @@ struct CourtsListView: View {
                     TextField("コート名、住所で検索", text: $searchText)
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
-                        .onChange(of: searchText) { oldValue, newValue in
+                        .onChange(of: searchText) { newValue in
                             viewModel.searchText = newValue
                             Task {
                                 await viewModel.fetchCourts()

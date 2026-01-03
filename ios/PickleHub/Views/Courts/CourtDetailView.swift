@@ -186,7 +186,7 @@ struct CourtDetailView: View {
                                 GoogleMapView(
                                     latitude: latitude,
                                     longitude: longitude,
-                                    markerTitle: court.name
+                                    title: court.name
                                 )
                                 .frame(height: 200)
                                 .cornerRadius(12)
