@@ -1,24 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  /* Modern color palette */
-  --primary: #6366F1;
-  --primary-hover: #4F46E5;
-  --primary-light: #EEF2FF;
-  --secondary: #EC4899;
-  --accent: #14B8A6;
+  /* Twitter Blue color palette */
+  --primary: #1D9BF0;
+  --primary-hover: #1A8CD8;
+  --primary-light: #E8F5FE;
+  --secondary: #536471;
+  --accent: #1D9BF0;
   --background: #FFFFFF;
-  --foreground: #0F172A;
-  --muted: #F8FAFC;
-  --muted-foreground: #64748B;
-  --border: #E2E8F0;
-  --destructive: #EF4444;
-  --success: #10B981;
-  --warning: #F59E0B;
+  --foreground: #0F1419;
+  --muted: #F7F9F9;
+  --muted-foreground: #536471;
+  --border: #EFF3F4;
+  --destructive: #F4212E;
+  --success: #00BA7C;
+  --warning: #FFD400;
 
-  /* Gradient colors */
-  --gradient-start: #6366F1;
-  --gradient-end: #EC4899;
+  /* Gradient colors (simplified to solid for iOS style) */
+  --gradient-start: #1D9BF0;
+  --gradient-end: #1D9BF0;
 }
 
 * {

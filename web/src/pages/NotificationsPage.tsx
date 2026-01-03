@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Bell,
+  BellOff,
   Calendar,
   Users,
   MessageCircle,
@@ -9,7 +10,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { api } from '@/services/api';
-import { Card, CardContent, Loading, Button } from '@/components/ui';
+import { Loading } from '@/components/ui';
 import { formatRelativeTime, cn } from '@/lib/utils';
 import type { Notification, NotificationType } from '@/types';
 
@@ -40,17 +41,17 @@ const getNotificationColor = (type: NotificationType) => {
   switch (type) {
     case 'event_joined':
     case 'team_join_approved':
-      return 'text-green-500 bg-green-100';
+      return 'text-[var(--success)] bg-green-100';
     case 'event_cancelled':
     case 'event_cancelled_by_creator':
     case 'team_member_left':
     case 'team_join_rejected':
-      return 'text-red-500 bg-red-100';
+      return 'text-[var(--destructive)] bg-red-100';
     case 'event_chat_message':
     case 'team_chat_message':
-      return 'text-blue-500 bg-blue-100';
+      return 'text-[var(--primary)] bg-[var(--primary-light)]';
     default:
-      return 'text-gray-500 bg-gray-100';
+      return 'text-[var(--muted-foreground)] bg-[var(--muted)]';
   }
 };
 
@@ -140,84 +141,98 @@ export function NotificationsPage() {
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   return (
-    <div className="min-h-screen bg-[var(--muted)]">
+    <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="max-w-4xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold">通知</h1>
-            {unreadCount > 0 && (
-              <Button size="sm" variant="ghost" onClick={handleMarkAllAsRead}>
-                <Check size={16} className="mr-1" />
-                すべて既読
-              </Button>
-            )}
-          </div>
+        <div className="max-w-2xl mx-auto flex items-center justify-between px-4 py-3">
+          <h1 className="text-lg font-semibold">通知</h1>
+          {unreadCount > 0 && (
+            <button
+              onClick={handleMarkAllAsRead}
+              className="text-sm text-[var(--primary)] hover:underline flex items-center gap-1"
+            >
+              <Check size={14} />
+              すべて既読
+            </button>
+          )}
         </div>
       </header>
 
       {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 py-4">
+      <div className="max-w-2xl mx-auto">
         {isLoading ? (
-          <div className="flex justify-center py-12">
+          <div className="flex justify-center py-16">
             <Loading size="lg" />
           </div>
         ) : notifications.length === 0 ? (
-          <div className="text-center py-12">
-            <Bell size={48} className="mx-auto text-gray-300 mb-4" />
-            <p className="text-gray-500">通知がありません</p>
+          <div className="flex flex-col items-center justify-center py-24">
+            <BellOff size={64} className="text-[var(--muted-foreground)] mb-4" />
+            <h3 className="text-lg font-semibold text-[var(--muted-foreground)]">
+              通知はありません
+            </h3>
+            <p className="text-sm text-[var(--muted-foreground)] mt-1">
+              新しい通知があるとここに表示されます
+            </p>
           </div>
         ) : (
-          <div className="space-y-2">
+          <ul className="divide-y divide-[var(--border)]">
             {notifications.map((notification) => {
               const Icon = getNotificationIcon(notification.type);
               const colorClass = getNotificationColor(notification.type);
 
               return (
-                <Card
+                <li
                   key={notification.id}
                   className={cn(
-                    'cursor-pointer hover:shadow-md transition-shadow',
-                    !notification.isRead && 'bg-blue-50/50'
+                    'cursor-pointer hover:bg-[var(--muted)] transition-colors',
+                    !notification.isRead && 'bg-[var(--primary-light)]/30'
                   )}
                   onClick={() => handleNotificationClick(notification)}
                 >
-                  <CardContent className="p-4">
-                    <div className="flex gap-3">
-                      <div
-                        className={cn(
-                          'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0',
-                          colorClass
-                        )}
-                      >
-                        <Icon size={20} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm">
-                          {notification.title}
-                        </p>
-                        <p className="text-sm text-gray-500 mt-0.5">
-                          {notification.message}
-                        </p>
-                        <p className="text-xs text-gray-400 mt-1">
-                          {formatRelativeTime(notification.createdAt)}
-                        </p>
-                      </div>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDelete(notification.id);
-                        }}
-                        className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                      >
-                        <Trash2 size={16} className="text-gray-400" />
-                      </button>
+                  <div className="flex items-start gap-3 px-4 py-3">
+                    {/* Icon */}
+                    <div
+                      className={cn(
+                        'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0',
+                        colorClass
+                      )}
+                    >
+                      <Icon size={18} />
                     </div>
-                  </CardContent>
-                </Card>
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm text-[var(--foreground)]">
+                        {notification.title}
+                      </p>
+                      <p className="text-sm text-[var(--muted-foreground)] mt-0.5 line-clamp-2">
+                        {notification.message}
+                      </p>
+                      <p className="text-xs text-[var(--muted-foreground)] mt-1">
+                        {formatRelativeTime(notification.createdAt)}
+                      </p>
+                    </div>
+
+                    {/* Delete button */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(notification.id);
+                      }}
+                      className="p-2 hover:bg-[var(--muted)] rounded-full transition-colors"
+                    >
+                      <Trash2 size={16} className="text-[var(--muted-foreground)]" />
+                    </button>
+
+                    {/* Unread indicator */}
+                    {!notification.isRead && (
+                      <div className="w-2 h-2 rounded-full bg-[var(--primary)] flex-shrink-0 mt-2" />
+                    )}
+                  </div>
+                </li>
               );
             })}
-          </div>
+          </ul>
         )}
       </div>
     </div>

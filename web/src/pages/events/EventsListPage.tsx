@@ -1,32 +1,47 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Plus, Search, MapPin, Calendar, Users, Sparkles } from 'lucide-react';
+import { Plus, MapPin, Calendar, Users, Search } from 'lucide-react';
 import { api } from '@/services/api';
-import { Card, CardContent, Button, Input, Loading, Avatar } from '@/components/ui';
-import { formatDateTime, getSkillLevelEmoji, getSkillLevelLabel, getDisplayName } from '@/lib/utils';
+import { Loading, Avatar } from '@/components/ui';
+import { formatDateTime, getDisplayName } from '@/lib/utils';
 import { PREFECTURES } from '@/lib/prefectures';
-import type { Event } from '@/types';
+import { cn } from '@/lib/utils';
+import type { Event, TeamEvent } from '@/types';
+
+type SegmentType = 'public' | 'team';
 
 export function EventsListPage() {
   const navigate = useNavigate();
   const [events, setEvents] = useState<Event[]>([]);
+  const [teamEvents, setTeamEvents] = useState<TeamEvent[]>([]);
+  const [publicTeamEvents, setPublicTeamEvents] = useState<TeamEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('');
+  const [segment, setSegment] = useState<SegmentType>('public');
 
   useEffect(() => {
     loadEvents();
-  }, [selectedRegion]);
+  }, [selectedRegion, segment]);
 
   const loadEvents = async () => {
     try {
       setIsLoading(true);
-      const data = await api.getEvents({
-        status: 'active',
-        upcoming: true,
-        region: selectedRegion || undefined,
-      });
-      setEvents(data);
+      if (segment === 'public') {
+        const [eventsData, publicTeamEventsData] = await Promise.all([
+          api.getEvents({
+            status: 'active',
+            upcoming: true,
+            region: selectedRegion || undefined,
+          }),
+          api.getPublicTeamEvents(true),
+        ]);
+        setEvents(eventsData);
+        setPublicTeamEvents(publicTeamEventsData);
+      } else {
+        const data = await api.getMyTeamEvents(true);
+        setTeamEvents(data);
+      }
     } catch (error) {
       console.error('Failed to load events:', error);
     } finally {
@@ -44,147 +59,276 @@ export function EventsListPage() {
     );
   });
 
+  const filteredPublicTeamEvents = publicTeamEvents.filter((event) => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      event.title.toLowerCase().includes(query) ||
+      event.description.toLowerCase().includes(query) ||
+      event.location.toLowerCase().includes(query)
+    );
+  });
+
+  const filteredTeamEvents = teamEvents.filter((event) => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      event.title.toLowerCase().includes(query) ||
+      event.description.toLowerCase().includes(query) ||
+      event.location.toLowerCase().includes(query)
+    );
+  });
+
+  const allPublicEvents = [...filteredEvents, ...filteredPublicTeamEvents].sort(
+    (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+  );
+
   return (
-    <div className="min-h-screen bg-[var(--muted)]">
+    <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-2xl font-bold text-[var(--foreground)]">イベント</h1>
-              <p className="text-sm text-[var(--muted-foreground)] mt-1">近くのピックルボールイベントを見つけよう</p>
+        <div className="max-w-2xl mx-auto">
+          {/* Title */}
+          <h1 className="text-2xl font-black italic text-center py-3">PickleHub</h1>
+
+          {/* Segment Control */}
+          <div className="px-4 pb-3">
+            <div className="flex bg-[var(--muted)] rounded-lg p-1">
+              <button
+                onClick={() => setSegment('public')}
+                className={cn(
+                  'flex-1 py-2 text-sm font-medium rounded-md transition-all',
+                  segment === 'public'
+                    ? 'bg-white shadow-sm text-[var(--foreground)]'
+                    : 'text-[var(--muted-foreground)]'
+                )}
+              >
+                公開イベント
+              </button>
+              <button
+                onClick={() => setSegment('team')}
+                className={cn(
+                  'flex-1 py-2 text-sm font-medium rounded-md transition-all',
+                  segment === 'team'
+                    ? 'bg-white shadow-sm text-[var(--foreground)]'
+                    : 'text-[var(--muted-foreground)]'
+                )}
+              >
+                マイチームイベント
+              </button>
             </div>
-            <Button
-              variant="gradient"
-              onClick={() => navigate('/events/create')}
-              className="flex items-center gap-2"
-            >
-              <Plus size={18} />
-              <span className="hidden sm:inline">イベント作成</span>
-              <span className="sm:hidden">作成</span>
-            </Button>
           </div>
 
-          {/* Search and Filter Row */}
-          <div className="flex flex-col md:flex-row md:items-center gap-4">
-            {/* Search */}
-            <div className="relative flex-1 md:max-w-md">
-              <Search
-                size={18}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)]"
-              />
-              <Input
-                placeholder="イベントを検索..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-11 h-11 bg-[var(--muted)] border-0 focus:bg-white focus:ring-2 focus:ring-[var(--primary)]"
-              />
+          {/* Search Bar */}
+          <div className="flex gap-2 px-4 pb-3">
+            {/* Region Filter */}
+            <div className="flex items-center gap-1 px-3 py-2 bg-[var(--muted)] rounded-lg min-w-[120px]">
+              <MapPin size={14} className="text-[var(--muted-foreground)] flex-shrink-0" />
+              <select
+                value={selectedRegion}
+                onChange={(e) => setSelectedRegion(e.target.value)}
+                className="bg-transparent border-0 p-0 text-sm outline-none cursor-pointer text-[var(--primary)]"
+              >
+                <option value="">全て</option>
+                {PREFECTURES.map((pref) => (
+                  <option key={pref} value={pref}>
+                    {pref}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            {/* Region Filter */}
-            <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
-              <button
-                onClick={() => setSelectedRegion('')}
-                className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                  !selectedRegion
-                    ? 'gradient-bg text-white shadow-md shadow-purple-500/20'
-                    : 'bg-white text-[var(--muted-foreground)] hover:bg-[var(--primary-light)] hover:text-[var(--primary)] border border-[var(--border)]'
-                }`}
-              >
-                全国
-              </button>
-              {PREFECTURES.slice(0, 10).map((pref) => (
-                <button
-                  key={pref}
-                  onClick={() => setSelectedRegion(pref)}
-                  className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                    selectedRegion === pref
-                      ? 'gradient-bg text-white shadow-md shadow-purple-500/20'
-                      : 'bg-white text-[var(--muted-foreground)] hover:bg-[var(--primary-light)] hover:text-[var(--primary)] border border-[var(--border)]'
-                  }`}
-                >
-                  {pref}
-                </button>
-              ))}
+            {/* Search Input */}
+            <div className="flex-1 flex items-center gap-2 px-3 py-2 bg-[var(--muted)] rounded-lg">
+              <Search size={14} className="text-[var(--muted-foreground)] flex-shrink-0" />
+              <input
+                type="text"
+                placeholder="イベントを検索"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="flex-1 bg-transparent border-0 outline-none text-sm placeholder:text-[var(--muted-foreground)]"
+              />
             </div>
           </div>
         </div>
       </header>
 
       {/* Content */}
-      <div className="max-w-6xl mx-auto px-4 py-6">
+      <div className="max-w-2xl mx-auto pb-20">
         {isLoading ? (
           <div className="flex justify-center py-16">
             <Loading size="lg" />
           </div>
-        ) : filteredEvents.length === 0 ? (
-          <div className="text-center py-16">
-            <div className="w-20 h-20 bg-[var(--primary-light)] rounded-full flex items-center justify-center mx-auto mb-4">
-              <Sparkles className="text-[var(--primary)]" size={32} />
+        ) : segment === 'public' ? (
+          allPublicEvents.length === 0 ? (
+            <div className="text-center py-16">
+              <Calendar className="mx-auto text-[var(--muted-foreground)]" size={48} />
+              <h3 className="text-lg font-semibold text-[var(--foreground)] mt-4 mb-2">
+                イベントが見つかりません
+              </h3>
+              <p className="text-[var(--muted-foreground)]">最初のイベントを作成しましょう！</p>
             </div>
-            <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">イベントがありません</h3>
-            <p className="text-[var(--muted-foreground)] mb-6">新しいイベントを作成してみましょう！</p>
-            <Button variant="gradient" onClick={() => navigate('/events/create')}>
-              <Plus size={18} className="mr-2" />
-              イベントを作成
-            </Button>
+          ) : (
+            <ul className="divide-y divide-[var(--border)]">
+              {allPublicEvents.map((event) => (
+                <EventRow key={event.id} event={event} />
+              ))}
+            </ul>
+          )
+        ) : filteredTeamEvents.length === 0 ? (
+          <div className="text-center py-16">
+            <Users className="mx-auto text-[var(--muted-foreground)]" size={48} />
+            <h3 className="text-lg font-semibold text-[var(--foreground)] mt-4 mb-2">
+              チームイベントが見つかりません
+            </h3>
+            <p className="text-[var(--muted-foreground)]">
+              チームに参加してイベントを確認しましょう
+            </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filteredEvents.map((event, index) => (
-              <Link
-                key={event.id}
-                to={`/events/${event.id}`}
-                className="animate-fade-in"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                <Card className="h-full group">
-                  <CardContent className="p-5">
-                    <div className="flex gap-4">
-                      <Avatar
-                        src={event.creator.profileImage}
-                        alt={getDisplayName(event.creator)}
-                        size="lg"
-                        className="ring-2 ring-[var(--border)] group-hover:ring-[var(--primary)]"
-                      />
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-[var(--foreground)] mb-2 truncate group-hover:text-[var(--primary)] transition-colors">
-                          {event.title}
-                        </h3>
-                        <div className="space-y-1.5">
-                          <div className="flex items-center gap-2 text-sm text-[var(--muted-foreground)]">
-                            <Calendar size={14} className="text-[var(--primary)]" />
-                            <span>{formatDateTime(event.startTime)}</span>
-                          </div>
-                          <div className="flex items-center gap-2 text-sm text-[var(--muted-foreground)]">
-                            <MapPin size={14} className="text-[var(--secondary)]" />
-                            <span className="truncate">{event.location}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Footer */}
-                    <div className="flex items-center justify-between mt-4 pt-4 border-t border-[var(--border)]">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[var(--muted)] rounded-full text-sm">
-                        {getSkillLevelEmoji(event.skillLevel)}{' '}
-                        <span className="text-[var(--muted-foreground)]">{getSkillLevelLabel(event.skillLevel)}</span>
-                      </span>
-                      <div className="flex items-center gap-1.5 text-sm">
-                        <Users size={14} className="text-[var(--accent)]" />
-                        <span className="font-medium text-[var(--foreground)]">
-                          {event.maxParticipants - event.availableSpots}
-                        </span>
-                        <span className="text-[var(--muted-foreground)]">/ {event.maxParticipants}</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+          <ul className="divide-y divide-[var(--border)]">
+            {filteredTeamEvents.map((event) => (
+              <TeamEventRow key={event.id} event={event} />
             ))}
-          </div>
+          </ul>
         )}
       </div>
+
+      {/* FAB */}
+      <button
+        onClick={() => navigate('/events/create')}
+        className="fixed bottom-20 right-4 md:bottom-6 md:right-6 w-14 h-14 bg-[var(--primary)] text-white rounded-full shadow-lg hover:bg-[var(--primary-hover)] transition-colors flex items-center justify-center z-50"
+      >
+        <Plus size={24} />
+      </button>
     </div>
+  );
+}
+
+function EventRow({ event }: { event: Event | TeamEvent }) {
+  const isTeamEvent = 'team' in event;
+  const linkTo = isTeamEvent
+    ? `/teams/${(event as TeamEvent).team.id}`
+    : `/events/${event.id}`;
+
+  const displayImage = isTeamEvent
+    ? (event as TeamEvent).creator.profileImage
+    : event.creator.profileImage;
+  const displayName = isTeamEvent
+    ? (event as TeamEvent).team.name
+    : getDisplayName(event.creator);
+
+  const maxParticipants = event.maxParticipants ?? 0;
+  const availableSpots = event.availableSpots ?? 0;
+
+  return (
+    <li>
+      <Link
+        to={linkTo}
+        className="flex items-start gap-3 px-4 py-3 hover:bg-[var(--muted)] transition-colors"
+      >
+        {/* Avatar */}
+        <div className="flex flex-col items-center gap-1 w-14 flex-shrink-0">
+          <Avatar src={displayImage} alt={displayName} size="lg" />
+          <span className="text-[10px] text-[var(--muted-foreground)] truncate w-full text-center">
+            {displayName}
+          </span>
+        </div>
+
+        {/* Event Info */}
+        <div className="flex-1 min-w-0">
+          {/* Date */}
+          <div className="flex items-center gap-1 text-sm text-[var(--muted-foreground)]">
+            <Calendar size={12} className="text-[var(--primary)]" />
+            <span>{formatDateTime(event.startTime)}</span>
+          </div>
+
+          {/* Title */}
+          <h3 className="font-semibold text-[var(--foreground)] mt-0.5 truncate">
+            {event.title}
+          </h3>
+
+          {/* Location */}
+          <div className="flex items-center gap-1 text-sm text-[var(--muted-foreground)] mt-0.5">
+            <MapPin size={12} className="text-[var(--primary)]" />
+            <span className="truncate">{event.location}</span>
+          </div>
+
+          {/* Participants */}
+          {maxParticipants > 0 && (
+            <div className="flex items-center gap-1 text-sm text-[var(--muted-foreground)] mt-0.5">
+              <Users size={12} className="text-[var(--primary)]" />
+              <span>
+                {maxParticipants - availableSpots}/{maxParticipants}人
+              </span>
+
+              {/* Status badge */}
+              {availableSpots === 0 && (
+                <span className="ml-2 px-2 py-0.5 text-xs font-medium text-white bg-red-500 rounded-full">
+                  満席
+                </span>
+              )}
+              {availableSpots > 0 && availableSpots <= 3 && (
+                <span className="ml-2 px-2 py-0.5 text-xs font-medium text-white bg-orange-500 rounded-full">
+                  残り{availableSpots}席
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      </Link>
+    </li>
+  );
+}
+
+function TeamEventRow({ event }: { event: TeamEvent }) {
+  const maxParticipants = event.maxParticipants ?? 0;
+  const availableSpots = event.availableSpots ?? 0;
+
+  return (
+    <li>
+      <Link
+        to={`/teams/${event.team.id}`}
+        className="flex items-start gap-3 px-4 py-3 hover:bg-[var(--muted)] transition-colors"
+      >
+        {/* Avatar */}
+        <div className="flex flex-col items-center gap-1 w-14 flex-shrink-0">
+          <Avatar src={event.creator.profileImage} alt={event.team.name} size="lg" />
+          <span className="text-[10px] text-[var(--muted-foreground)] truncate w-full text-center">
+            {event.team.name}
+          </span>
+        </div>
+
+        {/* Event Info */}
+        <div className="flex-1 min-w-0">
+          {/* Date */}
+          <div className="flex items-center gap-1 text-sm text-[var(--muted-foreground)]">
+            <Calendar size={12} className="text-[var(--primary)]" />
+            <span>{formatDateTime(event.startTime)}</span>
+          </div>
+
+          {/* Title */}
+          <h3 className="font-semibold text-[var(--foreground)] mt-0.5 truncate">
+            {event.title}
+          </h3>
+
+          {/* Location */}
+          <div className="flex items-center gap-1 text-sm text-[var(--muted-foreground)] mt-0.5">
+            <MapPin size={12} className="text-[var(--primary)]" />
+            <span className="truncate">{event.location}</span>
+          </div>
+
+          {/* Participants */}
+          {maxParticipants > 0 && (
+            <div className="flex items-center gap-1 text-sm text-[var(--muted-foreground)] mt-0.5">
+              <Users size={12} className="text-[var(--primary)]" />
+              <span>
+                {maxParticipants - availableSpots}/{maxParticipants}人
+              </span>
+            </div>
+          )}
+        </div>
+      </Link>
+    </li>
   );
 }
