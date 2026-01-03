@@ -52,13 +52,13 @@ struct CourtsListView: View {
                 .padding(.horizontal, Spacing.md)
                 .padding(.bottom, Spacing.sm)
                 .background(Color.white)
-                .onChange(of: searchText) { _, newValue in
+                .onChange(of: searchText) { newValue in
                     viewModel.searchText = newValue
                     Task {
                         await viewModel.fetchCourts()
                     }
                 }
-                .onChange(of: selectedRegion) { _, newValue in
+                .onChange(of: selectedRegion) { newValue in
                     viewModel.selectedRegion = newValue == "" ? "全国" : newValue
                     Task {
                         await viewModel.fetchCourts()
