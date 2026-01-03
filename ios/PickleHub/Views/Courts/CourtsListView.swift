@@ -3,89 +3,67 @@ import SwiftUI
 struct CourtsListView: View {
     @StateObject private var viewModel = CourtsViewModel()
     @State private var searchText = ""
-    @State private var selectedRegion = "全国"
-
-    // 都道府県リスト
-    private let regions = [
-        "全国", "北海道", "青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県",
-        "茨城県", "栃木県", "群馬県", "埼玉県", "千葉県", "東京都", "神奈川県",
-        "新潟県", "富山県", "石川県", "福井県", "山梨県", "長野県",
-        "岐阜県", "静岡県", "愛知県", "三重県",
-        "滋賀県", "京都府", "大阪府", "兵庫県", "奈良県", "和歌山県",
-        "鳥取県", "島根県", "岡山県", "広島県", "山口県",
-        "徳島県", "香川県", "愛媛県", "高知県",
-        "福岡県", "佐賀県", "長崎県", "熊本県", "大分県", "宮崎県", "鹿児島県", "沖縄県"
-    ]
+    @State private var selectedRegion = ""
 
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // カスタムタイトル
-                Text("コート検索")
-                    .font(.system(size: 28, weight: .black, design: .default))
-                    .italic()
-                    .kerning(-0.5)
-                    .foregroundColor(.black)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(Color.white)
-
                 // 検索バー
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.gray)
-                    TextField("コート名、住所で検索", text: $searchText)
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                        .onChange(of: searchText) { newValue in
-                            viewModel.searchText = newValue
-                            Task {
-                                await viewModel.fetchCourts()
+                HStack(spacing: Spacing.sm) {
+                    // 都道府県フィルター（左）
+                    HStack {
+                        Image(systemName: "mappin.circle")
+                            .foregroundColor(.gray)
+                            .font(.system(size: 14))
+                        Picker("地域", selection: $selectedRegion) {
+                            Text("全て").tag("")
+                            ForEach(Prefectures.all, id: \.self) { prefecture in
+                                Text(prefecture).tag(prefecture)
                             }
                         }
-                    if !searchText.isEmpty {
-                        Button(action: {
-                            searchText = ""
-                            viewModel.searchText = ""
-                            Task {
-                                await viewModel.fetchCourts()
-                            }
-                        }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(.gray)
-                        }
+                        .pickerStyle(.menu)
+                        .font(.bodyMedium)
                     }
-                }
-                .padding(10)
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
-                .padding(.horizontal)
-                .padding(.vertical, 8)
+                    .frame(height: 36)
+                    .padding(.horizontal, Spacing.sm)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(CornerRadius.medium)
 
-                // 都道府県フィルター
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        ForEach(regions.prefix(11), id: \.self) { region in
-                            Button(action: {
-                                selectedRegion = region
-                                viewModel.selectedRegion = region
-                                Task {
-                                    await viewModel.fetchCourts()
-                                }
-                            }) {
-                                Text(region)
-                                    .font(.system(size: 14, weight: .medium))
-                                    .padding(.horizontal, 16)
-                                    .padding(.vertical, 8)
-                                    .background(selectedRegion == region ? Color.blue : Color(.systemGray6))
-                                    .foregroundColor(selectedRegion == region ? .white : .primary)
-                                    .cornerRadius(20)
+                    // フリーテキスト検索（右）
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.gray)
+                            .font(.system(size: 14))
+                        TextField("コートを検索", text: $searchText)
+                            .font(.bodyMedium)
+                        if !searchText.isEmpty {
+                            Button(action: { searchText = "" }) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundColor(.gray)
+                                    .font(.system(size: 14))
                             }
                         }
                     }
-                    .padding(.horizontal)
+                    .frame(height: 36)
+                    .padding(.horizontal, Spacing.sm)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(CornerRadius.medium)
                 }
-                .padding(.vertical, 8)
+                .padding(.horizontal, Spacing.md)
+                .padding(.bottom, Spacing.sm)
+                .background(Color.white)
+                .onChange(of: searchText) { _, newValue in
+                    viewModel.searchText = newValue
+                    Task {
+                        await viewModel.fetchCourts()
+                    }
+                }
+                .onChange(of: selectedRegion) { _, newValue in
+                    viewModel.selectedRegion = newValue == "" ? "全国" : newValue
+                    Task {
+                        await viewModel.fetchCourts()
+                    }
+                }
 
                 Divider()
 
@@ -139,7 +117,8 @@ struct CourtsListView: View {
                     }
                 }
             }
-            .navigationBarHidden(true)
+            .navigationTitle("コート")
+            .navigationBarTitleDisplayMode(.inline)
         }
         .task {
             await viewModel.fetchCourts()
