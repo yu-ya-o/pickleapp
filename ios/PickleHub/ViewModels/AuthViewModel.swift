@@ -13,6 +13,14 @@ class AuthViewModel: ObservableObject {
 
     private let apiClient = APIClient.shared
 
+    // MARK: - Admin Check
+
+    var isAdmin: Bool {
+        guard let email = currentUser?.email else { return false }
+        let adminEmails = ["picklehub.japan@gmail.com"]
+        return adminEmails.contains(email)
+    }
+
     init() {
         // Check if user is already signed in
         checkAuthStatus()

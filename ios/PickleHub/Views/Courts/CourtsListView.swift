@@ -2,8 +2,10 @@ import SwiftUI
 
 struct CourtsListView: View {
     @StateObject private var viewModel = CourtsViewModel()
+    @EnvironmentObject var authViewModel: AuthViewModel
     @State private var searchText = ""
     @State private var selectedRegion = ""
+    @State private var showingCourtForm = false
 
     var body: some View {
         NavigationView {
@@ -119,6 +121,24 @@ struct CourtsListView: View {
             }
             .navigationTitle("コート")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                if authViewModel.isAdmin {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: { showingCourtForm = true }) {
+                            Image(systemName: "plus")
+                        }
+                    }
+                }
+            }
+            .sheet(isPresented: $showingCourtForm, onDismiss: {
+                // Refresh courts list after form is dismissed
+                Task {
+                    await viewModel.fetchCourts()
+                }
+            }) {
+                CourtFormView()
+                    .environmentObject(authViewModel)
+            }
         }
         .task {
             await viewModel.fetchCourts()

@@ -176,3 +176,11 @@ export async function getUserFromAuth(authHeader: string | null) {
 
   return user;
 }
+
+/**
+ * Check if user is admin
+ */
+export function isAdmin(userEmail: string): boolean {
+  const ADMIN_EMAILS = ['picklehub.japan@gmail.com'];
+  return ADMIN_EMAILS.includes(userEmail);
+}
