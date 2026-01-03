@@ -672,4 +672,76 @@ class APIClient {
             requiresAuth: false
         )
     }
+
+    // MARK: - Admin Courts API
+
+    func createCourt(court: CreateCourtRequest) async throws -> Court {
+        return try await request(
+            endpoint: "/api/admin/courts",
+            method: "POST",
+            body: court,
+            requiresAuth: true
+        )
+    }
+
+    func updateCourt(id: String, court: UpdateCourtRequest) async throws -> Court {
+        return try await request(
+            endpoint: "/api/admin/courts/\(id)",
+            method: "PATCH",
+            body: court,
+            requiresAuth: true
+        )
+    }
+
+    func deleteCourt(id: String) async throws {
+        struct Response: Codable { let success: Bool }
+        let _: Response = try await request(
+            endpoint: "/api/admin/courts/\(id)",
+            method: "DELETE",
+            requiresAuth: true
+        )
+    }
+}
+
+// MARK: - Admin Court Request Models
+
+struct CreateCourtRequest: Codable {
+    let name: String
+    let description: String
+    let imageUrl: String
+    let imageUrls: [String]?
+    let region: String
+    let address: String
+    let latitude: Double?
+    let longitude: Double?
+    let phoneNumber: String?
+    let websiteUrl: String?
+    let email: String?
+    let courtsCount: Int?
+    let indoorOutdoor: String?
+    let surface: String?
+    let amenities: [String]?
+    let operatingHours: String?
+    let priceInfo: String?
+}
+
+struct UpdateCourtRequest: Codable {
+    let name: String?
+    let description: String?
+    let imageUrl: String?
+    let imageUrls: [String]?
+    let region: String?
+    let address: String?
+    let latitude: Double?
+    let longitude: Double?
+    let phoneNumber: String?
+    let websiteUrl: String?
+    let email: String?
+    let courtsCount: Int?
+    let indoorOutdoor: String?
+    let surface: String?
+    let amenities: [String]?
+    let operatingHours: String?
+    let priceInfo: String?
+    let status: String?
 }
