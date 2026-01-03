@@ -85,15 +85,15 @@ model Event {
   reservations    Reservation[]
   chatRoom        ChatRoom?
 
-  // Court relation (optional) - TODO: Uncomment after migration
-  // courtId         String?
-  // court           Court?        @relation(fields: [courtId], references: [id], onDelete: SetNull)
+  // Court relation (optional)
+  courtId         String?
+  court           Court?        @relation(fields: [courtId], references: [id], onDelete: SetNull)
 
   @@index([creatorId])
   @@index([startTime])
   @@index([status])
   @@index([region])
-  // @@index([courtId])
+  @@index([courtId])
 }
 
 model Reservation {
@@ -258,15 +258,15 @@ model TeamEvent {
   participants TeamEventParticipant[]
   chatRoom    ChatRoom?
 
-  // Court relation (optional) - TODO: Uncomment after migration
-  // courtId     String?
-  // court       Court?                  @relation(fields: [courtId], references: [id], onDelete: SetNull)
+  // Court relation (optional)
+  courtId     String?
+  court       Court?                  @relation(fields: [courtId], references: [id], onDelete: SetNull)
 
   @@index([teamId])
   @@index([createdBy])
   @@index([startTime])
   @@index([visibility])
-  // @@index([courtId])
+  @@index([courtId])
 }
 
 model TeamEventParticipant {
@@ -377,9 +377,9 @@ model Court {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Relations - TODO: Uncomment after migration
-  // events      Event[]
-  // teamEvents  TeamEvent[]
+  // Relations
+  events      Event[]
+  teamEvents  TeamEvent[]
 
   @@index([region])
   @@index([status])
