@@ -375,6 +375,33 @@ class ApiClient {
       method: 'DELETE',
     });
   }
+
+  // Rankings
+  async getTeamRankings(type: 'members' | 'events' = 'members'): Promise<TeamRanking[]> {
+    return this.request<TeamRanking[]>(`/api/teams/rankings?type=${type}`);
+  }
+}
+
+// Team Ranking type
+export interface TeamRanking {
+  id: string;
+  name: string;
+  description: string;
+  iconImage: string | null;
+  headerImage: string | null;
+  region: string;
+  visibility: string;
+  createdAt: string;
+  updatedAt: string;
+  owner: {
+    id: string;
+    name: string;
+    profileImage: string | null;
+    nickname: string | null;
+  };
+  memberCount: number;
+  publicEventCount: number;
+  rank: number;
 }
 
 export const api = new ApiClient();

@@ -25,17 +25,17 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variants = {
       primary:
-        'bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] focus:ring-[var(--primary)] shadow-md shadow-[var(--primary)]/25 hover:shadow-lg hover:shadow-[var(--primary)]/30',
+        'bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] focus:ring-[var(--primary)] shadow-sm hover:shadow-md',
       secondary:
-        'bg-[var(--muted)] text-[var(--foreground)] hover:bg-slate-200 focus:ring-slate-400',
+        'bg-[var(--muted)] text-[var(--foreground)] hover:bg-gray-200 focus:ring-gray-400',
       outline:
-        'border-2 border-[var(--border)] bg-transparent hover:bg-[var(--muted)] hover:border-[var(--primary)] focus:ring-[var(--primary)]',
+        'border border-[var(--border)] bg-transparent hover:bg-[var(--muted)] hover:border-[var(--primary)] focus:ring-[var(--primary)]',
       ghost:
         'bg-transparent hover:bg-[var(--muted)] focus:ring-[var(--primary)]',
       destructive:
-        'bg-[var(--destructive)] text-white hover:bg-red-600 focus:ring-[var(--destructive)] shadow-md shadow-red-500/25',
+        'bg-[var(--destructive)] text-white hover:opacity-90 focus:ring-[var(--destructive)]',
       gradient:
-        'gradient-bg text-white hover:opacity-90 focus:ring-[var(--primary)] shadow-md shadow-purple-500/25 hover:shadow-lg',
+        'bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] focus:ring-[var(--primary)] shadow-sm hover:shadow-md',
     };
 
     const sizes = {

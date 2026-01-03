@@ -1,5 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const google: any;
+declare global {
+  interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    google?: any;
+  }
+}
+
 interface GoogleMapProps {
   latitude: number;
   longitude: number;
