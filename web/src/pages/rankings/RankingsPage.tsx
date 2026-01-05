@@ -85,16 +85,16 @@ export function RankingsPage() {
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="max-w-2xl mx-auto">
-          <h1 className="text-center text-lg font-semibold py-3">ランキング</h1>
+        <div className="max-w-2xl mx-auto px-4">
+          <h1 className="text-center text-lg font-semibold py-4">ランキング</h1>
 
           {/* Segment Control */}
-          <div className="px-4 pb-3">
-            <div className="flex bg-[var(--muted)] rounded-lg p-1">
+          <div className="pb-4">
+            <div className="flex bg-[var(--muted)] rounded-xl p-1.5">
               <button
                 onClick={() => setRankingType('members')}
                 className={cn(
-                  'flex-1 py-2 text-sm font-medium rounded-md transition-all',
+                  'flex-1 py-2.5 text-sm font-medium rounded-lg transition-all',
                   rankingType === 'members'
                     ? 'bg-white shadow-sm text-[var(--foreground)]'
                     : 'text-[var(--muted-foreground)]'
@@ -105,7 +105,7 @@ export function RankingsPage() {
               <button
                 onClick={() => setRankingType('events')}
                 className={cn(
-                  'flex-1 py-2 text-sm font-medium rounded-md transition-all',
+                  'flex-1 py-2.5 text-sm font-medium rounded-lg transition-all',
                   rankingType === 'events'
                     ? 'bg-white shadow-sm text-[var(--foreground)]'
                     : 'text-[var(--muted-foreground)]'
@@ -119,15 +119,15 @@ export function RankingsPage() {
       </header>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-2xl mx-auto px-4 pb-24 pt-4">
         {isLoading ? (
-          <div className="flex justify-center py-16">
+          <div className="flex justify-center py-20">
             <Loading size="lg" />
           </div>
         ) : rankings.length === 0 ? (
-          <div className="text-center py-16">
-            <Trophy className="mx-auto text-[var(--muted-foreground)]" size={48} />
-            <h3 className="text-lg font-semibold text-[var(--foreground)] mt-4 mb-2">
+          <div className="text-center py-20">
+            <Trophy className="mx-auto text-[var(--muted-foreground)]" size={56} />
+            <h3 className="text-lg font-semibold text-[var(--foreground)] mt-5 mb-2">
               ランキングがありません
             </h3>
             <p className="text-[var(--muted-foreground)]">
@@ -135,12 +135,12 @@ export function RankingsPage() {
             </p>
           </div>
         ) : (
-          <ul className="divide-y divide-[var(--border)]">
+          <ul className="divide-y divide-[var(--border)] bg-white rounded-2xl border border-[var(--border)] overflow-hidden">
             {rankings.map((team) => (
               <li key={team.id}>
                 <Link
                   to={`/teams/${team.id}`}
-                  className="flex items-center gap-3 px-4 py-3 hover:bg-[var(--muted)] transition-colors"
+                  className="flex items-center gap-4 px-5 py-4 hover:bg-[var(--muted)] transition-colors"
                 >
                   {/* Rank */}
                   {getRankDisplay(team.rank)}
@@ -154,13 +154,13 @@ export function RankingsPage() {
 
                   {/* Team Info */}
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-[var(--foreground)] truncate">
+                    <h3 className="font-semibold text-[var(--foreground)] truncate text-base">
                       {team.name}
                     </h3>
-                    <p className="text-sm text-[var(--muted-foreground)] truncate">
+                    <p className="text-sm text-[var(--muted-foreground)] truncate mt-0.5">
                       {team.description}
                     </p>
-                    <div className="flex items-center gap-1 text-sm text-[var(--muted-foreground)] mt-0.5">
+                    <div className="flex items-center gap-1.5 text-sm text-[var(--muted-foreground)] mt-1">
                       <Users size={14} className="text-[var(--primary)]" />
                       <span>{team.memberCount}人</span>
                     </div>
@@ -168,7 +168,7 @@ export function RankingsPage() {
 
                   {/* Trophy for top 3 */}
                   {team.rank <= 3 && (
-                    <Trophy size={24} className={getTrophyColor(team.rank)} />
+                    <Trophy size={28} className={getTrophyColor(team.rank)} />
                   )}
                 </Link>
               </li>

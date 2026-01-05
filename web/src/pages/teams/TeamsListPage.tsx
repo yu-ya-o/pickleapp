@@ -60,15 +60,15 @@ export function TeamsListPage() {
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-2xl mx-auto px-4">
           {/* Title */}
-          <h1 className="text-lg font-semibold text-center py-3">チーム</h1>
+          <h1 className="text-lg font-semibold text-center py-4">チーム</h1>
 
           {/* Search Bar */}
-          <div className="flex gap-2 px-4 pb-3">
+          <div className="flex gap-3 pb-4">
             {/* Region Filter */}
-            <div className="flex items-center gap-1 px-3 py-2 bg-[var(--muted)] rounded-lg min-w-[100px]">
-              <MapPin size={14} className="text-[var(--muted-foreground)] flex-shrink-0" />
+            <div className="flex items-center gap-2 px-4 py-3 bg-[var(--muted)] rounded-xl min-w-[110px]">
+              <MapPin size={16} className="text-[var(--muted-foreground)] flex-shrink-0" />
               <select
                 value={selectedRegion}
                 onChange={(e) => setSelectedRegion(e.target.value)}
@@ -84,8 +84,8 @@ export function TeamsListPage() {
             </div>
 
             {/* Search Input */}
-            <div className="flex-1 flex items-center gap-2 px-3 py-2 bg-[var(--muted)] rounded-lg">
-              <Search size={14} className="text-[var(--muted-foreground)] flex-shrink-0" />
+            <div className="flex-1 flex items-center gap-3 px-4 py-3 bg-[var(--muted)] rounded-xl">
+              <Search size={16} className="text-[var(--muted-foreground)] flex-shrink-0" />
               <input
                 type="text"
                 placeholder="チームを検索"
@@ -99,20 +99,20 @@ export function TeamsListPage() {
       </header>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto pb-20">
+      <div className="max-w-2xl mx-auto px-4 pb-24 pt-4">
         {isLoading ? (
-          <div className="flex justify-center py-16">
+          <div className="flex justify-center py-20">
             <Loading size="lg" />
           </div>
         ) : (
-          <>
+          <div className="space-y-6">
             {/* My Teams Section */}
             {filteredMyTeams.length > 0 && (
               <section>
-                <h2 className="px-4 py-2 text-sm font-medium text-[var(--muted-foreground)] bg-[var(--muted)]">
+                <h2 className="px-1 py-2 text-sm font-medium text-[var(--muted-foreground)]">
                   マイチーム
                 </h2>
-                <ul className="divide-y divide-[var(--border)]">
+                <ul className="divide-y divide-[var(--border)] bg-white rounded-2xl border border-[var(--border)] overflow-hidden">
                   {filteredMyTeams.map((team) => (
                     <TeamRow key={team.id} team={team} isMyTeam />
                   ))}
@@ -122,13 +122,13 @@ export function TeamsListPage() {
 
             {/* Find Teams Section */}
             <section>
-              <h2 className="px-4 py-2 text-sm font-medium text-[var(--muted-foreground)] bg-[var(--muted)]">
+              <h2 className="px-1 py-2 text-sm font-medium text-[var(--muted-foreground)]">
                 チームを探す
               </h2>
               {filteredTeams.length === 0 ? (
-                <div className="text-center py-16">
-                  <Users className="mx-auto text-[var(--muted-foreground)]" size={48} />
-                  <h3 className="text-lg font-semibold text-[var(--foreground)] mt-4 mb-2">
+                <div className="text-center py-20">
+                  <Users className="mx-auto text-[var(--muted-foreground)]" size={56} />
+                  <h3 className="text-lg font-semibold text-[var(--foreground)] mt-5 mb-2">
                     チームが見つかりません
                   </h3>
                   <p className="text-[var(--muted-foreground)]">
@@ -136,14 +136,14 @@ export function TeamsListPage() {
                   </p>
                 </div>
               ) : (
-                <ul className="divide-y divide-[var(--border)]">
+                <ul className="divide-y divide-[var(--border)] bg-white rounded-2xl border border-[var(--border)] overflow-hidden">
                   {filteredTeams.map((team) => (
                     <TeamRow key={team.id} team={team} />
                   ))}
                 </ul>
               )}
             </section>
-          </>
+          </div>
         )}
       </div>
 
@@ -163,7 +163,7 @@ function TeamRow({ team, isMyTeam }: { team: Team; isMyTeam?: boolean }) {
     <li>
       <Link
         to={`/teams/${team.id}`}
-        className="flex items-start gap-3 px-4 py-3 hover:bg-[var(--muted)] transition-colors"
+        className="flex items-start gap-4 px-5 py-4 hover:bg-[var(--muted)] transition-colors"
       >
         {/* Avatar */}
         <Avatar src={team.iconImage} alt={team.name} size="lg" />
@@ -172,24 +172,24 @@ function TeamRow({ team, isMyTeam }: { team: Team; isMyTeam?: boolean }) {
         <div className="flex-1 min-w-0">
           {/* Name */}
           <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-[var(--foreground)] truncate">
+            <h3 className="font-semibold text-[var(--foreground)] truncate text-base">
               {team.name}
             </h3>
             {isMyTeam && (
-              <Crown size={14} className="text-yellow-500 flex-shrink-0" />
+              <Crown size={16} className="text-yellow-500 flex-shrink-0" />
             )}
           </div>
 
           {/* Description */}
           {team.description && (
-            <p className="text-sm text-[var(--muted-foreground)] mt-0.5 line-clamp-2">
+            <p className="text-sm text-[var(--muted-foreground)] mt-1 line-clamp-2">
               {team.description}
             </p>
           )}
 
           {/* Member count */}
-          <div className="flex items-center gap-1 text-sm text-[var(--muted-foreground)] mt-1">
-            <Users size={12} className="text-[var(--primary)]" />
+          <div className="flex items-center gap-1.5 text-sm text-[var(--muted-foreground)] mt-1.5">
+            <Users size={14} className="text-[var(--primary)]" />
             <span>{team.memberCount}人</span>
           </div>
         </div>
