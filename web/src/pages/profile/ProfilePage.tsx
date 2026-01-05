@@ -64,16 +64,16 @@ export function ProfilePage() {
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="max-w-2xl mx-auto">
-          <h1 className="text-2xl font-black italic text-center py-3">PickleHub</h1>
+        <div className="max-w-2xl mx-auto px-4">
+          <h1 className="text-2xl font-black italic text-center py-4">PickleHub</h1>
         </div>
       </header>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto pb-20">
+      <div className="max-w-2xl mx-auto px-4 pb-24">
         {/* Profile Header */}
-        <div className="px-4 py-6">
-          <div className="flex items-start gap-4">
+        <div className="py-8">
+          <div className="flex items-start gap-5">
             <Avatar
               src={user.profileImage}
               alt={getDisplayName(user)}
@@ -84,7 +84,7 @@ export function ProfilePage() {
                 {getDisplayName(user)}
               </h2>
               {user.bio && (
-                <p className="text-sm text-[var(--muted-foreground)] mt-2 whitespace-pre-wrap">
+                <p className="text-sm text-[var(--muted-foreground)] mt-3 whitespace-pre-wrap">
                   {user.bio}
                 </p>
               )}
@@ -94,19 +94,19 @@ export function ProfilePage() {
 
         {/* Profile Info Section */}
         <section>
-          <h3 className="px-4 py-2 text-sm font-medium text-[var(--muted-foreground)] bg-[var(--muted)] border-y border-[var(--border)]">
+          <h3 className="px-1 py-2 text-sm font-medium text-[var(--muted-foreground)]">
             プロフィール情報
           </h3>
-          <div className="bg-white">
+          <div className="bg-white rounded-2xl border border-[var(--border)] overflow-hidden">
             {profileItems.map((item, index) => (
               <div
                 key={item.label}
-                className={`flex items-center gap-3 px-4 py-3 ${
+                className={`flex items-center gap-4 px-5 py-4 ${
                   index !== profileItems.length - 1 ? 'border-b border-[var(--border)]' : ''
                 }`}
               >
-                <item.icon size={18} className="text-[var(--primary)] flex-shrink-0" />
-                <span className="text-sm text-[var(--muted-foreground)] w-28 flex-shrink-0">
+                <item.icon size={20} className="text-[var(--primary)] flex-shrink-0" />
+                <span className="text-sm text-[var(--muted-foreground)] w-32 flex-shrink-0">
                   {item.label}
                 </span>
                 <span className="text-sm text-[var(--foreground)] font-medium">
@@ -118,53 +118,53 @@ export function ProfilePage() {
         </section>
 
         {/* Action Buttons */}
-        <div className="mt-4 px-4 space-y-3">
+        <div className="mt-6 space-y-3">
           {/* My Events */}
           <button
             onClick={() => navigate('/events')}
-            className="flex items-center w-full px-4 py-3 bg-white border border-[var(--border)] rounded-xl hover:bg-[var(--muted)] transition-colors"
+            className="flex items-center w-full px-5 py-4 bg-white border border-[var(--border)] rounded-2xl hover:bg-[var(--muted)] transition-colors"
           >
-            <Calendar size={18} className="text-[var(--muted-foreground)] mr-3" />
+            <Calendar size={20} className="text-[var(--muted-foreground)] mr-4" />
             <span className="flex-1 text-left text-[var(--foreground)]">マイイベント</span>
-            <ChevronRight size={18} className="text-[var(--muted-foreground)]" />
+            <ChevronRight size={20} className="text-[var(--muted-foreground)]" />
           </button>
 
           {/* Edit Profile */}
           <button
             onClick={() => navigate('/profile/edit')}
-            className="flex items-center w-full px-4 py-3 bg-white border border-[var(--border)] rounded-xl hover:bg-[var(--muted)] transition-colors"
+            className="flex items-center w-full px-5 py-4 bg-white border border-[var(--border)] rounded-2xl hover:bg-[var(--muted)] transition-colors"
           >
-            <Edit size={18} className="text-[var(--muted-foreground)] mr-3" />
+            <Edit size={20} className="text-[var(--muted-foreground)] mr-4" />
             <span className="flex-1 text-left text-[var(--foreground)]">プロフィールを編集</span>
-            <ChevronRight size={18} className="text-[var(--muted-foreground)]" />
+            <ChevronRight size={20} className="text-[var(--muted-foreground)]" />
           </button>
 
           {/* Contact */}
           <a
             href="mailto:support@picklehub.app"
-            className="flex items-center w-full px-4 py-3 bg-white border border-[var(--border)] rounded-xl hover:bg-[var(--muted)] transition-colors"
+            className="flex items-center w-full px-5 py-4 bg-white border border-[var(--border)] rounded-2xl hover:bg-[var(--muted)] transition-colors"
           >
-            <Mail size={18} className="text-[var(--muted-foreground)] mr-3" />
+            <Mail size={20} className="text-[var(--muted-foreground)] mr-4" />
             <span className="flex-1 text-left text-[var(--foreground)]">お問い合わせ</span>
-            <ExternalLink size={18} className="text-[var(--muted-foreground)]" />
+            <ExternalLink size={20} className="text-[var(--muted-foreground)]" />
           </a>
         </div>
 
         {/* Logout & Delete */}
-        <div className="mt-8 px-4 space-y-3">
+        <div className="mt-10 space-y-3">
           <button
             onClick={() => setShowLogoutModal(true)}
-            className="flex items-center justify-center w-full px-4 py-3 text-[var(--muted-foreground)] hover:bg-[var(--muted)] rounded-xl transition-colors"
+            className="flex items-center justify-center w-full px-5 py-4 text-[var(--muted-foreground)] hover:bg-[var(--muted)] rounded-2xl transition-colors"
           >
-            <LogOut size={18} className="mr-2" />
+            <LogOut size={20} className="mr-3" />
             <span>ログアウト</span>
           </button>
 
           <button
             onClick={() => setShowDeleteModal(true)}
-            className="flex items-center justify-center w-full px-4 py-3 text-[var(--destructive)] hover:bg-red-50 rounded-xl transition-colors"
+            className="flex items-center justify-center w-full px-5 py-4 text-[var(--destructive)] hover:bg-red-50 rounded-2xl transition-colors"
           >
-            <Trash2 size={18} className="mr-2" />
+            <Trash2 size={20} className="mr-3" />
             <span>アカウントを削除</span>
           </button>
         </div>
