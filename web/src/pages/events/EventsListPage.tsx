@@ -223,7 +223,7 @@ function EventRow({ event }: { event: Event | TeamEvent }) {
     <li>
       <Link
         to={linkTo}
-        className="flex items-start gap-5 px-6 py-6 hover:bg-[var(--muted)] transition-colors"
+        className="flex items-start gap-5 px-6 py-8 hover:bg-[var(--muted)] transition-colors"
       >
         {/* Avatar */}
         <div className="flex flex-col items-center gap-1.5 w-16 flex-shrink-0">
@@ -287,7 +287,7 @@ function TeamEventRow({ event }: { event: TeamEvent }) {
     <li>
       <Link
         to={`/teams/${event.team.id}`}
-        className="flex items-start gap-5 px-6 py-6 hover:bg-[var(--muted)] transition-colors"
+        className="flex items-start gap-5 px-6 py-8 hover:bg-[var(--muted)] transition-colors"
       >
         {/* Avatar */}
         <div className="flex flex-col items-center gap-1.5 w-16 flex-shrink-0">
