@@ -223,18 +223,19 @@ function EventRow({ event }: { event: Event | TeamEvent }) {
     <li>
       <Link
         to={linkTo}
-        className="flex items-start gap-5 px-6 py-8 hover:bg-[var(--muted)] transition-colors"
+        className="block hover:bg-[var(--muted)] transition-colors"
       >
-        {/* Avatar */}
-        <div className="flex flex-col items-center gap-1.5 w-16 flex-shrink-0">
-          <Avatar src={displayImage} alt={displayName} size="lg" />
-          <span className="text-[10px] text-[var(--muted-foreground)] truncate w-full text-center">
-            {displayName}
-          </span>
-        </div>
+        <div className="flex items-start gap-5 px-6 py-6">
+          {/* Avatar */}
+          <div className="flex flex-col items-center gap-1.5 w-16 flex-shrink-0">
+            <Avatar src={displayImage} alt={displayName} size="lg" />
+            <span className="text-[10px] text-[var(--muted-foreground)] truncate w-full text-center">
+              {displayName}
+            </span>
+          </div>
 
-        {/* Event Info */}
-        <div className="flex-1 min-w-0 overflow-hidden">
+          {/* Event Info */}
+          <div className="flex-1 min-w-0 overflow-hidden">
           {/* Date */}
           <div className="flex items-center gap-1.5 text-sm text-[var(--muted-foreground)]">
             <Calendar size={14} className="text-[var(--primary)] flex-shrink-0" />
@@ -273,6 +274,7 @@ function EventRow({ event }: { event: Event | TeamEvent }) {
               )}
             </div>
           )}
+          </div>
         </div>
       </Link>
     </li>
@@ -287,44 +289,46 @@ function TeamEventRow({ event }: { event: TeamEvent }) {
     <li>
       <Link
         to={`/teams/${event.team.id}`}
-        className="flex items-start gap-5 px-6 py-8 hover:bg-[var(--muted)] transition-colors"
+        className="block hover:bg-[var(--muted)] transition-colors"
       >
-        {/* Avatar */}
-        <div className="flex flex-col items-center gap-1.5 w-16 flex-shrink-0">
-          <Avatar src={event.team.iconImage} alt={event.team.name} size="lg" />
-          <span className="text-[10px] text-[var(--muted-foreground)] truncate w-full text-center">
-            {event.team.name}
-          </span>
-        </div>
-
-        {/* Event Info */}
-        <div className="flex-1 min-w-0 overflow-hidden">
-          {/* Date */}
-          <div className="flex items-center gap-1.5 text-sm text-[var(--muted-foreground)]">
-            <Calendar size={14} className="text-[var(--primary)] flex-shrink-0" />
-            <span>{formatDateTime(event.startTime)}</span>
+        <div className="flex items-start gap-5 px-6 py-6">
+          {/* Avatar */}
+          <div className="flex flex-col items-center gap-1.5 w-16 flex-shrink-0">
+            <Avatar src={event.team.iconImage} alt={event.team.name} size="lg" />
+            <span className="text-[10px] text-[var(--muted-foreground)] truncate w-full text-center">
+              {event.team.name}
+            </span>
           </div>
 
-          {/* Title */}
-          <h3 className="font-semibold text-[var(--foreground)] mt-1.5 text-base line-clamp-2 break-words">
-            {event.title}
-          </h3>
-
-          {/* Location */}
-          <div className="flex items-center gap-1.5 text-sm text-[var(--muted-foreground)] mt-1.5">
-            <MapPin size={14} className="text-[var(--primary)] flex-shrink-0" />
-            <span className="truncate">{event.location}</span>
-          </div>
-
-          {/* Participants */}
-          {maxParticipants > 0 && (
-            <div className="flex items-center gap-1.5 text-sm text-[var(--muted-foreground)] mt-1.5">
-              <Users size={14} className="text-[var(--primary)] flex-shrink-0" />
-              <span>
-                {maxParticipants - availableSpots}/{maxParticipants}人
-              </span>
+          {/* Event Info */}
+          <div className="flex-1 min-w-0 overflow-hidden">
+            {/* Date */}
+            <div className="flex items-center gap-1.5 text-sm text-[var(--muted-foreground)]">
+              <Calendar size={14} className="text-[var(--primary)] flex-shrink-0" />
+              <span>{formatDateTime(event.startTime)}</span>
             </div>
-          )}
+
+            {/* Title */}
+            <h3 className="font-semibold text-[var(--foreground)] mt-1.5 text-base line-clamp-2 break-words">
+              {event.title}
+            </h3>
+
+            {/* Location */}
+            <div className="flex items-center gap-1.5 text-sm text-[var(--muted-foreground)] mt-1.5">
+              <MapPin size={14} className="text-[var(--primary)] flex-shrink-0" />
+              <span className="truncate">{event.location}</span>
+            </div>
+
+            {/* Participants */}
+            {maxParticipants > 0 && (
+              <div className="flex items-center gap-1.5 text-sm text-[var(--muted-foreground)] mt-1.5">
+                <Users size={14} className="text-[var(--primary)] flex-shrink-0" />
+                <span>
+                  {maxParticipants - availableSpots}/{maxParticipants}人
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </Link>
     </li>
