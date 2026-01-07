@@ -112,6 +112,7 @@ export interface TeamEvent {
   team: {
     id: string;
     name: string;
+    iconImage?: string;
   };
   creator: {
     id: string;
