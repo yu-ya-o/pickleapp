@@ -89,10 +89,10 @@ export function EventsListPage() {
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
         <div className="max-w-2xl mx-auto px-4">
           {/* Title */}
-          <h1 className="text-2xl font-black italic text-center py-4">PickleHub</h1>
+          <h1 className="text-2xl font-black italic text-center py-6">PickleHub</h1>
 
           {/* Segment Control */}
-          <div className="flex gap-3 pb-4">
+          <div className="flex gap-3 pb-4 mb-2">
             <button
               onClick={() => setSegment('public')}
               className={cn(
@@ -118,7 +118,7 @@ export function EventsListPage() {
           </div>
 
           {/* Search Bar */}
-          <div className="flex gap-3 pb-4">
+          <div className="flex gap-3 pb-4 mt-2">
             {/* Region Filter */}
             <div className="flex items-center gap-2 px-4 py-3 bg-white border border-[var(--border)] rounded-xl min-w-[120px]">
               <MapPin size={16} className="text-[var(--primary)] flex-shrink-0" />
@@ -225,7 +225,7 @@ function EventRow({ event }: { event: Event | TeamEvent }) {
         to={linkTo}
         className="block hover:bg-[var(--muted)] transition-colors"
       >
-        <div className="flex items-start gap-5 px-6 py-6">
+        <div className="flex items-start gap-5" style={{ padding: '24px' }}>
           {/* Avatar */}
           <div className="flex flex-col items-center gap-1.5 w-16 flex-shrink-0">
             <Avatar src={displayImage} alt={displayName} size="lg" />
@@ -291,7 +291,7 @@ function TeamEventRow({ event }: { event: TeamEvent }) {
         to={`/teams/${event.team.id}`}
         className="block hover:bg-[var(--muted)] transition-colors"
       >
-        <div className="flex items-start gap-5 px-6 py-6">
+        <div className="flex items-start gap-5" style={{ padding: '24px' }}>
           {/* Avatar */}
           <div className="flex flex-col items-center gap-1.5 w-16 flex-shrink-0">
             <Avatar src={event.team.iconImage} alt={event.team.name} size="lg" />

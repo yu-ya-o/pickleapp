@@ -62,7 +62,7 @@ export function TeamsListPage() {
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
         <div className="max-w-2xl mx-auto px-4">
           {/* Title */}
-          <h1 className="text-lg font-semibold text-center py-4">チーム</h1>
+          <h1 className="text-lg font-semibold text-center py-6">チーム</h1>
 
           {/* Search Bar */}
           <div className="flex gap-3 pb-4">
@@ -172,7 +172,7 @@ function TeamRow({ team, isMyTeam }: { team: Team; isMyTeam?: boolean }) {
         <div className="flex-1 min-w-0">
           {/* Name */}
           <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-[var(--foreground)] truncate text-base">
+            <h3 className="font-semibold text-[var(--foreground)] line-clamp-2 break-words text-base">
               {team.name}
             </h3>
             {isMyTeam && (
