@@ -121,8 +121,8 @@ export function TeamDetailPage() {
               className="-mt-8 border-4 border-white"
             />
             <div className="flex-1 pt-2">
-              <div className="flex items-center gap-2">
-                <h2 className="text-xl font-bold">{team.name}</h2>
+              <div className="flex items-center gap-2 min-w-0">
+                <h2 className="text-xl font-bold break-words">{team.name}</h2>
                 {team.visibility === 'private' && (
                   <Badge variant="default">非公開</Badge>
                 )}
@@ -136,7 +136,7 @@ export function TeamDetailPage() {
             </div>
           </div>
           {team.description && (
-            <p className="mt-4 text-gray-600">{team.description}</p>
+            <p className="mt-4 text-gray-600 break-words">{team.description}</p>
           )}
         </div>
       </div>
@@ -199,7 +199,7 @@ export function TeamDetailPage() {
                   >
                     <Calendar size={20} className="text-gray-400" />
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium truncate">{event.title}</p>
+                      <p className="font-medium line-clamp-2 break-words">{event.title}</p>
                       <p className="text-sm text-gray-400">
                         {new Date(event.startTime).toLocaleDateString('ja-JP')}
                       </p>

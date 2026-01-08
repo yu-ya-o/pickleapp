@@ -202,10 +202,10 @@ export function NotificationsPage() {
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-sm text-[var(--foreground)]">
+                      <p className="font-medium text-sm text-[var(--foreground)] break-words">
                         {notification.title}
                       </p>
-                      <p className="text-sm text-[var(--muted-foreground)] mt-1 line-clamp-2">
+                      <p className="text-sm text-[var(--muted-foreground)] mt-1 line-clamp-2 break-words">
                         {notification.message}
                       </p>
                       <p className="text-xs text-[var(--muted-foreground)] mt-1.5">
