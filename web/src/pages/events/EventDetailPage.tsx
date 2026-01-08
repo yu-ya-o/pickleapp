@@ -145,7 +145,7 @@ export function EventDetailPage() {
         {/* Event Info Card */}
         <Card>
           <CardContent className="p-4 space-y-4">
-            <h2 className="text-xl font-bold">{event.title}</h2>
+            <h2 className="text-xl font-bold break-words">{event.title}</h2>
 
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-gray-600">
@@ -159,11 +159,11 @@ export function EventDetailPage() {
               </div>
 
               <div className="flex items-center gap-3 text-gray-600">
-                <MapPin size={20} />
-                <div className="flex-1">
-                  <p className="font-medium">{event.location}</p>
+                <MapPin size={20} className="flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium break-words">{event.location}</p>
                   {event.address && (
-                    <p className="text-sm text-gray-500">{event.address}</p>
+                    <p className="text-sm text-gray-500 break-words">{event.address}</p>
                   )}
                   <p className="text-sm text-gray-400">{event.region}</p>
                 </div>

@@ -14,7 +14,7 @@ export function MainLayout() {
   const location = useLocation();
 
   return (
-    <div className="flex min-h-screen bg-white">
+    <div className="flex min-h-screen bg-white overflow-x-hidden">
       {/* Sidebar navigation - PC only */}
       <aside className="hidden md:flex md:flex-col md:w-64 lg:w-72 bg-white border-r border-[var(--border)] fixed left-0 top-0 bottom-0 z-40">
         {/* Logo */}
@@ -54,7 +54,7 @@ export function MainLayout() {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 pb-20 md:pb-0 md:ml-64 lg:ml-72">
+      <main className="flex-1 pb-20 md:pb-0 md:ml-64 lg:ml-72 overflow-x-hidden">
         <Outlet />
       </main>
 

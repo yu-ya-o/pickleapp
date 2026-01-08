@@ -84,7 +84,7 @@ export function ProfilePage() {
                 {getDisplayName(user)}
               </h2>
               {user.bio && (
-                <p className="text-sm text-[var(--muted-foreground)] mt-3 whitespace-pre-wrap">
+                <p className="text-sm text-[var(--muted-foreground)] mt-3 whitespace-pre-wrap break-words">
                   {user.bio}
                 </p>
               )}
