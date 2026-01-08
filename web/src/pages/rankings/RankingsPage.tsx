@@ -86,7 +86,7 @@ export function RankingsPage() {
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
         <div className="max-w-2xl mx-auto px-4">
-          <h1 className="text-center text-lg font-semibold py-4">ランキング</h1>
+          <h1 className="text-center text-lg font-semibold py-6">ランキング</h1>
 
           {/* Segment Control */}
           <div className="pb-4">
@@ -154,10 +154,10 @@ export function RankingsPage() {
 
                   {/* Team Info */}
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-[var(--foreground)] truncate text-base">
+                    <h3 className="font-semibold text-[var(--foreground)] line-clamp-2 break-words text-base">
                       {team.name}
                     </h3>
-                    <p className="text-sm text-[var(--muted-foreground)] truncate mt-0.5">
+                    <p className="text-sm text-[var(--muted-foreground)] line-clamp-2 mt-0.5">
                       {team.description}
                     </p>
                     <div className="flex items-center gap-1.5 text-sm text-[var(--muted-foreground)] mt-1">
