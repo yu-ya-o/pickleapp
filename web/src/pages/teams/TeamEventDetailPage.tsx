@@ -146,7 +146,7 @@ export function TeamEventDetailPage() {
         {/* Description */}
         {event.description && (
           <div style={{ padding: '0 16px 16px' }}>
-            <p className="text-[var(--primary)] whitespace-pre-wrap leading-relaxed">
+            <p className="whitespace-pre-wrap leading-relaxed">
               {event.description}
             </p>
           </div>
