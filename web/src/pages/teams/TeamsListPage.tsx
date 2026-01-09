@@ -62,10 +62,10 @@ export function TeamsListPage() {
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
         <div className="max-w-2xl mx-auto px-4">
           {/* Title */}
-          <h1 className="text-lg font-semibold text-center pt-6 pb-12">チーム</h1>
+          <h1 className="text-lg font-semibold text-center" style={{ paddingTop: '12px', paddingBottom: '12px' }}>チーム</h1>
 
           {/* Search Bar */}
-          <div className="flex gap-3 pb-4">
+          <div className="flex gap-3" style={{ paddingBottom: '6px', paddingLeft: '16px', paddingRight: '16px' }}>
             {/* Region Filter */}
             <div className="flex items-center gap-2 px-4 py-3 bg-[var(--muted)] rounded-xl min-w-[110px]">
               <MapPin size={16} className="text-[var(--muted-foreground)] flex-shrink-0" />

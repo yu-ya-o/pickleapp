@@ -86,10 +86,10 @@ export function RankingsPage() {
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
         <div className="max-w-2xl mx-auto px-4">
-          <h1 className="text-center text-lg font-semibold pt-6 pb-12">ランキング</h1>
+          <h1 className="text-center text-lg font-semibold" style={{ paddingTop: '12px', paddingBottom: '12px' }}>ランキング</h1>
 
           {/* Segment Control */}
-          <div className="pb-4">
+          <div style={{ paddingBottom: '6px', paddingLeft: '16px', paddingRight: '16px' }}>
             <div className="flex bg-[var(--muted)] rounded-xl p-1.5">
               <button
                 onClick={() => setRankingType('members')}
