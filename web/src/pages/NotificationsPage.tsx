@@ -144,7 +144,7 @@ export function NotificationsPage() {
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="max-w-2xl mx-auto flex items-center justify-between px-5 pt-6 pb-8">
+        <div className="max-w-2xl mx-auto flex items-center justify-between px-5 pt-6 pb-12">
           <h1 className="text-lg font-semibold">通知</h1>
           {unreadCount > 0 && (
             <button
