@@ -94,7 +94,7 @@ export function RankingsPage() {
               <button
                 onClick={() => setRankingType('members')}
                 className={cn(
-                  'flex-1 py-2.5 text-sm font-medium rounded-lg transition-all',
+                  'flex-1 py-3.5 text-sm font-medium rounded-lg transition-all',
                   rankingType === 'members'
                     ? 'bg-white shadow-sm text-[var(--foreground)]'
                     : 'text-[var(--muted-foreground)]'
@@ -105,7 +105,7 @@ export function RankingsPage() {
               <button
                 onClick={() => setRankingType('events')}
                 className={cn(
-                  'flex-1 py-2.5 text-sm font-medium rounded-lg transition-all',
+                  'flex-1 py-3.5 text-sm font-medium rounded-lg transition-all',
                   rankingType === 'events'
                     ? 'bg-white shadow-sm text-[var(--foreground)]'
                     : 'text-[var(--muted-foreground)]'
