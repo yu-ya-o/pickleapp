@@ -99,7 +99,7 @@ export function RankingsPage() {
                     ? 'bg-white shadow-sm text-[var(--foreground)]'
                     : 'text-[var(--muted-foreground)]'
                 )}
-                style={{ padding: '14px 0' }}
+                style={{ padding: '4px 0' }}
               >
                 メンバー数
               </button>
@@ -111,7 +111,7 @@ export function RankingsPage() {
                     ? 'bg-white shadow-sm text-[var(--foreground)]'
                     : 'text-[var(--muted-foreground)]'
                 )}
-                style={{ padding: '14px 0' }}
+                style={{ padding: '4px 0' }}
               >
                 公開イベント数
               </button>
