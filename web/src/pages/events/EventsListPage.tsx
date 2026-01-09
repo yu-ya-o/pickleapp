@@ -210,7 +210,7 @@ export function EventsListPage() {
 function EventRow({ event }: { event: Event | TeamEvent }) {
   const isTeamEvent = 'team' in event;
   const linkTo = isTeamEvent
-    ? `/teams/${(event as TeamEvent).team.id}`
+    ? `/teams/${(event as TeamEvent).team.id}/events/${event.id}`
     : `/events/${event.id}`;
 
   const displayImage = isTeamEvent
@@ -264,7 +264,7 @@ function TeamEventRow({ event }: { event: TeamEvent }) {
   return (
     <li>
       <Link
-        to={`/teams/${event.team.id}`}
+        to={`/teams/${event.team.id}/events/${event.id}`}
         className="block hover:bg-[var(--muted)] transition-colors"
       >
         <div className="flex items-start gap-5" style={{ padding: '6px 12px' }}>
