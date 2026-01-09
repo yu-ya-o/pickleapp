@@ -97,22 +97,24 @@ export function EventsListPage() {
               <button
                 onClick={() => setSegment('public')}
                 className={cn(
-                  'flex-1 py-3.5 text-sm font-medium rounded-lg transition-all',
+                  'flex-1 text-sm font-medium rounded-lg transition-all',
                   segment === 'public'
                     ? 'bg-white shadow-sm text-[var(--foreground)]'
                     : 'text-[var(--muted-foreground)]'
                 )}
+                style={{ padding: '14px 0' }}
               >
                 公開イベント
               </button>
               <button
                 onClick={() => setSegment('team')}
                 className={cn(
-                  'flex-1 py-3.5 text-sm font-medium rounded-lg transition-all',
+                  'flex-1 text-sm font-medium rounded-lg transition-all',
                   segment === 'team'
                     ? 'bg-white shadow-sm text-[var(--foreground)]'
                     : 'text-[var(--muted-foreground)]'
                 )}
+                style={{ padding: '14px 0' }}
               >
                 マイチームイベント
               </button>
