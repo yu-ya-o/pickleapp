@@ -65,16 +65,16 @@ export function TeamsListPage() {
           <h1 className="text-lg font-semibold text-center" style={{ paddingTop: '12px', paddingBottom: '12px' }}>チーム</h1>
 
           {/* Search Bar */}
-          <div className="flex gap-3" style={{ paddingBottom: '6px', paddingLeft: '16px', paddingRight: '16px' }}>
+          <div className="flex gap-3" style={{ marginTop: '6px', paddingBottom: '6px', paddingLeft: '16px', paddingRight: '16px' }}>
             {/* Region Filter */}
-            <div className="flex items-center gap-2 px-4 py-3 bg-[var(--muted)] rounded-xl min-w-[110px]">
-              <MapPin size={16} className="text-[var(--muted-foreground)] flex-shrink-0" />
+            <div className="flex items-center gap-2 bg-white border border-[var(--border)] rounded-xl min-w-[120px]" style={{ padding: '4px 16px' }}>
+              <MapPin size={16} className="text-[var(--primary)] flex-shrink-0" />
               <select
                 value={selectedRegion}
                 onChange={(e) => setSelectedRegion(e.target.value)}
-                className="bg-transparent border-0 p-0 text-sm outline-none cursor-pointer text-[var(--primary)]"
+                className="bg-transparent border-0 p-0 text-sm outline-none cursor-pointer text-[var(--foreground)]"
               >
-                <option value="">全て</option>
+                <option value="">全国</option>
                 {PREFECTURES.map((pref) => (
                   <option key={pref} value={pref}>
                     {pref}
@@ -84,7 +84,7 @@ export function TeamsListPage() {
             </div>
 
             {/* Search Input */}
-            <div className="flex-1 flex items-center gap-3 px-4 py-3 bg-[var(--muted)] rounded-xl">
+            <div className="flex-1 flex items-center gap-3 bg-white border border-[var(--border)] rounded-xl" style={{ padding: '4px 16px' }}>
               <Search size={16} className="text-[var(--muted-foreground)] flex-shrink-0" />
               <input
                 type="text"
