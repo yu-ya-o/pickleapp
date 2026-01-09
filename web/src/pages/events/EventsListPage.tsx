@@ -118,7 +118,7 @@ export function EventsListPage() {
           </div>
 
           {/* Search Bar */}
-          <div className="flex gap-3" style={{ marginTop: '6px', paddingBottom: '16px' }}>
+          <div className="flex gap-3" style={{ marginTop: '6px', paddingBottom: '6px' }}>
             {/* Region Filter */}
             <div className="flex items-center gap-2 px-4 py-3 bg-white border border-[var(--border)] rounded-xl min-w-[120px]">
               <MapPin size={16} className="text-[var(--primary)] flex-shrink-0" />
