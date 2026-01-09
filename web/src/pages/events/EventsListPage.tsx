@@ -124,7 +124,7 @@ export function EventsListPage() {
           {/* Search Bar */}
           <div className="flex gap-3" style={{ marginTop: '6px', paddingBottom: '6px', paddingLeft: '16px', paddingRight: '16px' }}>
             {/* Region Filter */}
-            <div className="flex items-center gap-2 px-4 py-3 bg-white border border-[var(--border)] rounded-xl min-w-[120px]">
+            <div className="flex items-center gap-2 bg-white border border-[var(--border)] rounded-xl min-w-[120px]" style={{ padding: '4px 16px' }}>
               <MapPin size={16} className="text-[var(--primary)] flex-shrink-0" />
               <select
                 value={selectedRegion}
@@ -141,7 +141,7 @@ export function EventsListPage() {
             </div>
 
             {/* Search Input */}
-            <div className="flex-1 flex items-center gap-3 px-4 py-3 bg-white border border-[var(--border)] rounded-xl">
+            <div className="flex-1 flex items-center gap-3 bg-white border border-[var(--border)] rounded-xl" style={{ padding: '4px 16px' }}>
               <Search size={16} className="text-[var(--muted-foreground)] flex-shrink-0" />
               <input
                 type="text"
