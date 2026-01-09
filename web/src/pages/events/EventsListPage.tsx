@@ -216,9 +216,6 @@ function EventRow({ event }: { event: Event | TeamEvent }) {
     ? (event as TeamEvent).team.name
     : getDisplayName(event.creator);
 
-  const maxParticipants = event.maxParticipants ?? 0;
-  const availableSpots = event.availableSpots ?? 0;
-
   return (
     <li>
       <Link
@@ -243,7 +240,7 @@ function EventRow({ event }: { event: Event | TeamEvent }) {
           </div>
 
           {/* Title */}
-          <h3 className="font-semibold text-[var(--foreground)] mt-1.5 text-base line-clamp-2 break-words">
+          <h3 className="font-semibold text-[var(--foreground)] mt-1.5 text-base truncate">
             {event.title}
           </h3>
 
@@ -252,28 +249,6 @@ function EventRow({ event }: { event: Event | TeamEvent }) {
             <MapPin size={14} className="text-[var(--primary)] flex-shrink-0" />
             <span className="truncate">{event.location}</span>
           </div>
-
-          {/* Participants */}
-          {maxParticipants > 0 && (
-            <div className="flex items-center gap-1.5 text-sm text-[var(--muted-foreground)] mt-1.5">
-              <Users size={14} className="text-[var(--primary)] flex-shrink-0" />
-              <span>
-                {maxParticipants - availableSpots}/{maxParticipants}人
-              </span>
-
-              {/* Status badge */}
-              {availableSpots === 0 && (
-                <span className="ml-2 px-2.5 py-0.5 text-xs font-medium text-white bg-red-500 rounded-full">
-                  満席
-                </span>
-              )}
-              {availableSpots > 0 && availableSpots <= 3 && (
-                <span className="ml-2 px-2.5 py-0.5 text-xs font-medium text-white bg-orange-500 rounded-full">
-                  残り{availableSpots}席
-                </span>
-              )}
-            </div>
-          )}
           </div>
         </div>
       </Link>
@@ -282,9 +257,6 @@ function EventRow({ event }: { event: Event | TeamEvent }) {
 }
 
 function TeamEventRow({ event }: { event: TeamEvent }) {
-  const maxParticipants = event.maxParticipants ?? 0;
-  const availableSpots = event.availableSpots ?? 0;
-
   return (
     <li>
       <Link
@@ -309,7 +281,7 @@ function TeamEventRow({ event }: { event: TeamEvent }) {
             </div>
 
             {/* Title */}
-            <h3 className="font-semibold text-[var(--foreground)] mt-1.5 text-base line-clamp-2 break-words">
+            <h3 className="font-semibold text-[var(--foreground)] mt-1.5 text-base truncate">
               {event.title}
             </h3>
 
@@ -318,16 +290,6 @@ function TeamEventRow({ event }: { event: TeamEvent }) {
               <MapPin size={14} className="text-[var(--primary)] flex-shrink-0" />
               <span className="truncate">{event.location}</span>
             </div>
-
-            {/* Participants */}
-            {maxParticipants > 0 && (
-              <div className="flex items-center gap-1.5 text-sm text-[var(--muted-foreground)] mt-1.5">
-                <Users size={14} className="text-[var(--primary)] flex-shrink-0" />
-                <span>
-                  {maxParticipants - availableSpots}/{maxParticipants}人
-                </span>
-              </div>
-            )}
           </div>
         </div>
       </Link>
