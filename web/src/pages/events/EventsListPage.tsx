@@ -92,7 +92,7 @@ export function EventsListPage() {
           <h1 className="text-2xl font-black italic text-center" style={{ paddingTop: '12px', paddingBottom: '12px' }}>PickleHub</h1>
 
           {/* Segment Control */}
-          <div className="flex gap-3" style={{ marginBottom: '6px', paddingLeft: '6px', paddingRight: '6px' }}>
+          <div className="flex gap-3" style={{ marginBottom: '6px', paddingLeft: '16px', paddingRight: '16px' }}>
             <button
               onClick={() => setSegment('public')}
               className={cn(
@@ -118,7 +118,7 @@ export function EventsListPage() {
           </div>
 
           {/* Search Bar */}
-          <div className="flex gap-3" style={{ marginTop: '6px', paddingBottom: '6px', paddingLeft: '6px', paddingRight: '6px' }}>
+          <div className="flex gap-3" style={{ marginTop: '6px', paddingBottom: '6px', paddingLeft: '16px', paddingRight: '16px' }}>
             {/* Region Filter */}
             <div className="flex items-center gap-2 px-4 py-3 bg-white border border-[var(--border)] rounded-xl min-w-[120px]">
               <MapPin size={16} className="text-[var(--primary)] flex-shrink-0" />
