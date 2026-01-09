@@ -37,7 +37,8 @@ export function LocationAutocomplete({
 
   // Load Google Maps script
   useEffect(() => {
-    const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+    // Use environment variable or fallback to the API key from iOS config
+    const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'AIzaSyDvDEIGImbCrkgYIvuccyo6WiyEsxKUhtY';
 
     if (!apiKey) {
       console.error('Google Maps API key is not set');
