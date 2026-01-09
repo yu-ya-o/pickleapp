@@ -225,7 +225,7 @@ function EventRow({ event }: { event: Event | TeamEvent }) {
         to={linkTo}
         className="block hover:bg-[var(--muted)] transition-colors"
       >
-        <div className="flex items-start gap-5" style={{ padding: '6px 24px' }}>
+        <div className="flex items-start gap-5" style={{ padding: '6px 12px' }}>
           {/* Avatar */}
           <div className="flex flex-col items-center gap-1.5 w-16 flex-shrink-0">
             <Avatar src={displayImage} alt={displayName} size="lg" />
@@ -291,7 +291,7 @@ function TeamEventRow({ event }: { event: TeamEvent }) {
         to={`/teams/${event.team.id}`}
         className="block hover:bg-[var(--muted)] transition-colors"
       >
-        <div className="flex items-start gap-5" style={{ padding: '6px 24px' }}>
+        <div className="flex items-start gap-5" style={{ padding: '6px 12px' }}>
           {/* Avatar */}
           <div className="flex flex-col items-center gap-1.5 w-16 flex-shrink-0">
             <Avatar src={event.team.iconImage} alt={event.team.name} size="lg" />
