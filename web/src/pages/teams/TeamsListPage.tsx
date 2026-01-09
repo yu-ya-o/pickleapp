@@ -62,7 +62,7 @@ export function TeamsListPage() {
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
         <div className="max-w-2xl mx-auto px-4">
           {/* Title */}
-          <h1 className="text-lg font-semibold text-center pt-6 pb-8">チーム</h1>
+          <h1 className="text-lg font-semibold text-center pt-6 pb-12">チーム</h1>
 
           {/* Search Bar */}
           <div className="flex gap-3 pb-4">
