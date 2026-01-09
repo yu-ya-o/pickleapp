@@ -102,7 +102,7 @@ export function EventsListPage() {
                     ? 'bg-white shadow-sm text-[var(--foreground)]'
                     : 'text-[var(--muted-foreground)]'
                 )}
-                style={{ padding: '14px 0' }}
+                style={{ padding: '4px 0' }}
               >
                 公開イベント
               </button>
@@ -114,7 +114,7 @@ export function EventsListPage() {
                     ? 'bg-white shadow-sm text-[var(--foreground)]'
                     : 'text-[var(--muted-foreground)]'
                 )}
-                style={{ padding: '14px 0' }}
+                style={{ padding: '4px 0' }}
               >
                 マイチームイベント
               </button>
