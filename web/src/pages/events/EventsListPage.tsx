@@ -92,29 +92,31 @@ export function EventsListPage() {
           <h1 className="text-2xl font-black italic text-center" style={{ paddingTop: '12px', paddingBottom: '12px' }}>PickleHub</h1>
 
           {/* Segment Control */}
-          <div className="flex gap-3" style={{ marginBottom: '6px', paddingLeft: '16px', paddingRight: '16px' }}>
-            <button
-              onClick={() => setSegment('public')}
-              className={cn(
-                'flex-1 py-3 text-sm font-medium rounded-xl transition-all border',
-                segment === 'public'
-                  ? 'bg-[var(--primary)] text-white border-[var(--primary)]'
-                  : 'bg-white text-[var(--muted-foreground)] border-[var(--border)]'
-              )}
-            >
-              公開イベント
-            </button>
-            <button
-              onClick={() => setSegment('team')}
-              className={cn(
-                'flex-1 py-3 text-sm font-medium rounded-xl transition-all border',
-                segment === 'team'
-                  ? 'bg-[var(--primary)] text-white border-[var(--primary)]'
-                  : 'bg-white text-[var(--muted-foreground)] border-[var(--border)]'
-              )}
-            >
-              マイチームイベント
-            </button>
+          <div style={{ marginBottom: '6px', paddingLeft: '16px', paddingRight: '16px' }}>
+            <div className="flex bg-[var(--muted)] rounded-xl p-1.5">
+              <button
+                onClick={() => setSegment('public')}
+                className={cn(
+                  'flex-1 py-2.5 text-sm font-medium rounded-lg transition-all',
+                  segment === 'public'
+                    ? 'bg-white shadow-sm text-[var(--foreground)]'
+                    : 'text-[var(--muted-foreground)]'
+                )}
+              >
+                公開イベント
+              </button>
+              <button
+                onClick={() => setSegment('team')}
+                className={cn(
+                  'flex-1 py-2.5 text-sm font-medium rounded-lg transition-all',
+                  segment === 'team'
+                    ? 'bg-white shadow-sm text-[var(--foreground)]'
+                    : 'text-[var(--muted-foreground)]'
+                )}
+              >
+                マイチームイベント
+              </button>
+            </div>
           </div>
 
           {/* Search Bar */}
