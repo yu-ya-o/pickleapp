@@ -86,7 +86,7 @@ export function RankingsPage() {
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
         <div className="max-w-2xl mx-auto px-4">
-          <h1 className="text-center text-lg font-semibold py-6">ランキング</h1>
+          <h1 className="text-center text-lg font-semibold pt-6 pb-8">ランキング</h1>
 
           {/* Segment Control */}
           <div className="pb-4">
