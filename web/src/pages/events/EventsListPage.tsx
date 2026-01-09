@@ -216,9 +216,6 @@ function EventRow({ event }: { event: Event | TeamEvent }) {
     ? (event as TeamEvent).team.name
     : getDisplayName(event.creator);
 
-  const maxParticipants = event.maxParticipants ?? 0;
-  const availableSpots = event.availableSpots ?? 0;
-
   return (
     <li>
       <Link
@@ -260,9 +257,6 @@ function EventRow({ event }: { event: Event | TeamEvent }) {
 }
 
 function TeamEventRow({ event }: { event: TeamEvent }) {
-  const maxParticipants = event.maxParticipants ?? 0;
-  const availableSpots = event.availableSpots ?? 0;
-
   return (
     <li>
       <Link
