@@ -1,6 +1,6 @@
 import { useState, createContext, useContext } from 'react';
 import { Outlet, NavLink, useLocation } from 'react-router-dom';
-import { Calendar, Users, Trophy, Bell, User, Menu, X } from 'lucide-react';
+import { Calendar, Users, Trophy, Bell, User, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
