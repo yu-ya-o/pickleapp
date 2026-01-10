@@ -46,6 +46,12 @@ export function ProfilePage() {
     { id: 2, date: '2025/11', tournament: '初心者大会', result: '優勝' },
   ];
 
+  // 仮の所属チームデータ
+  const teams = [
+    { id: '1', name: '福岡ピックルズ', iconImage: null },
+    { id: '2', name: '週末練習会', iconImage: null },
+  ];
+
   // 仮のSNSデータ
   const snsLinks = [
     { id: 'instagram', name: 'Instagram', url: 'https://instagram.com/example', bgColor: 'linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)' },
@@ -161,25 +167,11 @@ export function ProfilePage() {
                   fontSize: '22px',
                   fontWeight: 700,
                   color: '#FFFFFF',
-                  marginBottom: '8px',
+                  marginBottom: '12px',
                   letterSpacing: '0.5px'
                 }}>
                   {getDisplayName(user)}
                 </h2>
-
-                {/* Level Badge */}
-                <div style={{
-                  display: 'inline-block',
-                  padding: '4px 12px',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                  borderRadius: '20px',
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  color: '#FFFFFF',
-                  marginBottom: '12px'
-                }}>
-                  {user.skillLevel ? getSkillLevelLabel(user.skillLevel) : '未設定'}
-                </div>
 
                 {/* Bio */}
                 {user.bio && (
@@ -237,29 +229,92 @@ export function ProfilePage() {
               <div style={{ padding: '16px 20px' }}>
                 <div style={{
                   display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gap: '8px'
+                  gridTemplateColumns: '1fr 1fr 1fr',
+                  gap: '12px'
                 }}>
-                  <div style={{ padding: '8px 0' }}>
-                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px' }}>REGION</p>
-                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>{user.region || '-'}</p>
+                  <div style={{ textAlign: 'center', padding: '8px 0' }}>
+                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>LEVEL</p>
+                    <p style={{ fontSize: '13px', color: '#FFFFFF', fontWeight: 600 }}>{user.skillLevel ? getSkillLevelLabel(user.skillLevel) : '-'}</p>
                   </div>
-                  <div style={{ padding: '8px 0' }}>
-                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px' }}>EXPERIENCE</p>
-                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>{user.pickleballExperience || '-'}</p>
+                  <div style={{ textAlign: 'center', padding: '8px 0' }}>
+                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>EXPERIENCE</p>
+                    <p style={{ fontSize: '13px', color: '#FFFFFF', fontWeight: 600 }}>{user.pickleballExperience || '-'}</p>
                   </div>
-                  <div style={{ padding: '8px 0' }}>
-                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px' }}>PADDLE</p>
-                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>{user.myPaddle || '-'}</p>
+                  <div style={{ textAlign: 'center', padding: '8px 0' }}>
+                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>GENDER</p>
+                    <p style={{ fontSize: '13px', color: '#FFFFFF', fontWeight: 600 }}>{user.gender || '-'}</p>
                   </div>
-                  <div style={{ padding: '8px 0' }}>
-                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px' }}>AGE</p>
-                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>{user.ageGroup || '-'}</p>
+                </div>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr 1fr',
+                  gap: '12px',
+                  marginTop: '8px'
+                }}>
+                  <div style={{ textAlign: 'center', padding: '8px 0' }}>
+                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>REGION</p>
+                    <p style={{ fontSize: '13px', color: '#FFFFFF', fontWeight: 600 }}>{user.region || '-'}</p>
+                  </div>
+                  <div style={{ textAlign: 'center', padding: '8px 0' }}>
+                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>AGE</p>
+                    <p style={{ fontSize: '13px', color: '#FFFFFF', fontWeight: 600 }}>{user.ageGroup || '-'}</p>
+                  </div>
+                  <div style={{ textAlign: 'center', padding: '8px 0' }}>
+                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>PADDLE</p>
+                    <p style={{ fontSize: '13px', color: '#FFFFFF', fontWeight: 600 }}>{user.myPaddle || '-'}</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* 所属チームセクション */}
+      <div style={{ padding: '20px 20px 0' }}>
+        <h3 style={{
+          fontSize: '14px',
+          fontWeight: 600,
+          color: 'rgba(255,255,255,0.7)',
+          marginBottom: '12px',
+          letterSpacing: '1px'
+        }}>
+          TEAMS
+        </h3>
+        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+          {teams.map((team) => (
+            <div
+              key={team.id}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                background: 'rgba(255,255,255,0.05)',
+                borderRadius: '12px',
+                padding: '10px 14px'
+              }}
+            >
+              <div style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '8px',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '14px'
+              }}>
+                {team.iconImage ? (
+                  <img src={team.iconImage} alt={team.name} style={{ width: '100%', height: '100%', borderRadius: '8px', objectFit: 'cover' }} />
+                ) : (
+                  '🏓'
+                )}
+              </div>
+              <span style={{ fontSize: '13px', color: '#FFFFFF', fontWeight: 500 }}>
+                {team.name}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
 
