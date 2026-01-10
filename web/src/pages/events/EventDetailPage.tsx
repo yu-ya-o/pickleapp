@@ -249,7 +249,7 @@ export function EventDetailPage() {
           {event.reservations.length === 0 ? (
             <p className="text-gray-400 text-sm">まだ参加者がいません</p>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
               {event.reservations.map((reservation) => (
                 <Link
                   key={reservation.id}
@@ -270,12 +270,12 @@ export function EventDetailPage() {
 
         {/* Action Buttons */}
         <div className="border-t border-[var(--border)]" style={{ padding: '16px' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {/* Chat Button */}
             <button
               onClick={() => navigate(`/events/${event.id}/chat`)}
               className="w-full flex items-center justify-center gap-2 text-white font-medium rounded-xl"
-              style={{ backgroundColor: 'var(--primary)', padding: '14px' }}
+              style={{ backgroundColor: 'var(--primary)', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
             >
               <MessageCircle size={20} />
               <span>チャットを開く</span>
@@ -291,6 +291,7 @@ export function EventDetailPage() {
                   backgroundColor: isJoined ? '#FEE2E2' : '#DBEAFE',
                   color: isJoined ? '#DC2626' : 'var(--primary)',
                   padding: '14px',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                 }}
               >
                 {isActionLoading ? '処理中...' : isJoined ? '参加をキャンセル' : isFull ? '満員' : '参加する'}
@@ -306,7 +307,7 @@ export function EventDetailPage() {
                     onClick={handleCancel}
                     disabled={isActionLoading}
                     className="w-full font-medium rounded-xl"
-                    style={{ backgroundColor: '#FEE2E2', color: '#DC2626', padding: '14px' }}
+                    style={{ backgroundColor: '#FEE2E2', color: '#DC2626', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
                   >
                     参加をキャンセル
                   </button>
@@ -316,7 +317,7 @@ export function EventDetailPage() {
                 <button
                   onClick={() => navigate(`/events/${event.id}/edit`)}
                   className="w-full flex items-center justify-center gap-2 font-medium rounded-xl"
-                  style={{ backgroundColor: '#DBEAFE', color: 'var(--primary)', padding: '14px' }}
+                  style={{ backgroundColor: '#DBEAFE', color: 'var(--primary)', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
                 >
                   <Edit size={18} />
                   <span>イベントを編集</span>
@@ -326,7 +327,7 @@ export function EventDetailPage() {
                 <button
                   onClick={() => navigate(`/events/create?duplicate=${event.id}`)}
                   className="w-full flex items-center justify-center gap-2 font-medium rounded-xl"
-                  style={{ backgroundColor: '#DCFCE7', color: '#16A34A', padding: '14px' }}
+                  style={{ backgroundColor: '#DCFCE7', color: '#16A34A', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
                 >
                   <Copy size={18} />
                   <span>イベントを複製</span>
@@ -336,7 +337,7 @@ export function EventDetailPage() {
                 <button
                   onClick={() => setShowCloseModal(true)}
                   className="w-full flex items-center justify-center gap-2 font-medium rounded-xl"
-                  style={{ backgroundColor: '#FEF3C7', color: '#D97706', padding: '14px' }}
+                  style={{ backgroundColor: '#FEF3C7', color: '#D97706', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
                 >
                   <Lock size={18} />
                   <span>イベントを締め切る</span>
@@ -346,7 +347,7 @@ export function EventDetailPage() {
                 <button
                   onClick={() => setShowDeleteModal(true)}
                   className="w-full font-medium rounded-xl"
-                  style={{ backgroundColor: '#FEE2E2', color: '#DC2626', padding: '14px' }}
+                  style={{ backgroundColor: '#FEE2E2', color: '#DC2626', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
                 >
                   イベントを削除
                 </button>
