@@ -1,25 +1,26 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft,
+  ChevronLeft,
+  ChevronRight,
   Users,
   Calendar,
   MessageCircle,
-  Settings,
-  MapPin,
   UserPlus,
+  Edit,
+  Crown,
 } from 'lucide-react';
 import { api } from '@/services/api';
-import { Button, Card, CardContent, Avatar, Loading, Badge } from '@/components/ui';
-import type { Team, TeamEvent } from '@/types';
+import { Avatar, Loading, Modal } from '@/components/ui';
+import type { Team } from '@/types';
 
 export function TeamDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [team, setTeam] = useState<Team | null>(null);
-  const [events, setEvents] = useState<TeamEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isActionLoading, setIsActionLoading] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -30,12 +31,8 @@ export function TeamDetailPage() {
   const loadTeam = async () => {
     try {
       setIsLoading(true);
-      const [teamData, eventsData] = await Promise.all([
-        api.getTeam(id!),
-        api.getTeamEvents(id!),
-      ]);
+      const teamData = await api.getTeam(id!);
       setTeam(teamData);
-      setEvents(eventsData);
     } catch (error) {
       console.error('Failed to load team:', error);
     } finally {
@@ -53,6 +50,16 @@ export function TeamDetailPage() {
       console.error('Failed to request to join:', error);
     } finally {
       setIsActionLoading(false);
+    }
+  };
+
+  const handleDeleteTeam = async () => {
+    if (!team) return;
+    try {
+      await api.deleteTeam(team.id);
+      navigate('/teams');
+    } catch (error) {
+      console.error('Failed to delete team:', error);
     }
   };
 
@@ -76,186 +83,168 @@ export function TeamDetailPage() {
   const isAdmin = team.userRole === 'admin' || isOwner;
   const isMember = team.isUserMember;
 
+  // Menu item component
+  const MenuItem = ({ icon: Icon, label, onClick }: { icon: React.ElementType; label: string; onClick: () => void }) => (
+    <button
+      onClick={onClick}
+      className="w-full flex items-center justify-between bg-white rounded-xl"
+      style={{ padding: '14px 16px' }}
+    >
+      <div className="flex items-center gap-3">
+        <Icon size={20} className="text-gray-500" />
+        <span className="font-medium">{label}</span>
+      </div>
+      <ChevronRight size={20} className="text-gray-400" />
+    </button>
+  );
+
   return (
-    <div className="min-h-screen bg-[var(--muted)]">
+    <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center justify-between" style={{ padding: '12px 16px' }}>
           <button
-            onClick={() => navigate(-1)}
-            className="p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors"
+            onClick={() => navigate('/teams')}
+            className="flex items-center text-[var(--primary)] font-medium"
           >
-            <ArrowLeft size={24} />
+            <ChevronLeft size={24} />
+            <span>チーム</span>
           </button>
-          <h1 className="font-semibold">チーム詳細</h1>
-          <div className="flex items-center gap-2">
-            {isAdmin && (
-              <button
-                onClick={() => navigate(`/teams/${team.id}/settings`)}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                <Settings size={20} />
-              </button>
-            )}
-          </div>
+          <h1 className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">チーム</h1>
+          <div style={{ width: '60px' }} />
         </div>
       </header>
 
-      {/* Team Header */}
-      <div className="bg-white border-b border-[var(--border)]">
-        {team.headerImage && (
-          <div className="h-32 md:h-48 bg-gray-200">
-            <img
-              src={team.headerImage}
-              alt=""
-              className="w-full h-full object-cover"
-            />
-          </div>
-        )}
-        <div className="max-w-4xl mx-auto px-4 py-4">
-          <div className="flex items-start gap-4">
-            <Avatar
-              src={team.iconImage}
-              alt={team.name}
-              size="xl"
-              className="-mt-8 border-4 border-white"
-            />
-            <div className="flex-1 pt-2">
-              <div className="flex items-center gap-2 min-w-0">
-                <h2 className="text-xl font-bold break-words">{team.name}</h2>
-                {team.visibility === 'private' && (
-                  <Badge variant="default">非公開</Badge>
-                )}
-              </div>
-              {team.region && (
-                <div className="flex items-center gap-1 text-gray-500 text-sm mt-1">
-                  <MapPin size={14} />
-                  <span>{team.region}</span>
-                </div>
-              )}
+      {/* Header Image */}
+      {team.headerImage && (
+        <div style={{ height: '200px' }} className="bg-gray-200">
+          <img
+            src={team.headerImage}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
+
+      {/* Team Info Section */}
+      <div className="bg-white border-b border-[var(--border)]" style={{ padding: '16px' }}>
+        <div className="flex items-start gap-4">
+          <Avatar
+            src={team.iconImage}
+            alt={team.name}
+            size="xl"
+          />
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl font-bold break-words">{team.name}</h2>
+              {isOwner && <Crown size={20} className="text-yellow-500 flex-shrink-0" />}
+            </div>
+            {team.description && (
+              <p className="text-gray-600 whitespace-pre-wrap break-words" style={{ marginTop: '8px' }}>
+                {team.description}
+              </p>
+            )}
+            <div className="flex items-center gap-2 text-gray-500 text-sm" style={{ marginTop: '12px' }}>
+              <Users size={16} />
+              <span>{team.memberCount}人</span>
+              <span>・</span>
+              <span>{team.visibility === 'private' ? '非公開' : '公開'}</span>
             </div>
           </div>
-          {team.description && (
-            <p className="mt-4 text-gray-600 break-words">{team.description}</p>
-          )}
         </div>
       </div>
 
       {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 py-4 space-y-4">
-        {/* Action Buttons */}
+      <div style={{ padding: '16px', paddingBottom: '100px' }}>
+        {/* Menu Items for Members */}
         {isMember ? (
-          <div className="grid grid-cols-2 gap-3">
-            <Button
-              variant="outline"
-              onClick={() => navigate(`/teams/${team.id}/chat`)}
-            >
-              <MessageCircle size={18} className="mr-2" />
-              チャット
-            </Button>
-            <Button
-              variant="outline"
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <MenuItem
+              icon={Users}
+              label="メンバーを見る"
               onClick={() => navigate(`/teams/${team.id}/members`)}
-            >
-              <Users size={18} className="mr-2" />
-              メンバー
-            </Button>
+            />
+            <MenuItem
+              icon={Calendar}
+              label="チームイベント"
+              onClick={() => navigate(`/teams/${team.id}/events`)}
+            />
+            <MenuItem
+              icon={MessageCircle}
+              label="チームチャット"
+              onClick={() => navigate(`/teams/${team.id}/chat`)}
+            />
+            {isAdmin && (
+              <>
+                <MenuItem
+                  icon={UserPlus}
+                  label="参加リクエスト管理"
+                  onClick={() => navigate(`/teams/${team.id}/requests`)}
+                />
+                <MenuItem
+                  icon={Edit}
+                  label="チームを編集"
+                  onClick={() => navigate(`/teams/${team.id}/edit`)}
+                />
+              </>
+            )}
+            {isOwner && (
+              <button
+                onClick={() => setShowDeleteModal(true)}
+                className="w-full font-medium rounded-xl"
+                style={{ backgroundColor: '#FEE2E2', color: '#DC2626', padding: '14px', marginTop: '8px' }}
+              >
+                チームを削除
+              </button>
+            )}
           </div>
         ) : (
-          <Button
-            className="w-full"
-            onClick={handleJoinRequest}
-            isLoading={isActionLoading}
-            disabled={team.hasPendingJoinRequest}
-          >
-            <UserPlus size={18} className="mr-2" />
-            {team.hasPendingJoinRequest ? '申請中' : '参加をリクエスト'}
-          </Button>
+          /* Non-member view */
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <MenuItem
+              icon={Users}
+              label="メンバーを見る"
+              onClick={() => navigate(`/teams/${team.id}/members`)}
+            />
+            <button
+              onClick={handleJoinRequest}
+              disabled={isActionLoading || team.hasPendingJoinRequest}
+              className="w-full flex items-center justify-center gap-2 text-white font-medium rounded-xl disabled:opacity-50"
+              style={{ backgroundColor: 'var(--primary)', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
+            >
+              <UserPlus size={20} />
+              <span>{team.hasPendingJoinRequest ? '申請中' : '参加リクエスト'}</span>
+            </button>
+          </div>
         )}
-
-        {/* Team Events */}
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold">チームイベント</h3>
-              {isAdmin && (
-                <Button
-                  size="sm"
-                  onClick={() => navigate(`/teams/${team.id}/events/create`)}
-                >
-                  作成
-                </Button>
-              )}
-            </div>
-            {events.length === 0 ? (
-              <p className="text-gray-400 text-sm">イベントがありません</p>
-            ) : (
-              <div className="space-y-3">
-                {events.slice(0, 3).map((event) => (
-                  <Link
-                    key={event.id}
-                    to={`/teams/${team.id}/events/${event.id}`}
-                    className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
-                  >
-                    <Calendar size={20} className="text-gray-400" />
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium line-clamp-2 break-words">{event.title}</p>
-                      <p className="text-sm text-gray-400">
-                        {new Date(event.startTime).toLocaleDateString('ja-JP')}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-                {events.length > 3 && (
-                  <Button
-                    variant="ghost"
-                    className="w-full"
-                    onClick={() => navigate(`/teams/${team.id}/events`)}
-                  >
-                    すべて見る ({events.length})
-                  </Button>
-                )}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Members Preview */}
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold">メンバー ({team.memberCount})</h3>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => navigate(`/teams/${team.id}/members`)}
-              >
-                すべて見る
-              </Button>
-            </div>
-            {team.members && team.members.length > 0 ? (
-              <div className="flex -space-x-2">
-                {team.members.slice(0, 8).map((member) => (
-                  <Avatar
-                    key={member.id}
-                    src={member.user.profileImage}
-                    alt={member.user.nickname || member.user.name}
-                    size="md"
-                    className="border-2 border-white"
-                  />
-                ))}
-                {team.memberCount > 8 && (
-                  <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-sm font-medium text-gray-600 border-2 border-white">
-                    +{team.memberCount - 8}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <p className="text-gray-400 text-sm">メンバーがいません</p>
-            )}
-          </CardContent>
-        </Card>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        title="チームを削除"
+      >
+        <p className="text-gray-600 mb-6">
+          このチームを削除しますか？この操作は取り消せません。
+        </p>
+        <div className="flex gap-3">
+          <button
+            className="flex-1 font-medium rounded-xl"
+            style={{ backgroundColor: '#F3F4F6', color: '#374151', padding: '14px' }}
+            onClick={() => setShowDeleteModal(false)}
+          >
+            キャンセル
+          </button>
+          <button
+            className="flex-1 font-medium rounded-xl"
+            style={{ backgroundColor: '#DC2626', color: 'white', padding: '14px' }}
+            onClick={handleDeleteTeam}
+          >
+            削除する
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }
