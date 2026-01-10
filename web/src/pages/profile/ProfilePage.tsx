@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ChevronRight,
@@ -10,6 +10,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/services/api';
 import { Button, Modal } from '@/components/ui';
 import { getDisplayName, getSkillLevelLabel } from '@/lib/utils';
+import type { Team } from '@/types';
 
 export function ProfilePage() {
   const navigate = useNavigate();
@@ -17,6 +18,19 @@ export function ProfilePage() {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [teams, setTeams] = useState<Team[]>([]);
+
+  useEffect(() => {
+    const loadTeams = async () => {
+      try {
+        const data = await api.getMyTeams();
+        setTeams(data);
+      } catch (error) {
+        console.error('Failed to load teams:', error);
+      }
+    };
+    loadTeams();
+  }, []);
 
   const handleLogout = () => {
     signOut();
@@ -44,12 +58,6 @@ export function ProfilePage() {
   const battleRecords = [
     { id: 1, date: '2025/12', tournament: '福岡オープン', result: '3位' },
     { id: 2, date: '2025/11', tournament: '初心者大会', result: '優勝' },
-  ];
-
-  // 仮の所属チームデータ
-  const teams = [
-    { id: '1', name: '福岡ピックルズ', iconImage: null },
-    { id: '2', name: '週末練習会', iconImage: null },
   ];
 
   // 仮のSNSデータ
@@ -225,43 +233,36 @@ export function ProfilePage() {
                 </div>
               </div>
 
-              {/* Info Grid */}
+              {/* Info Grid - 2 columns, 3 rows */}
               <div style={{ padding: '16px 20px' }}>
                 <div style={{
                   display: 'grid',
-                  gridTemplateColumns: '1fr 1fr 1fr',
-                  gap: '12px'
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '8px 16px'
                 }}>
-                  <div style={{ textAlign: 'center', padding: '8px 0' }}>
-                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>LEVEL</p>
-                    <p style={{ fontSize: '13px', color: '#FFFFFF', fontWeight: 600 }}>{user.skillLevel ? getSkillLevelLabel(user.skillLevel) : '-'}</p>
-                  </div>
-                  <div style={{ textAlign: 'center', padding: '8px 0' }}>
-                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>EXPERIENCE</p>
-                    <p style={{ fontSize: '13px', color: '#FFFFFF', fontWeight: 600 }}>{user.pickleballExperience || '-'}</p>
-                  </div>
-                  <div style={{ textAlign: 'center', padding: '8px 0' }}>
-                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>GENDER</p>
-                    <p style={{ fontSize: '13px', color: '#FFFFFF', fontWeight: 600 }}>{user.gender || '-'}</p>
-                  </div>
-                </div>
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr 1fr',
-                  gap: '12px',
-                  marginTop: '8px'
-                }}>
-                  <div style={{ textAlign: 'center', padding: '8px 0' }}>
+                  <div style={{ padding: '8px 0' }}>
                     <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>REGION</p>
-                    <p style={{ fontSize: '13px', color: '#FFFFFF', fontWeight: 600 }}>{user.region || '-'}</p>
+                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>{user.region || '-'}</p>
                   </div>
-                  <div style={{ textAlign: 'center', padding: '8px 0' }}>
+                  <div style={{ padding: '8px 0' }}>
+                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>EXPERIENCE</p>
+                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>{user.pickleballExperience || '-'}</p>
+                  </div>
+                  <div style={{ padding: '8px 0' }}>
+                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>LEVEL</p>
+                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>{user.skillLevel ? getSkillLevelLabel(user.skillLevel) : '-'}</p>
+                  </div>
+                  <div style={{ padding: '8px 0' }}>
+                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>GENDER</p>
+                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>{user.gender || '-'}</p>
+                  </div>
+                  <div style={{ padding: '8px 0' }}>
                     <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>AGE</p>
-                    <p style={{ fontSize: '13px', color: '#FFFFFF', fontWeight: 600 }}>{user.ageGroup || '-'}</p>
+                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>{user.ageGroup || '-'}</p>
                   </div>
-                  <div style={{ textAlign: 'center', padding: '8px 0' }}>
+                  <div style={{ padding: '8px 0' }}>
                     <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>PADDLE</p>
-                    <p style={{ fontSize: '13px', color: '#FFFFFF', fontWeight: 600 }}>{user.myPaddle || '-'}</p>
+                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>{user.myPaddle || '-'}</p>
                   </div>
                 </div>
               </div>
@@ -271,52 +272,57 @@ export function ProfilePage() {
       </div>
 
       {/* 所属チームセクション */}
-      <div style={{ padding: '20px 20px 0' }}>
-        <h3 style={{
-          fontSize: '14px',
-          fontWeight: 600,
-          color: 'rgba(255,255,255,0.7)',
-          marginBottom: '12px',
-          letterSpacing: '1px'
-        }}>
-          TEAMS
-        </h3>
-        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-          {teams.map((team) => (
-            <div
-              key={team.id}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                background: 'rgba(255,255,255,0.05)',
-                borderRadius: '12px',
-                padding: '10px 14px'
-              }}
-            >
-              <div style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '8px',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '14px'
-              }}>
-                {team.iconImage ? (
-                  <img src={team.iconImage} alt={team.name} style={{ width: '100%', height: '100%', borderRadius: '8px', objectFit: 'cover' }} />
-                ) : (
-                  '🏓'
-                )}
+      {teams.length > 0 && (
+        <div style={{ padding: '20px 20px 0' }}>
+          <h3 style={{
+            fontSize: '14px',
+            fontWeight: 600,
+            color: 'rgba(255,255,255,0.7)',
+            marginBottom: '12px',
+            letterSpacing: '1px'
+          }}>
+            TEAMS
+          </h3>
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            {teams.map((team) => (
+              <div
+                key={team.id}
+                onClick={() => navigate(`/teams/${team.id}`)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  background: 'rgba(255,255,255,0.05)',
+                  borderRadius: '12px',
+                  padding: '10px 14px',
+                  cursor: 'pointer'
+                }}
+              >
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '8px',
+                  background: team.iconImage ? 'transparent' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '14px',
+                  overflow: 'hidden'
+                }}>
+                  {team.iconImage ? (
+                    <img src={team.iconImage} alt={team.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    '🏓'
+                  )}
+                </div>
+                <span style={{ fontSize: '13px', color: '#FFFFFF', fontWeight: 500 }}>
+                  {team.name}
+                </span>
               </div>
-              <span style={{ fontSize: '13px', color: '#FFFFFF', fontWeight: 500 }}>
-                {team.name}
-              </span>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* 戦績セクション */}
       <div style={{ padding: '20px' }}>
