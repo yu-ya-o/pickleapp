@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, Trophy } from 'lucide-react';
+import { Users, Trophy, Menu } from 'lucide-react';
 import { api } from '@/services/api';
 import type { TeamRanking } from '@/services/api';
 import { Loading } from '@/components/ui';
+import { useDrawer } from '@/components/layout/MainLayout';
 
 type RankingType = 'members' | 'events';
 
 export function RankingsPage() {
+  const { openDrawer } = useDrawer();
   const [rankings, setRankings] = useState<TeamRanking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [rankingType, setRankingType] = useState<RankingType>('members');
@@ -68,17 +70,40 @@ export function RankingsPage() {
         borderBottom: '1px solid #E5E5E5',
         padding: '12px 16px'
       }}>
-        {/* Title */}
-        <h1 style={{
-          fontSize: '24px',
-          fontWeight: 900,
-          fontStyle: 'italic',
-          textAlign: 'center',
-          color: '#1a1a2e',
+        {/* Title Row */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
           marginBottom: '12px'
         }}>
-          PickleHub
-        </h1>
+          <button
+            onClick={openDrawer}
+            className="md:hidden"
+            style={{
+              background: '#F0F0F0',
+              border: 'none',
+              borderRadius: '50%',
+              width: '36px',
+              height: '36px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <Menu size={20} style={{ color: '#1a1a2e' }} />
+          </button>
+          <h1 style={{
+            fontSize: '24px',
+            fontWeight: 900,
+            fontStyle: 'italic',
+            color: '#1a1a2e'
+          }}>
+            PickleHub
+          </h1>
+          <div style={{ width: '36px' }} className="md:hidden" />
+        </div>
 
         {/* Segment Control */}
         <div style={{
@@ -127,7 +152,7 @@ export function RankingsPage() {
       </header>
 
       {/* Content */}
-      <div style={{ padding: '16px', paddingBottom: '100px' }}>
+      <div style={{ padding: '16px', paddingBottom: '24px' }}>
         {isLoading ? (
           <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '80px' }}>
             <Loading size="lg" />
