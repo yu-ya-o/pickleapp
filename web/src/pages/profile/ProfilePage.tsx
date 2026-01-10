@@ -61,19 +61,19 @@ export function ProfilePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#F5F5F5]">
       {/* Header */}
-      <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
+      <header className="bg-white border-b border-[var(--border)]">
         <div className="max-w-2xl mx-auto px-4">
           <h1 className="text-2xl font-black italic text-center" style={{ paddingTop: '12px', paddingBottom: '12px' }}>PickleHub</h1>
         </div>
       </header>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto px-4 pb-24">
+      <div className="max-w-2xl mx-auto pb-24">
         {/* Profile Header */}
-        <div className="py-8">
-          <div className="flex items-start gap-5">
+        <div className="bg-white px-4 py-6">
+          <div className="flex items-start gap-4">
             <Avatar
               src={user.profileImage}
               alt={getDisplayName(user)}
@@ -84,7 +84,7 @@ export function ProfilePage() {
                 {getDisplayName(user)}
               </h2>
               {user.bio && (
-                <p className="text-sm text-[var(--muted-foreground)] mt-3 whitespace-pre-wrap break-words">
+                <p className="text-sm text-[var(--muted-foreground)] mt-2 whitespace-pre-wrap break-words">
                   {user.bio}
                 </p>
               )}
@@ -92,21 +92,24 @@ export function ProfilePage() {
           </div>
         </div>
 
+        {/* Divider */}
+        <div className="h-2 bg-[#F5F5F5]" />
+
         {/* Profile Info Section */}
-        <section>
-          <h3 className="px-1 py-2 text-sm font-medium text-[var(--muted-foreground)]">
+        <section className="bg-white">
+          <h3 className="px-4 pt-4 pb-2 text-base font-semibold text-[var(--foreground)]">
             プロフィール情報
           </h3>
-          <div className="bg-white rounded-2xl border border-[var(--border)] overflow-hidden">
+          <div className="mx-4 mb-4 bg-[#F8F8F8] rounded-xl overflow-hidden">
             {profileItems.map((item, index) => (
               <div
                 key={item.label}
-                className={`flex items-center gap-4 px-5 py-4 ${
-                  index !== profileItems.length - 1 ? 'border-b border-[var(--border)]' : ''
+                className={`flex items-center px-4 py-3 ${
+                  index !== profileItems.length - 1 ? 'border-b border-gray-200' : ''
                 }`}
               >
                 <item.icon size={20} className="text-[var(--primary)] flex-shrink-0" />
-                <span className="text-sm text-[var(--muted-foreground)] w-32 flex-shrink-0">
+                <span className="text-sm text-[var(--muted-foreground)] ml-3" style={{ width: '120px', flexShrink: 0 }}>
                   {item.label}
                 </span>
                 <span className="text-sm text-[var(--foreground)] font-medium">
@@ -117,52 +120,54 @@ export function ProfilePage() {
           </div>
         </section>
 
+        {/* Divider */}
+        <div className="h-2 bg-[#F5F5F5]" />
+
         {/* Action Buttons */}
-        <div className="mt-6 space-y-3">
+        <div className="bg-white px-4 py-4 space-y-3">
           {/* My Events */}
           <button
-            onClick={() => navigate('/events')}
-            className="flex items-center w-full px-5 py-4 bg-white border border-[var(--border)] rounded-2xl hover:bg-[var(--muted)] transition-colors"
+            onClick={() => navigate('/my-events')}
+            className="flex items-center w-full px-4 py-4 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
           >
-            <Calendar size={20} className="text-[var(--muted-foreground)] mr-4" />
-            <span className="flex-1 text-left text-[var(--foreground)]">マイイベント</span>
-            <ChevronRight size={20} className="text-[var(--muted-foreground)]" />
+            <Calendar size={20} className="text-[var(--muted-foreground)]" />
+            <span className="flex-1 text-left text-[var(--foreground)] ml-3">マイイベント</span>
+            <ChevronRight size={20} className="text-gray-400" />
           </button>
 
           {/* Edit Profile */}
           <button
             onClick={() => navigate('/profile/edit')}
-            className="flex items-center w-full px-5 py-4 bg-white border border-[var(--border)] rounded-2xl hover:bg-[var(--muted)] transition-colors"
+            className="flex items-center w-full px-4 py-4 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
           >
-            <Edit size={20} className="text-[var(--muted-foreground)] mr-4" />
-            <span className="flex-1 text-left text-[var(--foreground)]">プロフィールを編集</span>
-            <ChevronRight size={20} className="text-[var(--muted-foreground)]" />
+            <Edit size={20} className="text-[var(--muted-foreground)]" />
+            <span className="flex-1 text-left text-[var(--foreground)] ml-3">プロフィールを編集</span>
+            <ChevronRight size={20} className="text-gray-400" />
           </button>
 
           {/* Contact */}
           <a
             href="mailto:support@picklehub.app"
-            className="flex items-center w-full px-5 py-4 bg-white border border-[var(--border)] rounded-2xl hover:bg-[var(--muted)] transition-colors"
+            className="flex items-center w-full px-4 py-4 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
           >
-            <Mail size={20} className="text-[var(--muted-foreground)] mr-4" />
-            <span className="flex-1 text-left text-[var(--foreground)]">お問い合わせ</span>
-            <ExternalLink size={20} className="text-[var(--muted-foreground)]" />
+            <Mail size={20} className="text-[var(--muted-foreground)]" />
+            <span className="flex-1 text-left text-[var(--foreground)] ml-3">お問い合わせ</span>
+            <ExternalLink size={20} className="text-gray-400" />
           </a>
-        </div>
 
-        {/* Logout & Delete */}
-        <div className="mt-6 space-y-3">
+          {/* Logout */}
           <button
             onClick={() => setShowLogoutModal(true)}
-            className="flex items-center justify-center w-full px-5 py-4 rounded-2xl transition-colors"
-            style={{ backgroundColor: 'rgba(255, 59, 48, 0.1)', color: '#FF3B30' }}
+            className="flex items-center justify-center w-full px-4 py-4 rounded-xl transition-colors"
+            style={{ backgroundColor: 'rgba(255, 182, 193, 0.4)', color: '#FF3B30' }}
           >
             <span className="font-medium">ログアウト</span>
           </button>
 
+          {/* Delete Account */}
           <button
             onClick={() => setShowDeleteModal(true)}
-            className="flex items-center justify-center w-full px-5 py-4 border border-[var(--border)] rounded-2xl transition-colors hover:bg-[var(--muted)]"
+            className="flex items-center justify-center w-full px-4 py-4 border border-gray-200 rounded-xl transition-colors hover:bg-gray-50"
             style={{ color: '#9CA3AF' }}
           >
             <span>アカウントを削除</span>
