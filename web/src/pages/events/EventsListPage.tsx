@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Plus, MapPin, Calendar, Users, Search } from 'lucide-react';
 import { api } from '@/services/api';
-import { Loading, Avatar } from '@/components/ui';
+import { Loading } from '@/components/ui';
 import { formatDateTime, getDisplayName } from '@/lib/utils';
 import { PREFECTURES } from '@/lib/prefectures';
 import type { Event, TeamEvent } from '@/types';
