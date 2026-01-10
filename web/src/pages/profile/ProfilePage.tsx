@@ -80,42 +80,65 @@ export function ProfilePage() {
   ];
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#FFFFFF' }}>
-      {/* Header */}
+    <div style={{ minHeight: '100vh', backgroundColor: '#F9FAFB' }}>
+      {/* Header - Transparent over gradient */}
       <header style={{
-        backgroundColor: '#FFFFFF',
-        borderBottom: '1px solid #E5E5E5',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 10,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         padding: '12px 16px'
       }}>
-        <div style={{ width: '40px' }} />
         <h1 style={{
           fontSize: '18px',
           fontWeight: 600,
+          color: '#FFFFFF'
         }}>
           マイプロフィール
         </h1>
-        <button
-          onClick={() => {/* TODO: Share */}}
-          style={{
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: '8px'
-          }}
-        >
-          <Share2 size={20} style={{ color: '#6B7280' }} />
-        </button>
       </header>
 
       {/* Content */}
       <div style={{ paddingBottom: '100px' }}>
-        {/* Profile Header - Centered */}
+        {/* Gradient Header Background */}
         <div style={{
-          padding: '32px 16px 24px',
+          background: 'linear-gradient(135deg, #3B82F6 0%, #06B6D4 50%, #10B981 100%)',
+          paddingTop: '32px',
+          paddingBottom: '60px',
+          position: 'relative'
+        }}>
+          {/* Share button repositioned */}
+          <button
+            onClick={() => {/* TODO: Share */}}
+            style={{
+              position: 'absolute',
+              top: '12px',
+              right: '16px',
+              background: 'rgba(255,255,255,0.2)',
+              border: 'none',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <Share2 size={20} style={{ color: '#FFFFFF' }} />
+          </button>
+        </div>
+
+        {/* Profile Header - Overlapping gradient */}
+        <div style={{
+          marginTop: '-50px',
+          padding: '0 16px 24px',
           backgroundColor: '#FFFFFF',
+          borderRadius: '24px 24px 0 0',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -123,16 +146,17 @@ export function ProfilePage() {
         }}>
           {/* Large Profile Image */}
           <div style={{
-            width: '120px',
-            height: '120px',
-            borderRadius: '60px',
+            width: '100px',
+            height: '100px',
+            borderRadius: '50px',
             overflow: 'hidden',
-            marginBottom: '16px',
-            border: '4px solid #F3F4F6',
+            marginTop: '-50px',
+            border: '4px solid #FFFFFF',
             backgroundColor: '#E5E7EB',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
           }}>
             {user.profileImage ? (
               <img
@@ -141,7 +165,7 @@ export function ProfilePage() {
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             ) : (
-              <span style={{ fontSize: '48px', color: '#9CA3AF' }}>👤</span>
+              <span style={{ fontSize: '40px', color: '#9CA3AF' }}>👤</span>
             )}
           </div>
 
@@ -150,7 +174,8 @@ export function ProfilePage() {
             fontSize: '24px',
             fontWeight: 700,
             color: '#1A1A1A',
-            marginBottom: '12px'
+            marginTop: '16px',
+            marginBottom: '8px'
           }}>
             {getDisplayName(user)}
           </h2>
