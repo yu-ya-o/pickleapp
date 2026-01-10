@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/services/api';
-import { Button, Avatar, Modal } from '@/components/ui';
+import { Button, Modal } from '@/components/ui';
 import { getDisplayName, getSkillLevelLabel } from '@/lib/utils';
 
 export function ProfilePage() {
@@ -119,14 +119,21 @@ export function ProfilePage() {
             borderRadius: '60px',
             overflow: 'hidden',
             marginBottom: '16px',
-            border: '4px solid #F3F4F6'
+            border: '4px solid #F3F4F6',
+            backgroundColor: '#E5E7EB',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}>
-            <Avatar
-              src={user.profileImage}
-              alt={getDisplayName(user)}
-              size="xl"
-              style={{ width: '100%', height: '100%' }}
-            />
+            {user.profileImage ? (
+              <img
+                src={user.profileImage}
+                alt={getDisplayName(user)}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            ) : (
+              <span style={{ fontSize: '48px', color: '#9CA3AF' }}>👤</span>
+            )}
           </div>
 
           {/* Name */}
