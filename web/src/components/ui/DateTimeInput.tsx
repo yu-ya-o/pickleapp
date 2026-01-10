@@ -22,14 +22,11 @@ export function DateTimeInput({
   // Parse ISO value to date and time
   useEffect(() => {
     if (value) {
-      const date = new Date(value);
-      if (!isNaN(date.getTime())) {
-        const year = date.getFullYear();
-        const month = date.getMonth() + 1;
-        const day = date.getDate();
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        setDateValue(`${year}/${month}/${day}`);
+      // Parse ISO format directly: YYYY-MM-DDTHH:mm
+      const match = value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})T(\d{2}):(\d{2})/);
+      if (match) {
+        const [, year, month, day, hours, minutes] = match;
+        setDateValue(`${year}/${parseInt(month)}/${parseInt(day)}`);
         setTimeValue(`${hours}:${minutes}`);
       }
     } else {
