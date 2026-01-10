@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import { api } from '@/services/api';
-import { Input, Textarea, Select, LocationAutocomplete, Loading } from '@/components/ui';
+import { Input, Textarea, Select, LocationAutocomplete, Loading, DateTimeInput } from '@/components/ui';
 import { PREFECTURE_OPTIONS } from '@/lib/prefectures';
 
 const SKILL_LEVELS = [
@@ -209,20 +209,16 @@ export function CreateEventPage() {
           />
 
           <div className="grid grid-cols-2 gap-4">
-            <Input
+            <DateTimeInput
               label="開始日時"
-              name="startTime"
-              type="datetime-local"
               value={formData.startTime}
-              onChange={handleChange}
+              onChange={(value) => setFormData((prev) => ({ ...prev, startTime: value }))}
               required
             />
-            <Input
+            <DateTimeInput
               label="終了日時"
-              name="endTime"
-              type="datetime-local"
               value={formData.endTime}
-              onChange={handleChange}
+              onChange={(value) => setFormData((prev) => ({ ...prev, endTime: value }))}
               required
             />
           </div>
