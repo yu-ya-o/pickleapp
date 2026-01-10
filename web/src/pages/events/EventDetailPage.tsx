@@ -9,6 +9,7 @@ import {
   Edit,
   Copy,
   Lock,
+  Menu,
 } from 'lucide-react';
 import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
@@ -123,237 +124,363 @@ export function EventDetailPage() {
   const currentParticipants = event.maxParticipants - event.availableSpots;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
       {/* Header */}
-      <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="flex items-center justify-between" style={{ padding: '12px 16px' }}>
+      <header style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 30,
+        background: '#FFFFFF',
+        borderBottom: '1px solid #E5E5E5',
+        padding: '12px 16px'
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between'
+        }}>
           <button
-            onClick={() => navigate(-1)}
-            className="flex items-center text-[var(--primary)] font-medium"
+            onClick={() => navigate('/events')}
+            style={{
+              background: '#F0F0F0',
+              border: 'none',
+              borderRadius: '50%',
+              width: '36px',
+              height: '36px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
           >
-            <ChevronLeft size={24} />
-            <span>前の画面に戻る</span>
+            <Menu size={20} style={{ color: '#1a1a2e' }} />
           </button>
-          <h1 className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">イベント</h1>
-          <div style={{ width: '60px' }} />
+          <h1 style={{
+            fontSize: '24px',
+            fontWeight: 900,
+            fontStyle: 'italic',
+            color: '#1a1a2e'
+          }}>
+            PickleHub
+          </h1>
+          <div style={{ width: '36px' }} />
         </div>
       </header>
 
-      {/* Content */}
-      <div style={{ paddingBottom: '200px' }}>
-        {/* Event Title & Level */}
-        <div style={{ padding: '16px' }}>
-          <h2 className="text-2xl font-bold">{event.title}</h2>
-          <p className="text-gray-500" style={{ marginTop: '4px' }}>
-            {getSkillLevelLabel(event.skillLevel)}
-          </p>
-        </div>
+      {/* Back Link */}
+      <button
+        onClick={() => navigate(-1)}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '4px',
+          padding: '12px 16px',
+          background: 'transparent',
+          border: 'none',
+          cursor: 'pointer',
+          color: '#1a1a2e',
+          fontSize: '14px'
+        }}
+      >
+        <ChevronLeft size={20} style={{ color: '#1a1a2e' }} />
+        <span>前の画面に戻る</span>
+      </button>
 
-        {/* Description */}
-        {event.description && (
-          <div style={{ padding: '0 16px 16px' }}>
-            <p className="whitespace-pre-wrap leading-relaxed">
-              {event.description}
+      {/* Content */}
+      <div style={{ padding: '0 16px', paddingBottom: '200px' }}>
+        {/* Card Container */}
+        <div style={{
+          background: '#FFFFFF',
+          borderRadius: '16px',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+          overflow: 'hidden'
+        }}>
+          {/* Event Title & Level */}
+          <div style={{ padding: '16px' }}>
+            <h2 style={{ fontSize: '24px', fontWeight: 700, color: '#1a1a2e' }}>{event.title}</h2>
+            <p style={{ marginTop: '4px', color: '#888888' }}>
+              {getSkillLevelLabel(event.skillLevel)}
             </p>
           </div>
-        )}
 
-        {/* Event Info */}
-        <div className="border-t border-[var(--border)]" style={{ padding: '16px' }}>
-          {/* Date/Time */}
-          <div className="flex items-center gap-3" style={{ marginBottom: '12px' }}>
-            <Calendar size={20} className="text-gray-400" />
-            <span>{formatDateTime(event.startTime)} 〜 {formatDateTime(event.endTime).split(' ')[1]}</span>
-          </div>
-
-          {/* Region */}
-          <div className="flex items-center gap-3" style={{ marginBottom: '12px' }}>
-            <MapPin size={20} className="text-gray-400" />
-            <span>{event.region}</span>
-          </div>
-
-          {/* Venue */}
-          <div className="flex items-start gap-3" style={{ marginBottom: '12px' }}>
-            <div className="rounded-full bg-gray-200 flex items-center justify-center" style={{ width: '20px', height: '20px', minWidth: '20px' }}>
-              <span className="text-xs">ⓘ</span>
-            </div>
-            <div>
-              <p className="font-medium">{event.location}</p>
-              {event.address && (
-                <p className="text-sm text-gray-500">{event.address}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Google Map */}
-          {event.latitude && event.longitude && (
-            <div style={{ marginBottom: '12px' }}>
-              <GoogleMap
-                latitude={event.latitude}
-                longitude={event.longitude}
-                title={event.location}
-              />
-              <a
-                href={`https://www.google.com/maps/search/?api=1&query=${event.latitude},${event.longitude}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-[var(--primary)]"
-                style={{ marginTop: '8px' }}
-              >
-                <span>📍</span>
-                <span>タップしてGoogle Mapsで開く</span>
-              </a>
+          {/* Description */}
+          {event.description && (
+            <div style={{ padding: '0 16px 16px' }}>
+              <p style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6, color: '#1a1a2e' }}>
+                {event.description}
+              </p>
             </div>
           )}
 
-          {/* Participants */}
-          <div className="flex items-center gap-3" style={{ marginBottom: '12px' }}>
-            <Users size={20} className="text-gray-400" />
-            <span className="text-[var(--primary)] font-medium">
-              {currentParticipants}/{event.maxParticipants}人
-            </span>
-          </div>
+          {/* Event Info */}
+          <div style={{ padding: '16px', borderTop: '1px solid #E5E5E5' }}>
+            {/* Date/Time */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+              <Calendar size={20} style={{ color: '#667eea' }} />
+              <span style={{ color: '#1a1a2e' }}>{formatDateTime(event.startTime)} 〜 {formatDateTime(event.endTime).split(' ')[1]}</span>
+            </div>
 
-          {/* Price */}
-          {event.price !== undefined && event.price !== null && (
-            <div className="flex items-center gap-3">
-              <div className="rounded-full border border-gray-400 flex items-center justify-center" style={{ width: '20px', height: '20px' }}>
-                <span className="text-xs">¥</span>
+            {/* Region */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+              <MapPin size={20} style={{ color: '#667eea' }} />
+              <span style={{ color: '#1a1a2e' }}>{event.region}</span>
+            </div>
+
+            {/* Venue */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '12px' }}>
+              <div style={{ width: '20px', height: '20px', minWidth: '20px', borderRadius: '50%', background: '#F0F0F0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontSize: '12px' }}>ⓘ</span>
               </div>
-              <span>¥{event.price.toLocaleString()}</span>
+              <div>
+                <p style={{ fontWeight: 500, color: '#1a1a2e' }}>{event.location}</p>
+                {event.address && (
+                  <p style={{ fontSize: '14px', color: '#888888' }}>{event.address}</p>
+                )}
+              </div>
             </div>
-          )}
-        </div>
 
-        {/* Organizer Section */}
-        <div className="border-t border-[var(--border)]" style={{ padding: '16px' }}>
-          <h3 className="font-bold" style={{ marginBottom: '12px' }}>主催</h3>
-          <Link
-            to={`/users/${event.creator.id}`}
-            className="flex items-center gap-3"
-          >
-            <Avatar
-              src={event.creator.profileImage}
-              alt={getDisplayName(event.creator)}
-              size="lg"
-            />
-            <span className="font-medium">{getDisplayName(event.creator)}</span>
-          </Link>
-        </div>
-
-        {/* Participants Section */}
-        <div className="border-t border-[var(--border)]" style={{ padding: '16px' }}>
-          <h3 className="font-bold" style={{ marginBottom: '12px' }}>
-            参加者 ({event.reservations.length})
-          </h3>
-          {event.reservations.length === 0 ? (
-            <p className="text-gray-400 text-sm">まだ参加者がいません</p>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              {event.reservations.map((reservation) => (
-                <Link
-                  key={reservation.id}
-                  to={`/users/${reservation.user.id}`}
-                  className="flex items-center gap-3"
+            {/* Google Map */}
+            {event.latitude && event.longitude && (
+              <div style={{ marginBottom: '12px' }}>
+                <GoogleMap
+                  latitude={event.latitude}
+                  longitude={event.longitude}
+                  title={event.location}
+                />
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${event.latitude},${event.longitude}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#667eea', marginTop: '8px', textDecoration: 'none' }}
                 >
-                  <Avatar
-                    src={reservation.user.profileImage}
-                    alt={getDisplayName(reservation.user)}
-                    size="md"
-                  />
-                  <span>{getDisplayName(reservation.user)}</span>
-                </Link>
-              ))}
+                  <span>📍</span>
+                  <span>タップしてGoogle Mapsで開く</span>
+                </a>
+              </div>
+            )}
+
+            {/* Participants */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+              <Users size={20} style={{ color: '#667eea' }} />
+              <span style={{ color: '#667eea', fontWeight: 500 }}>
+                {currentParticipants}/{event.maxParticipants}人
+              </span>
             </div>
-          )}
+
+            {/* Price */}
+            {event.price !== undefined && event.price !== null && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ width: '20px', height: '20px', borderRadius: '50%', border: '1px solid #888888', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={{ fontSize: '12px' }}>¥</span>
+                </div>
+                <span style={{ color: '#1a1a2e' }}>¥{event.price.toLocaleString()}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Organizer Section */}
+          <div style={{ padding: '16px', borderTop: '1px solid #E5E5E5' }}>
+            <h3 style={{ fontWeight: 700, marginBottom: '12px', color: '#1a1a2e' }}>主催</h3>
+            <Link
+              to={`/users/${event.creator.id}`}
+              style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}
+            >
+              <Avatar
+                src={event.creator.profileImage}
+                alt={getDisplayName(event.creator)}
+                size="lg"
+              />
+              <span style={{ fontWeight: 500, color: '#1a1a2e' }}>{getDisplayName(event.creator)}</span>
+            </Link>
+          </div>
+
+          {/* Participants Section */}
+          <div style={{ padding: '16px', borderTop: '1px solid #E5E5E5' }}>
+            <h3 style={{ fontWeight: 700, marginBottom: '12px', color: '#1a1a2e' }}>
+              参加者 ({event.reservations.length})
+            </h3>
+            {event.reservations.length === 0 ? (
+              <p style={{ color: '#888888', fontSize: '14px' }}>まだ参加者がいません</p>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                {event.reservations.map((reservation) => (
+                  <Link
+                    key={reservation.id}
+                    to={`/users/${reservation.user.id}`}
+                    style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}
+                  >
+                    <Avatar
+                      src={reservation.user.profileImage}
+                      alt={getDisplayName(reservation.user)}
+                      size="md"
+                    />
+                    <span style={{ color: '#1a1a2e' }}>{getDisplayName(reservation.user)}</span>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="border-t border-[var(--border)]" style={{ padding: '16px' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {/* Chat Button */}
-            <button
-              onClick={() => navigate(`/events/${event.id}/chat`)}
-              className="w-full flex items-center justify-center gap-2 text-white font-medium rounded-xl"
-              style={{ backgroundColor: 'var(--primary)', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
-            >
-              <MessageCircle size={20} />
-              <span>チャットを開く</span>
-            </button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '16px' }}>
+          {/* Chat Button */}
+          <button
+            onClick={() => navigate(`/events/${event.id}/chat`)}
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              color: '#FFFFFF',
+              fontWeight: 500,
+              borderRadius: '12px',
+              border: 'none',
+              cursor: 'pointer',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              padding: '14px',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+            }}
+          >
+            <MessageCircle size={20} />
+            <span>チャットを開く</span>
+          </button>
 
-            {/* Join/Cancel Button */}
-            {!isCreator && (
+          {/* Join/Cancel Button */}
+          {!isCreator && (
+            <button
+              onClick={isJoined ? handleCancel : handleJoin}
+              disabled={isActionLoading || (!isJoined && isFull)}
+              style={{
+                width: '100%',
+                fontWeight: 500,
+                borderRadius: '12px',
+                border: 'none',
+                cursor: 'pointer',
+                backgroundColor: isJoined ? '#FEE2E2' : '#DBEAFE',
+                color: isJoined ? '#DC2626' : '#667eea',
+                padding: '14px',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                opacity: (isActionLoading || (!isJoined && isFull)) ? 0.5 : 1
+              }}
+            >
+              {isActionLoading ? '処理中...' : isJoined ? '参加をキャンセル' : isFull ? '満員' : '参加する'}
+            </button>
+          )}
+
+          {/* Creator Actions */}
+          {isCreator && (
+            <>
+              {/* Cancel participation for creator */}
+              {isJoined && (
+                <button
+                  onClick={handleCancel}
+                  disabled={isActionLoading}
+                  style={{
+                    width: '100%',
+                    fontWeight: 500,
+                    borderRadius: '12px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    backgroundColor: '#FEE2E2',
+                    color: '#DC2626',
+                    padding: '14px',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                  }}
+                >
+                  参加をキャンセル
+                </button>
+              )}
+
+              {/* Edit Button */}
               <button
-                onClick={isJoined ? handleCancel : handleJoin}
-                disabled={isActionLoading || (!isJoined && isFull)}
-                className="w-full font-medium rounded-xl disabled:opacity-50"
+                onClick={() => navigate(`/events/${event.id}/edit`)}
                 style={{
-                  backgroundColor: isJoined ? '#FEE2E2' : '#DBEAFE',
-                  color: isJoined ? '#DC2626' : 'var(--primary)',
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  fontWeight: 500,
+                  borderRadius: '12px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  backgroundColor: '#DBEAFE',
+                  color: '#667eea',
                   padding: '14px',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                 }}
               >
-                {isActionLoading ? '処理中...' : isJoined ? '参加をキャンセル' : isFull ? '満員' : '参加する'}
+                <Edit size={18} />
+                <span>イベントを編集</span>
               </button>
-            )}
 
-            {/* Creator Actions */}
-            {isCreator && (
-              <>
-                {/* Cancel participation for creator */}
-                {isJoined && (
-                  <button
-                    onClick={handleCancel}
-                    disabled={isActionLoading}
-                    className="w-full font-medium rounded-xl"
-                    style={{ backgroundColor: '#FEE2E2', color: '#DC2626', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
-                  >
-                    参加をキャンセル
-                  </button>
-                )}
+              {/* Duplicate Button */}
+              <button
+                onClick={() => navigate(`/events/create?duplicate=${event.id}`)}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  fontWeight: 500,
+                  borderRadius: '12px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  backgroundColor: '#DCFCE7',
+                  color: '#16A34A',
+                  padding: '14px',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                }}
+              >
+                <Copy size={18} />
+                <span>イベントを複製</span>
+              </button>
 
-                {/* Edit Button */}
-                <button
-                  onClick={() => navigate(`/events/${event.id}/edit`)}
-                  className="w-full flex items-center justify-center gap-2 font-medium rounded-xl"
-                  style={{ backgroundColor: '#DBEAFE', color: 'var(--primary)', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
-                >
-                  <Edit size={18} />
-                  <span>イベントを編集</span>
-                </button>
+              {/* Close Event Button */}
+              <button
+                onClick={() => setShowCloseModal(true)}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  fontWeight: 500,
+                  borderRadius: '12px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  backgroundColor: '#FEF3C7',
+                  color: '#D97706',
+                  padding: '14px',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                }}
+              >
+                <Lock size={18} />
+                <span>イベントを締め切る</span>
+              </button>
 
-                {/* Duplicate Button */}
-                <button
-                  onClick={() => navigate(`/events/create?duplicate=${event.id}`)}
-                  className="w-full flex items-center justify-center gap-2 font-medium rounded-xl"
-                  style={{ backgroundColor: '#DCFCE7', color: '#16A34A', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
-                >
-                  <Copy size={18} />
-                  <span>イベントを複製</span>
-                </button>
-
-                {/* Close Event Button */}
-                <button
-                  onClick={() => setShowCloseModal(true)}
-                  className="w-full flex items-center justify-center gap-2 font-medium rounded-xl"
-                  style={{ backgroundColor: '#FEF3C7', color: '#D97706', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
-                >
-                  <Lock size={18} />
-                  <span>イベントを締め切る</span>
-                </button>
-
-                {/* Delete Button */}
-                <button
-                  onClick={() => setShowDeleteModal(true)}
-                  className="w-full font-medium rounded-xl"
-                  style={{ backgroundColor: '#FEE2E2', color: '#DC2626', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
-                >
-                  イベントを削除
-                </button>
-              </>
-            )}
-          </div>
+              {/* Delete Button */}
+              <button
+                onClick={() => setShowDeleteModal(true)}
+                style={{
+                  width: '100%',
+                  fontWeight: 500,
+                  borderRadius: '12px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  backgroundColor: '#FEE2E2',
+                  color: '#DC2626',
+                  padding: '14px',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                }}
+              >
+                イベントを削除
+              </button>
+            </>
+          )}
         </div>
       </div>
 
