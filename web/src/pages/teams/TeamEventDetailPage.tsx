@@ -28,6 +28,7 @@ export function TeamEventDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showCloseModal, setShowCloseModal] = useState(false);
 
   useEffect(() => {
     if (teamId && eventId) {
@@ -81,6 +82,24 @@ export function TeamEventDetailPage() {
     } catch (error) {
       console.error('Failed to delete team event:', error);
     }
+  };
+
+  const handleCloseEvent = async () => {
+    if (!event || !teamId) return;
+    try {
+      setIsActionLoading(true);
+      await api.updateTeamEvent(teamId, event.id, { status: 'completed' });
+      setShowCloseModal(false);
+      await loadEvent();
+    } catch (error) {
+      console.error('Failed to close team event:', error);
+    } finally {
+      setIsActionLoading(false);
+    }
+  };
+
+  const handleNotImplemented = (feature: string) => {
+    alert(`${feature}機能は近日公開予定です`);
   };
 
   if (isLoading) {
@@ -269,7 +288,7 @@ export function TeamEventDetailPage() {
           <div className="space-y-3">
             {/* Chat Button */}
             <button
-              onClick={() => navigate(`/teams/${teamId}/chat`)}
+              onClick={() => handleNotImplemented('イベントチャット')}
               className="w-full flex items-center justify-center gap-2 text-white font-medium rounded-xl"
               style={{ backgroundColor: 'var(--primary)', padding: '14px' }}
             >
@@ -310,7 +329,7 @@ export function TeamEventDetailPage() {
 
                 {/* Edit Button */}
                 <button
-                  onClick={() => navigate(`/teams/${teamId}/events/${event.id}/edit`)}
+                  onClick={() => handleNotImplemented('イベント編集')}
                   className="w-full flex items-center justify-center gap-2 font-medium rounded-xl"
                   style={{ backgroundColor: '#DBEAFE', color: 'var(--primary)', padding: '14px' }}
                 >
@@ -320,7 +339,7 @@ export function TeamEventDetailPage() {
 
                 {/* Duplicate Button */}
                 <button
-                  onClick={() => navigate(`/teams/${teamId}/events/create?duplicate=${event.id}`)}
+                  onClick={() => handleNotImplemented('イベント複製')}
                   className="w-full flex items-center justify-center gap-2 font-medium rounded-xl"
                   style={{ backgroundColor: '#DCFCE7', color: '#16A34A', padding: '14px' }}
                 >
@@ -330,6 +349,7 @@ export function TeamEventDetailPage() {
 
                 {/* Close Event Button */}
                 <button
+                  onClick={() => setShowCloseModal(true)}
                   className="w-full flex items-center justify-center gap-2 font-medium rounded-xl"
                   style={{ backgroundColor: '#FEF3C7', color: '#D97706', padding: '14px' }}
                 >
@@ -350,6 +370,34 @@ export function TeamEventDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Close Event Confirmation Modal */}
+      <Modal
+        isOpen={showCloseModal}
+        onClose={() => setShowCloseModal(false)}
+        title="イベントを締め切る"
+      >
+        <p className="text-gray-600 mb-6">
+          このイベントの募集を締め切りますか？
+        </p>
+        <div className="flex gap-3">
+          <button
+            className="flex-1 font-medium rounded-xl"
+            style={{ backgroundColor: '#F3F4F6', color: '#374151', padding: '14px' }}
+            onClick={() => setShowCloseModal(false)}
+          >
+            キャンセル
+          </button>
+          <button
+            className="flex-1 font-medium rounded-xl"
+            style={{ backgroundColor: '#D97706', color: 'white', padding: '14px' }}
+            onClick={handleCloseEvent}
+            disabled={isActionLoading}
+          >
+            {isActionLoading ? '処理中...' : '締め切る'}
+          </button>
+        </div>
+      </Modal>
 
       {/* Delete Confirmation Modal */}
       <Modal
