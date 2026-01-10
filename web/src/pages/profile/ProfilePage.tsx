@@ -71,7 +71,7 @@ export function ProfilePage() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)',
+      background: '#F5F5F7',
       paddingBottom: '100px'
     }}>
       {/* Header */}
@@ -79,20 +79,23 @@ export function ProfilePage() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '12px 16px'
+        padding: '12px 16px',
+        background: '#FFFFFF',
+        borderBottom: '1px solid #E5E5E5'
       }}>
         <div style={{ width: '40px' }} />
         <h1 style={{
-          fontSize: '18px',
-          fontWeight: 600,
-          color: '#FFFFFF'
+          fontSize: '24px',
+          fontWeight: 900,
+          fontStyle: 'italic',
+          color: '#1a1a2e'
         }}>
-          PLAYER CARD
+          PickleHub
         </h1>
         <button
           onClick={() => {/* TODO: Share */}}
           style={{
-            background: 'rgba(255,255,255,0.1)',
+            background: '#F0F0F0',
             border: 'none',
             borderRadius: '50%',
             width: '36px',
@@ -103,26 +106,26 @@ export function ProfilePage() {
             justifyContent: 'center'
           }}
         >
-          <Share2 size={18} style={{ color: '#FFFFFF' }} />
+          <Share2 size={18} style={{ color: '#1a1a2e' }} />
         </button>
       </header>
 
       {/* Trading Card */}
-      <div style={{ padding: '0 20px' }}>
+      <div style={{ padding: '20px' }}>
         <div style={{
-          background: 'linear-gradient(145deg, #2d2d44 0%, #1f1f35 100%)',
+          background: '#FFFFFF',
           borderRadius: '20px',
           padding: '4px',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)'
+          boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
         }}>
-          {/* Card Inner with holographic border effect */}
+          {/* Card Inner with subtle border effect */}
           <div style={{
-            background: 'linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+            background: 'linear-gradient(145deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
             borderRadius: '18px',
             padding: '3px'
           }}>
             <div style={{
-              background: 'linear-gradient(180deg, #252540 0%, #1a1a30 100%)',
+              background: '#FFFFFF',
               borderRadius: '16px',
               overflow: 'hidden'
             }}>
@@ -130,7 +133,7 @@ export function ProfilePage() {
               <div style={{
                 padding: '24px 20px',
                 textAlign: 'center',
-                borderBottom: '1px solid rgba(255,255,255,0.1)'
+                borderBottom: '1px solid #E5E5E5'
               }}>
                 {/* Profile Image with glow */}
                 <div style={{
@@ -140,14 +143,14 @@ export function ProfilePage() {
                   margin: '0 auto 16px',
                   padding: '3px',
                   background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                  boxShadow: '0 0 30px rgba(102, 126, 234, 0.4)'
+                  boxShadow: '0 0 30px rgba(102, 126, 234, 0.3)'
                 }}>
                   <div style={{
                     width: '100%',
                     height: '100%',
                     borderRadius: '50%',
                     overflow: 'hidden',
-                    backgroundColor: '#2a2a45'
+                    backgroundColor: '#F5F5F7'
                   }}>
                     {user.profileImage ? (
                       <img
@@ -174,7 +177,7 @@ export function ProfilePage() {
                 <h2 style={{
                   fontSize: '22px',
                   fontWeight: 700,
-                  color: '#FFFFFF',
+                  color: '#1a1a2e',
                   marginBottom: '12px',
                   letterSpacing: '0.5px'
                 }}>
@@ -185,7 +188,7 @@ export function ProfilePage() {
                 {user.bio && (
                   <p style={{
                     fontSize: '13px',
-                    color: 'rgba(255,255,255,0.7)',
+                    color: '#888888',
                     lineHeight: '1.5',
                     maxWidth: '260px',
                     margin: '0 auto'
@@ -196,7 +199,7 @@ export function ProfilePage() {
               </div>
 
               {/* Stats Section */}
-              <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+              <div style={{ padding: '16px 20px', borderBottom: '1px solid #E5E5E5' }}>
                 <div style={{
                   display: 'grid',
                   gridTemplateColumns: '1fr 1fr',
@@ -204,12 +207,12 @@ export function ProfilePage() {
                 }}>
                   {/* DUPR Singles */}
                   <div style={{
-                    background: 'rgba(255,255,255,0.05)',
+                    background: '#F5F5F7',
                     borderRadius: '12px',
                     padding: '12px',
                     textAlign: 'center'
                   }}>
-                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', marginBottom: '4px', letterSpacing: '1px' }}>
+                    <p style={{ fontSize: '10px', color: '#888888', marginBottom: '4px', letterSpacing: '1px' }}>
                       DUPR SINGLES
                     </p>
                     <p style={{ fontSize: '24px', fontWeight: 700, color: '#667eea' }}>
@@ -218,12 +221,12 @@ export function ProfilePage() {
                   </div>
                   {/* DUPR Doubles */}
                   <div style={{
-                    background: 'rgba(255,255,255,0.05)',
+                    background: '#F5F5F7',
                     borderRadius: '12px',
                     padding: '12px',
                     textAlign: 'center'
                   }}>
-                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', marginBottom: '4px', letterSpacing: '1px' }}>
+                    <p style={{ fontSize: '10px', color: '#888888', marginBottom: '4px', letterSpacing: '1px' }}>
                       DUPR DOUBLES
                     </p>
                     <p style={{ fontSize: '24px', fontWeight: 700, color: '#764ba2' }}>
@@ -241,28 +244,28 @@ export function ProfilePage() {
                   gap: '8px 16px'
                 }}>
                   <div style={{ padding: '8px 0' }}>
-                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>REGION</p>
-                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>{user.region || '-'}</p>
+                    <p style={{ fontSize: '10px', color: '#888888', letterSpacing: '1px', marginBottom: '4px' }}>REGION</p>
+                    <p style={{ fontSize: '14px', color: '#1a1a2e', fontWeight: 500 }}>{user.region || '-'}</p>
                   </div>
                   <div style={{ padding: '8px 0' }}>
-                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>EXPERIENCE</p>
-                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>{user.pickleballExperience || '-'}</p>
+                    <p style={{ fontSize: '10px', color: '#888888', letterSpacing: '1px', marginBottom: '4px' }}>EXPERIENCE</p>
+                    <p style={{ fontSize: '14px', color: '#1a1a2e', fontWeight: 500 }}>{user.pickleballExperience || '-'}</p>
                   </div>
                   <div style={{ padding: '8px 0' }}>
-                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>LEVEL</p>
-                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>{user.skillLevel ? getSkillLevelLabel(user.skillLevel) : '-'}</p>
+                    <p style={{ fontSize: '10px', color: '#888888', letterSpacing: '1px', marginBottom: '4px' }}>LEVEL</p>
+                    <p style={{ fontSize: '14px', color: '#1a1a2e', fontWeight: 500 }}>{user.skillLevel ? getSkillLevelLabel(user.skillLevel) : '-'}</p>
                   </div>
                   <div style={{ padding: '8px 0' }}>
-                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>GENDER</p>
-                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>{user.gender || '-'}</p>
+                    <p style={{ fontSize: '10px', color: '#888888', letterSpacing: '1px', marginBottom: '4px' }}>GENDER</p>
+                    <p style={{ fontSize: '14px', color: '#1a1a2e', fontWeight: 500 }}>{user.gender || '-'}</p>
                   </div>
                   <div style={{ padding: '8px 0' }}>
-                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>AGE</p>
-                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>{user.ageGroup || '-'}</p>
+                    <p style={{ fontSize: '10px', color: '#888888', letterSpacing: '1px', marginBottom: '4px' }}>AGE</p>
+                    <p style={{ fontSize: '14px', color: '#1a1a2e', fontWeight: 500 }}>{user.ageGroup || '-'}</p>
                   </div>
                   <div style={{ padding: '8px 0' }}>
-                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px', marginBottom: '4px' }}>PADDLE</p>
-                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>{user.myPaddle || '-'}</p>
+                    <p style={{ fontSize: '10px', color: '#888888', letterSpacing: '1px', marginBottom: '4px' }}>PADDLE</p>
+                    <p style={{ fontSize: '14px', color: '#1a1a2e', fontWeight: 500 }}>{user.myPaddle || '-'}</p>
                   </div>
                 </div>
               </div>
@@ -273,11 +276,11 @@ export function ProfilePage() {
 
       {/* 所属チームセクション */}
       {teams.length > 0 && (
-        <div style={{ padding: '20px 20px 0' }}>
+        <div style={{ padding: '0 20px 20px' }}>
           <h3 style={{
             fontSize: '14px',
             fontWeight: 600,
-            color: 'rgba(255,255,255,0.7)',
+            color: '#888888',
             marginBottom: '12px',
             letterSpacing: '1px'
           }}>
@@ -292,10 +295,11 @@ export function ProfilePage() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '10px',
-                  background: 'rgba(255,255,255,0.05)',
+                  background: '#FFFFFF',
                   borderRadius: '12px',
                   padding: '10px 14px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
                 }}
               >
                 <div style={{
@@ -315,7 +319,7 @@ export function ProfilePage() {
                     '🏓'
                   )}
                 </div>
-                <span style={{ fontSize: '13px', color: '#FFFFFF', fontWeight: 500 }}>
+                <span style={{ fontSize: '13px', color: '#1a1a2e', fontWeight: 500 }}>
                   {team.name}
                 </span>
               </div>
@@ -325,20 +329,21 @@ export function ProfilePage() {
       )}
 
       {/* 戦績セクション */}
-      <div style={{ padding: '20px' }}>
+      <div style={{ padding: '0 20px 20px' }}>
         <h3 style={{
           fontSize: '14px',
           fontWeight: 600,
-          color: 'rgba(255,255,255,0.7)',
+          color: '#888888',
           marginBottom: '12px',
           letterSpacing: '1px'
         }}>
           BATTLE RECORD
         </h3>
         <div style={{
-          background: 'rgba(255,255,255,0.05)',
+          background: '#FFFFFF',
           borderRadius: '12px',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
         }}>
           {battleRecords.map((record, index) => (
             <div
@@ -347,21 +352,21 @@ export function ProfilePage() {
                 display: 'flex',
                 alignItems: 'center',
                 padding: '14px 16px',
-                borderBottom: index !== battleRecords.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none'
+                borderBottom: index !== battleRecords.length - 1 ? '1px solid #E5E5E5' : 'none'
               }}
             >
               <div style={{ flex: 1 }}>
-                <p style={{ fontSize: '14px', fontWeight: 500, color: '#FFFFFF' }}>
+                <p style={{ fontSize: '14px', fontWeight: 500, color: '#1a1a2e' }}>
                   {record.tournament}
                 </p>
-                <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>
+                <p style={{ fontSize: '12px', color: '#888888' }}>
                   {record.date}
                 </p>
               </div>
               <span style={{
                 fontSize: '14px',
                 fontWeight: 600,
-                color: record.result === '優勝' ? '#F59E0B' : 'rgba(255,255,255,0.7)'
+                color: record.result === '優勝' ? '#F59E0B' : '#888888'
               }}>
                 {record.result}
               </span>
@@ -375,7 +380,7 @@ export function ProfilePage() {
         <h3 style={{
           fontSize: '14px',
           fontWeight: 600,
-          color: 'rgba(255,255,255,0.7)',
+          color: '#888888',
           marginBottom: '12px',
           letterSpacing: '1px'
         }}>
@@ -435,17 +440,18 @@ export function ProfilePage() {
             alignItems: 'center',
             width: '100%',
             padding: '16px',
-            backgroundColor: 'rgba(255,255,255,0.1)',
+            backgroundColor: '#FFFFFF',
             border: 'none',
             borderRadius: '12px',
             cursor: 'pointer',
-            marginBottom: '12px'
+            marginBottom: '12px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
           }}
         >
-          <span style={{ flex: 1, textAlign: 'left', color: '#FFFFFF', fontSize: '15px' }}>
+          <span style={{ flex: 1, textAlign: 'left', color: '#1a1a2e', fontSize: '15px' }}>
             プロフィールを編集
           </span>
-          <ChevronRight size={20} style={{ color: 'rgba(255,255,255,0.5)' }} />
+          <ChevronRight size={20} style={{ color: '#888888' }} />
         </button>
 
         {/* Logout */}
@@ -457,14 +463,14 @@ export function ProfilePage() {
             justifyContent: 'center',
             width: '100%',
             padding: '16px',
-            backgroundColor: 'rgba(255, 100, 100, 0.2)',
+            backgroundColor: 'rgba(255, 100, 100, 0.1)',
             border: 'none',
             borderRadius: '12px',
             cursor: 'pointer',
             marginBottom: '12px'
           }}
         >
-          <span style={{ color: '#FF6B6B', fontWeight: 500, fontSize: '15px' }}>ログアウト</span>
+          <span style={{ color: '#EF4444', fontWeight: 500, fontSize: '15px' }}>ログアウト</span>
         </button>
 
         {/* Delete Account */}
@@ -477,12 +483,12 @@ export function ProfilePage() {
             width: '100%',
             padding: '16px',
             backgroundColor: 'transparent',
-            border: '1px solid rgba(255,255,255,0.2)',
+            border: '1px solid #E5E5E5',
             borderRadius: '12px',
             cursor: 'pointer'
           }}
         >
-          <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '15px' }}>アカウントを削除</span>
+          <span style={{ color: '#888888', fontSize: '15px' }}>アカウントを削除</span>
         </button>
       </div>
 
