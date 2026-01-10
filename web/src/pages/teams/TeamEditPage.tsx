@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Image, Instagram, Music } from 'lucide-react';
+import { ChevronLeft, Image, Instagram, Music } from 'lucide-react';
 import { api } from '@/services/api';
 import { Loading } from '@/components/ui';
 import type { Team } from '@/types';
@@ -106,12 +106,13 @@ export function TeamEditPage() {
         <div className="flex items-center justify-between" style={{ padding: '12px 16px' }}>
           <button
             onClick={() => navigate(-1)}
-            className="text-[var(--primary)] font-medium"
+            className="flex items-center text-[var(--primary)] font-medium"
           >
-            キャンセル
+            <ChevronLeft size={24} />
+            <span>戻る</span>
           </button>
-          <h1 className="font-semibold text-lg">チームを編集</h1>
-          <div style={{ width: '80px' }} />
+          <h1 className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">チームを編集</h1>
+          <div style={{ width: '60px' }} />
         </div>
       </header>
 
