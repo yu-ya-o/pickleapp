@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Send } from 'lucide-react';
+import { ChevronLeft, Send } from 'lucide-react';
 import { api } from '@/services/api';
 import { wsClient } from '@/services/websocket';
 import { useAuth } from '@/contexts/AuthContext';
@@ -102,14 +102,16 @@ export function ChatPage() {
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center">
+        <div className="flex items-center justify-between" style={{ padding: '12px 16px' }}>
           <button
             onClick={() => navigate(-1)}
-            className="p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors"
+            className="flex items-center text-[var(--primary)] font-medium"
           >
-            <ArrowLeft size={24} />
+            <ChevronLeft size={24} />
+            <span>前の画面に戻る</span>
           </button>
-          <h1 className="font-semibold ml-2">チャット</h1>
+          <h1 className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">チャット</h1>
+          <div style={{ width: '60px' }} />
         </div>
       </header>
 
