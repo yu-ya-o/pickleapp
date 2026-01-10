@@ -61,30 +61,42 @@ export function ProfilePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5]">
+    <div style={{ minHeight: '100vh', backgroundColor: '#FFFFFF' }}>
       {/* Header */}
-      <header className="bg-white border-b border-[var(--border)]">
-        <div className="max-w-2xl mx-auto px-4">
-          <h1 className="text-2xl font-black italic text-center" style={{ paddingTop: '12px', paddingBottom: '12px' }}>PickleHub</h1>
-        </div>
+      <header style={{ backgroundColor: '#FFFFFF', borderBottom: '1px solid #E5E5E5' }}>
+        <h1 style={{
+          fontSize: '24px',
+          fontWeight: 900,
+          fontStyle: 'italic',
+          textAlign: 'center',
+          padding: '12px 16px'
+        }}>
+          PickleHub
+        </h1>
       </header>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto pb-24">
+      <div style={{ paddingBottom: '100px' }}>
         {/* Profile Header */}
-        <div className="bg-white px-4 py-6">
-          <div className="flex items-start gap-4">
+        <div style={{ padding: '24px 16px', backgroundColor: '#FFFFFF' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
             <Avatar
               src={user.profileImage}
               alt={getDisplayName(user)}
               size="xl"
             />
-            <div className="flex-1 min-w-0">
-              <h2 className="text-xl font-bold text-[var(--foreground)]">
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <h2 style={{ fontSize: '20px', fontWeight: 700, color: '#1A1A1A' }}>
                 {getDisplayName(user)}
               </h2>
               {user.bio && (
-                <p className="text-sm text-[var(--muted-foreground)] mt-2 whitespace-pre-wrap break-words">
+                <p style={{
+                  fontSize: '14px',
+                  color: '#6B7280',
+                  marginTop: '8px',
+                  whiteSpace: 'pre-wrap',
+                  wordBreak: 'break-word'
+                }}>
                   {user.bio}
                 </p>
               )}
@@ -93,84 +105,158 @@ export function ProfilePage() {
         </div>
 
         {/* Divider */}
-        <div className="h-2 bg-[#F5F5F5]" />
+        <div style={{ height: '8px', backgroundColor: '#F3F4F6' }} />
 
         {/* Profile Info Section */}
-        <section className="bg-white">
-          <h3 className="px-4 pt-4 pb-2 text-base font-semibold text-[var(--foreground)]">
+        <div style={{ backgroundColor: '#FFFFFF', padding: '16px' }}>
+          <h3 style={{
+            fontSize: '16px',
+            fontWeight: 600,
+            color: '#1A1A1A',
+            marginBottom: '12px'
+          }}>
             プロフィール情報
           </h3>
-          <div className="mx-4 mb-4 bg-[#F8F8F8] rounded-xl overflow-hidden">
+          <div style={{
+            backgroundColor: '#F9FAFB',
+            borderRadius: '16px',
+            overflow: 'hidden'
+          }}>
             {profileItems.map((item, index) => (
               <div
                 key={item.label}
-                className={`flex items-center px-4 py-3 ${
-                  index !== profileItems.length - 1 ? 'border-b border-gray-200' : ''
-                }`}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '14px 16px',
+                  borderBottom: index !== profileItems.length - 1 ? '1px solid #E5E7EB' : 'none'
+                }}
               >
-                <item.icon size={20} className="text-[var(--primary)] flex-shrink-0" />
-                <span className="text-sm text-[var(--muted-foreground)] ml-3" style={{ width: '120px', flexShrink: 0 }}>
+                <item.icon size={20} style={{ color: '#3B82F6', flexShrink: 0 }} />
+                <span style={{
+                  fontSize: '14px',
+                  color: '#6B7280',
+                  marginLeft: '12px',
+                  width: '120px',
+                  flexShrink: 0
+                }}>
                   {item.label}
                 </span>
-                <span className="text-sm text-[var(--foreground)] font-medium">
+                <span style={{ fontSize: '14px', color: '#1A1A1A', fontWeight: 500 }}>
                   {item.value}
                 </span>
               </div>
             ))}
           </div>
-        </section>
+        </div>
 
         {/* Divider */}
-        <div className="h-2 bg-[#F5F5F5]" />
+        <div style={{ height: '8px', backgroundColor: '#F3F4F6' }} />
 
         {/* Action Buttons */}
-        <div className="bg-white px-4 py-4 space-y-3">
+        <div style={{ backgroundColor: '#FFFFFF', padding: '16px' }}>
           {/* My Events */}
           <button
             onClick={() => navigate('/my-events')}
-            className="flex items-center w-full px-4 py-4 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              width: '100%',
+              padding: '16px',
+              backgroundColor: '#FFFFFF',
+              border: '1px solid #E5E7EB',
+              borderRadius: '16px',
+              cursor: 'pointer',
+              marginBottom: '12px'
+            }}
           >
-            <Calendar size={20} className="text-[var(--muted-foreground)]" />
-            <span className="flex-1 text-left text-[var(--foreground)] ml-3">マイイベント</span>
-            <ChevronRight size={20} className="text-gray-400" />
+            <Calendar size={20} style={{ color: '#6B7280' }} />
+            <span style={{ flex: 1, textAlign: 'left', color: '#1A1A1A', marginLeft: '12px', fontSize: '15px' }}>
+              マイイベント
+            </span>
+            <ChevronRight size={20} style={{ color: '#9CA3AF' }} />
           </button>
 
           {/* Edit Profile */}
           <button
             onClick={() => navigate('/profile/edit')}
-            className="flex items-center w-full px-4 py-4 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              width: '100%',
+              padding: '16px',
+              backgroundColor: '#FFFFFF',
+              border: '1px solid #E5E7EB',
+              borderRadius: '16px',
+              cursor: 'pointer',
+              marginBottom: '12px'
+            }}
           >
-            <Edit size={20} className="text-[var(--muted-foreground)]" />
-            <span className="flex-1 text-left text-[var(--foreground)] ml-3">プロフィールを編集</span>
-            <ChevronRight size={20} className="text-gray-400" />
+            <Edit size={20} style={{ color: '#6B7280' }} />
+            <span style={{ flex: 1, textAlign: 'left', color: '#1A1A1A', marginLeft: '12px', fontSize: '15px' }}>
+              プロフィールを編集
+            </span>
+            <ChevronRight size={20} style={{ color: '#9CA3AF' }} />
           </button>
 
           {/* Contact */}
           <a
             href="mailto:support@picklehub.app"
-            className="flex items-center w-full px-4 py-4 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              width: '100%',
+              padding: '16px',
+              backgroundColor: '#FFFFFF',
+              border: '1px solid #E5E7EB',
+              borderRadius: '16px',
+              cursor: 'pointer',
+              marginBottom: '12px',
+              textDecoration: 'none'
+            }}
           >
-            <Mail size={20} className="text-[var(--muted-foreground)]" />
-            <span className="flex-1 text-left text-[var(--foreground)] ml-3">お問い合わせ</span>
-            <ExternalLink size={20} className="text-gray-400" />
+            <Mail size={20} style={{ color: '#6B7280' }} />
+            <span style={{ flex: 1, textAlign: 'left', color: '#1A1A1A', marginLeft: '12px', fontSize: '15px' }}>
+              お問い合わせ
+            </span>
+            <ExternalLink size={20} style={{ color: '#9CA3AF' }} />
           </a>
 
           {/* Logout */}
           <button
             onClick={() => setShowLogoutModal(true)}
-            className="flex items-center justify-center w-full px-4 py-4 rounded-xl transition-colors"
-            style={{ backgroundColor: 'rgba(255, 182, 193, 0.4)', color: '#FF3B30' }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
+              padding: '16px',
+              backgroundColor: 'rgba(255, 182, 193, 0.5)',
+              border: 'none',
+              borderRadius: '16px',
+              cursor: 'pointer',
+              marginBottom: '12px'
+            }}
           >
-            <span className="font-medium">ログアウト</span>
+            <span style={{ color: '#FF3B30', fontWeight: 500, fontSize: '15px' }}>ログアウト</span>
           </button>
 
           {/* Delete Account */}
           <button
             onClick={() => setShowDeleteModal(true)}
-            className="flex items-center justify-center w-full px-4 py-4 border border-gray-200 rounded-xl transition-colors hover:bg-gray-50"
-            style={{ color: '#9CA3AF' }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
+              padding: '16px',
+              backgroundColor: '#FFFFFF',
+              border: '1px solid #E5E7EB',
+              borderRadius: '16px',
+              cursor: 'pointer'
+            }}
           >
-            <span>アカウントを削除</span>
+            <span style={{ color: '#9CA3AF', fontSize: '15px' }}>アカウントを削除</span>
           </button>
         </div>
       </div>
