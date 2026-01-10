@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Plus, MapPin, Calendar, Users, Search } from 'lucide-react';
+import { Plus, MapPin, Calendar, Users, Search, Menu } from 'lucide-react';
 import { api } from '@/services/api';
 import { Loading } from '@/components/ui';
+import { useDrawer } from '@/components/layout/MainLayout';
 import { formatDateTime, getDisplayName } from '@/lib/utils';
 import { PREFECTURES } from '@/lib/prefectures';
 import type { Event, TeamEvent } from '@/types';
@@ -11,6 +12,7 @@ type SegmentType = 'public' | 'team';
 
 export function EventsListPage() {
   const navigate = useNavigate();
+  const { openDrawer } = useDrawer();
   const [events, setEvents] = useState<Event[]>([]);
   const [teamEvents, setTeamEvents] = useState<TeamEvent[]>([]);
   const [publicTeamEvents, setPublicTeamEvents] = useState<TeamEvent[]>([]);
@@ -96,17 +98,40 @@ export function EventsListPage() {
         borderBottom: '1px solid #E5E5E5',
         padding: '12px 16px'
       }}>
-        {/* Title */}
-        <h1 style={{
-          fontSize: '24px',
-          fontWeight: 900,
-          fontStyle: 'italic',
-          textAlign: 'center',
-          color: '#1a1a2e',
+        {/* Title Row */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
           marginBottom: '12px'
         }}>
-          PickleHub
-        </h1>
+          <button
+            onClick={openDrawer}
+            className="md:hidden"
+            style={{
+              background: '#F0F0F0',
+              border: 'none',
+              borderRadius: '50%',
+              width: '36px',
+              height: '36px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <Menu size={20} style={{ color: '#1a1a2e' }} />
+          </button>
+          <h1 style={{
+            fontSize: '24px',
+            fontWeight: 900,
+            fontStyle: 'italic',
+            color: '#1a1a2e'
+          }}>
+            PickleHub
+          </h1>
+          <div style={{ width: '36px' }} className="md:hidden" />
+        </div>
 
         {/* Segment Control */}
         <div style={{
@@ -218,7 +243,7 @@ export function EventsListPage() {
       </header>
 
       {/* Content */}
-      <div style={{ padding: '16px', paddingBottom: '100px' }}>
+      <div style={{ padding: '16px', paddingBottom: '24px' }}>
         {isLoading ? (
           <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '80px' }}>
             <Loading size="lg" />
@@ -263,7 +288,7 @@ export function EventsListPage() {
         onClick={() => navigate('/events/create')}
         style={{
           position: 'fixed',
-          bottom: '80px',
+          bottom: '24px',
           right: '16px',
           width: '56px',
           height: '56px',

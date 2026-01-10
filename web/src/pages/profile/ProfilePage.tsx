@@ -5,15 +5,18 @@ import {
   Share2,
   Instagram,
   ExternalLink,
+  Menu,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/services/api';
 import { Button, Modal } from '@/components/ui';
+import { useDrawer } from '@/components/layout/MainLayout';
 import { getDisplayName, getSkillLevelLabel } from '@/lib/utils';
 import type { Team } from '@/types';
 
 export function ProfilePage() {
   const navigate = useNavigate();
+  const { openDrawer } = useDrawer();
   const { user, signOut } = useAuth();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -72,7 +75,7 @@ export function ProfilePage() {
     <div style={{
       minHeight: '100vh',
       background: '#F5F5F7',
-      paddingBottom: '100px'
+      paddingBottom: '24px'
     }}>
       {/* Header */}
       <header style={{
@@ -83,7 +86,23 @@ export function ProfilePage() {
         background: '#FFFFFF',
         borderBottom: '1px solid #E5E5E5'
       }}>
-        <div style={{ width: '40px' }} />
+        <button
+          onClick={openDrawer}
+          className="md:hidden"
+          style={{
+            background: '#F0F0F0',
+            border: 'none',
+            borderRadius: '50%',
+            width: '36px',
+            height: '36px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <Menu size={20} style={{ color: '#1a1a2e' }} />
+        </button>
         <h1 style={{
           fontSize: '24px',
           fontWeight: 900,
