@@ -13,6 +13,8 @@ import { CreateEventPage } from '@/pages/events/CreateEventPage';
 import { TeamsListPage } from '@/pages/teams/TeamsListPage';
 import { TeamDetailPage } from '@/pages/teams/TeamDetailPage';
 import { TeamEventDetailPage } from '@/pages/teams/TeamEventDetailPage';
+import { TeamChatPage } from '@/pages/teams/TeamChatPage';
+import { CreateTeamEventPage } from '@/pages/teams/CreateTeamEventPage';
 import { RankingsPage } from '@/pages/rankings/RankingsPage';
 import { ChatPage } from '@/pages/chat/ChatPage';
 import { NotificationsPage } from '@/pages/NotificationsPage';
@@ -77,7 +79,10 @@ function AppRoutes() {
         {/* Teams */}
         <Route path="/teams" element={<TeamsListPage />} />
         <Route path="/teams/:id" element={<TeamDetailPage />} />
+        <Route path="/teams/:teamId/chat" element={<TeamChatPage />} />
+        <Route path="/teams/:teamId/events/create" element={<CreateTeamEventPage />} />
         <Route path="/teams/:teamId/events/:eventId" element={<TeamEventDetailPage />} />
+        <Route path="/teams/:teamId/events/:eventId/edit" element={<CreateTeamEventPage />} />
 
         {/* Rankings */}
         <Route path="/rankings" element={<RankingsPage />} />
