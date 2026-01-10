@@ -23,7 +23,7 @@ export function ProfilePage() {
   useEffect(() => {
     const loadTeams = async () => {
       try {
-        const data = await api.getMyTeams();
+        const data = await api.getTeams({ myTeams: true });
         setTeams(data);
       } catch (error) {
         console.error('Failed to load teams:', error);
