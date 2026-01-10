@@ -9,3 +9,4 @@ export { Loading, LoadingPage } from './Loading';
 export { Badge } from './Badge';
 export { LocationAutocomplete } from './LocationAutocomplete';
 export { GoogleMap } from './GoogleMap';
+export { DateTimeInput } from './DateTimeInput';
