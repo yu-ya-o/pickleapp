@@ -9,6 +9,7 @@ export interface User {
   region?: string;
   pickleballExperience?: string;
   gender?: string;
+  ageGroup?: string;
   skillLevel?: string;
   duprDoubles?: number;
   duprSingles?: number;
