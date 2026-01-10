@@ -5,7 +5,6 @@ import { api } from '@/services/api';
 import { Loading, Avatar } from '@/components/ui';
 import { formatDateTime, getDisplayName } from '@/lib/utils';
 import { PREFECTURES } from '@/lib/prefectures';
-import { cn } from '@/lib/utils';
 import type { Event, TeamEvent } from '@/types';
 
 type SegmentType = 'public' | 'team';
@@ -84,122 +83,199 @@ export function EventsListPage() {
   );
 
   return (
-    <div className="min-h-screen bg-white">
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)'
+    }}>
       {/* Header */}
-      <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="max-w-2xl mx-auto px-4">
-          {/* Title */}
-          <h1 className="text-2xl font-black italic text-center" style={{ paddingTop: '12px', paddingBottom: '12px' }}>PickleHub</h1>
+      <header style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 30,
+        background: 'linear-gradient(180deg, #1a1a2e 0%, #1a1a2e 100%)',
+        borderBottom: '1px solid rgba(255,255,255,0.1)',
+        padding: '12px 16px'
+      }}>
+        {/* Title */}
+        <h1 style={{
+          fontSize: '24px',
+          fontWeight: 900,
+          fontStyle: 'italic',
+          textAlign: 'center',
+          color: '#FFFFFF',
+          marginBottom: '12px'
+        }}>
+          PickleHub
+        </h1>
 
-          {/* Segment Control */}
-          <div style={{ marginBottom: '6px', paddingLeft: '16px', paddingRight: '16px' }}>
-            <div className="flex bg-[var(--muted)] rounded-xl p-1.5">
-              <button
-                onClick={() => setSegment('public')}
-                className={cn(
-                  'flex-1 text-sm font-medium rounded-lg transition-all',
-                  segment === 'public'
-                    ? 'bg-white shadow-sm text-[var(--foreground)]'
-                    : 'text-[var(--muted-foreground)]'
-                )}
-                style={{ padding: '4px 0' }}
-              >
-                公開イベント
-              </button>
-              <button
-                onClick={() => setSegment('team')}
-                className={cn(
-                  'flex-1 text-sm font-medium rounded-lg transition-all',
-                  segment === 'team'
-                    ? 'bg-white shadow-sm text-[var(--foreground)]'
-                    : 'text-[var(--muted-foreground)]'
-                )}
-                style={{ padding: '4px 0' }}
-              >
-                マイチームイベント
-              </button>
-            </div>
+        {/* Segment Control */}
+        <div style={{
+          display: 'flex',
+          background: 'rgba(255,255,255,0.1)',
+          borderRadius: '12px',
+          padding: '4px',
+          marginBottom: '12px'
+        }}>
+          <button
+            onClick={() => setSegment('public')}
+            style={{
+              flex: 1,
+              padding: '8px 0',
+              fontSize: '14px',
+              fontWeight: 500,
+              borderRadius: '10px',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+              background: segment === 'public' ? 'rgba(255,255,255,0.2)' : 'transparent',
+              color: segment === 'public' ? '#FFFFFF' : 'rgba(255,255,255,0.6)'
+            }}
+          >
+            公開イベント
+          </button>
+          <button
+            onClick={() => setSegment('team')}
+            style={{
+              flex: 1,
+              padding: '8px 0',
+              fontSize: '14px',
+              fontWeight: 500,
+              borderRadius: '10px',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+              background: segment === 'team' ? 'rgba(255,255,255,0.2)' : 'transparent',
+              color: segment === 'team' ? '#FFFFFF' : 'rgba(255,255,255,0.6)'
+            }}
+          >
+            マイチームイベント
+          </button>
+        </div>
+
+        {/* Search Bar */}
+        <div style={{ display: 'flex', gap: '10px' }}>
+          {/* Region Filter */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: 'rgba(255,255,255,0.1)',
+            borderRadius: '10px',
+            padding: '8px 12px',
+            minWidth: '100px'
+          }}>
+            <MapPin size={16} style={{ color: '#667eea', flexShrink: 0 }} />
+            <select
+              value={selectedRegion}
+              onChange={(e) => setSelectedRegion(e.target.value)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: '#FFFFFF',
+                fontSize: '14px',
+                outline: 'none',
+                cursor: 'pointer'
+              }}
+            >
+              <option value="" style={{ background: '#1a1a2e' }}>全国</option>
+              {PREFECTURES.map((pref) => (
+                <option key={pref} value={pref} style={{ background: '#1a1a2e' }}>
+                  {pref}
+                </option>
+              ))}
+            </select>
           </div>
 
-          {/* Search Bar */}
-          <div className="flex gap-3" style={{ marginTop: '6px', paddingBottom: '6px', paddingLeft: '16px', paddingRight: '16px' }}>
-            {/* Region Filter */}
-            <div className="flex items-center gap-2 bg-white border border-[var(--border)] rounded-xl min-w-[120px]" style={{ padding: '4px 16px' }}>
-              <MapPin size={16} className="text-[var(--primary)] flex-shrink-0" />
-              <select
-                value={selectedRegion}
-                onChange={(e) => setSelectedRegion(e.target.value)}
-                className="bg-transparent border-0 p-0 text-sm outline-none cursor-pointer text-[var(--foreground)]"
-              >
-                <option value="">全国</option>
-                {PREFECTURES.map((pref) => (
-                  <option key={pref} value={pref}>
-                    {pref}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Search Input */}
-            <div className="flex-1 flex items-center gap-3 bg-white border border-[var(--border)] rounded-xl" style={{ padding: '4px 16px' }}>
-              <Search size={16} className="text-[var(--muted-foreground)] flex-shrink-0" />
-              <input
-                type="text"
-                placeholder="イベントを検索"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 bg-transparent border-0 outline-none text-sm placeholder:text-[var(--muted-foreground)]"
-              />
-            </div>
+          {/* Search Input */}
+          <div style={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: 'rgba(255,255,255,0.1)',
+            borderRadius: '10px',
+            padding: '8px 12px'
+          }}>
+            <Search size={16} style={{ color: 'rgba(255,255,255,0.5)', flexShrink: 0 }} />
+            <input
+              type="text"
+              placeholder="イベントを検索"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                flex: 1,
+                background: 'transparent',
+                border: 'none',
+                color: '#FFFFFF',
+                fontSize: '14px',
+                outline: 'none'
+              }}
+            />
           </div>
         </div>
       </header>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto px-4 pb-24 pt-4">
+      <div style={{ padding: '16px', paddingBottom: '100px' }}>
         {isLoading ? (
-          <div className="flex justify-center py-20">
+          <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '80px' }}>
             <Loading size="lg" />
           </div>
         ) : segment === 'public' ? (
           allPublicEvents.length === 0 ? (
-            <div className="text-center py-20">
-              <Calendar className="mx-auto text-[var(--muted-foreground)]" size={56} />
-              <h3 className="text-lg font-semibold text-[var(--foreground)] mt-5 mb-2">
+            <div style={{ textAlign: 'center', paddingTop: '80px' }}>
+              <Calendar size={56} style={{ color: 'rgba(255,255,255,0.3)', margin: '0 auto' }} />
+              <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#FFFFFF', marginTop: '20px', marginBottom: '8px' }}>
                 イベントが見つかりません
               </h3>
-              <p className="text-[var(--muted-foreground)]">最初のイベントを作成しましょう！</p>
+              <p style={{ color: 'rgba(255,255,255,0.5)' }}>最初のイベントを作成しましょう！</p>
             </div>
           ) : (
-            <ul className="divide-y divide-[var(--border)] bg-white rounded-2xl border border-[var(--border)] overflow-hidden">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {allPublicEvents.map((event) => (
-                <EventRow key={event.id} event={event} />
+                <EventCard key={event.id} event={event} />
               ))}
-            </ul>
+            </div>
           )
         ) : filteredTeamEvents.length === 0 ? (
-          <div className="text-center py-20">
-            <Users className="mx-auto text-[var(--muted-foreground)]" size={56} />
-            <h3 className="text-lg font-semibold text-[var(--foreground)] mt-5 mb-2">
+          <div style={{ textAlign: 'center', paddingTop: '80px' }}>
+            <Users size={56} style={{ color: 'rgba(255,255,255,0.3)', margin: '0 auto' }} />
+            <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#FFFFFF', marginTop: '20px', marginBottom: '8px' }}>
               チームイベントが見つかりません
             </h3>
-            <p className="text-[var(--muted-foreground)]">
+            <p style={{ color: 'rgba(255,255,255,0.5)' }}>
               チームに参加してイベントを確認しましょう
             </p>
           </div>
         ) : (
-          <ul className="divide-y divide-[var(--border)] bg-white rounded-2xl border border-[var(--border)] overflow-hidden">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {filteredTeamEvents.map((event) => (
-              <TeamEventRow key={event.id} event={event} />
+              <TeamEventCard key={event.id} event={event} />
             ))}
-          </ul>
+          </div>
         )}
       </div>
 
       {/* FAB */}
       <button
         onClick={() => navigate('/events/create')}
-        className="fixed bottom-20 right-4 md:bottom-6 md:right-6 w-14 h-14 bg-[var(--primary)] text-white rounded-full shadow-lg hover:bg-[var(--primary-hover)] transition-colors flex items-center justify-center z-50"
+        style={{
+          position: 'fixed',
+          bottom: '80px',
+          right: '16px',
+          width: '56px',
+          height: '56px',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: '#FFFFFF',
+          borderRadius: '50%',
+          border: 'none',
+          boxShadow: '0 4px 20px rgba(102, 126, 234, 0.4)',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 50
+        }}
       >
         <Plus size={24} />
       </button>
@@ -207,7 +283,7 @@ export function EventsListPage() {
   );
 }
 
-function EventRow({ event }: { event: Event | TeamEvent }) {
+function EventCard({ event }: { event: Event | TeamEvent }) {
   const isTeamEvent = 'team' in event;
   const linkTo = isTeamEvent
     ? `/teams/${(event as TeamEvent).team.id}/events/${event.id}`
@@ -221,82 +297,170 @@ function EventRow({ event }: { event: Event | TeamEvent }) {
     : getDisplayName(event.creator);
 
   return (
-    <li>
-      <Link
-        to={linkTo}
-        className="block hover:bg-[var(--muted)] transition-colors"
-      >
-        <div className="flex items-start gap-5" style={{ padding: '6px 12px' }}>
-          {/* Avatar */}
-          <div className="flex flex-col items-center gap-1.5 w-16 flex-shrink-0">
-            <Avatar src={displayImage} alt={displayName} size="lg" />
-            <span className="text-[10px] text-[var(--muted-foreground)] truncate w-full text-center">
-              {displayName}
+    <Link
+      to={linkTo}
+      style={{
+        display: 'block',
+        background: 'rgba(255,255,255,0.05)',
+        borderRadius: '16px',
+        padding: '16px',
+        textDecoration: 'none',
+        transition: 'background 0.2s'
+      }}
+    >
+      <div style={{ display: 'flex', gap: '14px' }}>
+        {/* Avatar */}
+        <div style={{ flexShrink: 0 }}>
+          <div style={{
+            width: '50px',
+            height: '50px',
+            borderRadius: '12px',
+            overflow: 'hidden',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            {displayImage ? (
+              <img src={displayImage} alt={displayName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : (
+              <span style={{ fontSize: '20px' }}>🏓</span>
+            )}
+          </div>
+        </div>
+
+        {/* Event Info */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          {/* Date */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
+            <Calendar size={14} style={{ color: '#667eea' }} />
+            <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)' }}>
+              {formatDateTime(event.startTime)}
             </span>
           </div>
 
-          {/* Event Info */}
-          <div className="flex-1 min-w-0 overflow-hidden">
-          {/* Date */}
-          <div className="flex items-center gap-1.5 text-sm text-[var(--muted-foreground)]">
-            <Calendar size={14} className="text-[var(--primary)] flex-shrink-0" />
-            <span>{formatDateTime(event.startTime)}</span>
-          </div>
-
           {/* Title */}
-          <h3 className="font-semibold text-[var(--foreground)] mt-1.5 text-base truncate">
+          <h3 style={{
+            fontSize: '16px',
+            fontWeight: 600,
+            color: '#FFFFFF',
+            marginBottom: '6px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap'
+          }}>
             {event.title}
           </h3>
 
           {/* Location */}
-          <div className="flex items-center gap-1.5 text-sm text-[var(--muted-foreground)] mt-1.5">
-            <MapPin size={14} className="text-[var(--primary)] flex-shrink-0" />
-            <span className="truncate">{event.location}</span>
-          </div>
-          </div>
-        </div>
-      </Link>
-    </li>
-  );
-}
-
-function TeamEventRow({ event }: { event: TeamEvent }) {
-  return (
-    <li>
-      <Link
-        to={`/teams/${event.team.id}/events/${event.id}`}
-        className="block hover:bg-[var(--muted)] transition-colors"
-      >
-        <div className="flex items-start gap-5" style={{ padding: '6px 12px' }}>
-          {/* Avatar */}
-          <div className="flex flex-col items-center gap-1.5 w-16 flex-shrink-0">
-            <Avatar src={event.team.iconImage} alt={event.team.name} size="lg" />
-            <span className="text-[10px] text-[var(--muted-foreground)] truncate w-full text-center">
-              {event.team.name}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <MapPin size={14} style={{ color: '#667eea' }} />
+            <span style={{
+              fontSize: '13px',
+              color: 'rgba(255,255,255,0.6)',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'
+            }}>
+              {event.location}
             </span>
           </div>
 
-          {/* Event Info */}
-          <div className="flex-1 min-w-0 overflow-hidden">
-            {/* Date */}
-            <div className="flex items-center gap-1.5 text-sm text-[var(--muted-foreground)]">
-              <Calendar size={14} className="text-[var(--primary)] flex-shrink-0" />
-              <span>{formatDateTime(event.startTime)}</span>
-            </div>
-
-            {/* Title */}
-            <h3 className="font-semibold text-[var(--foreground)] mt-1.5 text-base truncate">
-              {event.title}
-            </h3>
-
-            {/* Location */}
-            <div className="flex items-center gap-1.5 text-sm text-[var(--muted-foreground)] mt-1.5">
-              <MapPin size={14} className="text-[var(--primary)] flex-shrink-0" />
-              <span className="truncate">{event.location}</span>
-            </div>
+          {/* Host */}
+          <div style={{
+            marginTop: '8px',
+            fontSize: '12px',
+            color: 'rgba(255,255,255,0.4)'
+          }}>
+            by {displayName}
           </div>
         </div>
-      </Link>
-    </li>
+      </div>
+    </Link>
+  );
+}
+
+function TeamEventCard({ event }: { event: TeamEvent }) {
+  return (
+    <Link
+      to={`/teams/${event.team.id}/events/${event.id}`}
+      style={{
+        display: 'block',
+        background: 'rgba(255,255,255,0.05)',
+        borderRadius: '16px',
+        padding: '16px',
+        textDecoration: 'none',
+        transition: 'background 0.2s'
+      }}
+    >
+      <div style={{ display: 'flex', gap: '14px' }}>
+        {/* Avatar */}
+        <div style={{ flexShrink: 0 }}>
+          <div style={{
+            width: '50px',
+            height: '50px',
+            borderRadius: '12px',
+            overflow: 'hidden',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            {event.team.iconImage ? (
+              <img src={event.team.iconImage} alt={event.team.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : (
+              <span style={{ fontSize: '20px' }}>🏓</span>
+            )}
+          </div>
+        </div>
+
+        {/* Event Info */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          {/* Date */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
+            <Calendar size={14} style={{ color: '#667eea' }} />
+            <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)' }}>
+              {formatDateTime(event.startTime)}
+            </span>
+          </div>
+
+          {/* Title */}
+          <h3 style={{
+            fontSize: '16px',
+            fontWeight: 600,
+            color: '#FFFFFF',
+            marginBottom: '6px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap'
+          }}>
+            {event.title}
+          </h3>
+
+          {/* Location */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <MapPin size={14} style={{ color: '#667eea' }} />
+            <span style={{
+              fontSize: '13px',
+              color: 'rgba(255,255,255,0.6)',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'
+            }}>
+              {event.location}
+            </span>
+          </div>
+
+          {/* Team Name */}
+          <div style={{
+            marginTop: '8px',
+            fontSize: '12px',
+            color: 'rgba(255,255,255,0.4)'
+          }}>
+            {event.team.name}
+          </div>
+        </div>
+      </div>
+    </Link>
   );
 }
