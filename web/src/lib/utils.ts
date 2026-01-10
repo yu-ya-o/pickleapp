@@ -63,6 +63,8 @@ export function getSkillLevelEmoji(skillLevel: string): string {
 
 export function getSkillLevelLabel(skillLevel: string): string {
   switch (skillLevel) {
+    case 'all':
+      return '全レベル';
     case 'beginner':
       return '初心者';
     case 'intermediate':
