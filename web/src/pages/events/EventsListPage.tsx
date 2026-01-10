@@ -85,15 +85,15 @@ export function EventsListPage() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)'
+      background: '#F5F5F7'
     }}>
       {/* Header */}
       <header style={{
         position: 'sticky',
         top: 0,
         zIndex: 30,
-        background: 'linear-gradient(180deg, #1a1a2e 0%, #1a1a2e 100%)',
-        borderBottom: '1px solid rgba(255,255,255,0.1)',
+        background: '#FFFFFF',
+        borderBottom: '1px solid #E5E5E5',
         padding: '12px 16px'
       }}>
         {/* Title */}
@@ -102,7 +102,7 @@ export function EventsListPage() {
           fontWeight: 900,
           fontStyle: 'italic',
           textAlign: 'center',
-          color: '#FFFFFF',
+          color: '#1a1a2e',
           marginBottom: '12px'
         }}>
           PickleHub
@@ -111,7 +111,7 @@ export function EventsListPage() {
         {/* Segment Control */}
         <div style={{
           display: 'flex',
-          background: 'rgba(255,255,255,0.1)',
+          background: '#F0F0F0',
           borderRadius: '12px',
           padding: '4px',
           marginBottom: '12px'
@@ -127,8 +127,9 @@ export function EventsListPage() {
               border: 'none',
               cursor: 'pointer',
               transition: 'all 0.2s',
-              background: segment === 'public' ? 'rgba(255,255,255,0.2)' : 'transparent',
-              color: segment === 'public' ? '#FFFFFF' : 'rgba(255,255,255,0.6)'
+              background: segment === 'public' ? '#FFFFFF' : 'transparent',
+              color: segment === 'public' ? '#1a1a2e' : '#888888',
+              boxShadow: segment === 'public' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
             }}
           >
             公開イベント
@@ -144,8 +145,9 @@ export function EventsListPage() {
               border: 'none',
               cursor: 'pointer',
               transition: 'all 0.2s',
-              background: segment === 'team' ? 'rgba(255,255,255,0.2)' : 'transparent',
-              color: segment === 'team' ? '#FFFFFF' : 'rgba(255,255,255,0.6)'
+              background: segment === 'team' ? '#FFFFFF' : 'transparent',
+              color: segment === 'team' ? '#1a1a2e' : '#888888',
+              boxShadow: segment === 'team' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
             }}
           >
             マイチームイベント
@@ -159,7 +161,7 @@ export function EventsListPage() {
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            background: 'rgba(255,255,255,0.1)',
+            background: '#F0F0F0',
             borderRadius: '10px',
             padding: '8px 12px',
             minWidth: '100px'
@@ -171,15 +173,15 @@ export function EventsListPage() {
               style={{
                 background: 'transparent',
                 border: 'none',
-                color: '#FFFFFF',
+                color: '#1a1a2e',
                 fontSize: '14px',
                 outline: 'none',
                 cursor: 'pointer'
               }}
             >
-              <option value="" style={{ background: '#1a1a2e' }}>全国</option>
+              <option value="">全国</option>
               {PREFECTURES.map((pref) => (
-                <option key={pref} value={pref} style={{ background: '#1a1a2e' }}>
+                <option key={pref} value={pref}>
                   {pref}
                 </option>
               ))}
@@ -192,11 +194,11 @@ export function EventsListPage() {
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            background: 'rgba(255,255,255,0.1)',
+            background: '#F0F0F0',
             borderRadius: '10px',
             padding: '8px 12px'
           }}>
-            <Search size={16} style={{ color: 'rgba(255,255,255,0.5)', flexShrink: 0 }} />
+            <Search size={16} style={{ color: '#888888', flexShrink: 0 }} />
             <input
               type="text"
               placeholder="イベントを検索"
@@ -206,7 +208,7 @@ export function EventsListPage() {
                 flex: 1,
                 background: 'transparent',
                 border: 'none',
-                color: '#FFFFFF',
+                color: '#1a1a2e',
                 fontSize: '14px',
                 outline: 'none'
               }}
@@ -224,11 +226,11 @@ export function EventsListPage() {
         ) : segment === 'public' ? (
           allPublicEvents.length === 0 ? (
             <div style={{ textAlign: 'center', paddingTop: '80px' }}>
-              <Calendar size={56} style={{ color: 'rgba(255,255,255,0.3)', margin: '0 auto' }} />
-              <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#FFFFFF', marginTop: '20px', marginBottom: '8px' }}>
+              <Calendar size={56} style={{ color: '#CCCCCC', margin: '0 auto' }} />
+              <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#1a1a2e', marginTop: '20px', marginBottom: '8px' }}>
                 イベントが見つかりません
               </h3>
-              <p style={{ color: 'rgba(255,255,255,0.5)' }}>最初のイベントを作成しましょう！</p>
+              <p style={{ color: '#888888' }}>最初のイベントを作成しましょう！</p>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -239,11 +241,11 @@ export function EventsListPage() {
           )
         ) : filteredTeamEvents.length === 0 ? (
           <div style={{ textAlign: 'center', paddingTop: '80px' }}>
-            <Users size={56} style={{ color: 'rgba(255,255,255,0.3)', margin: '0 auto' }} />
-            <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#FFFFFF', marginTop: '20px', marginBottom: '8px' }}>
+            <Users size={56} style={{ color: '#CCCCCC', margin: '0 auto' }} />
+            <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#1a1a2e', marginTop: '20px', marginBottom: '8px' }}>
               チームイベントが見つかりません
             </h3>
-            <p style={{ color: 'rgba(255,255,255,0.5)' }}>
+            <p style={{ color: '#888888' }}>
               チームに参加してイベントを確認しましょう
             </p>
           </div>
@@ -301,11 +303,12 @@ function EventCard({ event }: { event: Event | TeamEvent }) {
       to={linkTo}
       style={{
         display: 'block',
-        background: 'rgba(255,255,255,0.05)',
+        background: '#FFFFFF',
         borderRadius: '16px',
         padding: '16px',
         textDecoration: 'none',
-        transition: 'background 0.2s'
+        transition: 'background 0.2s',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
       }}
     >
       <div style={{ display: 'flex', gap: '14px' }}>
@@ -334,7 +337,7 @@ function EventCard({ event }: { event: Event | TeamEvent }) {
           {/* Date */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
             <Calendar size={14} style={{ color: '#667eea' }} />
-            <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)' }}>
+            <span style={{ fontSize: '13px', color: '#888888' }}>
               {formatDateTime(event.startTime)}
             </span>
           </div>
@@ -343,7 +346,7 @@ function EventCard({ event }: { event: Event | TeamEvent }) {
           <h3 style={{
             fontSize: '16px',
             fontWeight: 600,
-            color: '#FFFFFF',
+            color: '#1a1a2e',
             marginBottom: '6px',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -357,7 +360,7 @@ function EventCard({ event }: { event: Event | TeamEvent }) {
             <MapPin size={14} style={{ color: '#667eea' }} />
             <span style={{
               fontSize: '13px',
-              color: 'rgba(255,255,255,0.6)',
+              color: '#888888',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap'
@@ -370,7 +373,7 @@ function EventCard({ event }: { event: Event | TeamEvent }) {
           <div style={{
             marginTop: '8px',
             fontSize: '12px',
-            color: 'rgba(255,255,255,0.4)'
+            color: '#AAAAAA'
           }}>
             by {displayName}
           </div>
@@ -386,11 +389,12 @@ function TeamEventCard({ event }: { event: TeamEvent }) {
       to={`/teams/${event.team.id}/events/${event.id}`}
       style={{
         display: 'block',
-        background: 'rgba(255,255,255,0.05)',
+        background: '#FFFFFF',
         borderRadius: '16px',
         padding: '16px',
         textDecoration: 'none',
-        transition: 'background 0.2s'
+        transition: 'background 0.2s',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
       }}
     >
       <div style={{ display: 'flex', gap: '14px' }}>
@@ -419,7 +423,7 @@ function TeamEventCard({ event }: { event: TeamEvent }) {
           {/* Date */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
             <Calendar size={14} style={{ color: '#667eea' }} />
-            <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)' }}>
+            <span style={{ fontSize: '13px', color: '#888888' }}>
               {formatDateTime(event.startTime)}
             </span>
           </div>
@@ -428,7 +432,7 @@ function TeamEventCard({ event }: { event: TeamEvent }) {
           <h3 style={{
             fontSize: '16px',
             fontWeight: 600,
-            color: '#FFFFFF',
+            color: '#1a1a2e',
             marginBottom: '6px',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -442,7 +446,7 @@ function TeamEventCard({ event }: { event: TeamEvent }) {
             <MapPin size={14} style={{ color: '#667eea' }} />
             <span style={{
               fontSize: '13px',
-              color: 'rgba(255,255,255,0.6)',
+              color: '#888888',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap'
@@ -455,7 +459,7 @@ function TeamEventCard({ event }: { event: TeamEvent }) {
           <div style={{
             marginTop: '8px',
             fontSize: '12px',
-            color: 'rgba(255,255,255,0.4)'
+            color: '#AAAAAA'
           }}>
             {event.team.name}
           </div>
