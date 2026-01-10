@@ -15,6 +15,10 @@ import { TeamDetailPage } from '@/pages/teams/TeamDetailPage';
 import { TeamEventDetailPage } from '@/pages/teams/TeamEventDetailPage';
 import { TeamChatPage } from '@/pages/teams/TeamChatPage';
 import { CreateTeamEventPage } from '@/pages/teams/CreateTeamEventPage';
+import { TeamMembersPage } from '@/pages/teams/TeamMembersPage';
+import { TeamEventsListPage } from '@/pages/teams/TeamEventsListPage';
+import { TeamJoinRequestsPage } from '@/pages/teams/TeamJoinRequestsPage';
+import { TeamEditPage } from '@/pages/teams/TeamEditPage';
 import { RankingsPage } from '@/pages/rankings/RankingsPage';
 import { ChatPage } from '@/pages/chat/ChatPage';
 import { NotificationsPage } from '@/pages/NotificationsPage';
@@ -79,6 +83,10 @@ function AppRoutes() {
         {/* Teams */}
         <Route path="/teams" element={<TeamsListPage />} />
         <Route path="/teams/:id" element={<TeamDetailPage />} />
+        <Route path="/teams/:teamId/members" element={<TeamMembersPage />} />
+        <Route path="/teams/:teamId/events" element={<TeamEventsListPage />} />
+        <Route path="/teams/:teamId/requests" element={<TeamJoinRequestsPage />} />
+        <Route path="/teams/:teamId/edit" element={<TeamEditPage />} />
         <Route path="/teams/:teamId/chat" element={<TeamChatPage />} />
         <Route path="/teams/:teamId/events/create" element={<CreateTeamEventPage />} />
         <Route path="/teams/:teamId/events/:eventId" element={<TeamEventDetailPage />} />
