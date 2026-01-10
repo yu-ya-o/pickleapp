@@ -249,7 +249,7 @@ export function EventDetailPage() {
           {event.reservations.length === 0 ? (
             <p className="text-gray-400 text-sm">まだ参加者がいません</p>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
               {event.reservations.map((reservation) => (
                 <Link
                   key={reservation.id}
@@ -270,7 +270,7 @@ export function EventDetailPage() {
 
         {/* Action Buttons */}
         <div className="border-t border-[var(--border)]" style={{ padding: '16px' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             {/* Chat Button */}
             <button
               onClick={() => navigate(`/events/${event.id}/chat`)}
