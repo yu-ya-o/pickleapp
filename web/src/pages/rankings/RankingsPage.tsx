@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import { Users, Trophy } from 'lucide-react';
 import { api } from '@/services/api';
 import type { TeamRanking } from '@/services/api';
-import { Loading, Avatar } from '@/components/ui';
-import { cn } from '@/lib/utils';
+import { Loading } from '@/components/ui';
 
 type RankingType = 'members' | 'events';
 
@@ -32,150 +31,219 @@ export function RankingsPage() {
   const getMedalColor = (rank: number) => {
     switch (rank) {
       case 1:
-        return 'text-yellow-500';
+        return '#F59E0B'; // gold
       case 2:
-        return 'text-gray-400';
+        return '#9CA3AF'; // silver
       case 3:
-        return 'text-amber-600';
+        return '#D97706'; // bronze
       default:
-        return 'text-[var(--muted-foreground)]';
+        return '#888888';
     }
   };
 
   const getTrophyColor = (rank: number) => {
     switch (rank) {
       case 1:
-        return 'text-yellow-500';
+        return '#F59E0B';
       case 2:
-        return 'text-gray-400';
+        return '#9CA3AF';
       case 3:
-        return 'text-amber-600';
+        return '#D97706';
       default:
-        return 'text-transparent';
+        return 'transparent';
     }
-  };
-
-  const getRankDisplay = (rank: number) => {
-    if (rank <= 3) {
-      return (
-        <div className={cn('flex items-center justify-center w-10', getMedalColor(rank))}>
-          <svg viewBox="0 0 36 36" className="w-8 h-8">
-            <circle cx="18" cy="18" r="16" fill="currentColor" />
-            <text
-              x="18"
-              y="24"
-              textAnchor="middle"
-              className="fill-white text-sm font-bold"
-              style={{ fontSize: '14px' }}
-            >
-              {rank}
-            </text>
-          </svg>
-        </div>
-      );
-    }
-    return (
-      <div className="flex items-center justify-center w-10">
-        <span className="text-lg font-semibold text-[var(--muted-foreground)]">{rank}</span>
-      </div>
-    );
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div style={{
+      minHeight: '100vh',
+      background: '#F5F5F7'
+    }}>
       {/* Header */}
-      <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="max-w-2xl mx-auto px-4">
-          <h1 className="text-center text-lg font-semibold" style={{ paddingTop: '12px', paddingBottom: '12px' }}>ランキング</h1>
+      <header style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 30,
+        background: '#FFFFFF',
+        borderBottom: '1px solid #E5E5E5',
+        padding: '12px 16px'
+      }}>
+        {/* Title */}
+        <h1 style={{
+          fontSize: '24px',
+          fontWeight: 900,
+          fontStyle: 'italic',
+          textAlign: 'center',
+          color: '#1a1a2e',
+          marginBottom: '12px'
+        }}>
+          PickleHub
+        </h1>
 
-          {/* Segment Control */}
-          <div style={{ paddingBottom: '6px', paddingLeft: '16px', paddingRight: '16px' }}>
-            <div className="flex bg-[var(--muted)] rounded-xl p-1.5">
-              <button
-                onClick={() => setRankingType('members')}
-                className={cn(
-                  'flex-1 text-sm font-medium rounded-lg transition-all',
-                  rankingType === 'members'
-                    ? 'bg-white shadow-sm text-[var(--foreground)]'
-                    : 'text-[var(--muted-foreground)]'
-                )}
-                style={{ padding: '4px 0' }}
-              >
-                メンバー数
-              </button>
-              <button
-                onClick={() => setRankingType('events')}
-                className={cn(
-                  'flex-1 text-sm font-medium rounded-lg transition-all',
-                  rankingType === 'events'
-                    ? 'bg-white shadow-sm text-[var(--foreground)]'
-                    : 'text-[var(--muted-foreground)]'
-                )}
-                style={{ padding: '4px 0' }}
-              >
-                公開イベント数
-              </button>
-            </div>
-          </div>
+        {/* Segment Control */}
+        <div style={{
+          display: 'flex',
+          background: '#F0F0F0',
+          borderRadius: '12px',
+          padding: '4px'
+        }}>
+          <button
+            onClick={() => setRankingType('members')}
+            style={{
+              flex: 1,
+              padding: '8px 0',
+              fontSize: '14px',
+              fontWeight: 500,
+              borderRadius: '10px',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+              background: rankingType === 'members' ? '#FFFFFF' : 'transparent',
+              color: rankingType === 'members' ? '#1a1a2e' : '#888888',
+              boxShadow: rankingType === 'members' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+            }}
+          >
+            メンバー数
+          </button>
+          <button
+            onClick={() => setRankingType('events')}
+            style={{
+              flex: 1,
+              padding: '8px 0',
+              fontSize: '14px',
+              fontWeight: 500,
+              borderRadius: '10px',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+              background: rankingType === 'events' ? '#FFFFFF' : 'transparent',
+              color: rankingType === 'events' ? '#1a1a2e' : '#888888',
+              boxShadow: rankingType === 'events' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+            }}
+          >
+            公開イベント数
+          </button>
         </div>
       </header>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto px-4 pb-24 pt-4">
+      <div style={{ padding: '16px', paddingBottom: '100px' }}>
         {isLoading ? (
-          <div className="flex justify-center py-20">
+          <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '80px' }}>
             <Loading size="lg" />
           </div>
         ) : rankings.length === 0 ? (
-          <div className="text-center py-20">
-            <Trophy className="mx-auto text-[var(--muted-foreground)]" size={56} />
-            <h3 className="text-lg font-semibold text-[var(--foreground)] mt-5 mb-2">
+          <div style={{ textAlign: 'center', paddingTop: '80px' }}>
+            <Trophy size={56} style={{ color: '#CCCCCC', margin: '0 auto' }} />
+            <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#1a1a2e', marginTop: '20px', marginBottom: '8px' }}>
               ランキングがありません
             </h3>
-            <p className="text-[var(--muted-foreground)]">
-              チームが登録されるとランキングが表示されます
-            </p>
+            <p style={{ color: '#888888' }}>チームが登録されるとランキングが表示されます</p>
           </div>
         ) : (
-          <ul className="divide-y divide-[var(--border)] bg-white rounded-2xl border border-[var(--border)] overflow-hidden">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {rankings.map((team) => (
-              <li key={team.id}>
-                <Link
-                  to={`/teams/${team.id}`}
-                  className="flex items-center gap-4 px-5 py-4 hover:bg-[var(--muted)] transition-colors"
-                >
+              <Link
+                key={team.id}
+                to={`/teams/${team.id}`}
+                style={{
+                  display: 'block',
+                  background: '#FFFFFF',
+                  borderRadius: '16px',
+                  padding: '16px',
+                  textDecoration: 'none',
+                  transition: 'background 0.2s',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                   {/* Rank */}
-                  {getRankDisplay(team.rank)}
+                  <div style={{
+                    width: '40px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    {team.rank <= 3 ? (
+                      <div style={{
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '50%',
+                        background: getMedalColor(team.rank),
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#FFFFFF',
+                        fontWeight: 700,
+                        fontSize: '14px'
+                      }}>
+                        {team.rank}
+                      </div>
+                    ) : (
+                      <span style={{ fontSize: '18px', fontWeight: 600, color: '#888888' }}>
+                        {team.rank}
+                      </span>
+                    )}
+                  </div>
 
                   {/* Team Icon */}
-                  <Avatar
-                    src={team.iconImage}
-                    alt={team.name}
-                    size="lg"
-                  />
+                  <div style={{
+                    width: '50px',
+                    height: '50px',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0
+                  }}>
+                    {team.iconImage ? (
+                      <img src={team.iconImage} alt={team.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      <span style={{ fontSize: '20px' }}>🏓</span>
+                    )}
+                  </div>
 
                   {/* Team Info */}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-[var(--foreground)] line-clamp-2 break-words text-base">
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <h3 style={{
+                      fontSize: '16px',
+                      fontWeight: 600,
+                      color: '#1a1a2e',
+                      marginBottom: '4px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap'
+                    }}>
                       {team.name}
                     </h3>
-                    <p className="text-sm text-[var(--muted-foreground)] line-clamp-2 mt-0.5">
-                      {team.description}
-                    </p>
-                    <div className="flex items-center gap-1.5 text-sm text-[var(--muted-foreground)] mt-1">
-                      <Users size={14} className="text-[var(--primary)]" />
-                      <span>{team.memberCount}人</span>
+                    {team.description && (
+                      <p style={{
+                        fontSize: '13px',
+                        color: '#888888',
+                        marginBottom: '4px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap'
+                      }}>
+                        {team.description}
+                      </p>
+                    )}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <Users size={14} style={{ color: '#667eea' }} />
+                      <span style={{ fontSize: '13px', color: '#888888' }}>{team.memberCount}人</span>
                     </div>
                   </div>
 
                   {/* Trophy for top 3 */}
                   {team.rank <= 3 && (
-                    <Trophy size={28} className={getTrophyColor(team.rank)} />
+                    <Trophy size={28} style={{ color: getTrophyColor(team.rank), flexShrink: 0 }} />
                   )}
-                </Link>
-              </li>
+                </div>
+              </Link>
             ))}
-          </ul>
+          </div>
         )}
       </div>
     </div>

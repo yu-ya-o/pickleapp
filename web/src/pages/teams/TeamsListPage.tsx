@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Plus, Search, Users, MapPin, Crown } from 'lucide-react';
 import { api } from '@/services/api';
-import { Loading, Avatar } from '@/components/ui';
+import { Loading } from '@/components/ui';
 import { PREFECTURES } from '@/lib/prefectures';
 import type { Team } from '@/types';
 
@@ -57,90 +57,147 @@ export function TeamsListPage() {
   });
 
   return (
-    <div className="min-h-screen bg-white">
+    <div style={{
+      minHeight: '100vh',
+      background: '#F5F5F7'
+    }}>
       {/* Header */}
-      <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="max-w-2xl mx-auto px-4">
-          {/* Title */}
-          <h1 className="text-lg font-semibold text-center" style={{ paddingTop: '12px', paddingBottom: '12px' }}>チーム</h1>
+      <header style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 30,
+        background: '#FFFFFF',
+        borderBottom: '1px solid #E5E5E5',
+        padding: '12px 16px'
+      }}>
+        {/* Title */}
+        <h1 style={{
+          fontSize: '24px',
+          fontWeight: 900,
+          fontStyle: 'italic',
+          textAlign: 'center',
+          color: '#1a1a2e',
+          marginBottom: '12px'
+        }}>
+          PickleHub
+        </h1>
 
-          {/* Search Bar */}
-          <div className="flex gap-3" style={{ marginTop: '6px', paddingBottom: '6px', paddingLeft: '16px', paddingRight: '16px' }}>
-            {/* Region Filter */}
-            <div className="flex items-center gap-2 bg-white border border-[var(--border)] rounded-xl min-w-[120px]" style={{ padding: '4px 16px' }}>
-              <MapPin size={16} className="text-[var(--primary)] flex-shrink-0" />
-              <select
-                value={selectedRegion}
-                onChange={(e) => setSelectedRegion(e.target.value)}
-                className="bg-transparent border-0 p-0 text-sm outline-none cursor-pointer text-[var(--foreground)]"
-              >
-                <option value="">全国</option>
-                {PREFECTURES.map((pref) => (
-                  <option key={pref} value={pref}>
-                    {pref}
-                  </option>
-                ))}
-              </select>
-            </div>
+        {/* Search Bar */}
+        <div style={{ display: 'flex', gap: '10px' }}>
+          {/* Region Filter */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: '#F0F0F0',
+            borderRadius: '10px',
+            padding: '8px 12px',
+            minWidth: '100px'
+          }}>
+            <MapPin size={16} style={{ color: '#667eea', flexShrink: 0 }} />
+            <select
+              value={selectedRegion}
+              onChange={(e) => setSelectedRegion(e.target.value)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: '#1a1a2e',
+                fontSize: '14px',
+                outline: 'none',
+                cursor: 'pointer'
+              }}
+            >
+              <option value="">全国</option>
+              {PREFECTURES.map((pref) => (
+                <option key={pref} value={pref}>
+                  {pref}
+                </option>
+              ))}
+            </select>
+          </div>
 
-            {/* Search Input */}
-            <div className="flex-1 flex items-center gap-3 bg-white border border-[var(--border)] rounded-xl" style={{ padding: '4px 16px' }}>
-              <Search size={16} className="text-[var(--muted-foreground)] flex-shrink-0" />
-              <input
-                type="text"
-                placeholder="チームを検索"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 bg-transparent border-0 outline-none text-sm placeholder:text-[var(--muted-foreground)]"
-              />
-            </div>
+          {/* Search Input */}
+          <div style={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: '#F0F0F0',
+            borderRadius: '10px',
+            padding: '8px 12px'
+          }}>
+            <Search size={16} style={{ color: '#888888', flexShrink: 0 }} />
+            <input
+              type="text"
+              placeholder="チームを検索"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                flex: 1,
+                background: 'transparent',
+                border: 'none',
+                color: '#1a1a2e',
+                fontSize: '14px',
+                outline: 'none'
+              }}
+            />
           </div>
         </div>
       </header>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto px-4 pb-24 pt-4">
+      <div style={{ padding: '16px', paddingBottom: '100px' }}>
         {isLoading ? (
-          <div className="flex justify-center py-20">
+          <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '80px' }}>
             <Loading size="lg" />
           </div>
         ) : (
-          <div className="space-y-6">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             {/* My Teams Section */}
             {filteredMyTeams.length > 0 && (
               <section>
-                <h2 className="px-1 py-2 text-sm font-medium text-[var(--muted-foreground)]">
-                  マイチーム
+                <h2 style={{
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  color: '#888888',
+                  marginBottom: '12px',
+                  letterSpacing: '1px'
+                }}>
+                  MY TEAMS
                 </h2>
-                <ul className="divide-y divide-[var(--border)] bg-white rounded-2xl border border-[var(--border)] overflow-hidden">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {filteredMyTeams.map((team) => (
-                    <TeamRow key={team.id} team={team} isMyTeam />
+                    <TeamCard key={team.id} team={team} isMyTeam />
                   ))}
-                </ul>
+                </div>
               </section>
             )}
 
             {/* Find Teams Section */}
             <section>
-              <h2 className="px-1 py-2 text-sm font-medium text-[var(--muted-foreground)]">
-                チームを探す
+              <h2 style={{
+                fontSize: '14px',
+                fontWeight: 600,
+                color: '#888888',
+                marginBottom: '12px',
+                letterSpacing: '1px'
+              }}>
+                TEAMS
               </h2>
               {filteredTeams.length === 0 ? (
-                <div className="text-center py-20">
-                  <Users className="mx-auto text-[var(--muted-foreground)]" size={56} />
-                  <h3 className="text-lg font-semibold text-[var(--foreground)] mt-5 mb-2">
+                <div style={{ textAlign: 'center', paddingTop: '80px' }}>
+                  <Users size={56} style={{ color: '#CCCCCC', margin: '0 auto' }} />
+                  <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#1a1a2e', marginTop: '20px', marginBottom: '8px' }}>
                     チームが見つかりません
                   </h3>
-                  <p className="text-[var(--muted-foreground)]">
-                    新しいチームを作成しましょう
-                  </p>
+                  <p style={{ color: '#888888' }}>新しいチームを作成しましょう</p>
                 </div>
               ) : (
-                <ul className="divide-y divide-[var(--border)] bg-white rounded-2xl border border-[var(--border)] overflow-hidden">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {filteredTeams.map((team) => (
-                    <TeamRow key={team.id} team={team} />
+                    <TeamCard key={team.id} team={team} />
                   ))}
-                </ul>
+                </div>
               )}
             </section>
           </div>
@@ -150,7 +207,23 @@ export function TeamsListPage() {
       {/* FAB */}
       <button
         onClick={() => navigate('/teams/create')}
-        className="fixed bottom-20 right-4 md:bottom-6 md:right-6 w-14 h-14 bg-[var(--primary)] text-white rounded-full shadow-lg hover:bg-[var(--primary-hover)] transition-colors flex items-center justify-center z-50"
+        style={{
+          position: 'fixed',
+          bottom: '80px',
+          right: '16px',
+          width: '56px',
+          height: '56px',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: '#FFFFFF',
+          borderRadius: '50%',
+          border: 'none',
+          boxShadow: '0 4px 20px rgba(102, 126, 234, 0.4)',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 50
+        }}
       >
         <Plus size={24} />
       </button>
@@ -158,42 +231,81 @@ export function TeamsListPage() {
   );
 }
 
-function TeamRow({ team, isMyTeam }: { team: Team; isMyTeam?: boolean }) {
+function TeamCard({ team, isMyTeam }: { team: Team; isMyTeam?: boolean }) {
   return (
-    <li>
-      <Link
-        to={`/teams/${team.id}`}
-        className="flex items-start gap-4 px-5 py-4 hover:bg-[var(--muted)] transition-colors"
-      >
+    <Link
+      to={`/teams/${team.id}`}
+      style={{
+        display: 'block',
+        background: '#FFFFFF',
+        borderRadius: '16px',
+        padding: '16px',
+        textDecoration: 'none',
+        transition: 'background 0.2s',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+      }}
+    >
+      <div style={{ display: 'flex', gap: '14px' }}>
         {/* Avatar */}
-        <Avatar src={team.iconImage} alt={team.name} size="lg" />
+        <div style={{ flexShrink: 0 }}>
+          <div style={{
+            width: '50px',
+            height: '50px',
+            borderRadius: '12px',
+            overflow: 'hidden',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            {team.iconImage ? (
+              <img src={team.iconImage} alt={team.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : (
+              <span style={{ fontSize: '20px' }}>🏓</span>
+            )}
+          </div>
+        </div>
 
         {/* Team Info */}
-        <div className="flex-1 min-w-0">
+        <div style={{ flex: 1, minWidth: 0 }}>
           {/* Name */}
-          <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-[var(--foreground)] line-clamp-2 break-words text-base">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+            <h3 style={{
+              fontSize: '16px',
+              fontWeight: 600,
+              color: '#1a1a2e',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'
+            }}>
               {team.name}
             </h3>
             {isMyTeam && (
-              <Crown size={16} className="text-yellow-500 flex-shrink-0" />
+              <Crown size={16} style={{ color: '#F59E0B', flexShrink: 0 }} />
             )}
           </div>
 
           {/* Description */}
           {team.description && (
-            <p className="text-sm text-[var(--muted-foreground)] mt-1 line-clamp-2">
+            <p style={{
+              fontSize: '13px',
+              color: '#888888',
+              marginBottom: '8px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'
+            }}>
               {team.description}
             </p>
           )}
 
           {/* Member count */}
-          <div className="flex items-center gap-1.5 text-sm text-[var(--muted-foreground)] mt-1.5">
-            <Users size={14} className="text-[var(--primary)]" />
-            <span>{team.memberCount}人</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Users size={14} style={{ color: '#667eea' }} />
+            <span style={{ fontSize: '13px', color: '#888888' }}>{team.memberCount}人</span>
           </div>
         </div>
-      </Link>
-    </li>
+      </div>
+    </Link>
   );
 }
