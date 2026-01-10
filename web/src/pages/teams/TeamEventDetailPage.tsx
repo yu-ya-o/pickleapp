@@ -260,7 +260,7 @@ export function TeamEventDetailPage() {
           {!event.participants || event.participants.length === 0 ? (
             <p className="text-gray-400 text-sm">まだ参加者がいません</p>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-0.5">
               {event.participants.map((participant) => (
                 <Link
                   key={participant.id}
@@ -281,7 +281,7 @@ export function TeamEventDetailPage() {
 
         {/* Action Buttons */}
         <div className="border-t border-[var(--border)]" style={{ padding: '16px' }}>
-          <div className="space-y-3">
+          <div className="space-y-0.5">
             {/* Chat Button */}
             <button
               onClick={() => navigate(`/events/${event.id}/chat`)}
