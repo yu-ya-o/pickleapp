@@ -1,12 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  MapPin,
-  Clock,
-  Star,
-  TrendingUp,
-  Users,
-  Hash,
   ChevronRight,
   Share2,
   Instagram,
@@ -16,14 +10,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/services/api';
 import { Button, Modal } from '@/components/ui';
 import { getDisplayName, getSkillLevelLabel } from '@/lib/utils';
-
-// パドルアイコン用のSVG
-const PaddleIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <ellipse cx="12" cy="8" rx="5" ry="7" />
-    <line x1="12" y1="15" x2="12" y2="22" />
-  </svg>
-);
 
 export function ProfilePage() {
   const navigate = useNavigate();
@@ -68,23 +54,14 @@ export function ProfilePage() {
     { id: 'line', name: 'LINE', url: 'https://line.me/example', bgColor: '#06C755' },
   ];
 
-  const profileItems = [
-    { icon: MapPin, label: '地域', value: user.region || '-' },
-    { icon: Clock, label: 'ピックルボール歴', value: user.pickleballExperience || '-' },
-    { icon: Star, label: 'レベル', value: user.skillLevel ? getSkillLevelLabel(user.skillLevel) : '-' },
-    { icon: TrendingUp, label: 'DUPR シングルス', value: user.duprSingles || '-' },
-    { icon: TrendingUp, label: 'DUPR ダブルス', value: user.duprDoubles || '-' },
-    { icon: PaddleIcon, label: '使用パドル', value: user.myPaddle || '-' },
-    { icon: Users, label: '性別', value: user.gender || '-' },
-    { icon: Hash, label: '年代', value: user.ageGroup || '-' },
-  ];
-
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#FFFFFF' }}>
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)',
+      paddingBottom: '100px'
+    }}>
       {/* Header */}
       <header style={{
-        backgroundColor: '#FFFFFF',
-        borderBottom: '1px solid #E5E5E5',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -94,293 +71,358 @@ export function ProfilePage() {
         <h1 style={{
           fontSize: '18px',
           fontWeight: 600,
+          color: '#FFFFFF'
         }}>
-          マイプロフィール
+          PLAYER CARD
         </h1>
         <button
           onClick={() => {/* TODO: Share */}}
           style={{
-            background: 'none',
+            background: 'rgba(255,255,255,0.1)',
             border: 'none',
+            borderRadius: '50%',
+            width: '36px',
+            height: '36px',
             cursor: 'pointer',
-            padding: '8px'
-          }}
-        >
-          <Share2 size={20} style={{ color: '#6B7280' }} />
-        </button>
-      </header>
-
-      {/* Content */}
-      <div style={{ paddingBottom: '100px' }}>
-        {/* Profile Header - Centered */}
-        <div style={{
-          padding: '32px 16px 24px',
-          backgroundColor: '#FFFFFF',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          textAlign: 'center'
-        }}>
-          {/* Large Profile Image */}
-          <div style={{
-            width: '120px',
-            height: '120px',
-            borderRadius: '60px',
-            overflow: 'hidden',
-            marginBottom: '16px',
-            border: '4px solid #F3F4F6',
-            backgroundColor: '#E5E7EB',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
-          }}>
-            {user.profileImage ? (
-              <img
-                src={user.profileImage}
-                alt={getDisplayName(user)}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-            ) : (
-              <span style={{ fontSize: '48px', color: '#9CA3AF' }}>👤</span>
-            )}
-          </div>
+          }}
+        >
+          <Share2 size={18} style={{ color: '#FFFFFF' }} />
+        </button>
+      </header>
 
-          {/* Name */}
-          <h2 style={{
-            fontSize: '24px',
-            fontWeight: 700,
-            color: '#1A1A1A',
-            marginBottom: '12px'
+      {/* Trading Card */}
+      <div style={{ padding: '0 20px' }}>
+        <div style={{
+          background: 'linear-gradient(145deg, #2d2d44 0%, #1f1f35 100%)',
+          borderRadius: '20px',
+          padding: '4px',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)'
+        }}>
+          {/* Card Inner with holographic border effect */}
+          <div style={{
+            background: 'linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+            borderRadius: '18px',
+            padding: '3px'
           }}>
-            {getDisplayName(user)}
-          </h2>
-
-          {/* Bio */}
-          {user.bio && (
-            <p style={{
-              fontSize: '14px',
-              color: '#4B5563',
-              lineHeight: '1.6',
-              maxWidth: '300px'
+            <div style={{
+              background: 'linear-gradient(180deg, #252540 0%, #1a1a30 100%)',
+              borderRadius: '16px',
+              overflow: 'hidden'
             }}>
-              {user.bio}
-            </p>
-          )}
-        </div>
-
-        {/* 戦績セクション */}
-        <div style={{ padding: '16px', backgroundColor: '#FFFFFF' }}>
-          <h3 style={{
-            fontSize: '16px',
-            fontWeight: 600,
-            color: '#1A1A1A',
-            marginBottom: '12px'
-          }}>
-            戦績
-          </h3>
-          <div style={{
-            backgroundColor: '#F9FAFB',
-            borderRadius: '12px',
-            overflow: 'hidden'
-          }}>
-            {battleRecords.map((record, index) => (
-              <div
-                key={record.id}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '14px 16px',
-                  borderBottom: index !== battleRecords.length - 1 ? '1px solid #E5E7EB' : 'none'
-                }}
-              >
-                <div style={{ flex: 1 }}>
-                  <p style={{ fontSize: '14px', fontWeight: 500, color: '#1A1A1A' }}>
-                    {record.tournament}
-                  </p>
-                  <p style={{ fontSize: '12px', color: '#6B7280' }}>
-                    {record.date}
-                  </p>
-                </div>
-                <span style={{
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  color: record.result === '優勝' ? '#F59E0B' : '#6B7280'
+              {/* Card Top - Image & Name */}
+              <div style={{
+                padding: '24px 20px',
+                textAlign: 'center',
+                borderBottom: '1px solid rgba(255,255,255,0.1)'
+              }}>
+                {/* Profile Image with glow */}
+                <div style={{
+                  width: '100px',
+                  height: '100px',
+                  borderRadius: '50%',
+                  margin: '0 auto 16px',
+                  padding: '3px',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  boxShadow: '0 0 30px rgba(102, 126, 234, 0.4)'
                 }}>
-                  {record.result}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Divider */}
-        <div style={{ height: '8px', backgroundColor: '#F3F4F6' }} />
-
-        {/* Profile Info Section */}
-        <div style={{ backgroundColor: '#FFFFFF', padding: '16px' }}>
-          <h3 style={{
-            fontSize: '16px',
-            fontWeight: 600,
-            color: '#1A1A1A',
-            marginBottom: '12px'
-          }}>
-            プロフィール情報
-          </h3>
-          <div style={{
-            backgroundColor: '#F9FAFB',
-            borderRadius: '12px',
-            overflow: 'hidden'
-          }}>
-            {profileItems.map((item, index) => (
-              <div
-                key={item.label}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '14px 16px',
-                  borderBottom: index !== profileItems.length - 1 ? '1px solid #E5E7EB' : 'none'
-                }}
-              >
-                <div style={{ color: '#3B82F6', flexShrink: 0, width: '20px', height: '20px' }}>
-                  <item.icon />
+                  <div style={{
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: '50%',
+                    overflow: 'hidden',
+                    backgroundColor: '#2a2a45'
+                  }}>
+                    {user.profileImage ? (
+                      <img
+                        src={user.profileImage}
+                        alt={getDisplayName(user)}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                    ) : (
+                      <div style={{
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '40px'
+                      }}>
+                        👤
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <span style={{
-                  fontSize: '14px',
-                  color: '#6B7280',
-                  marginLeft: '12px',
-                  width: '130px',
-                  flexShrink: 0
-                }}>
-                  {item.label}
-                </span>
-                <span style={{ fontSize: '14px', color: '#1A1A1A', fontWeight: 500 }}>
-                  {item.value}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
 
-        {/* Divider */}
-        <div style={{ height: '8px', backgroundColor: '#F3F4F6' }} />
-
-        {/* SNS Links Section */}
-        <div style={{ backgroundColor: '#FFFFFF', padding: '16px' }}>
-          <h3 style={{
-            fontSize: '16px',
-            fontWeight: 600,
-            color: '#1A1A1A',
-            marginBottom: '12px'
-          }}>
-            SNS
-          </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {snsLinks.map((sns) => (
-              <a
-                key={sns.id}
-                href={sns.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '14px 16px',
-                  borderRadius: '12px',
-                  textDecoration: 'none',
+                {/* Name */}
+                <h2 style={{
+                  fontSize: '22px',
+                  fontWeight: 700,
                   color: '#FFFFFF',
-                  fontWeight: 500,
-                  fontSize: '15px',
-                  background: sns.bgColor,
+                  marginBottom: '8px',
+                  letterSpacing: '0.5px'
+                }}>
+                  {getDisplayName(user)}
+                </h2>
+
+                {/* Level Badge */}
+                <div style={{
+                  display: 'inline-block',
+                  padding: '4px 12px',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  borderRadius: '20px',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  color: '#FFFFFF',
+                  marginBottom: '12px'
+                }}>
+                  {user.skillLevel ? getSkillLevelLabel(user.skillLevel) : '未設定'}
+                </div>
+
+                {/* Bio */}
+                {user.bio && (
+                  <p style={{
+                    fontSize: '13px',
+                    color: 'rgba(255,255,255,0.7)',
+                    lineHeight: '1.5',
+                    maxWidth: '260px',
+                    margin: '0 auto'
+                  }}>
+                    {user.bio}
+                  </p>
+                )}
+              </div>
+
+              {/* Stats Section */}
+              <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '12px'
+                }}>
+                  {/* DUPR Singles */}
+                  <div style={{
+                    background: 'rgba(255,255,255,0.05)',
+                    borderRadius: '12px',
+                    padding: '12px',
+                    textAlign: 'center'
+                  }}>
+                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', marginBottom: '4px', letterSpacing: '1px' }}>
+                      DUPR SINGLES
+                    </p>
+                    <p style={{ fontSize: '24px', fontWeight: 700, color: '#667eea' }}>
+                      {user.duprSingles || '-'}
+                    </p>
+                  </div>
+                  {/* DUPR Doubles */}
+                  <div style={{
+                    background: 'rgba(255,255,255,0.05)',
+                    borderRadius: '12px',
+                    padding: '12px',
+                    textAlign: 'center'
+                  }}>
+                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', marginBottom: '4px', letterSpacing: '1px' }}>
+                      DUPR DOUBLES
+                    </p>
+                    <p style={{ fontSize: '24px', fontWeight: 700, color: '#764ba2' }}>
+                      {user.duprDoubles || '-'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Info Grid */}
+              <div style={{ padding: '16px 20px' }}>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
                   gap: '8px'
-                }}
-              >
-                {sns.id === 'instagram' && <Instagram size={20} />}
-                {sns.id === 'twitter' && (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                  </svg>
-                )}
-                {sns.id === 'tiktok' && (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-                  </svg>
-                )}
-                {sns.id === 'line' && (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
-                  </svg>
-                )}
-                <span>{sns.name}</span>
-                <ExternalLink size={16} style={{ marginLeft: 'auto', opacity: 0.7 }} />
-              </a>
-            ))}
+                }}>
+                  <div style={{ padding: '8px 0' }}>
+                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px' }}>REGION</p>
+                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>{user.region || '-'}</p>
+                  </div>
+                  <div style={{ padding: '8px 0' }}>
+                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px' }}>EXPERIENCE</p>
+                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>{user.pickleballExperience || '-'}</p>
+                  </div>
+                  <div style={{ padding: '8px 0' }}>
+                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px' }}>PADDLE</p>
+                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>{user.myPaddle || '-'}</p>
+                  </div>
+                  <div style={{ padding: '8px 0' }}>
+                    <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1px' }}>AGE</p>
+                    <p style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: 500 }}>{user.ageGroup || '-'}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Divider */}
-        <div style={{ height: '8px', backgroundColor: '#F3F4F6' }} />
-
-        {/* Action Buttons */}
-        <div style={{ backgroundColor: '#FFFFFF', padding: '16px' }}>
-          {/* Edit Profile */}
-          <button
-            onClick={() => navigate('/profile/edit')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              width: '100%',
-              padding: '16px',
-              backgroundColor: '#FFFFFF',
-              border: '1px solid #E5E7EB',
-              borderRadius: '12px',
-              cursor: 'pointer',
-              marginBottom: '12px'
-            }}
-          >
-            <span style={{ flex: 1, textAlign: 'left', color: '#1A1A1A', fontSize: '15px' }}>
-              プロフィールを編集
-            </span>
-            <ChevronRight size={20} style={{ color: '#9CA3AF' }} />
-          </button>
-
-          {/* Logout */}
-          <button
-            onClick={() => setShowLogoutModal(true)}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '100%',
-              padding: '16px',
-              backgroundColor: 'rgba(255, 182, 193, 0.5)',
-              border: 'none',
-              borderRadius: '12px',
-              cursor: 'pointer',
-              marginBottom: '12px'
-            }}
-          >
-            <span style={{ color: '#FF3B30', fontWeight: 500, fontSize: '15px' }}>ログアウト</span>
-          </button>
-
-          {/* Delete Account */}
-          <button
-            onClick={() => setShowDeleteModal(true)}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '100%',
-              padding: '16px',
-              backgroundColor: '#FFFFFF',
-              border: '1px solid #E5E7EB',
-              borderRadius: '12px',
-              cursor: 'pointer'
-            }}
-          >
-            <span style={{ color: '#9CA3AF', fontSize: '15px' }}>アカウントを削除</span>
-          </button>
+      {/* 戦績セクション */}
+      <div style={{ padding: '20px' }}>
+        <h3 style={{
+          fontSize: '14px',
+          fontWeight: 600,
+          color: 'rgba(255,255,255,0.7)',
+          marginBottom: '12px',
+          letterSpacing: '1px'
+        }}>
+          BATTLE RECORD
+        </h3>
+        <div style={{
+          background: 'rgba(255,255,255,0.05)',
+          borderRadius: '12px',
+          overflow: 'hidden'
+        }}>
+          {battleRecords.map((record, index) => (
+            <div
+              key={record.id}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                padding: '14px 16px',
+                borderBottom: index !== battleRecords.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none'
+              }}
+            >
+              <div style={{ flex: 1 }}>
+                <p style={{ fontSize: '14px', fontWeight: 500, color: '#FFFFFF' }}>
+                  {record.tournament}
+                </p>
+                <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>
+                  {record.date}
+                </p>
+              </div>
+              <span style={{
+                fontSize: '14px',
+                fontWeight: 600,
+                color: record.result === '優勝' ? '#F59E0B' : 'rgba(255,255,255,0.7)'
+              }}>
+                {record.result}
+              </span>
+            </div>
+          ))}
         </div>
+      </div>
+
+      {/* SNS Links Section */}
+      <div style={{ padding: '0 20px 20px' }}>
+        <h3 style={{
+          fontSize: '14px',
+          fontWeight: 600,
+          color: 'rgba(255,255,255,0.7)',
+          marginBottom: '12px',
+          letterSpacing: '1px'
+        }}>
+          SNS
+        </h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          {snsLinks.map((sns) => (
+            <a
+              key={sns.id}
+              href={sns.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '14px 16px',
+                borderRadius: '12px',
+                textDecoration: 'none',
+                color: '#FFFFFF',
+                fontWeight: 500,
+                fontSize: '15px',
+                background: sns.bgColor,
+                gap: '8px'
+              }}
+            >
+              {sns.id === 'instagram' && <Instagram size={20} />}
+              {sns.id === 'twitter' && (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+              )}
+              {sns.id === 'tiktok' && (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                </svg>
+              )}
+              {sns.id === 'line' && (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+                </svg>
+              )}
+              <span>{sns.name}</span>
+              <ExternalLink size={16} style={{ marginLeft: 'auto', opacity: 0.7 }} />
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div style={{ padding: '0 20px 20px' }}>
+        {/* Edit Profile */}
+        <button
+          onClick={() => navigate('/profile/edit')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            width: '100%',
+            padding: '16px',
+            backgroundColor: 'rgba(255,255,255,0.1)',
+            border: 'none',
+            borderRadius: '12px',
+            cursor: 'pointer',
+            marginBottom: '12px'
+          }}
+        >
+          <span style={{ flex: 1, textAlign: 'left', color: '#FFFFFF', fontSize: '15px' }}>
+            プロフィールを編集
+          </span>
+          <ChevronRight size={20} style={{ color: 'rgba(255,255,255,0.5)' }} />
+        </button>
+
+        {/* Logout */}
+        <button
+          onClick={() => setShowLogoutModal(true)}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '100%',
+            padding: '16px',
+            backgroundColor: 'rgba(255, 100, 100, 0.2)',
+            border: 'none',
+            borderRadius: '12px',
+            cursor: 'pointer',
+            marginBottom: '12px'
+          }}
+        >
+          <span style={{ color: '#FF6B6B', fontWeight: 500, fontSize: '15px' }}>ログアウト</span>
+        </button>
+
+        {/* Delete Account */}
+        <button
+          onClick={() => setShowDeleteModal(true)}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '100%',
+            padding: '16px',
+            backgroundColor: 'transparent',
+            border: '1px solid rgba(255,255,255,0.2)',
+            borderRadius: '12px',
+            cursor: 'pointer'
+          }}
+        >
+          <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '15px' }}>アカウントを削除</span>
+        </button>
       </div>
 
       {/* Logout Modal */}
