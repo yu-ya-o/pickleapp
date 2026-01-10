@@ -98,10 +98,6 @@ export function TeamEventDetailPage() {
     }
   };
 
-  const handleNotImplemented = (feature: string) => {
-    alert(`${feature}機能は近日公開予定です`);
-  };
-
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -288,7 +284,7 @@ export function TeamEventDetailPage() {
           <div className="space-y-3">
             {/* Chat Button */}
             <button
-              onClick={() => handleNotImplemented('イベントチャット')}
+              onClick={() => navigate(`/teams/${teamId}/chat`)}
               className="w-full flex items-center justify-center gap-2 text-white font-medium rounded-xl"
               style={{ backgroundColor: 'var(--primary)', padding: '14px' }}
             >
@@ -329,7 +325,7 @@ export function TeamEventDetailPage() {
 
                 {/* Edit Button */}
                 <button
-                  onClick={() => handleNotImplemented('イベント編集')}
+                  onClick={() => navigate(`/teams/${teamId}/events/${event.id}/edit`)}
                   className="w-full flex items-center justify-center gap-2 font-medium rounded-xl"
                   style={{ backgroundColor: '#DBEAFE', color: 'var(--primary)', padding: '14px' }}
                 >
@@ -339,7 +335,7 @@ export function TeamEventDetailPage() {
 
                 {/* Duplicate Button */}
                 <button
-                  onClick={() => handleNotImplemented('イベント複製')}
+                  onClick={() => navigate(`/teams/${teamId}/events/create?duplicate=${event.id}`)}
                   className="w-full flex items-center justify-center gap-2 font-medium rounded-xl"
                   style={{ backgroundColor: '#DCFCE7', color: '#16A34A', padding: '14px' }}
                 >
