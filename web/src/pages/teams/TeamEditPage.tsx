@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Image } from 'lucide-react';
+import { Image, Instagram, Music } from 'lucide-react';
 import { api } from '@/services/api';
 import { Loading } from '@/components/ui';
 import type { Team } from '@/types';
@@ -27,6 +27,10 @@ export function TeamEditPage() {
   const [region, setRegion] = useState('');
   const [iconImage, setIconImage] = useState('');
   const [headerImage, setHeaderImage] = useState('');
+  const [instagramUrl, setInstagramUrl] = useState('');
+  const [twitterUrl, setTwitterUrl] = useState('');
+  const [tiktokUrl, setTiktokUrl] = useState('');
+  const [lineUrl, setLineUrl] = useState('');
 
   useEffect(() => {
     if (teamId) {
@@ -44,6 +48,11 @@ export function TeamEditPage() {
       setRegion(data.region || '');
       setIconImage(data.iconImage || '');
       setHeaderImage(data.headerImage || '');
+      // SNS URLs - these may need to be added to the Team type
+      setInstagramUrl((data as any).instagramUrl || '');
+      setTwitterUrl((data as any).twitterUrl || '');
+      setTiktokUrl((data as any).tiktokUrl || '');
+      setLineUrl((data as any).lineUrl || '');
     } catch (error) {
       console.error('Failed to load team:', error);
     } finally {
@@ -61,7 +70,11 @@ export function TeamEditPage() {
         region,
         iconImage,
         headerImage,
-      });
+        instagramUrl,
+        twitterUrl,
+        tiktokUrl,
+        lineUrl,
+      } as any);
       navigate(-1);
     } catch (error) {
       console.error('Failed to update team:', error);
@@ -98,18 +111,12 @@ export function TeamEditPage() {
             キャンセル
           </button>
           <h1 className="font-semibold text-lg">チームを編集</h1>
-          <button
-            onClick={handleSave}
-            disabled={isSaving || !name.trim()}
-            className="text-[var(--primary)] font-medium disabled:opacity-50"
-          >
-            {isSaving ? '保存中...' : '保存'}
-          </button>
+          <div style={{ width: '80px' }} />
         </div>
       </header>
 
       {/* Content */}
-      <div style={{ padding: '16px', paddingBottom: '100px' }}>
+      <div style={{ padding: '16px', paddingBottom: '120px' }}>
         {/* Team Icon */}
         <div style={{ marginBottom: '24px' }}>
           <label className="block text-sm text-gray-500" style={{ marginBottom: '8px' }}>
@@ -227,6 +234,107 @@ export function TeamEditPage() {
             </div>
           </div>
         </div>
+
+        {/* SNS Links */}
+        <div style={{ marginBottom: '24px' }}>
+          <div className="bg-white rounded-xl" style={{ padding: '16px' }}>
+            <h3 className="font-bold" style={{ marginBottom: '16px' }}>SNSリンク</h3>
+
+            {/* Instagram */}
+            <div style={{ marginBottom: '16px' }}>
+              <div className="flex items-center gap-2" style={{ marginBottom: '8px' }}>
+                <div
+                  className="rounded-lg flex items-center justify-center"
+                  style={{ width: '24px', height: '24px', background: 'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)' }}
+                >
+                  <Instagram size={14} className="text-white" />
+                </div>
+                <span className="text-sm font-medium">Instagram</span>
+              </div>
+              <input
+                type="url"
+                value={instagramUrl}
+                onChange={(e) => setInstagramUrl(e.target.value)}
+                placeholder="https://instagram.com/username"
+                className="w-full border border-gray-200 rounded-lg text-[var(--primary)] focus:outline-none focus:border-[var(--primary)]"
+                style={{ padding: '10px 12px' }}
+              />
+            </div>
+
+            {/* Twitter/X */}
+            <div style={{ marginBottom: '16px' }}>
+              <div className="flex items-center gap-2" style={{ marginBottom: '8px' }}>
+                <div
+                  className="rounded-lg flex items-center justify-center bg-blue-400"
+                  style={{ width: '24px', height: '24px' }}
+                >
+                  <span className="text-white text-xs font-bold">𝕏</span>
+                </div>
+                <span className="text-sm font-medium">Twitter/X</span>
+              </div>
+              <input
+                type="url"
+                value={twitterUrl}
+                onChange={(e) => setTwitterUrl(e.target.value)}
+                placeholder="https://twitter.com/username"
+                className="w-full border border-gray-200 rounded-lg text-[var(--primary)] focus:outline-none focus:border-[var(--primary)]"
+                style={{ padding: '10px 12px' }}
+              />
+            </div>
+
+            {/* TikTok */}
+            <div style={{ marginBottom: '16px' }}>
+              <div className="flex items-center gap-2" style={{ marginBottom: '8px' }}>
+                <div
+                  className="rounded-lg flex items-center justify-center bg-black"
+                  style={{ width: '24px', height: '24px' }}
+                >
+                  <Music size={14} className="text-white" />
+                </div>
+                <span className="text-sm font-medium">TikTok</span>
+              </div>
+              <input
+                type="url"
+                value={tiktokUrl}
+                onChange={(e) => setTiktokUrl(e.target.value)}
+                placeholder="https://tiktok.com/@username"
+                className="w-full border border-gray-200 rounded-lg text-[var(--primary)] focus:outline-none focus:border-[var(--primary)]"
+                style={{ padding: '10px 12px' }}
+              />
+            </div>
+
+            {/* LINE */}
+            <div>
+              <div className="flex items-center gap-2" style={{ marginBottom: '8px' }}>
+                <div
+                  className="rounded-lg flex items-center justify-center"
+                  style={{ width: '24px', height: '24px', backgroundColor: '#06C755' }}
+                >
+                  <span className="text-white text-xs font-bold">L</span>
+                </div>
+                <span className="text-sm font-medium">LINE</span>
+              </div>
+              <input
+                type="url"
+                value={lineUrl}
+                onChange={(e) => setLineUrl(e.target.value)}
+                placeholder="https://line.me/ti/p/username"
+                className="w-full border border-gray-200 rounded-lg text-[var(--primary)] focus:outline-none focus:border-[var(--primary)]"
+                style={{ padding: '10px 12px' }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Save Button */}
+        <button
+          onClick={handleSave}
+          disabled={isSaving || !name.trim()}
+          className="w-full font-medium rounded-xl text-[var(--primary)] border-2 border-[var(--primary)] disabled:opacity-50"
+          style={{ padding: '14px', backgroundColor: 'white' }}
+        >
+          {isSaving ? '保存中...' : '変更を保存'}
+        </button>
       </div>
     </div>
   );
