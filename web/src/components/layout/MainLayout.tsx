@@ -13,6 +13,24 @@ const navItems = [
 export function MainLayout() {
   const location = useLocation();
 
+  // Determine which tab should be active
+  const isTabActive = (to: string) => {
+    const path = location.pathname;
+
+    // Team events (e.g., /teams/123/events/456) should highlight イベント tab
+    if (to === '/events' && path.includes('/teams/') && path.includes('/events/')) {
+      return true;
+    }
+
+    // Prevent /teams/123/events/456 from highlighting チーム tab
+    if (to === '/teams' && path.includes('/events/')) {
+      return false;
+    }
+
+    // Default: check if path starts with the nav item path
+    return path.startsWith(to);
+  };
+
   return (
     <div className="flex min-h-screen bg-white overflow-x-hidden">
       {/* Sidebar navigation - PC only */}
@@ -26,7 +44,7 @@ export function MainLayout() {
         <nav className="flex-1 px-4 pb-4">
           <ul className="space-y-1">
             {navItems.map(({ to, icon: Icon, label }) => {
-              const isActive = location.pathname.startsWith(to);
+              const isActive = isTabActive(to);
               return (
                 <li key={to}>
                   <NavLink
@@ -62,7 +80,7 @@ export function MainLayout() {
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-[var(--border)] safe-area-inset-bottom z-40 md:hidden">
         <div className="flex items-center justify-around h-14">
           {navItems.map(({ to, icon: Icon, label }) => {
-            const isActive = location.pathname.startsWith(to);
+            const isActive = isTabActive(to);
             return (
               <NavLink
                 key={to}

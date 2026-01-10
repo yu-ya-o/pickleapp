@@ -29,7 +29,8 @@ export function GoogleMap({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+    // Use environment variable or fallback to the API key from iOS config
+    const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'AIzaSyDvDEIGImbCrkgYIvuccyo6WiyEsxKUhtY';
 
     if (!apiKey) {
       setError('Google Maps APIキーが設定されていません');
