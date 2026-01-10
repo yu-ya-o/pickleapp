@@ -28,6 +28,7 @@ export function EventDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showCloseModal, setShowCloseModal] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -83,6 +84,20 @@ export function EventDetailPage() {
       navigate('/events');
     } catch (error) {
       console.error('Failed to delete event:', error);
+    }
+  };
+
+  const handleCloseEvent = async () => {
+    if (!event) return;
+    try {
+      setIsActionLoading(true);
+      await api.updateEvent(event.id, { status: 'completed' });
+      setShowCloseModal(false);
+      await loadEvent();
+    } catch (error) {
+      console.error('Failed to close event:', error);
+    } finally {
+      setIsActionLoading(false);
     }
   };
 
@@ -319,6 +334,7 @@ export function EventDetailPage() {
 
                 {/* Close Event Button */}
                 <button
+                  onClick={() => setShowCloseModal(true)}
                   className="w-full flex items-center justify-center gap-2 font-medium rounded-xl"
                   style={{ backgroundColor: '#FEF3C7', color: '#D97706', padding: '14px' }}
                 >
@@ -339,6 +355,34 @@ export function EventDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Close Event Confirmation Modal */}
+      <Modal
+        isOpen={showCloseModal}
+        onClose={() => setShowCloseModal(false)}
+        title="イベントを締め切る"
+      >
+        <p className="text-gray-600 mb-6">
+          このイベントの募集を締め切りますか？
+        </p>
+        <div className="flex gap-3">
+          <button
+            className="flex-1 font-medium rounded-xl"
+            style={{ backgroundColor: '#F3F4F6', color: '#374151', padding: '14px' }}
+            onClick={() => setShowCloseModal(false)}
+          >
+            キャンセル
+          </button>
+          <button
+            className="flex-1 font-medium rounded-xl"
+            style={{ backgroundColor: '#D97706', color: 'white', padding: '14px' }}
+            onClick={handleCloseEvent}
+            disabled={isActionLoading}
+          >
+            {isActionLoading ? '処理中...' : '締め切る'}
+          </button>
+        </div>
+      </Modal>
 
       {/* Delete Confirmation Modal */}
       <Modal

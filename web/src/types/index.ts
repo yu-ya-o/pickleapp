@@ -36,7 +36,7 @@ export interface Event {
   endTime: string;
   maxParticipants: number;
   availableSpots: number;
-  skillLevel: 'beginner' | 'intermediate' | 'advanced';
+  skillLevel: 'all' | 'beginner' | 'intermediate' | 'advanced';
   price?: number;
   status: 'active' | 'completed' | 'cancelled';
   createdAt: string;

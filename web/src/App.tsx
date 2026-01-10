@@ -71,6 +71,7 @@ function AppRoutes() {
         <Route path="/events" element={<EventsListPage />} />
         <Route path="/events/create" element={<CreateEventPage />} />
         <Route path="/events/:id" element={<EventDetailPage />} />
+        <Route path="/events/:id/edit" element={<CreateEventPage />} />
         <Route path="/events/:eventId/chat" element={<ChatPage />} />
 
         {/* Teams */}
