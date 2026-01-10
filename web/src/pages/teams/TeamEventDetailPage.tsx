@@ -284,7 +284,7 @@ export function TeamEventDetailPage() {
           <div className="space-y-3">
             {/* Chat Button */}
             <button
-              onClick={() => navigate(`/teams/${teamId}/chat`)}
+              onClick={() => navigate(`/events/${event.id}/chat`)}
               className="w-full flex items-center justify-center gap-2 text-white font-medium rounded-xl"
               style={{ backgroundColor: 'var(--primary)', padding: '14px' }}
             >
