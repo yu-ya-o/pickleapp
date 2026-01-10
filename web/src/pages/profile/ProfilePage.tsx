@@ -7,7 +7,6 @@ import {
   TrendingUp,
   Users,
   Hash,
-  Trophy,
   ChevronRight,
   Share2,
   Instagram,
@@ -17,6 +16,14 @@ import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/services/api';
 import { Button, Modal } from '@/components/ui';
 import { getDisplayName, getSkillLevelLabel } from '@/lib/utils';
+
+// パドルアイコン用のSVG
+const PaddleIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <ellipse cx="12" cy="8" rx="5" ry="7" />
+    <line x1="12" y1="15" x2="12" y2="22" />
+  </svg>
+);
 
 export function ProfilePage() {
   const navigate = useNavigate();
@@ -49,23 +56,25 @@ export function ProfilePage() {
 
   // 仮の戦績データ
   const battleRecords = [
-    { id: 1, date: '2025/12', tournament: '福岡オープン', result: '3位', medal: '🥉' },
-    { id: 2, date: '2025/11', tournament: '初心者大会', result: '優勝', medal: '🥇' },
+    { id: 1, date: '2025/12', tournament: '福岡オープン', result: '3位' },
+    { id: 2, date: '2025/11', tournament: '初心者大会', result: '優勝' },
   ];
 
   // 仮のSNSデータ
   const snsLinks = [
-    { id: 'instagram', name: 'Instagram', icon: Instagram, url: 'https://instagram.com/example', color: '#E4405F', bgColor: 'linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)' },
-    { id: 'twitter', name: 'X (Twitter)', icon: null, url: 'https://x.com/example', color: '#000000', bgColor: '#000000' },
-    { id: 'tiktok', name: 'TikTok', icon: null, url: 'https://tiktok.com/@example', color: '#000000', bgColor: '#000000' },
-    { id: 'line', name: 'LINE', icon: null, url: 'https://line.me/example', color: '#06C755', bgColor: '#06C755' },
+    { id: 'instagram', name: 'Instagram', url: 'https://instagram.com/example', bgColor: 'linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)' },
+    { id: 'twitter', name: 'X (Twitter)', url: 'https://x.com/example', bgColor: '#000000' },
+    { id: 'tiktok', name: 'TikTok', url: 'https://tiktok.com/@example', bgColor: '#000000' },
+    { id: 'line', name: 'LINE', url: 'https://line.me/example', bgColor: '#06C755' },
   ];
 
   const profileItems = [
     { icon: MapPin, label: '地域', value: user.region || '-' },
     { icon: Clock, label: 'ピックルボール歴', value: user.pickleballExperience || '-' },
     { icon: Star, label: 'レベル', value: user.skillLevel ? getSkillLevelLabel(user.skillLevel) : '-' },
-    { icon: TrendingUp, label: 'DUPR', value: user.duprDoubles || user.duprSingles ? `${user.duprSingles || '-'} / ${user.duprDoubles || '-'}` : '-' },
+    { icon: TrendingUp, label: 'DUPR シングルス', value: user.duprSingles || '-' },
+    { icon: TrendingUp, label: 'DUPR ダブルス', value: user.duprDoubles || '-' },
+    { icon: PaddleIcon, label: '使用パドル', value: user.myPaddle || '-' },
     { icon: Users, label: '性別', value: user.gender || '-' },
     { icon: Hash, label: '年代', value: user.ageGroup || '-' },
   ];
@@ -141,24 +150,10 @@ export function ProfilePage() {
             fontSize: '24px',
             fontWeight: 700,
             color: '#1A1A1A',
-            marginBottom: '8px'
+            marginBottom: '12px'
           }}>
             {getDisplayName(user)}
           </h2>
-
-          {/* Quick Info */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            color: '#6B7280',
-            fontSize: '14px',
-            marginBottom: '16px'
-          }}>
-            <span>📍 {user.region || '未設定'}</span>
-            <span>•</span>
-            <span>🏓 {user.skillLevel ? getSkillLevelLabel(user.skillLevel) : '未設定'}</span>
-          </div>
 
           {/* Bio */}
           {user.bio && (
@@ -175,17 +170,14 @@ export function ProfilePage() {
 
         {/* 戦績セクション */}
         <div style={{ padding: '16px', backgroundColor: '#FFFFFF' }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
+          <h3 style={{
+            fontSize: '16px',
+            fontWeight: 600,
+            color: '#1A1A1A',
             marginBottom: '12px'
           }}>
-            <Trophy size={20} style={{ color: '#F59E0B' }} />
-            <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#1A1A1A' }}>
-              戦績
-            </h3>
-          </div>
+            戦績
+          </h3>
           <div style={{
             backgroundColor: '#F9FAFB',
             borderRadius: '12px',
@@ -201,7 +193,6 @@ export function ProfilePage() {
                   borderBottom: index !== battleRecords.length - 1 ? '1px solid #E5E7EB' : 'none'
                 }}
               >
-                <span style={{ fontSize: '24px', marginRight: '12px' }}>{record.medal}</span>
                 <div style={{ flex: 1 }}>
                   <p style={{ fontSize: '14px', fontWeight: 500, color: '#1A1A1A' }}>
                     {record.tournament}
@@ -250,12 +241,14 @@ export function ProfilePage() {
                   borderBottom: index !== profileItems.length - 1 ? '1px solid #E5E7EB' : 'none'
                 }}
               >
-                <item.icon size={20} style={{ color: '#3B82F6', flexShrink: 0 }} />
+                <div style={{ color: '#3B82F6', flexShrink: 0, width: '20px', height: '20px' }}>
+                  <item.icon />
+                </div>
                 <span style={{
                   fontSize: '14px',
                   color: '#6B7280',
                   marginLeft: '12px',
-                  width: '120px',
+                  width: '130px',
                   flexShrink: 0
                 }}>
                   {item.label}
