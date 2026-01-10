@@ -139,10 +139,6 @@ export function DateTimeInput({
                 onMonthChange={setCurrentMonth}
                 locale={ja}
                 showOutsideDays
-                hideNavigation={false}
-                formatters={{
-                  formatCaption: (date) => format(date, 'yyyy年 M月', { locale: ja }),
-                }}
                 classNames={{
                   root: 'w-full',
                   months: 'flex flex-col',
