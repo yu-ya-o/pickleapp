@@ -101,7 +101,7 @@ export function TeamChatPage() {
             className="flex items-center text-[var(--primary)] font-medium"
           >
             <ChevronLeft size={24} />
-            <span>Back</span>
+            <span>前の画面に戻る</span>
           </button>
           <h1 className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">チャット</h1>
           <div style={{ width: '60px' }} />

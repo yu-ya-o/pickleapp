@@ -65,7 +65,23 @@ function AppRoutes() {
         }
       />
 
-      {/* Protected routes with MainLayout */}
+      {/* Protected fullscreen routes (no tab bar) */}
+      <Route path="/events/:id" element={<ProtectedRoute><EventDetailPage /></ProtectedRoute>} />
+      <Route path="/events/create" element={<ProtectedRoute><CreateEventPage /></ProtectedRoute>} />
+      <Route path="/events/:id/edit" element={<ProtectedRoute><CreateEventPage /></ProtectedRoute>} />
+      <Route path="/events/:eventId/chat" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
+
+      <Route path="/teams/:id" element={<ProtectedRoute><TeamDetailPage /></ProtectedRoute>} />
+      <Route path="/teams/:teamId/members" element={<ProtectedRoute><TeamMembersPage /></ProtectedRoute>} />
+      <Route path="/teams/:teamId/events" element={<ProtectedRoute><TeamEventsListPage /></ProtectedRoute>} />
+      <Route path="/teams/:teamId/requests" element={<ProtectedRoute><TeamJoinRequestsPage /></ProtectedRoute>} />
+      <Route path="/teams/:teamId/edit" element={<ProtectedRoute><TeamEditPage /></ProtectedRoute>} />
+      <Route path="/teams/:teamId/chat" element={<ProtectedRoute><TeamChatPage /></ProtectedRoute>} />
+      <Route path="/teams/:teamId/events/create" element={<ProtectedRoute><CreateTeamEventPage /></ProtectedRoute>} />
+      <Route path="/teams/:teamId/events/:eventId" element={<ProtectedRoute><TeamEventDetailPage /></ProtectedRoute>} />
+      <Route path="/teams/:teamId/events/:eventId/edit" element={<ProtectedRoute><CreateTeamEventPage /></ProtectedRoute>} />
+
+      {/* Protected routes with MainLayout (tab bar) */}
       <Route
         element={
           <ProtectedRoute>
@@ -75,22 +91,9 @@ function AppRoutes() {
       >
         {/* Events */}
         <Route path="/events" element={<EventsListPage />} />
-        <Route path="/events/create" element={<CreateEventPage />} />
-        <Route path="/events/:id" element={<EventDetailPage />} />
-        <Route path="/events/:id/edit" element={<CreateEventPage />} />
-        <Route path="/events/:eventId/chat" element={<ChatPage />} />
 
         {/* Teams */}
         <Route path="/teams" element={<TeamsListPage />} />
-        <Route path="/teams/:id" element={<TeamDetailPage />} />
-        <Route path="/teams/:teamId/members" element={<TeamMembersPage />} />
-        <Route path="/teams/:teamId/events" element={<TeamEventsListPage />} />
-        <Route path="/teams/:teamId/requests" element={<TeamJoinRequestsPage />} />
-        <Route path="/teams/:teamId/edit" element={<TeamEditPage />} />
-        <Route path="/teams/:teamId/chat" element={<TeamChatPage />} />
-        <Route path="/teams/:teamId/events/create" element={<CreateTeamEventPage />} />
-        <Route path="/teams/:teamId/events/:eventId" element={<TeamEventDetailPage />} />
-        <Route path="/teams/:teamId/events/:eventId/edit" element={<CreateTeamEventPage />} />
 
         {/* Rankings */}
         <Route path="/rankings" element={<RankingsPage />} />
