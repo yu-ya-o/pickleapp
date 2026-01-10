@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { ChevronLeft } from 'lucide-react';
 import { api } from '@/services/api';
 import { Avatar, Loading } from '@/components/ui';
 import { getDisplayName } from '@/lib/utils';
@@ -82,14 +83,15 @@ export function TeamJoinRequestsPage() {
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
         <div className="flex items-center justify-between" style={{ padding: '12px 16px' }}>
-          <div style={{ width: '60px' }} />
-          <h1 className="font-semibold text-lg">参加リクエスト</h1>
           <button
             onClick={() => navigate(-1)}
-            className="text-[var(--primary)] font-medium"
+            className="flex items-center text-[var(--primary)] font-medium"
           >
-            完了
+            <ChevronLeft size={24} />
+            <span>戻る</span>
           </button>
+          <h1 className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">参加リクエスト</h1>
+          <div style={{ width: '60px' }} />
         </div>
       </header>
 

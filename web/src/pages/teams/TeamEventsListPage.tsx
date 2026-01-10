@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { Plus, Calendar, MapPin, Users, ChevronRight } from 'lucide-react';
+import { ChevronLeft, Plus, Calendar, MapPin, Users, ChevronRight } from 'lucide-react';
 import { api } from '@/services/api';
 import { Avatar, Loading } from '@/components/ui';
 import type { Team, TeamEvent } from '@/types';
@@ -62,11 +62,12 @@ export function TeamEventsListPage() {
         <div className="flex items-center justify-between" style={{ padding: '12px 16px' }}>
           <button
             onClick={() => navigate(-1)}
-            className="text-[var(--primary)] font-medium"
+            className="flex items-center text-[var(--primary)] font-medium"
           >
-            完了
+            <ChevronLeft size={24} />
+            <span>戻る</span>
           </button>
-          <h1 className="font-semibold text-lg">チームイベント</h1>
+          <h1 className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">チームイベント</h1>
           {isAdmin ? (
             <button
               onClick={() => navigate(`/teams/${teamId}/events/create`)}
@@ -75,7 +76,7 @@ export function TeamEventsListPage() {
               <Plus size={24} />
             </button>
           ) : (
-            <div style={{ width: '24px' }} />
+            <div style={{ width: '60px' }} />
           )}
         </div>
       </header>
