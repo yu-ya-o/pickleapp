@@ -270,7 +270,7 @@ export function EventDetailPage() {
 
         {/* Action Buttons */}
         <div className="border-t border-[var(--border)]" style={{ padding: '16px' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {/* Chat Button */}
             <button
               onClick={() => navigate(`/events/${event.id}/chat`)}
