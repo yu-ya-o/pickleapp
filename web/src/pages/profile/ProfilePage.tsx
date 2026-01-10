@@ -4,8 +4,6 @@ import {
   Calendar,
   Edit,
   Mail,
-  LogOut,
-  Trash2,
   User,
   MapPin,
   Clock,
@@ -14,6 +12,7 @@ import {
   Users,
   ChevronRight,
   ExternalLink,
+  Hash,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/services/api';
@@ -58,6 +57,7 @@ export function ProfilePage() {
     { icon: TrendingUp, label: 'DUPR シングルス', value: user.duprSingles || '-' },
     { icon: Edit, label: '使用パドル', value: user.myPaddle || '-' },
     { icon: Users, label: '性別', value: user.gender || '-' },
+    { icon: Hash, label: '年代', value: user.ageGroup || '-' },
   ];
 
   return (
@@ -151,20 +151,20 @@ export function ProfilePage() {
         </div>
 
         {/* Logout & Delete */}
-        <div className="mt-10 space-y-3">
+        <div className="mt-6 space-y-3">
           <button
             onClick={() => setShowLogoutModal(true)}
-            className="flex items-center justify-center w-full px-5 py-4 text-[var(--muted-foreground)] hover:bg-[var(--muted)] rounded-2xl transition-colors"
+            className="flex items-center justify-center w-full px-5 py-4 rounded-2xl transition-colors"
+            style={{ backgroundColor: 'rgba(255, 59, 48, 0.1)', color: '#FF3B30' }}
           >
-            <LogOut size={20} className="mr-3" />
-            <span>ログアウト</span>
+            <span className="font-medium">ログアウト</span>
           </button>
 
           <button
             onClick={() => setShowDeleteModal(true)}
-            className="flex items-center justify-center w-full px-5 py-4 text-[var(--destructive)] hover:bg-red-50 rounded-2xl transition-colors"
+            className="flex items-center justify-center w-full px-5 py-4 border border-[var(--border)] rounded-2xl transition-colors hover:bg-[var(--muted)]"
+            style={{ color: '#9CA3AF' }}
           >
-            <Trash2 size={20} className="mr-3" />
             <span>アカウントを削除</span>
           </button>
         </div>
