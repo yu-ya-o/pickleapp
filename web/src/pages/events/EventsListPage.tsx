@@ -4,6 +4,7 @@ import { Plus, MapPin, Calendar, Users, Search, Menu } from 'lucide-react';
 import { api } from '@/services/api';
 import { Loading } from '@/components/ui';
 import { useDrawer } from '@/components/layout/MainLayout';
+import { useAuth } from '@/contexts/AuthContext';
 import { formatDateTime, getDisplayName } from '@/lib/utils';
 import { PREFECTURES } from '@/lib/prefectures';
 import type { Event, TeamEvent } from '@/types';
@@ -13,6 +14,7 @@ type SegmentType = 'public' | 'team';
 export function EventsListPage() {
   const navigate = useNavigate();
   const { openDrawer } = useDrawer();
+  const { isAuthenticated } = useAuth();
   const [events, setEvents] = useState<Event[]>([]);
   const [teamEvents, setTeamEvents] = useState<TeamEvent[]>([]);
   const [publicTeamEvents, setPublicTeamEvents] = useState<TeamEvent[]>([]);
@@ -23,12 +25,13 @@ export function EventsListPage() {
 
   useEffect(() => {
     loadEvents();
-  }, [selectedRegion, segment]);
+  }, [selectedRegion, segment, isAuthenticated]);
 
   const loadEvents = async () => {
     try {
       setIsLoading(true);
-      if (segment === 'public') {
+      // 未ログイン時は常に公開イベントのみ
+      if (!isAuthenticated || segment === 'public') {
         const [eventsData, publicTeamEventsData] = await Promise.all([
           api.getEvents({
             status: 'active',
@@ -133,51 +136,53 @@ export function EventsListPage() {
           <div style={{ width: '36px' }} className="md:hidden" />
         </div>
 
-        {/* Segment Control */}
-        <div style={{
-          display: 'flex',
-          background: '#F0F0F0',
-          borderRadius: '12px',
-          padding: '4px',
-          marginBottom: '12px'
-        }}>
-          <button
-            onClick={() => setSegment('public')}
-            style={{
-              flex: 1,
-              padding: '8px 0',
-              fontSize: '14px',
-              fontWeight: 500,
-              borderRadius: '10px',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-              background: segment === 'public' ? '#FFFFFF' : 'transparent',
-              color: segment === 'public' ? '#1a1a2e' : '#888888',
-              boxShadow: segment === 'public' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
-            }}
-          >
-            公開イベント
-          </button>
-          <button
-            onClick={() => setSegment('team')}
-            style={{
-              flex: 1,
-              padding: '8px 0',
-              fontSize: '14px',
-              fontWeight: 500,
-              borderRadius: '10px',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-              background: segment === 'team' ? '#FFFFFF' : 'transparent',
-              color: segment === 'team' ? '#1a1a2e' : '#888888',
-              boxShadow: segment === 'team' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
-            }}
-          >
-            マイチームイベント
-          </button>
-        </div>
+        {/* Segment Control - ログイン時のみ表示 */}
+        {isAuthenticated && (
+          <div style={{
+            display: 'flex',
+            background: '#F0F0F0',
+            borderRadius: '12px',
+            padding: '4px',
+            marginBottom: '12px'
+          }}>
+            <button
+              onClick={() => setSegment('public')}
+              style={{
+                flex: 1,
+                padding: '8px 0',
+                fontSize: '14px',
+                fontWeight: 500,
+                borderRadius: '10px',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                background: segment === 'public' ? '#FFFFFF' : 'transparent',
+                color: segment === 'public' ? '#1a1a2e' : '#888888',
+                boxShadow: segment === 'public' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+              }}
+            >
+              公開イベント
+            </button>
+            <button
+              onClick={() => setSegment('team')}
+              style={{
+                flex: 1,
+                padding: '8px 0',
+                fontSize: '14px',
+                fontWeight: 500,
+                borderRadius: '10px',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                background: segment === 'team' ? '#FFFFFF' : 'transparent',
+                color: segment === 'team' ? '#1a1a2e' : '#888888',
+                boxShadow: segment === 'team' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+              }}
+            >
+              マイチームイベント
+            </button>
+          </div>
+        )}
 
         {/* Search Bar */}
         <div style={{ display: 'flex', gap: '10px' }}>
@@ -248,7 +253,7 @@ export function EventsListPage() {
           <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '80px' }}>
             <Loading size="lg" />
           </div>
-        ) : segment === 'public' ? (
+        ) : (!isAuthenticated || segment === 'public') ? (
           allPublicEvents.length === 0 ? (
             <div style={{ textAlign: 'center', paddingTop: '80px' }}>
               <Calendar size={56} style={{ color: '#CCCCCC', margin: '0 auto' }} />
@@ -283,29 +288,31 @@ export function EventsListPage() {
         )}
       </div>
 
-      {/* FAB */}
-      <button
-        onClick={() => navigate('/events/create')}
-        style={{
-          position: 'fixed',
-          bottom: '24px',
-          right: '16px',
-          width: '56px',
-          height: '56px',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: '#FFFFFF',
-          borderRadius: '50%',
-          border: 'none',
-          boxShadow: '0 4px 20px rgba(102, 126, 234, 0.4)',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 50
-        }}
-      >
-        <Plus size={24} />
-      </button>
+      {/* FAB - ログイン時のみ表示 */}
+      {isAuthenticated && (
+        <button
+          onClick={() => navigate('/events/create')}
+          style={{
+            position: 'fixed',
+            bottom: '24px',
+            right: '16px',
+            width: '56px',
+            height: '56px',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: '#FFFFFF',
+            borderRadius: '50%',
+            border: 'none',
+            boxShadow: '0 4px 20px rgba(102, 126, 234, 0.4)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 50
+          }}
+        >
+          <Plus size={24} />
+        </button>
+      )}
     </div>
   );
 }

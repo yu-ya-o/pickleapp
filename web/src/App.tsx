@@ -52,6 +52,17 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+// Wrapper that shows loading while auth is initializing
+function OptionalAuthRoute({ children }: { children: React.ReactNode }) {
+  const { isLoading } = useAuth();
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
+
+  return <>{children}</>;
+}
+
 function AppRoutes() {
   return (
     <Routes>
@@ -65,13 +76,15 @@ function AppRoutes() {
         }
       />
 
-      {/* Protected fullscreen routes (no tab bar) */}
-      <Route path="/events/:id" element={<ProtectedRoute><EventDetailPage /></ProtectedRoute>} />
+      {/* Public viewable routes (no auth required) */}
+      <Route path="/events/:id" element={<OptionalAuthRoute><EventDetailPage /></OptionalAuthRoute>} />
+      <Route path="/teams/:id" element={<OptionalAuthRoute><TeamDetailPage /></OptionalAuthRoute>} />
+
+      {/* Protected fullscreen routes (auth required) */}
       <Route path="/events/create" element={<ProtectedRoute><CreateEventPage /></ProtectedRoute>} />
       <Route path="/events/:id/edit" element={<ProtectedRoute><CreateEventPage /></ProtectedRoute>} />
       <Route path="/events/:eventId/chat" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
 
-      <Route path="/teams/:id" element={<ProtectedRoute><TeamDetailPage /></ProtectedRoute>} />
       <Route path="/teams/:teamId/members" element={<ProtectedRoute><TeamMembersPage /></ProtectedRoute>} />
       <Route path="/teams/:teamId/events" element={<ProtectedRoute><TeamEventsListPage /></ProtectedRoute>} />
       <Route path="/teams/:teamId/requests" element={<ProtectedRoute><TeamJoinRequestsPage /></ProtectedRoute>} />
@@ -81,7 +94,21 @@ function AppRoutes() {
       <Route path="/teams/:teamId/events/:eventId" element={<ProtectedRoute><TeamEventDetailPage /></ProtectedRoute>} />
       <Route path="/teams/:teamId/events/:eventId/edit" element={<ProtectedRoute><CreateTeamEventPage /></ProtectedRoute>} />
 
-      {/* Protected routes with MainLayout (tab bar) */}
+      {/* Public list routes with MainLayout */}
+      <Route
+        element={
+          <OptionalAuthRoute>
+            <MainLayout />
+          </OptionalAuthRoute>
+        }
+      >
+        {/* Public pages */}
+        <Route path="/events" element={<EventsListPage />} />
+        <Route path="/teams" element={<TeamsListPage />} />
+        <Route path="/rankings" element={<RankingsPage />} />
+      </Route>
+
+      {/* Protected routes with MainLayout */}
       <Route
         element={
           <ProtectedRoute>
@@ -89,15 +116,6 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       >
-        {/* Events */}
-        <Route path="/events" element={<EventsListPage />} />
-
-        {/* Teams */}
-        <Route path="/teams" element={<TeamsListPage />} />
-
-        {/* Rankings */}
-        <Route path="/rankings" element={<RankingsPage />} />
-
         {/* Notifications */}
         <Route path="/notifications" element={<NotificationsPage />} />
 
