@@ -24,12 +24,13 @@ import type { Event } from '@/types';
 export function EventDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const [event, setEvent] = useState<Event | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCloseModal, setShowCloseModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -324,161 +325,185 @@ export function EventDetailPage() {
 
         {/* Action Buttons */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '16px' }}>
-          {/* Chat Button */}
-          <button
-            onClick={() => navigate(`/events/${event.id}/chat`)}
-            style={{
-              width: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              color: '#FFFFFF',
-              fontWeight: 500,
-              borderRadius: '12px',
-              border: 'none',
-              cursor: 'pointer',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              padding: '14px',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-            }}
-          >
-            <MessageCircle size={20} />
-            <span>チャットを開く</span>
-          </button>
-
-          {/* Join/Cancel Button */}
-          {!isCreator && (
+          {/* 未ログイン時は参加ボタンのみ表示 */}
+          {!isAuthenticated ? (
             <button
-              onClick={isJoined ? handleCancel : handleJoin}
-              disabled={isActionLoading || (!isJoined && isFull)}
+              onClick={() => setShowLoginModal(true)}
+              disabled={isFull}
               style={{
                 width: '100%',
                 fontWeight: 500,
                 borderRadius: '12px',
                 border: 'none',
                 cursor: 'pointer',
-                backgroundColor: isJoined ? '#FEE2E2' : '#DBEAFE',
-                color: isJoined ? '#DC2626' : '#667eea',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                color: '#FFFFFF',
                 padding: '14px',
                 boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                opacity: (isActionLoading || (!isJoined && isFull)) ? 0.5 : 1
+                opacity: isFull ? 0.5 : 1
               }}
             >
-              {isActionLoading ? '処理中...' : isJoined ? '参加をキャンセル' : isFull ? '満員' : '参加する'}
+              {isFull ? '満員' : '参加する'}
             </button>
-          )}
-
-          {/* Creator Actions */}
-          {isCreator && (
+          ) : (
             <>
-              {/* Cancel participation for creator */}
-              {isJoined && (
+              {/* Chat Button */}
+              <button
+                onClick={() => navigate(`/events/${event.id}/chat`)}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  color: '#FFFFFF',
+                  fontWeight: 500,
+                  borderRadius: '12px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  padding: '14px',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                }}
+              >
+                <MessageCircle size={20} />
+                <span>チャットを開く</span>
+              </button>
+
+              {/* Join/Cancel Button */}
+              {!isCreator && (
                 <button
-                  onClick={handleCancel}
-                  disabled={isActionLoading}
+                  onClick={isJoined ? handleCancel : handleJoin}
+                  disabled={isActionLoading || (!isJoined && isFull)}
                   style={{
                     width: '100%',
                     fontWeight: 500,
                     borderRadius: '12px',
                     border: 'none',
                     cursor: 'pointer',
-                    backgroundColor: '#FEE2E2',
-                    color: '#DC2626',
+                    backgroundColor: isJoined ? '#FEE2E2' : '#DBEAFE',
+                    color: isJoined ? '#DC2626' : '#667eea',
                     padding: '14px',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                    opacity: (isActionLoading || (!isJoined && isFull)) ? 0.5 : 1
                   }}
                 >
-                  参加をキャンセル
+                  {isActionLoading ? '処理中...' : isJoined ? '参加をキャンセル' : isFull ? '満員' : '参加する'}
                 </button>
               )}
 
-              {/* Edit Button */}
-              <button
-                onClick={() => navigate(`/events/${event.id}/edit`)}
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  fontWeight: 500,
-                  borderRadius: '12px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  backgroundColor: '#DBEAFE',
-                  color: '#667eea',
-                  padding: '14px',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                }}
-              >
-                <Edit size={18} />
-                <span>イベントを編集</span>
-              </button>
+              {/* Creator Actions */}
+              {isCreator && (
+                <>
+                  {/* Cancel participation for creator */}
+                  {isJoined && (
+                    <button
+                      onClick={handleCancel}
+                      disabled={isActionLoading}
+                      style={{
+                        width: '100%',
+                        fontWeight: 500,
+                        borderRadius: '12px',
+                        border: 'none',
+                        cursor: 'pointer',
+                        backgroundColor: '#FEE2E2',
+                        color: '#DC2626',
+                        padding: '14px',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                      }}
+                    >
+                      参加をキャンセル
+                    </button>
+                  )}
 
-              {/* Duplicate Button */}
-              <button
-                onClick={() => navigate(`/events/create?duplicate=${event.id}`)}
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  fontWeight: 500,
-                  borderRadius: '12px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  backgroundColor: '#DCFCE7',
-                  color: '#16A34A',
-                  padding: '14px',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                }}
-              >
-                <Copy size={18} />
-                <span>イベントを複製</span>
-              </button>
+                  {/* Edit Button */}
+                  <button
+                    onClick={() => navigate(`/events/${event.id}/edit`)}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      fontWeight: 500,
+                      borderRadius: '12px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      backgroundColor: '#DBEAFE',
+                      color: '#667eea',
+                      padding: '14px',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                    }}
+                  >
+                    <Edit size={18} />
+                    <span>イベントを編集</span>
+                  </button>
 
-              {/* Close Event Button */}
-              <button
-                onClick={() => setShowCloseModal(true)}
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  fontWeight: 500,
-                  borderRadius: '12px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  backgroundColor: '#FEF3C7',
-                  color: '#D97706',
-                  padding: '14px',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                }}
-              >
-                <Lock size={18} />
-                <span>イベントを締め切る</span>
-              </button>
+                  {/* Duplicate Button */}
+                  <button
+                    onClick={() => navigate(`/events/create?duplicate=${event.id}`)}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      fontWeight: 500,
+                      borderRadius: '12px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      backgroundColor: '#DCFCE7',
+                      color: '#16A34A',
+                      padding: '14px',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                    }}
+                  >
+                    <Copy size={18} />
+                    <span>イベントを複製</span>
+                  </button>
 
-              {/* Delete Button */}
-              <button
-                onClick={() => setShowDeleteModal(true)}
-                style={{
-                  width: '100%',
-                  fontWeight: 500,
-                  borderRadius: '12px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  backgroundColor: '#FEE2E2',
-                  color: '#DC2626',
-                  padding: '14px',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                }}
-              >
-                イベントを削除
-              </button>
+                  {/* Close Event Button */}
+                  <button
+                    onClick={() => setShowCloseModal(true)}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      fontWeight: 500,
+                      borderRadius: '12px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      backgroundColor: '#FEF3C7',
+                      color: '#D97706',
+                      padding: '14px',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                    }}
+                  >
+                    <Lock size={18} />
+                    <span>イベントを締め切る</span>
+                  </button>
+
+                  {/* Delete Button */}
+                  <button
+                    onClick={() => setShowDeleteModal(true)}
+                    style={{
+                      width: '100%',
+                      fontWeight: 500,
+                      borderRadius: '12px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      backgroundColor: '#FEE2E2',
+                      color: '#DC2626',
+                      padding: '14px',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                    }}
+                  >
+                    イベントを削除
+                  </button>
+                </>
+              )}
             </>
           )}
         </div>
@@ -535,6 +560,49 @@ export function EventDetailPage() {
             onClick={handleDelete}
           >
             削除する
+          </button>
+        </div>
+      </Modal>
+
+      {/* Login Required Modal */}
+      <Modal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="ログインが必要です"
+      >
+        <p style={{ color: '#666666', marginBottom: '24px' }}>
+          イベントに参加するにはログインしてください。
+        </p>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <button
+            style={{
+              flex: 1,
+              fontWeight: 500,
+              borderRadius: '12px',
+              border: 'none',
+              cursor: 'pointer',
+              backgroundColor: '#F3F4F6',
+              color: '#374151',
+              padding: '14px'
+            }}
+            onClick={() => setShowLoginModal(false)}
+          >
+            キャンセル
+          </button>
+          <button
+            style={{
+              flex: 1,
+              fontWeight: 500,
+              borderRadius: '12px',
+              border: 'none',
+              cursor: 'pointer',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              color: 'white',
+              padding: '14px'
+            }}
+            onClick={() => navigate('/login')}
+          >
+            ログイン
           </button>
         </div>
       </Modal>

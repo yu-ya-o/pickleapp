@@ -11,16 +11,19 @@ import {
   Crown,
 } from 'lucide-react';
 import { api } from '@/services/api';
+import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, Loading, Modal } from '@/components/ui';
 import type { Team } from '@/types';
 
 export function TeamDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const [team, setTeam] = useState<Team | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -207,13 +210,19 @@ export function TeamDetailPage() {
               onClick={() => navigate(`/teams/${team.id}/members`)}
             />
             <button
-              onClick={handleJoinRequest}
-              disabled={isActionLoading || team.hasPendingJoinRequest}
+              onClick={() => {
+                if (!isAuthenticated) {
+                  setShowLoginModal(true);
+                } else {
+                  handleJoinRequest();
+                }
+              }}
+              disabled={isActionLoading || (isAuthenticated && team.hasPendingJoinRequest)}
               className="w-full flex items-center justify-center gap-2 text-white font-medium rounded-xl disabled:opacity-50"
               style={{ backgroundColor: 'var(--primary)', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
             >
               <UserPlus size={20} />
-              <span>{team.hasPendingJoinRequest ? '申請中' : '参加リクエスト'}</span>
+              <span>{isAuthenticated && team.hasPendingJoinRequest ? '申請中' : '参加リクエスト'}</span>
             </button>
           </div>
         )}
@@ -242,6 +251,49 @@ export function TeamDetailPage() {
             onClick={handleDeleteTeam}
           >
             削除する
+          </button>
+        </div>
+      </Modal>
+
+      {/* Login Required Modal */}
+      <Modal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="ログインが必要です"
+      >
+        <p style={{ color: '#666666', marginBottom: '24px' }}>
+          チームに参加リクエストを送るにはログインしてください。
+        </p>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <button
+            style={{
+              flex: 1,
+              fontWeight: 500,
+              borderRadius: '12px',
+              border: 'none',
+              cursor: 'pointer',
+              backgroundColor: '#F3F4F6',
+              color: '#374151',
+              padding: '14px'
+            }}
+            onClick={() => setShowLoginModal(false)}
+          >
+            キャンセル
+          </button>
+          <button
+            style={{
+              flex: 1,
+              fontWeight: 500,
+              borderRadius: '12px',
+              border: 'none',
+              cursor: 'pointer',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              color: 'white',
+              padding: '14px'
+            }}
+            onClick={() => navigate('/login')}
+          >
+            ログイン
           </button>
         </div>
       </Modal>
