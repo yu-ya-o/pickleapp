@@ -38,20 +38,6 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-function PublicRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, isLoading } = useAuth();
-
-  if (isLoading) {
-    return <LoadingPage />;
-  }
-
-  if (isAuthenticated) {
-    return <Navigate to="/events" replace />;
-  }
-
-  return <>{children}</>;
-}
-
 // Wrapper that shows loading while auth is initializing
 function OptionalAuthRoute({ children }: { children: React.ReactNode }) {
   const { isLoading } = useAuth();
