@@ -19,6 +19,7 @@ export function EventsListPage() {
   const [teamEvents, setTeamEvents] = useState<TeamEvent[]>([]);
   const [publicTeamEvents, setPublicTeamEvents] = useState<TeamEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('');
   const [segment, setSegment] = useState<SegmentType>('public');
@@ -30,6 +31,7 @@ export function EventsListPage() {
   const loadEvents = async () => {
     try {
       setIsLoading(true);
+      setError(null);
       // 未ログイン時は常に公開イベントのみ
       if (!isAuthenticated || segment === 'public') {
         const [eventsData, publicTeamEventsData] = await Promise.all([
@@ -46,8 +48,9 @@ export function EventsListPage() {
         const data = await api.getMyTeamEvents(true);
         setTeamEvents(data);
       }
-    } catch (error) {
-      console.error('Failed to load events:', error);
+    } catch (err) {
+      console.error('Failed to load events:', err);
+      setError('イベントの読み込みに失敗しました');
     } finally {
       setIsLoading(false);
     }
@@ -252,6 +255,28 @@ export function EventsListPage() {
         {isLoading ? (
           <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '80px' }}>
             <Loading size="lg" />
+          </div>
+        ) : error ? (
+          <div style={{ textAlign: 'center', paddingTop: '80px' }}>
+            <Calendar size={56} style={{ color: '#DC2626', margin: '0 auto' }} />
+            <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#1a1a2e', marginTop: '20px', marginBottom: '8px' }}>
+              {error}
+            </h3>
+            <button
+              onClick={() => loadEvents()}
+              style={{
+                marginTop: '16px',
+                padding: '10px 24px',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: 500
+              }}
+            >
+              再試行
+            </button>
           </div>
         ) : (!isAuthenticated || segment === 'public') ? (
           allPublicEvents.length === 0 ? (
