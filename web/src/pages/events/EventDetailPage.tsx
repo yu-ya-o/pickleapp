@@ -27,6 +27,7 @@ export function EventDetailPage() {
   const { user, isAuthenticated } = useAuth();
   const [event, setEvent] = useState<Event | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCloseModal, setShowCloseModal] = useState(false);
@@ -41,10 +42,12 @@ export function EventDetailPage() {
   const loadEvent = async () => {
     try {
       setIsLoading(true);
+      setError(null);
       const data = await api.getEvent(id!);
       setEvent(data);
-    } catch (error) {
-      console.error('Failed to load event:', error);
+    } catch (err) {
+      console.error('Failed to load event:', err);
+      setError(err instanceof Error ? err.message : 'イベントの読み込みに失敗しました');
     } finally {
       setIsLoading(false);
     }
@@ -113,8 +116,26 @@ export function EventDetailPage() {
 
   if (!event) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500">イベントが見つかりません</p>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#F5F5F7', padding: '16px' }}>
+        <Calendar size={56} style={{ color: '#DC2626', marginBottom: '16px' }} />
+        <p style={{ color: '#1a1a2e', fontWeight: 600, fontSize: '18px', marginBottom: '8px' }}>
+          {error || 'イベントが見つかりません'}
+        </p>
+        <button
+          onClick={() => navigate('/events')}
+          style={{
+            marginTop: '16px',
+            padding: '10px 24px',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: '#FFFFFF',
+            border: 'none',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontWeight: 500
+          }}
+        >
+          イベント一覧に戻る
+        </button>
       </div>
     );
   }
