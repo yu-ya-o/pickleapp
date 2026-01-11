@@ -66,16 +66,6 @@ function OptionalAuthRoute({ children }: { children: React.ReactNode }) {
 function AppRoutes() {
   return (
     <Routes>
-      {/* Public routes */}
-      <Route
-        path="/login"
-        element={
-          <PublicRoute>
-            <LoginPage />
-          </PublicRoute>
-        }
-      />
-
       {/* Public viewable routes (no auth required) */}
       <Route path="/events/:id" element={<OptionalAuthRoute><EventDetailPage /></OptionalAuthRoute>} />
       <Route path="/teams/:id" element={<OptionalAuthRoute><TeamDetailPage /></OptionalAuthRoute>} />
@@ -94,7 +84,7 @@ function AppRoutes() {
       <Route path="/teams/:teamId/events/create" element={<ProtectedRoute><CreateTeamEventPage /></ProtectedRoute>} />
       <Route path="/teams/:teamId/events/:eventId/edit" element={<ProtectedRoute><CreateTeamEventPage /></ProtectedRoute>} />
 
-      {/* Public list routes with MainLayout */}
+      {/* Public routes with MainLayout (includes login page) */}
       <Route
         element={
           <OptionalAuthRoute>
@@ -103,6 +93,7 @@ function AppRoutes() {
         }
       >
         {/* Public pages */}
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/events" element={<EventsListPage />} />
         <Route path="/teams" element={<TeamsListPage />} />
         <Route path="/rankings" element={<RankingsPage />} />

@@ -1,15 +1,8 @@
 import { useState, createContext, useContext } from 'react';
-import { Outlet, NavLink, useLocation } from 'react-router-dom';
-import { Calendar, Users, Trophy, Bell, User, X } from 'lucide-react';
+import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Calendar, Users, Trophy, Bell, User, X, LogIn, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-const navItems = [
-  { to: '/events', icon: Calendar, label: 'イベント' },
-  { to: '/teams', icon: Users, label: 'チーム' },
-  { to: '/rankings', icon: Trophy, label: 'ランキング' },
-  { to: '/notifications', icon: Bell, label: '通知' },
-  { to: '/profile', icon: User, label: 'プロフィール' },
-];
+import { useAuth } from '@/contexts/AuthContext';
 
 // Context for drawer state
 const DrawerContext = createContext<{
@@ -26,10 +19,34 @@ export const useDrawer = () => useContext(DrawerContext);
 
 export function MainLayout() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { isAuthenticated, signOut } = useAuth();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const openDrawer = () => setIsDrawerOpen(true);
   const closeDrawer = () => setIsDrawerOpen(false);
+
+  // Build nav items based on auth state
+  const navItems = isAuthenticated
+    ? [
+        { to: '/events', icon: Calendar, label: 'イベント' },
+        { to: '/teams', icon: Users, label: 'チーム' },
+        { to: '/rankings', icon: Trophy, label: 'ランキング' },
+        { to: '/notifications', icon: Bell, label: '通知' },
+        { to: '/profile', icon: User, label: 'プロフィール' },
+      ]
+    : [
+        { to: '/events', icon: Calendar, label: 'イベント' },
+        { to: '/teams', icon: Users, label: 'チーム' },
+        { to: '/rankings', icon: Trophy, label: 'ランキング' },
+        { to: '/login', icon: LogIn, label: 'ログイン' },
+      ];
+
+  const handleLogout = async () => {
+    await signOut();
+    closeDrawer();
+    navigate('/login');
+  };
 
   // Determine which tab should be active
   const isTabActive = (to: string) => {
@@ -86,6 +103,15 @@ export function MainLayout() {
 
           {/* Footer */}
           <div className="p-4 border-t border-[var(--border)]">
+            {isAuthenticated && (
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-3 px-4 py-3 rounded-full w-full text-[var(--muted-foreground)] hover:bg-[var(--muted)] hover:text-[var(--foreground)] transition-all duration-200 mb-2"
+              >
+                <LogOut size={20} strokeWidth={2} />
+                <span>ログアウト</span>
+              </button>
+            )}
             <p className="text-xs text-[var(--muted-foreground)] text-center">PickleHub v1.0</p>
           </div>
         </aside>
@@ -185,6 +211,29 @@ export function MainLayout() {
             padding: '16px',
             borderTop: '1px solid #E5E5E5'
           }}>
+            {isAuthenticated && (
+              <button
+                onClick={handleLogout}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '14px',
+                  padding: '14px 16px',
+                  borderRadius: '12px',
+                  width: '100%',
+                  border: 'none',
+                  background: 'transparent',
+                  color: '#DC2626',
+                  fontWeight: 400,
+                  fontSize: '15px',
+                  cursor: 'pointer',
+                  marginBottom: '12px'
+                }}
+              >
+                <LogOut size={22} strokeWidth={2} />
+                <span>ログアウト</span>
+              </button>
+            )}
             <p style={{ fontSize: '12px', color: '#888888', textAlign: 'center' }}>
               PickleHub v1.0
             </p>

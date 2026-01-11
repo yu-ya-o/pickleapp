@@ -2,10 +2,13 @@ import { useNavigate } from 'react-router-dom';
 import { GoogleLogin, type CredentialResponse } from '@react-oauth/google';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
+import { Menu } from 'lucide-react';
+import { useDrawer } from '@/components/layout/MainLayout';
 
 export function LoginPage() {
   const navigate = useNavigate();
   const { signInWithGoogle } = useAuth();
+  const { openDrawer } = useDrawer();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -34,107 +37,152 @@ export function LoginPage() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#FFFFFF',
-        padding: '24px',
-      }}
-    >
-      {/* App Name - Italic style */}
-      <h1
+    <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
+      {/* Header */}
+      <header style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 30,
+        background: '#FFFFFF',
+        borderBottom: '1px solid #E5E5E5',
+        padding: '12px 16px'
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between'
+        }}>
+          <button
+            onClick={openDrawer}
+            className="md:hidden"
+            style={{
+              background: '#F0F0F0',
+              border: 'none',
+              borderRadius: '50%',
+              width: '36px',
+              height: '36px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <Menu size={20} style={{ color: '#1a1a2e' }} />
+          </button>
+          <h1 style={{
+            fontSize: '24px',
+            fontWeight: 900,
+            fontStyle: 'italic',
+            color: '#1a1a2e'
+          }}>
+            PickleHub
+          </h1>
+          <div style={{ width: '36px' }} className="md:hidden" />
+        </div>
+      </header>
+
+      {/* Content */}
+      <div
         style={{
-          fontSize: '56px',
-          fontWeight: 700,
-          fontStyle: 'italic',
-          color: '#1a1a2e',
-          marginBottom: '16px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '24px',
+          paddingTop: '80px',
         }}
       >
-        PickleHub
-      </h1>
-
-      {/* Tagline */}
-      <p
-        style={{
-          fontSize: '16px',
-          fontWeight: 400,
-          color: '#666666',
-          marginBottom: '80px',
-        }}
-      >
-        ログインして、ピックルボールイベントに参加しよう！
-      </p>
-
-      {/* Error Message */}
-      {error && (
-        <div
+        {/* App Name - Italic style */}
+        <h1
           style={{
-            marginBottom: '24px',
-            padding: '12px 24px',
-            backgroundColor: '#FEE2E2',
-            borderRadius: '12px',
-            color: '#DC2626',
-            fontSize: '14px',
+            fontSize: '56px',
+            fontWeight: 700,
+            fontStyle: 'italic',
+            color: '#1a1a2e',
+            marginBottom: '16px',
           }}
         >
-          {error}
-        </div>
-      )}
+          PickleHub
+        </h1>
 
-      {/* Google Login Button */}
-      <div style={{ width: '100%', maxWidth: '320px' }}>
-        {isLoading ? (
+        {/* Tagline */}
+        <p
+          style={{
+            fontSize: '16px',
+            fontWeight: 400,
+            color: '#666666',
+            marginBottom: '80px',
+          }}
+        >
+          ログインして、ピックルボールイベントに参加しよう！
+        </p>
+
+        {/* Error Message */}
+        {error && (
           <div
             style={{
-              display: 'flex',
-              justifyContent: 'center',
-              padding: '16px',
+              marginBottom: '24px',
+              padding: '12px 24px',
+              backgroundColor: '#FEE2E2',
+              borderRadius: '12px',
+              color: '#DC2626',
+              fontSize: '14px',
             }}
           >
-            <div
-              style={{
-                width: '32px',
-                height: '32px',
-                border: '3px solid #E5E7EB',
-                borderTopColor: '#3B82F6',
-                borderRadius: '50%',
-                animation: 'spin 1s linear infinite',
-              }}
-            />
-          </div>
-        ) : (
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-            }}
-          >
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={handleGoogleError}
-              useOneTap
-              theme="filled_blue"
-              size="large"
-              text="signin_with"
-              shape="rectangular"
-              locale="ja"
-              width="320"
-            />
+            {error}
           </div>
         )}
-      </div>
 
-      {/* Spin animation style */}
-      <style>{`
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
+        {/* Google Login Button */}
+        <div style={{ width: '100%', maxWidth: '320px' }}>
+          {isLoading ? (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                padding: '16px',
+              }}
+            >
+              <div
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  border: '3px solid #E5E7EB',
+                  borderTopColor: '#3B82F6',
+                  borderRadius: '50%',
+                  animation: 'spin 1s linear infinite',
+                }}
+              />
+            </div>
+          ) : (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleError}
+                useOneTap
+                theme="filled_blue"
+                size="large"
+                text="signin_with"
+                shape="rectangular"
+                locale="ja"
+                width="320"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Spin animation style */}
+        <style>{`
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
     </div>
   );
 }
