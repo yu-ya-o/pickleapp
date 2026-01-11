@@ -23,12 +23,13 @@ import type { TeamEvent } from '@/types';
 export function TeamEventDetailPage() {
   const { teamId, eventId } = useParams<{ teamId: string; eventId: string }>();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const [event, setEvent] = useState<TeamEvent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCloseModal, setShowCloseModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     if (teamId && eventId) {
@@ -282,86 +283,107 @@ export function TeamEventDetailPage() {
         {/* Action Buttons */}
         <div className="border-t border-[var(--border)]" style={{ padding: '16px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {/* Chat Button */}
-            <button
-              onClick={() => navigate(`/events/${event.id}/chat`)}
-              className="w-full flex items-center justify-center gap-2 text-white font-medium rounded-xl"
-              style={{ backgroundColor: 'var(--primary)', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
-            >
-              <MessageCircle size={20} />
-              <span>チャットを開く</span>
-            </button>
-
-            {/* Join/Cancel Button */}
-            {!isCreator && (
+            {/* 未ログイン時は参加ボタンのみ表示 */}
+            {!isAuthenticated ? (
               <button
-                onClick={isJoined ? handleCancel : handleJoin}
-                disabled={isActionLoading || (!isJoined && isFull)}
+                onClick={() => setShowLoginModal(true)}
+                disabled={isFull}
                 className="w-full font-medium rounded-xl disabled:opacity-50"
                 style={{
-                  backgroundColor: isJoined ? '#FEE2E2' : '#DBEAFE',
-                  color: isJoined ? '#DC2626' : 'var(--primary)',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  color: '#FFFFFF',
                   padding: '14px',
                   boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                  border: 'none',
+                  cursor: 'pointer'
                 }}
               >
-                {isActionLoading ? '処理中...' : isJoined ? '参加をキャンセル' : isFull ? '満員' : '参加する'}
+                {isFull ? '満員' : '参加する'}
               </button>
-            )}
-
-            {/* Creator Actions */}
-            {isCreator && (
+            ) : (
               <>
-                {/* Cancel participation for creator */}
-                {isJoined && (
+                {/* Chat Button */}
+                <button
+                  onClick={() => navigate(`/events/${event.id}/chat`)}
+                  className="w-full flex items-center justify-center gap-2 text-white font-medium rounded-xl"
+                  style={{ backgroundColor: 'var(--primary)', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
+                >
+                  <MessageCircle size={20} />
+                  <span>チャットを開く</span>
+                </button>
+
+                {/* Join/Cancel Button */}
+                {!isCreator && (
                   <button
-                    onClick={handleCancel}
-                    disabled={isActionLoading}
-                    className="w-full font-medium rounded-xl"
-                    style={{ backgroundColor: '#FEE2E2', color: '#DC2626', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
+                    onClick={isJoined ? handleCancel : handleJoin}
+                    disabled={isActionLoading || (!isJoined && isFull)}
+                    className="w-full font-medium rounded-xl disabled:opacity-50"
+                    style={{
+                      backgroundColor: isJoined ? '#FEE2E2' : '#DBEAFE',
+                      color: isJoined ? '#DC2626' : 'var(--primary)',
+                      padding: '14px',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                    }}
                   >
-                    参加をキャンセル
+                    {isActionLoading ? '処理中...' : isJoined ? '参加をキャンセル' : isFull ? '満員' : '参加する'}
                   </button>
                 )}
 
-                {/* Edit Button */}
-                <button
-                  onClick={() => navigate(`/teams/${teamId}/events/${event.id}/edit`)}
-                  className="w-full flex items-center justify-center gap-2 font-medium rounded-xl"
-                  style={{ backgroundColor: '#DBEAFE', color: 'var(--primary)', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
-                >
-                  <Edit size={18} />
-                  <span>イベントを編集</span>
-                </button>
+                {/* Creator Actions */}
+                {isCreator && (
+                  <>
+                    {/* Cancel participation for creator */}
+                    {isJoined && (
+                      <button
+                        onClick={handleCancel}
+                        disabled={isActionLoading}
+                        className="w-full font-medium rounded-xl"
+                        style={{ backgroundColor: '#FEE2E2', color: '#DC2626', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
+                      >
+                        参加をキャンセル
+                      </button>
+                    )}
 
-                {/* Duplicate Button */}
-                <button
-                  onClick={() => navigate(`/teams/${teamId}/events/create?duplicate=${event.id}`)}
-                  className="w-full flex items-center justify-center gap-2 font-medium rounded-xl"
-                  style={{ backgroundColor: '#DCFCE7', color: '#16A34A', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
-                >
-                  <Copy size={18} />
-                  <span>イベントを複製</span>
-                </button>
+                    {/* Edit Button */}
+                    <button
+                      onClick={() => navigate(`/teams/${teamId}/events/${event.id}/edit`)}
+                      className="w-full flex items-center justify-center gap-2 font-medium rounded-xl"
+                      style={{ backgroundColor: '#DBEAFE', color: 'var(--primary)', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
+                    >
+                      <Edit size={18} />
+                      <span>イベントを編集</span>
+                    </button>
 
-                {/* Close Event Button */}
-                <button
-                  onClick={() => setShowCloseModal(true)}
-                  className="w-full flex items-center justify-center gap-2 font-medium rounded-xl"
-                  style={{ backgroundColor: '#FEF3C7', color: '#D97706', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
-                >
-                  <Lock size={18} />
-                  <span>イベントを締め切る</span>
-                </button>
+                    {/* Duplicate Button */}
+                    <button
+                      onClick={() => navigate(`/teams/${teamId}/events/create?duplicate=${event.id}`)}
+                      className="w-full flex items-center justify-center gap-2 font-medium rounded-xl"
+                      style={{ backgroundColor: '#DCFCE7', color: '#16A34A', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
+                    >
+                      <Copy size={18} />
+                      <span>イベントを複製</span>
+                    </button>
 
-                {/* Delete Button */}
-                <button
-                  onClick={() => setShowDeleteModal(true)}
-                  className="w-full font-medium rounded-xl"
-                  style={{ backgroundColor: '#FEE2E2', color: '#DC2626', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
-                >
-                  イベントを削除
-                </button>
+                    {/* Close Event Button */}
+                    <button
+                      onClick={() => setShowCloseModal(true)}
+                      className="w-full flex items-center justify-center gap-2 font-medium rounded-xl"
+                      style={{ backgroundColor: '#FEF3C7', color: '#D97706', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
+                    >
+                      <Lock size={18} />
+                      <span>イベントを締め切る</span>
+                    </button>
+
+                    {/* Delete Button */}
+                    <button
+                      onClick={() => setShowDeleteModal(true)}
+                      className="w-full font-medium rounded-xl"
+                      style={{ backgroundColor: '#FEE2E2', color: '#DC2626', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
+                    >
+                      イベントを削除
+                    </button>
+                  </>
+                )}
               </>
             )}
           </div>
@@ -419,6 +441,49 @@ export function TeamEventDetailPage() {
             onClick={handleDelete}
           >
             削除する
+          </button>
+        </div>
+      </Modal>
+
+      {/* Login Required Modal */}
+      <Modal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="ログインが必要です"
+      >
+        <p style={{ color: '#666666', marginBottom: '24px' }}>
+          イベントに参加するにはログインしてください。
+        </p>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <button
+            style={{
+              flex: 1,
+              fontWeight: 500,
+              borderRadius: '12px',
+              border: 'none',
+              cursor: 'pointer',
+              backgroundColor: '#F3F4F6',
+              color: '#374151',
+              padding: '14px'
+            }}
+            onClick={() => setShowLoginModal(false)}
+          >
+            キャンセル
+          </button>
+          <button
+            style={{
+              flex: 1,
+              fontWeight: 500,
+              borderRadius: '12px',
+              border: 'none',
+              cursor: 'pointer',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              color: 'white',
+              padding: '14px'
+            }}
+            onClick={() => navigate('/login')}
+          >
+            ログイン
           </button>
         </div>
       </Modal>
