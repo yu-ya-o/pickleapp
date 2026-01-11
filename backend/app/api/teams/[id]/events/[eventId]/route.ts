@@ -24,11 +24,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { id, eventId } = await params;
     const authHeader = request.headers.get('authorization');
-    const user = await getUserFromAuth(authHeader);
-
-    if (!user) {
-      throw new UnauthorizedError('Authentication required');
-    }
+    // Allow unauthenticated access for public events
+    const user = authHeader ? await getUserFromAuth(authHeader) : null;
 
     const team = await prisma.team.findUnique({
       where: { id },
@@ -109,7 +106,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
 
     // Check access: either user is a member, or event is public
-    const isMember = team.members.some((m) => m.userId === user.id);
+    const isMember = user ? team.members.some((m) => m.userId === user.id) : false;
     const isPublicEvent = event.visibility === 'public';
 
     if (!isMember && !isPublicEvent) {
@@ -149,7 +146,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       })),
       participantCount,
       availableSpots,
-      isUserParticipating: event.participants.some((p) => p.userId === user.id),
+      isUserParticipating: user ? event.participants.some((p) => p.userId === user.id) : false,
     };
 
     return NextResponse.json(response);
