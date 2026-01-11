@@ -61,13 +61,13 @@ export function LoginPage() {
       {/* Tagline */}
       <p
         style={{
-          fontSize: '24px',
-          fontWeight: 500,
-          color: '#1a1a2e',
+          fontSize: '16px',
+          fontWeight: 400,
+          color: '#666666',
           marginBottom: '80px',
         }}
       >
-        ピックルボールをもっと楽しく
+        ログインして、ピックルボールイベントに参加しよう！
       </p>
 
       {/* Error Message */}
