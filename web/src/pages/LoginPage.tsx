@@ -3,66 +3,6 @@ import { GoogleLogin, type CredentialResponse } from '@react-oauth/google';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
 
-// Pickleball player icon SVG
-function PickleballPlayerIcon({ size = 120 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 100 100"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      {/* Head */}
-      <circle cx="50" cy="18" r="10" fill="#22C55E" />
-      {/* Body */}
-      <path
-        d="M50 28 L50 55"
-        stroke="#22C55E"
-        strokeWidth="6"
-        strokeLinecap="round"
-      />
-      {/* Left arm (holding paddle) */}
-      <path
-        d="M50 38 L70 28"
-        stroke="#22C55E"
-        strokeWidth="6"
-        strokeLinecap="round"
-      />
-      {/* Paddle */}
-      <rect
-        x="68"
-        y="12"
-        width="8"
-        height="20"
-        rx="4"
-        fill="#22C55E"
-      />
-      {/* Right arm */}
-      <path
-        d="M50 38 L30 48"
-        stroke="#22C55E"
-        strokeWidth="6"
-        strokeLinecap="round"
-      />
-      {/* Left leg */}
-      <path
-        d="M50 55 L35 80"
-        stroke="#22C55E"
-        strokeWidth="6"
-        strokeLinecap="round"
-      />
-      {/* Right leg */}
-      <path
-        d="M50 55 L65 80"
-        stroke="#22C55E"
-        strokeWidth="6"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
 export function LoginPage() {
   const navigate = useNavigate();
   const { signInWithGoogle } = useAuth();
@@ -105,18 +45,14 @@ export function LoginPage() {
         padding: '24px',
       }}
     >
-      {/* Logo */}
-      <div style={{ marginBottom: '24px' }}>
-        <PickleballPlayerIcon size={120} />
-      </div>
-
-      {/* App Name */}
+      {/* App Name - Italic style */}
       <h1
         style={{
-          fontSize: '36px',
+          fontSize: '56px',
           fontWeight: 700,
+          fontStyle: 'italic',
           color: '#1a1a2e',
-          marginBottom: '12px',
+          marginBottom: '16px',
         }}
       >
         PickleHub
@@ -125,8 +61,9 @@ export function LoginPage() {
       {/* Tagline */}
       <p
         style={{
-          fontSize: '16px',
-          color: '#888888',
+          fontSize: '24px',
+          fontWeight: 500,
+          color: '#1a1a2e',
           marginBottom: '80px',
         }}
       >
