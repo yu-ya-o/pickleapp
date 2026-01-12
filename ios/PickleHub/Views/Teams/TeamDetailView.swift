@@ -128,14 +128,6 @@ struct TeamDetailView: View {
                                     .font(.body)
                                     .foregroundColor(.secondary)
 
-                                // SNS Links
-                                SNSLinksView(
-                                    instagramUrl: team.instagramUrl,
-                                    twitterUrl: team.twitterUrl,
-                                    tiktokUrl: team.tiktokUrl,
-                                    lineUrl: team.lineUrl
-                                )
-
                                 HStack {
                                     Label("\(team.memberCount)人", systemImage: "person.2")
                                     Text("•")
@@ -149,6 +141,31 @@ struct TeamDetailView: View {
                     .padding()
 
                     Divider()
+
+                    // SNS Section
+                    let hasSNS = (team.instagramUrl != nil && !team.instagramUrl!.isEmpty) ||
+                                 (team.twitterUrl != nil && !team.twitterUrl!.isEmpty) ||
+                                 (team.tiktokUrl != nil && !team.tiktokUrl!.isEmpty) ||
+                                 (team.lineUrl != nil && !team.lineUrl!.isEmpty)
+
+                    if hasSNS {
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("SNS")
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.secondary)
+
+                            SNSLinksView(
+                                instagramUrl: team.instagramUrl,
+                                twitterUrl: team.twitterUrl,
+                                tiktokUrl: team.tiktokUrl,
+                                lineUrl: team.lineUrl
+                            )
+                        }
+                        .padding(.horizontal)
+
+                        Divider()
+                    }
 
                     // Actions
                     VStack(spacing: 12) {
