@@ -22,7 +22,8 @@ export async function GET(request: NextRequest) {
     };
 
     if (upcoming) {
-      where.startTime = {
+      // Show events where end time hasn't passed yet
+      where.endTime = {
         gte: new Date(),
       };
     }
