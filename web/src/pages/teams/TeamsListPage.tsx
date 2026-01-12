@@ -4,12 +4,14 @@ import { Plus, Search, Users, MapPin, Crown, Menu } from 'lucide-react';
 import { api } from '@/services/api';
 import { Loading } from '@/components/ui';
 import { useDrawer } from '@/components/layout/MainLayout';
+import { useAuth } from '@/contexts/AuthContext';
 import { PREFECTURES } from '@/lib/prefectures';
 import type { Team } from '@/types';
 
 export function TeamsListPage() {
   const navigate = useNavigate();
   const { openDrawer } = useDrawer();
+  const { isAuthenticated } = useAuth();
   const [teams, setTeams] = useState<Team[]>([]);
   const [myTeams, setMyTeams] = useState<Team[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -18,17 +20,24 @@ export function TeamsListPage() {
 
   useEffect(() => {
     loadTeams();
-  }, [selectedRegion]);
+  }, [selectedRegion, isAuthenticated]);
 
   const loadTeams = async () => {
     try {
       setIsLoading(true);
-      const [allTeams, userTeams] = await Promise.all([
-        api.getTeams({ region: selectedRegion || undefined }),
-        api.getTeams({ myTeams: true }),
-      ]);
-      setTeams(allTeams);
-      setMyTeams(userTeams);
+      // 未ログイン時はマイチームを取得しない
+      if (isAuthenticated) {
+        const [allTeams, userTeams] = await Promise.all([
+          api.getTeams({ region: selectedRegion || undefined }),
+          api.getTeams({ myTeams: true }),
+        ]);
+        setTeams(allTeams);
+        setMyTeams(userTeams);
+      } else {
+        const allTeams = await api.getTeams({ region: selectedRegion || undefined });
+        setTeams(allTeams);
+        setMyTeams([]);
+      }
     } catch (error) {
       console.error('Failed to load teams:', error);
     } finally {
@@ -229,29 +238,31 @@ export function TeamsListPage() {
         )}
       </div>
 
-      {/* FAB */}
-      <button
-        onClick={() => navigate('/teams/create')}
-        style={{
-          position: 'fixed',
-          bottom: '24px',
-          right: '16px',
-          width: '56px',
-          height: '56px',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: '#FFFFFF',
-          borderRadius: '50%',
-          border: 'none',
-          boxShadow: '0 4px 20px rgba(102, 126, 234, 0.4)',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 50
-        }}
-      >
-        <Plus size={24} />
-      </button>
+      {/* FAB - ログイン時のみ表示 */}
+      {isAuthenticated && (
+        <button
+          onClick={() => navigate('/teams/create')}
+          style={{
+            position: 'fixed',
+            bottom: '24px',
+            right: '16px',
+            width: '56px',
+            height: '56px',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: '#FFFFFF',
+            borderRadius: '50%',
+            border: 'none',
+            boxShadow: '0 4px 20px rgba(102, 126, 234, 0.4)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 50
+          }}
+        >
+          <Plus size={24} />
+        </button>
+      )}
     </div>
   );
 }
