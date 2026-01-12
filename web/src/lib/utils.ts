@@ -76,7 +76,7 @@ export function getSkillLevelLabel(skillLevel: string): string {
   }
 }
 
-export function getDisplayName(user: { name: string; nickname?: string }): string {
+export function getDisplayName(user: { name: string; nickname?: string | null }): string {
   return user.nickname || user.name;
 }
 
