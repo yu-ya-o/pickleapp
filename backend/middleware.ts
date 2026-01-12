@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 
 // CORS allowed origins
 const allowedOrigins = [
+  'https://picklehub.jp',
+  'https://www.picklehub.jp',
   'https://pickleapp-web.onrender.com',
   'https://picklehub-web.onrender.com',
   'http://localhost:5173',
