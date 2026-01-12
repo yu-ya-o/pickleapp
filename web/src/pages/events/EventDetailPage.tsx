@@ -32,6 +32,8 @@ export function EventDetailPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCloseModal, setShowCloseModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showJoinModal, setShowJoinModal] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -391,10 +393,10 @@ export function EventDetailPage() {
                 <span>チャットを開く</span>
               </button>
 
-              {/* Join/Cancel Button */}
+              {/* Join/Cancel Button - for non-creators */}
               {!isCreator && (
                 <button
-                  onClick={isJoined ? handleCancel : handleJoin}
+                  onClick={() => isJoined ? setShowCancelModal(true) : setShowJoinModal(true)}
                   disabled={isActionLoading || (!isJoined && isFull)}
                   style={{
                     width: '100%',
@@ -416,10 +418,31 @@ export function EventDetailPage() {
               {/* Creator Actions */}
               {isCreator && (
                 <>
+                  {/* Join button for creator when not joined */}
+                  {!isJoined && (
+                    <button
+                      onClick={() => setShowJoinModal(true)}
+                      disabled={isActionLoading || isFull}
+                      style={{
+                        width: '100%',
+                        fontWeight: 500,
+                        borderRadius: '12px',
+                        border: 'none',
+                        cursor: 'pointer',
+                        backgroundColor: '#DCFCE7',
+                        color: '#16A34A',
+                        padding: '14px',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                        opacity: (isActionLoading || isFull) ? 0.5 : 1
+                      }}
+                    >
+                      {isFull ? '満員' : '参加する'}
+                    </button>
+                  )}
                   {/* Cancel participation for creator */}
                   {isJoined && (
                     <button
-                      onClick={handleCancel}
+                      onClick={() => setShowCancelModal(true)}
                       disabled={isActionLoading}
                       style={{
                         width: '100%',
@@ -624,6 +647,100 @@ export function EventDetailPage() {
             onClick={() => navigate('/login')}
           >
             ログイン
+          </button>
+        </div>
+      </Modal>
+
+      {/* Join Confirmation Modal */}
+      <Modal
+        isOpen={showJoinModal}
+        onClose={() => setShowJoinModal(false)}
+        title="イベントに参加"
+      >
+        <p style={{ color: '#666666', marginBottom: '24px' }}>
+          このイベントに参加しますか？
+        </p>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <button
+            style={{
+              flex: 1,
+              fontWeight: 500,
+              borderRadius: '12px',
+              border: 'none',
+              cursor: 'pointer',
+              backgroundColor: '#F3F4F6',
+              color: '#374151',
+              padding: '14px'
+            }}
+            onClick={() => setShowJoinModal(false)}
+          >
+            キャンセル
+          </button>
+          <button
+            style={{
+              flex: 1,
+              fontWeight: 500,
+              borderRadius: '12px',
+              border: 'none',
+              cursor: 'pointer',
+              backgroundColor: '#16A34A',
+              color: 'white',
+              padding: '14px'
+            }}
+            onClick={() => {
+              setShowJoinModal(false);
+              handleJoin();
+            }}
+            disabled={isActionLoading}
+          >
+            {isActionLoading ? '処理中...' : '参加する'}
+          </button>
+        </div>
+      </Modal>
+
+      {/* Cancel Confirmation Modal */}
+      <Modal
+        isOpen={showCancelModal}
+        onClose={() => setShowCancelModal(false)}
+        title="参加をキャンセル"
+      >
+        <p style={{ color: '#666666', marginBottom: '24px' }}>
+          このイベントへの参加をキャンセルしますか？
+        </p>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <button
+            style={{
+              flex: 1,
+              fontWeight: 500,
+              borderRadius: '12px',
+              border: 'none',
+              cursor: 'pointer',
+              backgroundColor: '#F3F4F6',
+              color: '#374151',
+              padding: '14px'
+            }}
+            onClick={() => setShowCancelModal(false)}
+          >
+            戻る
+          </button>
+          <button
+            style={{
+              flex: 1,
+              fontWeight: 500,
+              borderRadius: '12px',
+              border: 'none',
+              cursor: 'pointer',
+              backgroundColor: '#DC2626',
+              color: 'white',
+              padding: '14px'
+            }}
+            onClick={() => {
+              setShowCancelModal(false);
+              handleCancel();
+            }}
+            disabled={isActionLoading}
+          >
+            {isActionLoading ? '処理中...' : 'キャンセルする'}
           </button>
         </div>
       </Modal>
