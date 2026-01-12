@@ -1,5 +1,20 @@
 import Foundation
 
+// MARK: - Battle Record
+struct BattleRecord: Codable, Identifiable, Hashable {
+    var id: String
+    var tournamentName: String
+    var yearMonth: String
+    var result: String
+
+    init(id: String = UUID().uuidString, tournamentName: String = "", yearMonth: String = "", result: String = "") {
+        self.id = id
+        self.tournamentName = tournamentName
+        self.yearMonth = yearMonth
+        self.result = result
+    }
+}
+
 struct User: Codable, Identifiable, Hashable {
     let id: String
     let email: String
@@ -22,6 +37,9 @@ struct User: Codable, Identifiable, Hashable {
     let twitterUrl: String?
     let tiktokUrl: String?
     let lineUrl: String?
+
+    // Battle Records
+    let battleRecords: [BattleRecord]?
 
     var profileImageURL: URL? {
         guard let urlString = profileImage else { return nil }
@@ -72,6 +90,7 @@ struct UpdateProfileRequest: Codable {
     let twitterUrl: String?
     let tiktokUrl: String?
     let lineUrl: String?
+    let battleRecords: [BattleRecord]?
 
     init(nickname: String? = nil,
          bio: String? = nil,
@@ -87,7 +106,8 @@ struct UpdateProfileRequest: Codable {
          instagramUrl: String? = nil,
          twitterUrl: String? = nil,
          tiktokUrl: String? = nil,
-         lineUrl: String? = nil) {
+         lineUrl: String? = nil,
+         battleRecords: [BattleRecord]? = nil) {
         self.nickname = nickname
         self.bio = bio
         self.region = region
@@ -103,5 +123,6 @@ struct UpdateProfileRequest: Codable {
         self.twitterUrl = twitterUrl
         self.tiktokUrl = tiktokUrl
         self.lineUrl = lineUrl
+        self.battleRecords = battleRecords
     }
 }
