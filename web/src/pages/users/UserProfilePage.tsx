@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, Instagram, ExternalLink } from 'lucide-react';
+import { Menu, Instagram, ExternalLink } from 'lucide-react';
 import { api } from '@/services/api';
 import type { UserProfile } from '@/services/api';
 import { Loading } from '@/components/ui';
+import { useDrawer } from '@/components/layout/MainLayout';
 import { getDisplayName, getSkillLevelLabel } from '@/lib/utils';
 import type { Team } from '@/types';
 
 export function UserProfilePage() {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
+  const { openDrawer } = useDrawer();
   const [user, setUser] = useState<UserProfile | null>(null);
   const [teams, setTeams] = useState<Team[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -93,28 +95,31 @@ export function UserProfilePage() {
         borderBottom: '1px solid #E5E5E5'
       }}>
         <button
-          onClick={() => navigate(-1)}
+          onClick={openDrawer}
+          className="md:hidden"
           style={{
-            background: 'transparent',
+            background: '#F0F0F0',
             border: 'none',
+            borderRadius: '50%',
+            width: '36px',
+            height: '36px',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
-            color: '#667eea',
-            fontWeight: 500
+            justifyContent: 'center'
           }}
         >
-          <ChevronLeft size={24} />
-          <span>戻る</span>
+          <Menu size={20} style={{ color: '#1a1a2e' }} />
         </button>
         <h1 style={{
-          fontSize: '18px',
-          fontWeight: 600,
+          fontSize: '24px',
+          fontWeight: 900,
+          fontStyle: 'italic',
           color: '#1a1a2e'
         }}>
-          プロフィール
+          PickleHub
         </h1>
-        <div style={{ width: '60px' }} />
+        <div style={{ width: '36px' }} className="md:hidden" />
       </header>
 
       {/* Trading Card */}
