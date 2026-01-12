@@ -13,16 +13,21 @@ export function UserProfilePage() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [teams, setTeams] = useState<Team[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (userId) {
       loadUserProfile();
+    } else {
+      setIsLoading(false);
+      setError('ユーザーIDが指定されていません');
     }
   }, [userId]);
 
   const loadUserProfile = async () => {
     try {
       setIsLoading(true);
+      setError(null);
       const [userData, teamsData] = await Promise.all([
         api.getUserProfile(userId!),
         api.getUserTeams(userId!),
@@ -31,6 +36,7 @@ export function UserProfilePage() {
       setTeams(teamsData);
     } catch (error) {
       console.error('Failed to load user profile:', error);
+      setError(error instanceof Error ? error.message : 'プロフィールの読み込みに失敗しました');
     } finally {
       setIsLoading(false);
     }
@@ -47,7 +53,7 @@ export function UserProfilePage() {
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500">ユーザーが見つかりません</p>
+        <p className="text-gray-500">{error || 'ユーザーが見つかりません'}</p>
       </div>
     );
   }
