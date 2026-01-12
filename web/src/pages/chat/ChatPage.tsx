@@ -46,14 +46,18 @@ export function ChatPage() {
   const loadData = async () => {
     try {
       setIsLoading(true);
-      // Load event and chat room in parallel
-      const [eventData, roomData] = await Promise.all([
-        api.getEvent(eventId!),
-        api.getChatRoom(eventId!)
-      ]);
-      setEvent(eventData);
+      // Load chat room first (required)
+      const roomData = await api.getChatRoom(eventId!);
       setChatRoom(roomData);
       setMessages(roomData.messages || []);
+
+      // Load event data separately (optional, for title)
+      try {
+        const eventData = await api.getEvent(eventId!);
+        setEvent(eventData);
+      } catch {
+        // Event fetch failed, continue without title
+      }
 
       // Connect WebSocket
       const token = api.getToken();

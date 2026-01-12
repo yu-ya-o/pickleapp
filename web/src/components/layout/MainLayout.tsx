@@ -1,6 +1,6 @@
 import { useState, createContext, useContext } from 'react';
 import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Calendar, Users, Trophy, Bell, User, X, LogIn, LogOut } from 'lucide-react';
+import { Calendar, Users, Trophy, User, X, LogIn, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -32,7 +32,6 @@ export function MainLayout() {
         { to: '/events', icon: Calendar, label: 'イベント' },
         { to: '/teams', icon: Users, label: 'チーム' },
         { to: '/rankings', icon: Trophy, label: 'ランキング' },
-        { to: '/notifications', icon: Bell, label: '通知' },
         { to: '/profile', icon: User, label: 'プロフィール' },
       ]
     : [

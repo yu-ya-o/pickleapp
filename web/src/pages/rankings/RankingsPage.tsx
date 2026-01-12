@@ -43,19 +43,6 @@ export function RankingsPage() {
     }
   };
 
-  const getTrophyColor = (rank: number) => {
-    switch (rank) {
-      case 1:
-        return '#F59E0B';
-      case 2:
-        return '#9CA3AF';
-      case 3:
-        return '#D97706';
-      default:
-        return 'transparent';
-    }
-  };
-
   return (
     <div style={{
       minHeight: '100vh',
@@ -264,11 +251,6 @@ export function RankingsPage() {
                       </span>
                     </div>
                   </div>
-
-                  {/* Trophy for top 3 */}
-                  {team.rank <= 3 && (
-                    <Trophy size={28} style={{ color: getTrophyColor(team.rank), flexShrink: 0 }} />
-                  )}
                 </div>
               </Link>
             ))}

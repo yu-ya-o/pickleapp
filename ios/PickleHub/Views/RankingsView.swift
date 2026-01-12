@@ -164,13 +164,6 @@ struct RankingRowView: View {
             }
 
             Spacer()
-
-            // Top 3 Trophy Icon
-            if ranking.isTopThree {
-                Image(systemName: "trophy.fill")
-                    .font(.system(size: 24))
-                    .foregroundColor(ranking.rankColor.start)
-            }
         }
         .padding(.horizontal, Spacing.md)
         .padding(.vertical, ranking.isTopThree ? Spacing.md : Spacing.sm)
