@@ -10,6 +10,8 @@ struct ProfileView: View {
     @State private var deleteAccountErrorMessage = ""
     @State private var showingEditProfile = false
     @State private var showingMyEvents = false
+    @State private var userTeams: [Team] = []
+    @State private var isLoadingTeams = false
 
     var body: some View {
         NavigationView {
@@ -132,11 +134,55 @@ struct ProfileView: View {
                                     .tracking(1)
                                     .padding(.horizontal, 16)
 
-                                // TODO: チーム一覧の取得と表示
-                                Text("ありません")
-                                    .font(.system(size: 14))
-                                    .foregroundColor(Color(red: 156/255, green: 163/255, blue: 175/255))
+                                if isLoadingTeams {
+                                    ProgressView()
+                                        .padding(.horizontal, 16)
+                                } else if userTeams.isEmpty {
+                                    Text("ありません")
+                                        .font(.system(size: 14))
+                                        .foregroundColor(Color(red: 156/255, green: 163/255, blue: 175/255))
+                                        .padding(.horizontal, 16)
+                                } else {
+                                    VStack(spacing: 8) {
+                                        ForEach(userTeams) { team in
+                                            NavigationLink(destination: TeamDetailView(teamId: team.id).environmentObject(authViewModel)) {
+                                                HStack(spacing: 12) {
+                                                    if let iconUrl = team.iconImage, let url = URL(string: iconUrl) {
+                                                        AsyncImage(url: url) { image in
+                                                            image
+                                                                .resizable()
+                                                                .scaledToFill()
+                                                        } placeholder: {
+                                                            Circle()
+                                                                .fill(Color(red: 229/255, green: 231/255, blue: 235/255))
+                                                        }
+                                                        .frame(width: 40, height: 40)
+                                                        .clipShape(Circle())
+                                                    } else {
+                                                        Circle()
+                                                            .fill(Color(red: 229/255, green: 231/255, blue: 235/255))
+                                                            .frame(width: 40, height: 40)
+                                                    }
+
+                                                    Text(team.name)
+                                                        .font(.system(size: 15, weight: .medium))
+                                                        .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+
+                                                    Spacer()
+                                                }
+                                                .padding(.horizontal, 16)
+                                                .padding(.vertical, 12)
+                                                .background(Color.white)
+                                                .cornerRadius(12)
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 12)
+                                                        .stroke(Color(red: 229/255, green: 231/255, blue: 235/255), lineWidth: 1)
+                                                )
+                                            }
+                                        }
+                                    }
                                     .padding(.horizontal, 16)
+                                }
                             }
 
                             // 戦績セクション
@@ -332,6 +378,28 @@ struct ProfileView: View {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .onAppear {
+            loadUserTeams()
+        }
+    }
+
+    private func loadUserTeams() {
+        guard let userId = authViewModel.currentUser?.id else { return }
+        isLoadingTeams = true
+        Task {
+            do {
+                let teams = try await APIClient.shared.getUserTeams(userId: userId)
+                await MainActor.run {
+                    self.userTeams = teams
+                    self.isLoadingTeams = false
+                }
+            } catch {
+                print("Failed to load user teams: \(error)")
+                await MainActor.run {
+                    self.isLoadingTeams = false
+                }
+            }
+        }
     }
 }
 
