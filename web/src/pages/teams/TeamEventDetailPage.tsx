@@ -361,7 +361,7 @@ export function TeamEventDetailPage() {
                         onClick={() => setShowJoinModal(true)}
                         disabled={isActionLoading || isFull}
                         className="w-full font-medium rounded-xl disabled:opacity-50"
-                        style={{ backgroundColor: '#DCFCE7', color: '#16A34A', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
+                        style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: '#FFFFFF', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
                       >
                         {isFull ? '満員' : '参加する'}
                       </button>

@@ -429,8 +429,8 @@ export function EventDetailPage() {
                         borderRadius: '12px',
                         border: 'none',
                         cursor: 'pointer',
-                        backgroundColor: '#DCFCE7',
-                        color: '#16A34A',
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        color: '#FFFFFF',
                         padding: '14px',
                         boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                         opacity: (isActionLoading || isFull) ? 0.5 : 1
