@@ -81,8 +81,6 @@
 		1A0000010000000000000072 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000072 /* SplashView.swift */; };
 		1A0000010000000000000073 /* ProfileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000073 /* ProfileEditView.swift */; };
 		1A0000010000000000000074 /* ProfileSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000074 /* ProfileSetupView.swift */; };
-		1A0000010000000000000075 /* DrawerMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000075 /* DrawerMenuView.swift */; };
-		1A0000010000000000000076 /* HamburgerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0000010000000000000076 /* HamburgerHeaderView.swift */; };
 		3A0000010000000000000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A0000010000000000000001 /* Assets.xcassets */; };
 		3A0000010000000000000002 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4A0000010000000000000002 /* GoogleService-Info.plist */; };
 		F596E4E8D42BE8470C6E0E27 /* Pods_PickleHub.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58D912B91FCC83B77CC2A05F /* Pods_PickleHub.framework */; };
@@ -163,8 +161,6 @@
 		2A0000010000000000000072 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		2A0000010000000000000073 /* ProfileEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditView.swift; sourceTree = "<group>"; };
 		2A0000010000000000000074 /* ProfileSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupView.swift; sourceTree = "<group>"; };
-		2A0000010000000000000075 /* DrawerMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawerMenuView.swift; sourceTree = "<group>"; };
-		2A0000010000000000000076 /* HamburgerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HamburgerHeaderView.swift; sourceTree = "<group>"; };
 		4A0000010000000000000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4A0000010000000000000002 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		58D912B91FCC83B77CC2A05F /* Pods_PickleHub.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PickleHub.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -345,8 +341,6 @@
 				2A0000010000000000000054 /* LocationSearchView.swift */,
 				2A0000010000000000000055 /* GoogleMapView.swift */,
 				2A0000010000000000000056 /* SNSLinksView.swift */,
-				2A0000010000000000000075 /* DrawerMenuView.swift */,
-				2A0000010000000000000076 /* HamburgerHeaderView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -601,8 +595,6 @@
 				1A0000010000000000000072 /* SplashView.swift in Sources */,
 				1A0000010000000000000073 /* ProfileEditView.swift in Sources */,
 				1A0000010000000000000074 /* ProfileSetupView.swift in Sources */,
-				1A0000010000000000000075 /* DrawerMenuView.swift in Sources */,
-				1A0000010000000000000076 /* HamburgerHeaderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
