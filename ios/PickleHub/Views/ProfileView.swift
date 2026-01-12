@@ -14,146 +14,144 @@ struct ProfileView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // ハンバーガーメニューヘッダー
-                HamburgerHeaderView(title: "プロフィール", onMenuTap: openDrawer)
+                // ヘッダー
+                HStack(spacing: 12) {
+                    Button(action: openDrawer) {
+                        Image(systemName: "line.3.horizontal")
+                            .font(.system(size: 20, weight: .medium))
+                            .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+                            .frame(width: 44, height: 44)
+                    }
+
+                    Spacer()
+
+                    Text("PickleHub")
+                        .font(.system(size: 24, weight: .black))
+                        .italic()
+                        .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+
+                    Spacer()
+
+                    Button(action: {
+                        // Share action
+                    }) {
+                        Image(systemName: "square.and.arrow.up")
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+                            .frame(width: 44, height: 44)
+                    }
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(Color.white)
 
                 ScrollView {
                     if let user = authViewModel.currentUser {
-                        VStack(alignment: .leading, spacing: 20) {
-                            // Header
-                            VStack(alignment: .leading, spacing: 8) {
-                                HStack(alignment: .top, spacing: 16) {
-                                    // Profile Image
-                                    ProfileImageView(url: user.profileImageURL, size: 80)
+                        VStack(spacing: 20) {
+                            // プロフィールカード
+                            VStack(spacing: 16) {
+                                // プロフィール画像
+                                ZStack {
+                                    Circle()
+                                        .stroke(
+                                            LinearGradient(
+                                                colors: [
+                                                    Color(red: 99/255, green: 102/255, blue: 241/255),
+                                                    Color(red: 168/255, green: 85/255, blue: 247/255)
+                                                ],
+                                                startPoint: .topLeading,
+                                                endPoint: .bottomTrailing
+                                            ),
+                                            lineWidth: 3
+                                        )
+                                        .frame(width: 106, height: 106)
 
-                                    VStack(alignment: .leading, spacing: 8) {
-                                        Text(user.displayName)
-                                            .font(.title)
-                                            .fontWeight(.bold)
-
-                                        if let bio = user.bio, !bio.isEmpty {
-                                            ExpandableTextView(
-                                                text: bio,
-                                                lineLimit: 3,
-                                                font: .body,
-                                                foregroundColor: .secondary,
-                                                alignment: .leading
-                                            )
-                                        }
-                                    }
+                                    ProfileImageView(url: user.profileImageURL, size: 100)
                                 }
-                            }
-                            .padding()
 
-                            Divider()
+                                // 名前
+                                Text(user.displayName)
+                                    .font(.system(size: 22, weight: .bold))
+                                    .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
 
-                            // Profile Details
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("プロフィール情報")
-                                    .font(.headline)
+                                // 自己紹介
+                                if let bio = user.bio, !bio.isEmpty {
+                                    Text(bio)
+                                        .font(.system(size: 14))
+                                        .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
+                                        .multilineTextAlignment(.center)
+                                        .padding(.horizontal, 20)
+                                }
 
-                                VStack(spacing: Spacing.md) {
-                                    if let nickname = user.nickname {
-                                        ProfileInfoRow(
-                                            icon: "person.fill",
-                                            label: "ニックネーム",
-                                            value: nickname
-                                        )
-                                    }
-
-                                    if let region = user.region {
-                                        ProfileInfoRow(
-                                            icon: "mappin.circle.fill",
-                                            label: "地域",
-                                            value: region
-                                        )
-                                    }
-
-                                    if let experience = user.pickleballExperience {
-                                        ProfileInfoRow(
-                                            icon: "clock.fill",
-                                            label: "ピックルボール歴",
-                                            value: experience
-                                        )
-                                    }
-
-                                    if let skillLevel = user.skillLevel {
-                                        ProfileInfoRow(
-                                            icon: "star.fill",
-                                            label: "レベル",
-                                            value: skillLevel
-                                        )
-                                    }
-
-                                    // DUPR Doubles
-                                    ProfileInfoRow(
-                                        icon: "chart.line.uptrend.xyaxis",
-                                        label: "DUPR ダブルス",
-                                        value: user.duprDoubles != nil ? String(format: "%.3f", user.duprDoubles!) : "-"
-                                    )
-
-                                    // DUPR Singles
-                                    ProfileInfoRow(
-                                        icon: "chart.line.uptrend.xyaxis",
-                                        label: "DUPR シングルス",
+                                // DUPR セクション
+                                HStack(spacing: 12) {
+                                    DUPRBox(
+                                        label: "DUPR SINGLES",
                                         value: user.duprSingles != nil ? String(format: "%.3f", user.duprSingles!) : "-"
                                     )
-
-                                    ProfileInfoRow(
-                                        icon: "tennis.racket",
-                                        label: "使用パドル",
-                                        value: user.myPaddle ?? "-"
+                                    DUPRBox(
+                                        label: "DUPR DOUBLES",
+                                        value: user.duprDoubles != nil ? String(format: "%.3f", user.duprDoubles!) : "-"
                                     )
+                                }
+                                .padding(.horizontal, 16)
 
-                                    if let gender = user.gender {
-                                        ProfileInfoRow(
-                                            icon: "person.2.fill",
-                                            label: "性別",
-                                            value: gender
-                                        )
+                                Divider()
+                                    .padding(.horizontal, 16)
+
+                                // プロフィール詳細（2カラム）
+                                VStack(spacing: 16) {
+                                    HStack(spacing: 0) {
+                                        ProfileDetailItem(label: "REGION", value: user.region ?? "-")
+                                        ProfileDetailItem(label: "EXPERIENCE", value: user.pickleballExperience ?? "-")
                                     }
-
-                                    if let ageGroup = user.ageGroup {
-                                        ProfileInfoRow(
-                                            icon: "number.circle.fill",
-                                            label: "年代",
-                                            value: ageGroup
-                                        )
+                                    HStack(spacing: 0) {
+                                        ProfileDetailItem(label: "LEVEL", value: user.skillLevel ?? "-")
+                                        ProfileDetailItem(label: "GENDER", value: user.gender ?? "-")
+                                    }
+                                    HStack(spacing: 0) {
+                                        ProfileDetailItem(label: "AGE", value: user.ageGroup ?? "-")
+                                        ProfileDetailItem(label: "PADDLE", value: user.myPaddle ?? "-")
                                     }
                                 }
-                                .padding(Spacing.md)
-                                .background(
-                                    RoundedRectangle(cornerRadius: CornerRadius.medium)
-                                        .fill(Color(.systemGray6))
-                                )
+                                .padding(.horizontal, 16)
+                                .padding(.bottom, 16)
                             }
-                            .padding(.horizontal)
+                            .background(Color.white)
+                            .cornerRadius(16)
+                            .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 2)
+                            .padding(.horizontal, 16)
+                            .padding(.top, 16)
 
-                            // Battle Records Section
+                            // TEAMSセクション（将来的にチーム一覧を表示）
+                            // TODO: チーム一覧の取得と表示
+
+                            // BATTLE RECORDセクション
                             if let battleRecords = user.battleRecords, !battleRecords.isEmpty {
                                 VStack(alignment: .leading, spacing: 12) {
-                                    Text("戦歴")
-                                        .font(.headline)
-                                        .foregroundColor(.secondary)
+                                    Text("BATTLE RECORD")
+                                        .font(.system(size: 12, weight: .semibold))
+                                        .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
+                                        .tracking(1)
+                                        .padding(.horizontal, 16)
 
                                     VStack(spacing: 0) {
                                         ForEach(battleRecords) { record in
                                             HStack {
                                                 VStack(alignment: .leading, spacing: 4) {
                                                     Text(record.tournamentName)
-                                                        .font(.subheadline)
-                                                        .fontWeight(.medium)
+                                                        .font(.system(size: 15, weight: .medium))
+                                                        .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
                                                     Text(record.yearMonth)
-                                                        .font(.caption)
-                                                        .foregroundColor(.secondary)
+                                                        .font(.system(size: 13))
+                                                        .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
                                                 }
                                                 Spacer()
                                                 Text(record.result)
-                                                    .font(.subheadline)
-                                                    .fontWeight(.semibold)
-                                                    .foregroundColor(record.result == "優勝" ? .red : .primary)
+                                                    .font(.system(size: 15, weight: .semibold))
+                                                    .foregroundColor(record.result == "優勝" ? Color(red: 220/255, green: 38/255, blue: 38/255) : Color(red: 26/255, green: 26/255, blue: 46/255))
                                             }
-                                            .padding(.vertical, 12)
+                                            .padding(.vertical, 14)
                                             .padding(.horizontal, 16)
 
                                             if record.id != battleRecords.last?.id {
@@ -162,142 +160,107 @@ struct ProfileView: View {
                                             }
                                         }
                                     }
-                                    .background(
-                                        RoundedRectangle(cornerRadius: CornerRadius.medium)
-                                            .fill(Color(.systemGray6))
-                                    )
-                                }
-                                .padding(.horizontal)
-                            }
-
-                            // SNS Links Section
-                            if user.instagramUrl != nil || user.twitterUrl != nil || user.tiktokUrl != nil || user.lineUrl != nil {
-                                VStack(alignment: .leading, spacing: 12) {
-                                    Text("SNS")
-                                        .font(.headline)
-                                        .foregroundColor(.secondary)
-
-                                    VStack(spacing: 8) {
-                                        if let instagramUrl = user.instagramUrl, !instagramUrl.isEmpty {
-                                            SNSLinkButton(
-                                                platform: .instagram,
-                                                url: instagramUrl
-                                            )
-                                        }
-                                        if let twitterUrl = user.twitterUrl, !twitterUrl.isEmpty {
-                                            SNSLinkButton(
-                                                platform: .twitter,
-                                                url: twitterUrl
-                                            )
-                                        }
-                                        if let tiktokUrl = user.tiktokUrl, !tiktokUrl.isEmpty {
-                                            SNSLinkButton(
-                                                platform: .tiktok,
-                                                url: tiktokUrl
-                                            )
-                                        }
-                                        if let lineUrl = user.lineUrl, !lineUrl.isEmpty {
-                                            SNSLinkButton(
-                                                platform: .line,
-                                                url: lineUrl
-                                            )
-                                        }
-                                    }
-                                }
-                                .padding(.horizontal)
-                            }
-
-                            Divider()
-
-                            // Actions
-                            VStack(spacing: 12) {
-                                // My Events
-                                Button(action: { showingMyEvents = true }) {
-                                    HStack {
-                                        Image(systemName: "calendar")
-                                        Text("マイイベント")
-                                        Spacer()
-                                        Image(systemName: "chevron.right")
-                                    }
-                                    .foregroundColor(.primary)
-                                    .padding()
-                                    .background(Color(.systemGray6))
-                                    .cornerRadius(12)
-                                }
-
-                                // Edit Profile
-                                Button(action: { showingEditProfile = true }) {
-                                    HStack {
-                                        Image(systemName: "pencil")
-                                        Text("プロフィールを編集")
-                                        Spacer()
-                                        Image(systemName: "chevron.right")
-                                    }
-                                    .foregroundColor(.primary)
-                                    .padding()
-                                    .background(Color(.systemGray6))
-                                    .cornerRadius(12)
-                                }
-
-                                // Contact / お問い合わせ
-                                Button(action: {
-                                    if let url = URL(string: "https://docs.google.com/forms/d/e/1FAIpQLScti-2AT0gb4oM7gpdvLuKSNYQ9ruulbHXPqcEJraR9BTIRkQ/viewform?usp=header") {
-                                        UIApplication.shared.open(url)
-                                    }
-                                }) {
-                                    HStack {
-                                        Image(systemName: "envelope")
-                                        Text("お問い合わせ")
-                                        Spacer()
-                                        Image(systemName: "arrow.up.right.square")
-                                            .font(.caption)
-                                    }
-                                    .foregroundColor(.primary)
-                                    .padding()
-                                    .background(Color(.systemGray6))
-                                    .cornerRadius(12)
-                                }
-
-                                // Sign Out
-                                Button(action: { showingSignOutAlert = true }) {
-                                    HStack {
-                                        Spacer()
-                                        Text("ログアウト")
-                                            .foregroundColor(.red)
-                                        Spacer()
-                                    }
-                                    .padding()
-                                    .background(Color.red.opacity(0.1))
-                                    .cornerRadius(12)
-                                }
-
-                                // Delete Account
-                                Button(action: { showingDeleteAccountAlert = true }) {
-                                    HStack {
-                                        Spacer()
-                                        Text("アカウントを削除")
-                                            .foregroundColor(.secondary)
-                                            .font(.headline)
-                                        Spacer()
-                                    }
-                                    .padding()
                                     .background(Color.white)
                                     .cornerRadius(12)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+                                            .stroke(Color(red: 229/255, green: 231/255, blue: 235/255), lineWidth: 1)
+                                    )
+                                    .padding(.horizontal, 16)
+                                }
+                            }
+
+                            // SNSセクション
+                            if user.instagramUrl != nil || user.twitterUrl != nil || user.tiktokUrl != nil || user.lineUrl != nil {
+                                VStack(alignment: .leading, spacing: 12) {
+                                    Text("SNS")
+                                        .font(.system(size: 12, weight: .semibold))
+                                        .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
+                                        .tracking(1)
+                                        .padding(.horizontal, 16)
+
+                                    VStack(spacing: 8) {
+                                        if let instagramUrl = user.instagramUrl, !instagramUrl.isEmpty {
+                                            SNSLinkButton(platform: .instagram, url: instagramUrl)
+                                        }
+                                        if let twitterUrl = user.twitterUrl, !twitterUrl.isEmpty {
+                                            SNSLinkButton(platform: .twitter, url: twitterUrl)
+                                        }
+                                        if let tiktokUrl = user.tiktokUrl, !tiktokUrl.isEmpty {
+                                            SNSLinkButton(platform: .tiktok, url: tiktokUrl)
+                                        }
+                                        if let lineUrl = user.lineUrl, !lineUrl.isEmpty {
+                                            SNSLinkButton(platform: .line, url: lineUrl)
+                                        }
+                                    }
+                                    .padding(.horizontal, 16)
+                                }
+                            }
+
+                            // アクションボタン
+                            VStack(spacing: 12) {
+                                // プロフィールを編集
+                                Button(action: { showingEditProfile = true }) {
+                                    HStack {
+                                        Text("プロフィールを編集")
+                                            .font(.system(size: 15))
+                                            .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .font(.system(size: 14, weight: .medium))
+                                            .foregroundColor(Color(red: 156/255, green: 163/255, blue: 175/255))
+                                    }
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 16)
+                                    .background(Color.white)
+                                    .cornerRadius(12)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(Color(red: 229/255, green: 231/255, blue: 235/255), lineWidth: 1)
+                                    )
+                                }
+
+                                // ログアウト
+                                Button(action: { showingSignOutAlert = true }) {
+                                    HStack {
+                                        Spacer()
+                                        Text("ログアウト")
+                                            .font(.system(size: 15, weight: .medium))
+                                            .foregroundColor(Color(red: 220/255, green: 38/255, blue: 38/255))
+                                        Spacer()
+                                    }
+                                    .padding(.vertical, 16)
+                                    .background(Color(red: 254/255, green: 226/255, blue: 226/255))
+                                    .cornerRadius(12)
+                                }
+
+                                // アカウントを削除
+                                Button(action: { showingDeleteAccountAlert = true }) {
+                                    HStack {
+                                        Spacer()
+                                        Text("アカウントを削除")
+                                            .font(.system(size: 15))
+                                            .foregroundColor(Color(red: 156/255, green: 163/255, blue: 175/255))
+                                        Spacer()
+                                    }
+                                    .padding(.vertical, 16)
+                                    .background(Color(red: 249/255, green: 250/255, blue: 251/255))
+                                    .cornerRadius(12)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(Color(red: 229/255, green: 231/255, blue: 235/255), lineWidth: 1)
                                     )
                                 }
                             }
-                            .padding(.horizontal)
-
-                            Spacer()
+                            .padding(.horizontal, 16)
+                            .padding(.bottom, 32)
                         }
                     } else {
                         ProgressView()
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
                 }
+                .background(Color(red: 249/255, green: 250/255, blue: 251/255))
             }
             .navigationBarHidden(true)
             .sheet(isPresented: $showingEditProfile) {
@@ -341,6 +304,55 @@ struct ProfileView: View {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
+    }
+}
+
+// DUPR ボックスコンポーネント
+struct DUPRBox: View {
+    let label: String
+    let value: String
+
+    var body: some View {
+        VStack(spacing: 8) {
+            Text(label)
+                .font(.system(size: 11, weight: .medium))
+                .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
+                .tracking(0.5)
+
+            Text(value)
+                .font(.system(size: 18, weight: .bold))
+                .foregroundColor(value == "-" ? Color(red: 99/255, green: 102/255, blue: 241/255) : Color(red: 26/255, green: 26/255, blue: 46/255))
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 16)
+        .background(Color(red: 249/255, green: 250/255, blue: 251/255))
+        .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color(red: 229/255, green: 231/255, blue: 235/255), lineWidth: 1)
+        )
+    }
+}
+
+// プロフィール詳細アイテムコンポーネント
+struct ProfileDetailItem: View {
+    let label: String
+    let value: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(label)
+                .font(.system(size: 11, weight: .medium))
+                .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
+                .tracking(0.5)
+
+            Text(value)
+                .font(.system(size: 15, weight: .medium))
+                .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+                .lineLimit(1)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, 4)
     }
 }
 
