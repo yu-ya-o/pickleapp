@@ -7,57 +7,31 @@ struct SNSLinksView: View {
     let lineUrl: String?
 
     var hasAnySNS: Bool {
-        instagramUrl != nil || twitterUrl != nil || tiktokUrl != nil || lineUrl != nil
+        (instagramUrl != nil && !instagramUrl!.isEmpty) ||
+        (twitterUrl != nil && !twitterUrl!.isEmpty) ||
+        (tiktokUrl != nil && !tiktokUrl!.isEmpty) ||
+        (lineUrl != nil && !lineUrl!.isEmpty)
     }
 
     var body: some View {
         if hasAnySNS {
-            HStack(spacing: 16) {
-                if let instagram = instagramUrl, !instagram.isEmpty, let url = URL(string: instagram) {
-                    Link(destination: url) {
-                        Image(systemName: "camera.fill")
-                            .font(.system(size: 24))
-                            .foregroundColor(Color(red: 0.89, green: 0.21, blue: 0.54)) // Instagram pink/purple
-                            .frame(width: 44, height: 44)
-                            .background(Color(.systemGray6))
-                            .clipShape(Circle())
-                    }
+            VStack(spacing: 8) {
+                if let instagram = instagramUrl, !instagram.isEmpty {
+                    SNSLinkButton(platform: .instagram, url: instagram)
                 }
 
-                if let twitter = twitterUrl, !twitter.isEmpty, let url = URL(string: twitter) {
-                    Link(destination: url) {
-                        Image(systemName: "bird.fill")
-                            .font(.system(size: 20))
-                            .foregroundColor(Color(red: 0.11, green: 0.63, blue: 0.95)) // Twitter blue
-                            .frame(width: 44, height: 44)
-                            .background(Color(.systemGray6))
-                            .clipShape(Circle())
-                    }
+                if let twitter = twitterUrl, !twitter.isEmpty {
+                    SNSLinkButton(platform: .twitter, url: twitter)
                 }
 
-                if let tiktok = tiktokUrl, !tiktok.isEmpty, let url = URL(string: tiktok) {
-                    Link(destination: url) {
-                        Image(systemName: "music.note")
-                            .font(.system(size: 20))
-                            .foregroundColor(.black)
-                            .frame(width: 44, height: 44)
-                            .background(Color(.systemGray6))
-                            .clipShape(Circle())
-                    }
+                if let tiktok = tiktokUrl, !tiktok.isEmpty {
+                    SNSLinkButton(platform: .tiktok, url: tiktok)
                 }
 
-                if let line = lineUrl, !line.isEmpty, let url = URL(string: line) {
-                    Link(destination: url) {
-                        Image(systemName: "message.fill")
-                            .font(.system(size: 20))
-                            .foregroundColor(Color(red: 0.00, green: 0.75, blue: 0.24)) // LINE green
-                            .frame(width: 44, height: 44)
-                            .background(Color(.systemGray6))
-                            .clipShape(Circle())
-                    }
+                if let line = lineUrl, !line.isEmpty {
+                    SNSLinkButton(platform: .line, url: line)
                 }
             }
-            .padding(.vertical, 8)
         }
     }
 }
