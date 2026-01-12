@@ -66,84 +66,85 @@ struct EditEventView: View {
                 .padding(.vertical, 12)
                 .background(Color.white)
 
-            if isEventPast {
-                VStack(spacing: 20) {
-                    Image(systemName: "clock.fill")
-                        .font(.system(size: 60))
-                        .foregroundColor(.orange)
-                    Text("開始時間が過ぎたイベントは編集できません")
-                        .font(.headline)
-                        .multilineTextAlignment(.center)
-                    Button("閉じる") {
-                        dismiss()
-                    }
-                    .buttonStyle(.borderedProminent)
-                }
-                .padding()
-            } else {
-                Form {
-                Section(header: Text("イベント詳細")) {
-                    TextField("イベントタイトル", text: $title)
-                    TextField("説明", text: $description, axis: .vertical)
-                        .lineLimit(3...6)
-                    TextField("場所", text: $location)
-                }
-
-                Section(header: Text("地域")) {
-                    Picker("都道府県を選択", selection: $region) {
-                        Text("選択してください").tag("")
-                        ForEach(Prefectures.all, id: \.self) { prefecture in
-                            Text(prefecture).tag(prefecture)
+                if isEventPast {
+                    VStack(spacing: 20) {
+                        Image(systemName: "clock.fill")
+                            .font(.system(size: 60))
+                            .foregroundColor(.orange)
+                        Text("開始時間が過ぎたイベントは編集できません")
+                            .font(.headline)
+                            .multilineTextAlignment(.center)
+                        Button("閉じる") {
+                            dismiss()
                         }
+                        .buttonStyle(.borderedProminent)
                     }
-                    .pickerStyle(.menu)
-                }
-
-                Section(header: Text("日時")) {
-                    DatePicker("開始", selection: $startDate, in: Date()..., displayedComponents: [.date, .hourAndMinute])
-                    DatePicker("終了", selection: $endDate, in: Date()..., displayedComponents: [.date, .hourAndMinute])
-                }
-
-                Section(header: Text("定員")) {
-                    Stepper("定員: \(maxParticipants)人", value: $maxParticipants, in: 2...100)
-                }
-
-                Section(header: Text("料金")) {
-                    TextField("料金（円）", text: $priceInput)
-                        .keyboardType(.numberPad)
-                    Text("無料の場合は空欄にしてください")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-
-                Section(header: Text("スキルレベル")) {
-                    Picker("スキルレベル", selection: $skillLevel) {
-                        ForEach(skillLevels, id: \.self) { level in
-                            Text(skillLevelLabel(level)).tag(level)
+                    .padding()
+                } else {
+                    Form {
+                        Section(header: Text("イベント詳細")) {
+                            TextField("イベントタイトル", text: $title)
+                            TextField("説明", text: $description, axis: .vertical)
+                                .lineLimit(3...6)
+                            TextField("場所", text: $location)
                         }
-                    }
-                    .pickerStyle(.segmented)
-                }
 
-                Section {
-                    Button(action: updateEvent) {
-                        if isLoading {
-                            HStack {
-                                Spacer()
-                                ProgressView()
-                                Spacer()
+                        Section(header: Text("地域")) {
+                            Picker("都道府県を選択", selection: $region) {
+                                Text("選択してください").tag("")
+                                ForEach(Prefectures.all, id: \.self) { prefecture in
+                                    Text(prefecture).tag(prefecture)
+                                }
                             }
-                        } else {
-                            HStack {
-                                Spacer()
-                                Text("変更を保存")
-                                    .fontWeight(.semibold)
-                                Spacer()
+                            .pickerStyle(.menu)
+                        }
+
+                        Section(header: Text("日時")) {
+                            DatePicker("開始", selection: $startDate, in: Date()..., displayedComponents: [.date, .hourAndMinute])
+                            DatePicker("終了", selection: $endDate, in: Date()..., displayedComponents: [.date, .hourAndMinute])
+                        }
+
+                        Section(header: Text("定員")) {
+                            Stepper("定員: \(maxParticipants)人", value: $maxParticipants, in: 2...100)
+                        }
+
+                        Section(header: Text("料金")) {
+                            TextField("料金（円）", text: $priceInput)
+                                .keyboardType(.numberPad)
+                            Text("無料の場合は空欄にしてください")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        Section(header: Text("スキルレベル")) {
+                            Picker("スキルレベル", selection: $skillLevel) {
+                                ForEach(skillLevels, id: \.self) { level in
+                                    Text(skillLevelLabel(level)).tag(level)
+                                }
                             }
+                            .pickerStyle(.segmented)
+                        }
+
+                        Section {
+                            Button(action: updateEvent) {
+                                if isLoading {
+                                    HStack {
+                                        Spacer()
+                                        ProgressView()
+                                        Spacer()
+                                    }
+                                } else {
+                                    HStack {
+                                        Spacer()
+                                        Text("変更を保存")
+                                            .fontWeight(.semibold)
+                                        Spacer()
+                                    }
+                                }
+                            }
+                            .disabled(!isFormValid || isLoading)
                         }
                     }
-                    .disabled(!isFormValid || isLoading)
-                }
                 }
             }
             .navigationTitle("イベントを編集")
@@ -160,7 +161,6 @@ struct EditEventView: View {
             } message: {
                 Text(errorMessage)
             }
-        }
         }
     }
 
