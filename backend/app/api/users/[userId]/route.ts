@@ -36,6 +36,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         twitterUrl: true,
         tiktokUrl: true,
         lineUrl: true,
+        battleRecords: true,
         createdAt: true,
       },
     });
@@ -62,6 +63,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       twitterUrl: user.twitterUrl,
       tiktokUrl: user.tiktokUrl,
       lineUrl: user.lineUrl,
+      battleRecords: user.battleRecords as any[] | null,
       createdAt: user.createdAt.toISOString(),
     });
   } catch (error) {

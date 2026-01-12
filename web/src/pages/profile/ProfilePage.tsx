@@ -80,6 +80,7 @@ export function ProfilePage() {
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '12px 16px',
+        paddingTop: 'max(12px, env(safe-area-inset-top))',
         background: '#FFFFFF',
         borderBottom: '1px solid #E5E5E5'
       }}>
