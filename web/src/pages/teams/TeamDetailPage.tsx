@@ -24,6 +24,7 @@ export function TeamDetailPage() {
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showJoinRequestModal, setShowJoinRequestModal] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -214,7 +215,7 @@ export function TeamDetailPage() {
                 if (!isAuthenticated) {
                   setShowLoginModal(true);
                 } else {
-                  handleJoinRequest();
+                  setShowJoinRequestModal(true);
                 }
               }}
               disabled={isActionLoading || (isAuthenticated && team.hasPendingJoinRequest)}
@@ -294,6 +295,53 @@ export function TeamDetailPage() {
             onClick={() => navigate('/login')}
           >
             ログイン
+          </button>
+        </div>
+      </Modal>
+
+      {/* Join Request Confirmation Modal */}
+      <Modal
+        isOpen={showJoinRequestModal}
+        onClose={() => setShowJoinRequestModal(false)}
+        title="参加リクエスト"
+      >
+        <p style={{ color: '#666666', marginBottom: '24px' }}>
+          このチームに参加リクエストを送信しますか？
+        </p>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <button
+            style={{
+              flex: 1,
+              fontWeight: 500,
+              borderRadius: '12px',
+              border: 'none',
+              cursor: 'pointer',
+              backgroundColor: '#F3F4F6',
+              color: '#374151',
+              padding: '14px'
+            }}
+            onClick={() => setShowJoinRequestModal(false)}
+          >
+            キャンセル
+          </button>
+          <button
+            style={{
+              flex: 1,
+              fontWeight: 500,
+              borderRadius: '12px',
+              border: 'none',
+              cursor: 'pointer',
+              backgroundColor: '#16A34A',
+              color: 'white',
+              padding: '14px'
+            }}
+            onClick={() => {
+              setShowJoinRequestModal(false);
+              handleJoinRequest();
+            }}
+            disabled={isActionLoading}
+          >
+            {isActionLoading ? '処理中...' : '送信する'}
           </button>
         </div>
       </Modal>
