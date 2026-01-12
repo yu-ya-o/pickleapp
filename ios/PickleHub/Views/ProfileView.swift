@@ -156,6 +156,7 @@ struct ProfileView: View {
                                     Text("ありません")
                                         .font(.system(size: 14))
                                         .foregroundColor(textMuted)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
                                         .padding(.horizontal, 16)
                                 } else {
                                     VStack(spacing: 8) {
@@ -248,6 +249,7 @@ struct ProfileView: View {
                                     Text("ありません")
                                         .font(.system(size: 14))
                                         .foregroundColor(textMuted)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
                                         .padding(.horizontal, 16)
                                 }
                             }
@@ -285,6 +287,7 @@ struct ProfileView: View {
                                     Text("ありません")
                                         .font(.system(size: 14))
                                         .foregroundColor(textMuted)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
                                         .padding(.horizontal, 16)
                                 }
                             }
