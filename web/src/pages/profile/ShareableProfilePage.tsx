@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Menu, Instagram, ExternalLink } from 'lucide-react';
+import { Menu, Instagram, ExternalLink, Share2 } from 'lucide-react';
 import { api } from '@/services/api';
 import type { UserProfile } from '@/services/api';
 import { Loading } from '@/components/ui';
@@ -75,6 +75,9 @@ export function ShareableProfilePage() {
     user.lineUrl && { id: 'line', name: 'LINE', url: user.lineUrl, bgColor: '#06C755' },
   ].filter(Boolean) as { id: string; name: string; url: string; bgColor: string }[];
 
+  // Get battle records from user data
+  const battleRecords = (user as any).battleRecords || [];
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -115,7 +118,33 @@ export function ShareableProfilePage() {
         }}>
           PickleHub
         </h1>
-        <div style={{ width: '36px' }} className="md:hidden" />
+        <button
+          onClick={() => {
+            const shareUrl = window.location.href;
+            if (navigator.share) {
+              navigator.share({
+                title: `${getDisplayName(user)}のプロフィール`,
+                url: shareUrl,
+              });
+            } else {
+              navigator.clipboard.writeText(shareUrl);
+              alert('リンクをコピーしました');
+            }
+          }}
+          style={{
+            background: '#F0F0F0',
+            border: 'none',
+            borderRadius: '50%',
+            width: '36px',
+            height: '36px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <Share2 size={18} style={{ color: '#1a1a2e' }} />
+        </button>
       </header>
 
       {/* Trading Card */}
@@ -330,18 +359,69 @@ export function ShareableProfilePage() {
         </div>
       )}
 
-      {/* SNS Links Section */}
-      {snsLinks.length > 0 && (
-        <div style={{ padding: '0 20px 20px' }}>
-          <h3 style={{
-            fontSize: '14px',
-            fontWeight: 600,
-            color: '#888888',
-            marginBottom: '12px',
-            letterSpacing: '1px'
+      {/* Battle Records Section */}
+      <div style={{ padding: '0 20px 20px' }}>
+        <h3 style={{
+          fontSize: '14px',
+          fontWeight: 600,
+          color: '#888888',
+          marginBottom: '12px',
+          letterSpacing: '1px'
+        }}>
+          BATTLE RECORD
+        </h3>
+        {battleRecords.length > 0 ? (
+          <div style={{
+            background: '#FFFFFF',
+            borderRadius: '12px',
+            overflow: 'hidden',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
           }}>
-            SNS
-          </h3>
+            {battleRecords.map((record: any, index: number) => (
+              <div
+                key={record.id}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '14px 16px',
+                  borderBottom: index !== battleRecords.length - 1 ? '1px solid #E5E5E5' : 'none'
+                }}
+              >
+                <div style={{ flex: 1 }}>
+                  <p style={{ fontSize: '14px', fontWeight: 500, color: '#1a1a2e' }}>
+                    {record.tournamentName}
+                  </p>
+                  <p style={{ fontSize: '12px', color: '#888888' }}>
+                    {record.yearMonth}
+                  </p>
+                </div>
+                <span style={{
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  color: record.result === '優勝' ? '#dc2626' : '#1a1a2e'
+                }}>
+                  {record.result}
+                </span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p style={{ fontSize: '14px', color: '#9ca3af' }}>ありません</p>
+        )}
+      </div>
+
+      {/* SNS Links Section */}
+      <div style={{ padding: '0 20px 20px' }}>
+        <h3 style={{
+          fontSize: '14px',
+          fontWeight: 600,
+          color: '#888888',
+          marginBottom: '12px',
+          letterSpacing: '1px'
+        }}>
+          SNS
+        </h3>
+        {snsLinks.length > 0 ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {snsLinks.map((sns) => (
               <a
@@ -384,8 +464,10 @@ export function ShareableProfilePage() {
               </a>
             ))}
           </div>
-        </div>
-      )}
+        ) : (
+          <p style={{ fontSize: '14px', color: '#9ca3af' }}>ありません</p>
+        )}
+      </div>
     </div>
   );
 }

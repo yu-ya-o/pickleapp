@@ -23,26 +23,26 @@ export async function GET(request: NextRequest) {
     // Filter logic based on upcoming parameter
     const upcomingParam = searchParams.get('upcoming');
     if (upcomingParam === 'true') {
-      // For upcoming: show all events in the future
-      where.startTime = {
+      // For upcoming: show all events where end time hasn't passed yet
+      where.endTime = {
         gte: new Date(),
       };
     } else if (upcomingParam === 'false') {
-      // For past: show all events in the past
-      where.startTime = {
+      // For past: show all events where end time has passed
+      where.endTime = {
         lt: new Date(),
       };
     } else if (statusParam) {
       // If specific status is requested, use it
       where.status = statusParam;
     } else {
-      // Default: show active events OR completed events that are still in the future
+      // Default: show active events OR completed events where end time hasn't passed
       where.OR = [
         { status: 'active' },
         {
           AND: [
             { status: 'completed' },
-            { startTime: { gte: new Date() } },
+            { endTime: { gte: new Date() } },
           ],
         },
       ];

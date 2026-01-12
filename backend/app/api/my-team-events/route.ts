@@ -40,12 +40,13 @@ export async function GET(request: NextRequest) {
     };
 
     if (upcoming) {
-      where.startTime = {
+      // Show events where end time hasn't passed yet
+      where.endTime = {
         gte: new Date(),
       };
     } else {
-      // Past events: startTime < now
-      where.startTime = {
+      // Past events: endTime < now
+      where.endTime = {
         lt: new Date(),
       };
     }
