@@ -104,10 +104,8 @@ export function ProfileEditPage() {
 
       // Upload image if selected
       if (selectedFile) {
-        const formData = new FormData();
-        formData.append('file', selectedFile);
-        const uploadResult = await api.uploadImage(formData);
-        profileImageUrl = uploadResult.url;
+        const uploadResult = await api.uploadProfileImage(selectedFile);
+        profileImageUrl = uploadResult.imageUrl;
       }
 
       // Filter out empty battle records
