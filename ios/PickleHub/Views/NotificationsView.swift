@@ -3,6 +3,7 @@ import SwiftUI
 struct NotificationsView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @EnvironmentObject var viewModel: NotificationsViewModel
+    @Environment(\.openDrawer) var openDrawer
     @State private var showingMarkAllAlert = false
     @State private var selectedEventId: String?
     @State private var selectedTeamId: String?
@@ -14,6 +15,17 @@ struct NotificationsView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
+                // ハンバーガーメニューヘッダー
+                HamburgerHeaderView(title: "通知", onMenuTap: openDrawer) {
+                    if viewModel.unreadCount > 0 {
+                        Button("すべて既読") {
+                            showingMarkAllAlert = true
+                        }
+                        .font(.system(size: 14))
+                        .foregroundColor(.twitterBlue)
+                    }
+                }
+
                 if viewModel.isLoading {
                     ProgressView()
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -70,17 +82,7 @@ struct NotificationsView: View {
                     }
                 }
             }
-            .navigationTitle("通知")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                if viewModel.unreadCount > 0 {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("すべて既読") {
-                            showingMarkAllAlert = true
-                        }
-                    }
-                }
-            }
+            .navigationBarHidden(true)
             .task {
                 await viewModel.fetchNotifications()
             }

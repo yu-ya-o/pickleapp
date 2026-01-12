@@ -3,6 +3,7 @@ import SwiftUI
 struct TeamsListView: View {
     @StateObject private var viewModel = TeamsViewModel()
     @EnvironmentObject var authViewModel: AuthViewModel
+    @Environment(\.openDrawer) var openDrawer
     @State private var showingCreateTeam = false
     @State private var selectedRegion = ""
     @State private var searchText = ""
@@ -10,6 +11,9 @@ struct TeamsListView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
+                // ハンバーガーメニューヘッダー
+                HamburgerHeaderView(title: "チーム", onMenuTap: openDrawer)
+
                 // 検索バー
                 HStack(spacing: Spacing.sm) {
                     // 都道府県フィルター（左）
@@ -127,8 +131,7 @@ struct TeamsListView: View {
                     }
                 }
             }
-            .navigationTitle("チーム")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarHidden(true)
             .overlay(alignment: .bottomTrailing) {
                 Button(action: {
                     showingCreateTeam = true
