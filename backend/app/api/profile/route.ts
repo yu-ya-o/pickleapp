@@ -94,7 +94,7 @@ export async function PATCH(request: NextRequest) {
         twitterUrl: body.twitterUrl !== undefined ? body.twitterUrl : user.twitterUrl,
         tiktokUrl: body.tiktokUrl !== undefined ? body.tiktokUrl : user.tiktokUrl,
         lineUrl: body.lineUrl !== undefined ? body.lineUrl : user.lineUrl,
-        battleRecords: body.battleRecords !== undefined ? body.battleRecords : user.battleRecords,
+        battleRecords: body.battleRecords !== undefined ? (body.battleRecords as any) : user.battleRecords,
         isProfileComplete,
       },
     });
