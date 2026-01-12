@@ -257,7 +257,11 @@ export function RankingsPage() {
                     )}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <Users size={14} style={{ color: '#667eea' }} />
-                      <span style={{ fontSize: '13px', color: '#888888' }}>{team.memberCount}人</span>
+                      <span style={{ fontSize: '13px', color: '#888888' }}>
+                        {rankingType === 'events'
+                          ? `${team.publicEventCount}イベント`
+                          : `${team.memberCount}人`}
+                      </span>
                     </div>
                   </div>
 

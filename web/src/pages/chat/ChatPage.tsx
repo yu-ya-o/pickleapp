@@ -1,18 +1,28 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, Send } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { api } from '@/services/api';
 import { wsClient } from '@/services/websocket';
 import { useAuth } from '@/contexts/AuthContext';
-import { Avatar, Loading, Input } from '@/components/ui';
-import { formatRelativeTime, getDisplayName } from '@/lib/utils';
-import { cn } from '@/lib/utils';
-import type { Message, ChatRoom } from '@/types';
+import { Avatar, Loading } from '@/components/ui';
+import { getDisplayName } from '@/lib/utils';
+import type { Message, ChatRoom, Event } from '@/types';
+
+// Format date for chat (e.g., "12/30 20:19")
+function formatChatTime(dateString: string): string {
+  const date = new Date(dateString);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${month}/${day} ${hours}:${minutes}`;
+}
 
 export function ChatPage() {
   const { eventId } = useParams<{ eventId: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const [event, setEvent] = useState<Event | null>(null);
   const [chatRoom, setChatRoom] = useState<ChatRoom | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
@@ -22,7 +32,7 @@ export function ChatPage() {
 
   useEffect(() => {
     if (eventId) {
-      loadChatRoom();
+      loadData();
     }
     return () => {
       wsClient.disconnect();
@@ -33,17 +43,22 @@ export function ChatPage() {
     scrollToBottom();
   }, [messages]);
 
-  const loadChatRoom = async () => {
+  const loadData = async () => {
     try {
       setIsLoading(true);
-      const room = await api.getChatRoom(eventId!);
-      setChatRoom(room);
-      setMessages(room.messages || []);
+      // Load event and chat room in parallel
+      const [eventData, roomData] = await Promise.all([
+        api.getEvent(eventId!),
+        api.getChatRoom(eventId!)
+      ]);
+      setEvent(eventData);
+      setChatRoom(roomData);
+      setMessages(roomData.messages || []);
 
       // Connect WebSocket
       const token = api.getToken();
-      if (token && room.id) {
-        wsClient.connect(room.id, token);
+      if (token && roomData.id) {
+        wsClient.connect(roomData.id, token);
         wsClient.onMessage((message) => {
           setMessages((prev) => [...prev, message as Message]);
         });
@@ -73,7 +88,7 @@ export function ChatPage() {
       } else {
         // Fallback to REST API
         await api.sendMessage(chatRoom.id, messageText);
-        await loadChatRoom();
+        await loadData();
       }
     } catch (error) {
       console.error('Failed to send message:', error);
@@ -92,50 +107,103 @@ export function ChatPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#FFFFFF'
+      }}>
         <Loading size="lg" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div style={{
+      minHeight: '100vh',
+      background: '#FFFFFF',
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
       {/* Header */}
-      <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="flex items-center justify-between" style={{ padding: '12px 16px' }}>
+      <header style={{
+        background: '#FFFFFF',
+        borderBottom: '1px solid #E5E5E5',
+        position: 'sticky',
+        top: 0,
+        zIndex: 30
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '12px 16px'
+        }}>
+          <div style={{ width: '60px' }} />
+          <h1 style={{
+            fontSize: '16px',
+            fontWeight: 600,
+            color: '#1a1a2e',
+            textAlign: 'center',
+            flex: 1,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            padding: '0 8px'
+          }}>
+            {event?.title || 'チャット'}
+          </h1>
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center text-[var(--primary)] font-medium"
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#1DA1F2',
+              fontSize: '16px',
+              fontWeight: 500,
+              cursor: 'pointer',
+              padding: '4px 8px'
+            }}
           >
-            <ChevronLeft size={24} />
-            <span>前の画面に戻る</span>
+            完了
           </button>
-          <h1 className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">チャット</h1>
-          <div style={{ width: '60px' }} />
         </div>
       </header>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+      <div style={{
+        flex: 1,
+        overflowY: 'auto',
+        padding: '16px',
+        paddingBottom: '100px'
+      }}>
         {messages.length === 0 ? (
-          <div className="text-center text-gray-400 py-12">
+          <div style={{
+            textAlign: 'center',
+            color: '#9CA3AF',
+            paddingTop: '48px'
+          }}>
             まだメッセージがありません
           </div>
         ) : (
-          messages.map((message) => {
-            const isOwn = message.user.id === user?.id;
-            return (
-              <div
-                key={message.id}
-                className={cn(
-                  'flex gap-2',
-                  isOwn ? 'flex-row-reverse' : 'flex-row'
-                )}
-              >
-                {!isOwn && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {messages.map((message) => {
+              const isOwn = message.user.id === user?.id;
+              return (
+                <div
+                  key={message.id}
+                  style={{
+                    display: 'flex',
+                    flexDirection: isOwn ? 'row-reverse' : 'row',
+                    alignItems: 'flex-end',
+                    gap: '8px'
+                  }}
+                >
+                  {/* Profile Image */}
                   <div
                     onClick={() => navigate(`/users/${message.user.id}`)}
-                    style={{ cursor: 'pointer' }}
+                    style={{ cursor: 'pointer', flexShrink: 0 }}
                   >
                     <Avatar
                       src={message.user.profileImage}
@@ -143,60 +211,93 @@ export function ChatPage() {
                       size="sm"
                     />
                   </div>
-                )}
-                <div
-                  className={cn(
-                    'max-w-[70%] flex flex-col',
-                    isOwn ? 'items-end' : 'items-start'
-                  )}
-                >
-                  {!isOwn && (
-                    <span className="text-xs text-gray-400 mb-1">
-                      {getDisplayName(message.user)}
-                    </span>
-                  )}
-                  <div
-                    className={cn(
-                      'px-4 py-2 rounded-2xl',
-                      isOwn
-                        ? 'bg-[var(--primary)] text-white'
-                        : 'bg-gray-100 text-gray-800'
-                    )}
-                  >
-                    <p className="whitespace-pre-wrap break-words">
+
+                  {/* Message Bubble */}
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: isOwn ? 'flex-end' : 'flex-start',
+                    maxWidth: '70%'
+                  }}>
+                    <div style={{
+                      background: '#1DA1F2',
+                      color: '#FFFFFF',
+                      padding: '12px 16px',
+                      borderRadius: isOwn ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
+                      fontSize: '15px',
+                      lineHeight: '1.5',
+                      wordBreak: 'break-word',
+                      whiteSpace: 'pre-wrap'
+                    }}>
                       {message.content}
-                    </p>
+                    </div>
+                    <span style={{
+                      fontSize: '12px',
+                      color: '#9CA3AF',
+                      marginTop: '4px'
+                    }}>
+                      {formatChatTime(message.createdAt)}
+                    </span>
                   </div>
-                  <span className="text-xs text-gray-400 mt-1">
-                    {formatRelativeTime(message.createdAt)}
-                  </span>
                 </div>
-              </div>
-            );
-          })
+              );
+            })}
+            <div ref={messagesEndRef} />
+          </div>
         )}
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Input */}
-      <div className="border-t border-[var(--border)] bg-white p-4 pb-20 md:pb-4">
-        <div className="max-w-4xl mx-auto flex gap-2">
-          <Input
+      <div style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        background: '#FFFFFF',
+        borderTop: '1px solid #E5E5E5',
+        padding: '12px 16px',
+        paddingBottom: 'max(12px, env(safe-area-inset-bottom))'
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          maxWidth: '800px',
+          margin: '0 auto'
+        }}>
+          <input
+            type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="メッセージを入力..."
-            className="flex-1"
+            style={{
+              flex: 1,
+              padding: '12px 16px',
+              fontSize: '16px',
+              border: '1px solid #E5E5E5',
+              borderRadius: '24px',
+              outline: 'none',
+              background: '#F5F5F7'
+            }}
           />
           <button
             onClick={handleSend}
             disabled={!newMessage.trim() || isSending}
-            className={cn(
-              'p-3 rounded-full transition-colors',
-              newMessage.trim()
-                ? 'bg-[var(--primary)] text-white'
-                : 'bg-gray-100 text-gray-400'
-            )}
+            style={{
+              width: '44px',
+              height: '44px',
+              borderRadius: '50%',
+              border: 'none',
+              background: newMessage.trim() ? '#1DA1F2' : '#E5E5E5',
+              color: newMessage.trim() ? '#FFFFFF' : '#9CA3AF',
+              cursor: newMessage.trim() ? 'pointer' : 'default',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'background 0.2s, color 0.2s',
+              flexShrink: 0
+            }}
           >
             <Send size={20} />
           </button>
