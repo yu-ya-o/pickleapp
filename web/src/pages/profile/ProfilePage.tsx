@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ChevronRight,
-  Share2,
   Instagram,
   ExternalLink,
   Menu,
@@ -109,33 +108,7 @@ export function ProfilePage() {
         }}>
           PickleHub
         </h1>
-        <button
-          onClick={() => {
-            const shareUrl = `${window.location.origin}/p/${user.id}`;
-            if (navigator.share) {
-              navigator.share({
-                title: `${getDisplayName(user)}のプロフィール`,
-                url: shareUrl,
-              });
-            } else {
-              navigator.clipboard.writeText(shareUrl);
-              alert('リンクをコピーしました');
-            }
-          }}
-          style={{
-            background: '#F0F0F0',
-            border: 'none',
-            borderRadius: '50%',
-            width: '36px',
-            height: '36px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <Share2 size={18} style={{ color: '#1a1a2e' }} />
-        </button>
+        <div style={{ width: '36px' }} className="md:hidden" />
       </header>
 
       {/* Trading Card */}

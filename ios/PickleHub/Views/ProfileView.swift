@@ -43,14 +43,9 @@ struct ProfileView: View {
 
                     Spacer()
 
-                    Button(action: {
-                        // Share action
-                    }) {
-                        Image(systemName: "square.and.arrow.up")
-                            .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(textPrimary)
-                            .frame(width: 44, height: 44)
-                    }
+                    // Spacer for layout balance
+                    Color.clear
+                        .frame(width: 44, height: 44)
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)

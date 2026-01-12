@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Menu, Instagram, ExternalLink, Share2 } from 'lucide-react';
+import { Menu, Instagram, ExternalLink } from 'lucide-react';
 import { api } from '@/services/api';
 import type { UserProfile } from '@/services/api';
 import { Loading } from '@/components/ui';
@@ -119,33 +119,7 @@ export function ShareableProfilePage() {
         }}>
           PickleHub
         </h1>
-        <button
-          onClick={() => {
-            const shareUrl = window.location.href;
-            if (navigator.share) {
-              navigator.share({
-                title: `${getDisplayName(user)}のプロフィール`,
-                url: shareUrl,
-              });
-            } else {
-              navigator.clipboard.writeText(shareUrl);
-              alert('リンクをコピーしました');
-            }
-          }}
-          style={{
-            background: '#F0F0F0',
-            border: 'none',
-            borderRadius: '50%',
-            width: '36px',
-            height: '36px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <Share2 size={18} style={{ color: '#1a1a2e' }} />
-        </button>
+        <div style={{ width: '36px' }} className="md:hidden" />
       </header>
 
       {/* Trading Card */}
