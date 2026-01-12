@@ -16,6 +16,18 @@ struct ChatView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
+                // PickleHub Header
+                HStack {
+                    Spacer()
+                    Text("PickleHub")
+                        .font(.system(size: 24, weight: .black))
+                        .italic()
+                        .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+                    Spacer()
+                }
+                .padding(.vertical, 12)
+                .background(Color.white)
+
                 // Messages
                 ScrollViewReader { proxy in
                     ScrollView {
