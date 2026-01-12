@@ -4,6 +4,7 @@ import { Users, Trophy, Menu, Calendar } from 'lucide-react';
 import { api } from '@/services/api';
 import type { TeamRanking } from '@/services/api';
 import { Loading } from '@/components/ui';
+import { RankingsSEO } from '@/components/SEO';
 import { useDrawer } from '@/components/layout/MainLayout';
 
 type RankingType = 'members' | 'events';
@@ -48,6 +49,7 @@ export function RankingsPage() {
       minHeight: '100vh',
       background: '#F5F5F7'
     }}>
+      <RankingsSEO />
       {/* Header */}
       <header style={{
         position: 'sticky',

@@ -1,0 +1,14 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow private/authenticated pages
+Disallow: /profile
+Disallow: /profile/edit
+Disallow: /notifications
+Disallow: /*/chat
+Disallow: /*/edit
+Disallow: /*/create
+
+# Sitemap
+Sitemap: https://picklehub.jp/sitemap.xml
