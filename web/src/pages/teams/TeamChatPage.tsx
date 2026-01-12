@@ -54,14 +54,18 @@ export function TeamChatPage() {
   const loadData = async () => {
     try {
       setIsLoading(true);
-      // Load team and chat room in parallel
-      const [teamData, roomData] = await Promise.all([
-        api.getTeam(teamId!),
-        api.getTeamChatRoom(teamId!)
-      ]);
-      setTeam(teamData);
+      // Load chat room first (required)
+      const roomData = await api.getTeamChatRoom(teamId!);
       setChatRoom(roomData);
       setMessages(roomData.messages || []);
+
+      // Load team data separately (optional, for title)
+      try {
+        const teamData = await api.getTeam(teamId!);
+        setTeam(teamData);
+      } catch {
+        // Team fetch failed, continue without title
+      }
     } catch (error) {
       console.error('Failed to load team chat room:', error);
     } finally {
