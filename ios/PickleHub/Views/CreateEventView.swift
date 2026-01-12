@@ -111,20 +111,7 @@ struct CreateEventView: View {
 
     var body: some View {
         NavigationView {
-            VStack(spacing: 0) {
-                // PickleHub Header
-                HStack {
-                    Spacer()
-                    Text("PickleHub")
-                        .font(.system(size: 24, weight: .black))
-                        .italic()
-                        .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
-                    Spacer()
-                }
-                .padding(.vertical, 12)
-                .background(Color.white)
-
-                Form {
+            Form {
                 // Organizer Section
                 Section(header: Text("主催者")) {
                     Picker("主催", selection: $selectedOrganizer) {
@@ -217,7 +204,6 @@ struct CreateEventView: View {
                         }
                     }
                     .disabled(!isFormValid || isLoading)
-                }
                 }
             }
             .navigationTitle("イベント作成")

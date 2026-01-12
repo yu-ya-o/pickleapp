@@ -1,8 +1,7 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Menu, X, Camera, Plus, Trash2 } from 'lucide-react';
+import { ArrowLeft, Camera, Plus, Trash2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useDrawer } from '@/components/layout/MainLayout';
 import { api } from '@/services/api';
 
 const regions = [
@@ -34,7 +33,6 @@ interface BattleRecord {
 export function ProfileEditPage() {
   const navigate = useNavigate();
   const { user, refreshUser } = useAuth();
-  const { openDrawer } = useDrawer();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -163,43 +161,6 @@ export function ProfileEditPage() {
         zIndex: 10
       }}>
         <button
-          onClick={openDrawer}
-          className="md:hidden"
-          style={{
-            background: '#F0F0F0',
-            border: 'none',
-            borderRadius: '50%',
-            width: '36px',
-            height: '36px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <Menu size={20} style={{ color: '#1a1a2e' }} />
-        </button>
-        <h1 style={{
-          fontSize: '24px',
-          fontWeight: 900,
-          fontStyle: 'italic',
-          color: '#1a1a2e'
-        }}>
-          PickleHub
-        </h1>
-        <div style={{ width: '36px' }} className="md:hidden" />
-      </header>
-
-      {/* Sub Header - Edit controls */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '12px 16px',
-        background: '#FFFFFF',
-        borderBottom: '1px solid #E5E5E5'
-      }}>
-        <button
           onClick={() => navigate('/profile')}
           style={{
             background: 'transparent',
@@ -208,16 +169,16 @@ export function ProfileEditPage() {
             display: 'flex',
             alignItems: 'center',
             gap: '4px',
-            color: '#667eea',
+            color: '#1a1a2e',
             fontSize: '15px'
           }}
         >
-          <X size={18} />
+          <ArrowLeft size={20} />
           キャンセル
         </button>
-        <span style={{ fontSize: '15px', fontWeight: 600, color: '#1a1a2e' }}>
+        <h1 style={{ fontSize: '17px', fontWeight: 600, color: '#1a1a2e' }}>
           プロフィール編集
-        </span>
+        </h1>
         <button
           onClick={handleSave}
           disabled={!isFormValid || isLoading}
@@ -232,7 +193,7 @@ export function ProfileEditPage() {
         >
           {isLoading ? '保存中...' : '保存'}
         </button>
-      </div>
+      </header>
 
       <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
         {error && (
