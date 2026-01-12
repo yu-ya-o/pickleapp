@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, Instagram, ExternalLink } from 'lucide-react';
+import { Menu, Instagram, ExternalLink } from 'lucide-react';
 import { api } from '@/services/api';
 import type { UserProfile } from '@/services/api';
 import { Loading } from '@/components/ui';
+import { useDrawer } from '@/components/layout/MainLayout';
 import { getDisplayName, getSkillLevelLabel } from '@/lib/utils';
 import type { Team } from '@/types';
 
-export function UserProfilePage() {
+export function ShareableProfilePage() {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
+  const { openDrawer } = useDrawer();
   const [user, setUser] = useState<UserProfile | null>(null);
   const [teams, setTeams] = useState<Team[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -29,17 +31,14 @@ export function UserProfilePage() {
       setIsLoading(true);
       setError(null);
 
-      // Fetch user profile first
       const userData = await api.getUserProfile(userId!);
       setUser(userData);
 
-      // Fetch teams separately (don't block on failure)
       try {
         const teamsData = await api.getUserTeams(userId!);
         setTeams(teamsData);
-      } catch (teamsError) {
-        console.error('Failed to load user teams:', teamsError);
-        // Teams are optional, don't show error for this
+      } catch {
+        // Teams are optional
       }
     } catch (error) {
       console.error('Failed to load user profile:', error);
@@ -69,7 +68,6 @@ export function UserProfilePage() {
     );
   }
 
-  // SNS Links
   const snsLinks = [
     user.instagramUrl && { id: 'instagram', name: 'Instagram', url: user.instagramUrl, bgColor: 'linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)' },
     user.twitterUrl && { id: 'twitter', name: 'X (Twitter)', url: user.twitterUrl, bgColor: '#000000' },
@@ -83,7 +81,7 @@ export function UserProfilePage() {
       background: '#F5F5F7',
       paddingBottom: '24px'
     }}>
-      {/* Header */}
+      {/* PickleHub Header */}
       <header style={{
         display: 'flex',
         alignItems: 'center',
@@ -93,28 +91,31 @@ export function UserProfilePage() {
         borderBottom: '1px solid #E5E5E5'
       }}>
         <button
-          onClick={() => navigate(-1)}
+          onClick={openDrawer}
+          className="md:hidden"
           style={{
-            background: 'transparent',
+            background: '#F0F0F0',
             border: 'none',
+            borderRadius: '50%',
+            width: '36px',
+            height: '36px',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
-            color: '#667eea',
-            fontWeight: 500
+            justifyContent: 'center'
           }}
         >
-          <ChevronLeft size={24} />
-          <span>戻る</span>
+          <Menu size={20} style={{ color: '#1a1a2e' }} />
         </button>
         <h1 style={{
-          fontSize: '18px',
-          fontWeight: 600,
+          fontSize: '24px',
+          fontWeight: 900,
+          fontStyle: 'italic',
           color: '#1a1a2e'
         }}>
-          プロフィール
+          PickleHub
         </h1>
-        <div style={{ width: '60px' }} />
+        <div style={{ width: '36px' }} className="md:hidden" />
       </header>
 
       {/* Trading Card */}
@@ -125,7 +126,6 @@ export function UserProfilePage() {
           padding: '4px',
           boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
         }}>
-          {/* Card Inner with subtle border effect */}
           <div style={{
             background: 'linear-gradient(145deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
             borderRadius: '18px',
@@ -142,7 +142,6 @@ export function UserProfilePage() {
                 textAlign: 'center',
                 borderBottom: '1px solid #E5E5E5'
               }}>
-                {/* Profile Image with glow */}
                 <div style={{
                   width: '100px',
                   height: '100px',
@@ -180,7 +179,6 @@ export function UserProfilePage() {
                   </div>
                 </div>
 
-                {/* Name */}
                 <h2 style={{
                   fontSize: '22px',
                   fontWeight: 700,
@@ -191,7 +189,6 @@ export function UserProfilePage() {
                   {getDisplayName(user)}
                 </h2>
 
-                {/* Bio */}
                 {user.bio && (
                   <p style={{
                     fontSize: '13px',
@@ -212,7 +209,6 @@ export function UserProfilePage() {
                   gridTemplateColumns: '1fr 1fr',
                   gap: '12px'
                 }}>
-                  {/* DUPR Singles */}
                   <div style={{
                     background: '#F5F5F7',
                     borderRadius: '12px',
@@ -226,7 +222,6 @@ export function UserProfilePage() {
                       {user.duprSingles || '-'}
                     </p>
                   </div>
-                  {/* DUPR Doubles */}
                   <div style={{
                     background: '#F5F5F7',
                     borderRadius: '12px',
@@ -243,7 +238,7 @@ export function UserProfilePage() {
                 </div>
               </div>
 
-              {/* Info Grid - 2 columns, 3 rows */}
+              {/* Info Grid */}
               <div style={{ padding: '16px 20px' }}>
                 <div style={{
                   display: 'grid',
@@ -281,7 +276,7 @@ export function UserProfilePage() {
         </div>
       </div>
 
-      {/* 所属チームセクション */}
+      {/* Teams Section */}
       {teams.length > 0 && (
         <div style={{ padding: '0 20px 20px' }}>
           <h3 style={{

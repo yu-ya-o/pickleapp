@@ -109,7 +109,18 @@ export function ProfilePage() {
           PickleHub
         </h1>
         <button
-          onClick={() => {/* TODO: Share */}}
+          onClick={() => {
+            const shareUrl = `${window.location.origin}/p/${user.id}`;
+            if (navigator.share) {
+              navigator.share({
+                title: `${getDisplayName(user)}のプロフィール`,
+                url: shareUrl,
+              });
+            } else {
+              navigator.clipboard.writeText(shareUrl);
+              alert('リンクをコピーしました');
+            }
+          }}
           style={{
             background: '#F0F0F0',
             border: 'none',
