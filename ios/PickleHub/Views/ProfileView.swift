@@ -1,12 +1,12 @@
 import SwiftUI
 
-// Dark theme colors
-private let darkBg = Color(red: 18/255, green: 18/255, blue: 30/255)
-private let cardBg = Color(red: 30/255, green: 30/255, blue: 45/255)
-private let cardBorder = Color(red: 55/255, green: 55/255, blue: 75/255)
-private let textPrimary = Color.white
-private let textSecondary = Color(red: 156/255, green: 163/255, blue: 175/255)
-private let textMuted = Color(red: 107/255, green: 114/255, blue: 128/255)
+// Light theme colors
+private let lightBg = Color(red: 245/255, green: 245/255, blue: 247/255)
+private let cardBg = Color.white
+private let cardBorder = Color(red: 229/255, green: 231/255, blue: 235/255)
+private let textPrimary = Color(red: 26/255, green: 26/255, blue: 46/255)
+private let textSecondary = Color(red: 107/255, green: 114/255, blue: 128/255)
+private let textMuted = Color(red: 156/255, green: 163/255, blue: 175/255)
 private let accentPurple = Color(red: 139/255, green: 92/255, blue: 246/255)
 
 struct ProfileView: View {
@@ -54,7 +54,7 @@ struct ProfileView: View {
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
-                .background(darkBg)
+                .background(cardBg)
 
                 ScrollView {
                     if let user = authViewModel.currentUser {
@@ -97,11 +97,11 @@ struct ProfileView: View {
 
                                 // DUPR セクション
                                 HStack(spacing: 12) {
-                                    DUPRBoxDark(
+                                    DUPRBoxLight(
                                         label: "DUPR SINGLES",
                                         value: user.duprSingles != nil ? String(format: "%.3f", user.duprSingles!) : "-"
                                     )
-                                    DUPRBoxDark(
+                                    DUPRBoxLight(
                                         label: "DUPR DOUBLES",
                                         value: user.duprDoubles != nil ? String(format: "%.3f", user.duprDoubles!) : "-"
                                     )
@@ -115,16 +115,16 @@ struct ProfileView: View {
                                 // プロフィール詳細（2カラム）
                                 VStack(spacing: 16) {
                                     HStack(spacing: 0) {
-                                        ProfileDetailItemDark(label: "REGION", value: user.region ?? "-")
-                                        ProfileDetailItemDark(label: "EXPERIENCE", value: user.pickleballExperience ?? "-")
+                                        ProfileDetailItemLight(label: "REGION", value: user.region ?? "-")
+                                        ProfileDetailItemLight(label: "EXPERIENCE", value: user.pickleballExperience ?? "-")
                                     }
                                     HStack(spacing: 0) {
-                                        ProfileDetailItemDark(label: "LEVEL", value: user.skillLevel ?? "-")
-                                        ProfileDetailItemDark(label: "GENDER", value: user.gender ?? "-")
+                                        ProfileDetailItemLight(label: "LEVEL", value: user.skillLevel ?? "-")
+                                        ProfileDetailItemLight(label: "GENDER", value: user.gender ?? "-")
                                     }
                                     HStack(spacing: 0) {
-                                        ProfileDetailItemDark(label: "AGE", value: user.ageGroup ?? "-")
-                                        ProfileDetailItemDark(label: "PADDLE", value: user.myPaddle ?? "-")
+                                        ProfileDetailItemLight(label: "AGE", value: user.ageGroup ?? "-")
+                                        ProfileDetailItemLight(label: "PADDLE", value: user.myPaddle ?? "-")
                                     }
                                 }
                                 .padding(.horizontal, 16)
@@ -136,6 +136,7 @@ struct ProfileView: View {
                                 RoundedRectangle(cornerRadius: 16)
                                     .stroke(cardBorder, lineWidth: 1)
                             )
+                            .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
                             .padding(.horizontal, 16)
                             .padding(.top, 16)
 
@@ -192,6 +193,7 @@ struct ProfileView: View {
                                                     RoundedRectangle(cornerRadius: 12)
                                                         .stroke(cardBorder, lineWidth: 1)
                                                 )
+                                                .shadow(color: Color.black.opacity(0.03), radius: 4, x: 0, y: 1)
                                             }
                                         }
                                     }
@@ -222,7 +224,7 @@ struct ProfileView: View {
                                                 Spacer()
                                                 Text(record.result)
                                                     .font(.system(size: 15, weight: .semibold))
-                                                    .foregroundColor(record.result == "優勝" ? Color(red: 251/255, green: 191/255, blue: 36/255) : textPrimary)
+                                                    .foregroundColor(record.result == "優勝" ? Color(red: 234/255, green: 179/255, blue: 8/255) : textPrimary)
                                             }
                                             .padding(.vertical, 14)
                                             .padding(.horizontal, 16)
@@ -240,6 +242,7 @@ struct ProfileView: View {
                                         RoundedRectangle(cornerRadius: 12)
                                             .stroke(cardBorder, lineWidth: 1)
                                     )
+                                    .shadow(color: Color.black.opacity(0.03), radius: 4, x: 0, y: 1)
                                     .padding(.horizontal, 16)
                                 } else {
                                     Text("ありません")
@@ -307,6 +310,7 @@ struct ProfileView: View {
                                         RoundedRectangle(cornerRadius: 12)
                                             .stroke(cardBorder, lineWidth: 1)
                                     )
+                                    .shadow(color: Color.black.opacity(0.03), radius: 4, x: 0, y: 1)
                                 }
 
                                 // ログアウト
@@ -315,15 +319,15 @@ struct ProfileView: View {
                                         Spacer()
                                         Text("ログアウト")
                                             .font(.system(size: 15, weight: .medium))
-                                            .foregroundColor(Color(red: 248/255, green: 113/255, blue: 113/255))
+                                            .foregroundColor(Color(red: 220/255, green: 38/255, blue: 38/255))
                                         Spacer()
                                     }
                                     .padding(.vertical, 16)
-                                    .background(Color(red: 127/255, green: 29/255, blue: 29/255).opacity(0.3))
+                                    .background(Color(red: 254/255, green: 242/255, blue: 242/255))
                                     .cornerRadius(12)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .stroke(Color(red: 127/255, green: 29/255, blue: 29/255), lineWidth: 1)
+                                            .stroke(Color(red: 254/255, green: 202/255, blue: 202/255), lineWidth: 1)
                                     )
                                 }
 
@@ -354,7 +358,7 @@ struct ProfileView: View {
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
                 }
-                .background(darkBg)
+                .background(lightBg)
             }
             .navigationBarHidden(true)
             .sheet(isPresented: $showingEditProfile) {
@@ -423,8 +427,8 @@ struct ProfileView: View {
     }
 }
 
-// DUPR ボックスコンポーネント（ダーク）
-struct DUPRBoxDark: View {
+// DUPR ボックスコンポーネント（ライト）
+struct DUPRBoxLight: View {
     let label: String
     let value: String
 
@@ -441,7 +445,7 @@ struct DUPRBoxDark: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 16)
-        .background(Color(red: 24/255, green: 24/255, blue: 38/255))
+        .background(Color(red: 249/255, green: 250/255, blue: 251/255))
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
@@ -450,8 +454,8 @@ struct DUPRBoxDark: View {
     }
 }
 
-// プロフィール詳細アイテムコンポーネント（ダーク）
-struct ProfileDetailItemDark: View {
+// プロフィール詳細アイテムコンポーネント（ライト）
+struct ProfileDetailItemLight: View {
     let label: String
     let value: String
 
@@ -472,13 +476,22 @@ struct ProfileDetailItemDark: View {
     }
 }
 
-// Legacy components for compatibility
+// Legacy components for compatibility (now use light theme)
 struct DUPRBox: View {
     let label: String
     let value: String
 
     var body: some View {
-        DUPRBoxDark(label: label, value: value)
+        DUPRBoxLight(label: label, value: value)
+    }
+}
+
+struct DUPRBoxDark: View {
+    let label: String
+    let value: String
+
+    var body: some View {
+        DUPRBoxLight(label: label, value: value)
     }
 }
 
@@ -487,7 +500,16 @@ struct ProfileDetailItem: View {
     let value: String
 
     var body: some View {
-        ProfileDetailItemDark(label: label, value: value)
+        ProfileDetailItemLight(label: label, value: value)
+    }
+}
+
+struct ProfileDetailItemDark: View {
+    let label: String
+    let value: String
+
+    var body: some View {
+        ProfileDetailItemLight(label: label, value: value)
     }
 }
 

@@ -23,6 +23,7 @@ import { RankingsPage } from '@/pages/rankings/RankingsPage';
 import { ChatPage } from '@/pages/chat/ChatPage';
 import { NotificationsPage } from '@/pages/NotificationsPage';
 import { ProfilePage } from '@/pages/profile/ProfilePage';
+import { ProfileEditPage } from '@/pages/profile/ProfileEditPage';
 import { UserProfilePage } from '@/pages/users/UserProfilePage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -100,6 +101,7 @@ function AppRoutes() {
 
         {/* Profile */}
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profile/edit" element={<ProfileEditPage />} />
       </Route>
 
       {/* Redirect root to events */}
