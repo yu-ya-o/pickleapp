@@ -6,7 +6,7 @@ import {
   MapPin,
   Users,
   MessageCircle,
-  Edit,
+  Edit as EditIcon,
   Copy,
   Lock,
   Menu,
@@ -14,6 +14,8 @@ import {
 import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, Loading, Modal, GoogleMap } from '@/components/ui';
+import { SEO } from '@/components/SEO';
+import { generateEventMeta, generateEventJsonLd } from '@/lib/seo';
 import {
   formatDateTime,
   getSkillLevelLabel,
@@ -147,8 +149,17 @@ export function EventDetailPage() {
   const isFull = event.availableSpots === 0;
   const currentParticipants = event.maxParticipants - event.availableSpots;
 
+  const seoMeta = generateEventMeta(event);
+  const seoJsonLd = generateEventJsonLd(event);
+
   return (
     <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
+      <SEO
+        title={seoMeta.title}
+        description={seoMeta.description}
+        url={`/events/${event.id}`}
+        jsonLd={seoJsonLd}
+      />
       {/* Header */}
       <header style={{
         position: 'sticky',
@@ -479,7 +490,7 @@ export function EventDetailPage() {
                       boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                     }}
                   >
-                    <Edit size={18} />
+                    <EditIcon size={18} />
                     <span>イベントを編集</span>
                   </button>
 

@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
 import { Menu } from 'lucide-react';
 import { useDrawer } from '@/components/layout/MainLayout';
+import { LoginSEO } from '@/components/SEO';
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ export function LoginPage() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
+      <LoginSEO />
       {/* Header */}
       <header style={{
         position: 'sticky',
