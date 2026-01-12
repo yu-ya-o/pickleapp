@@ -24,6 +24,7 @@ import { ChatPage } from '@/pages/chat/ChatPage';
 import { NotificationsPage } from '@/pages/NotificationsPage';
 import { ProfilePage } from '@/pages/profile/ProfilePage';
 import { ProfileEditPage } from '@/pages/profile/ProfileEditPage';
+import { ShareableProfilePage } from '@/pages/profile/ShareableProfilePage';
 import { UserProfilePage } from '@/pages/users/UserProfilePage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -86,6 +87,8 @@ function AppRoutes() {
         <Route path="/events" element={<EventsListPage />} />
         <Route path="/teams" element={<TeamsListPage />} />
         <Route path="/rankings" element={<RankingsPage />} />
+        {/* Shareable profile page */}
+        <Route path="/p/:userId" element={<ShareableProfilePage />} />
       </Route>
 
       {/* Protected routes with MainLayout */}
