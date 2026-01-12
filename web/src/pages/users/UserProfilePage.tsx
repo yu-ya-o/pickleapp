@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ChevronLeft, Instagram, ExternalLink } from 'lucide-react';
-import { api, UserProfile } from '@/services/api';
+import { api } from '@/services/api';
+import type { UserProfile } from '@/services/api';
 import { Loading } from '@/components/ui';
 import { getDisplayName, getSkillLevelLabel } from '@/lib/utils';
 import type { Team } from '@/types';
