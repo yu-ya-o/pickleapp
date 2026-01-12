@@ -2,10 +2,14 @@ import SwiftUI
 
 struct RankingsView: View {
     @StateObject private var viewModel = RankingsViewModel()
+    @Environment(\.openDrawer) var openDrawer
 
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
+                // ハンバーガーメニューヘッダー
+                HamburgerHeaderView(title: "ランキング", onMenuTap: openDrawer)
+
                 // Ranking Type Picker
                 Picker("ランキング種別", selection: $viewModel.selectedType) {
                     ForEach(RankingsViewModel.RankingType.allCases, id: \.self) { type in
@@ -94,8 +98,7 @@ struct RankingsView: View {
                     await viewModel.refresh()
                 }
             }
-            .navigationTitle("ランキング")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarHidden(true)
             .onAppear {
                 Task {
                     await viewModel.initialLoad()

@@ -1,9 +1,25 @@
 import SwiftUI
 
+// Environment key for drawer action
+struct DrawerActionKey: EnvironmentKey {
+    static let defaultValue: () -> Void = {}
+}
+
+extension EnvironmentValues {
+    var openDrawer: () -> Void {
+        get { self[DrawerActionKey.self] }
+        set { self[DrawerActionKey.self] = newValue }
+    }
+}
+
 struct MainTabView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @StateObject private var eventsViewModel = EventsViewModel()
     @StateObject private var notificationsViewModel = NotificationsViewModel()
+
+    // Drawer state
+    @State private var isDrawerOpen = false
+    @State private var selectedTab = 0
 
     // Deep Link handling (Custom URL Scheme)
     @State private var showingEventDetail = false
@@ -13,50 +29,49 @@ struct MainTabView: View {
     @State private var selectedTeamEventId: String?
 
     var body: some View {
-        TabView {
-            EventsListView()
-                .environmentObject(eventsViewModel)
-                .environmentObject(authViewModel)
-                .tabItem {
-                    Label("イベント", systemImage: "calendar")
+        ZStack {
+            // Main content
+            Group {
+                switch selectedTab {
+                case 0:
+                    EventsListView()
+                        .environmentObject(eventsViewModel)
+                        .environmentObject(authViewModel)
+                case 1:
+                    TeamsListView()
+                case 2:
+                    RankingsView()
+                case 3:
+                    NotificationsView()
+                        .environmentObject(authViewModel)
+                        .environmentObject(notificationsViewModel)
+                case 4:
+                    ProfileView()
+                        .environmentObject(eventsViewModel)
+                default:
+                    EventsListView()
+                        .environmentObject(eventsViewModel)
+                        .environmentObject(authViewModel)
                 }
+            }
+            .environment(\.openDrawer, openDrawer)
 
-            // TODO: コート機能は準備中のため一時的に非表示
-            // CourtsListView()
-            //     .tabItem {
-            //         Label("コート", systemImage: "sportscourt.fill")
-            //     }
-
-            TeamsListView()
-                .tabItem {
-                    Label("チーム", systemImage: "person.3.fill")
+            // Drawer overlay
+            DrawerMenuView(
+                isOpen: $isDrawerOpen,
+                selectedTab: $selectedTab,
+                onLogout: {
+                    authViewModel.signOut()
                 }
-
-            RankingsView()
-                .tabItem {
-                    Label("ランキング", systemImage: "trophy.fill")
-                }
-
-            NotificationsView()
-                .environmentObject(authViewModel)
-                .environmentObject(notificationsViewModel)
-                .tabItem {
-                    Label("通知", systemImage: "bell.fill")
-                }
-                .badge(notificationsViewModel.unreadCount > 0 ? notificationsViewModel.unreadCount : 0)
-
-            ProfileView()
-                .environmentObject(eventsViewModel)
-                .tabItem {
-                    Label("プロフィール", systemImage: "person.circle")
-                }
+            )
+            .environmentObject(authViewModel)
         }
         .task {
             // Fetch notifications on tab view load
             await notificationsViewModel.fetchNotifications()
         }
         .onAppear {
-            print("🔵 MainTabView appeared")
+            print("MainTabView appeared")
             // Check if there's a pending deep link
             checkPendingDeepLink()
         }
@@ -78,63 +93,69 @@ struct MainTabView: View {
         }
     }
 
+    private func openDrawer() {
+        withAnimation(.easeOut(duration: 0.3)) {
+            isDrawerOpen = true
+        }
+    }
+
     private func checkPendingDeepLink() {
-        print("🔍 Checking for pending deep link...")
+        print("Checking for pending deep link...")
 
         // Check UserDefaults for pending deep link
         if let eventId = UserDefaults.standard.string(forKey: "pendingEventId") {
-            print("✅ Found pending event deep link: \(eventId)")
+            print("Found pending event deep link: \(eventId)")
             UserDefaults.standard.removeObject(forKey: "pendingEventId")
 
             // Open event with a slight delay to ensure view is fully loaded
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                print("🚀 Opening event detail for: \(eventId)")
+                print("Opening event detail for: \(eventId)")
                 self.selectedEventId = eventId
                 self.showingEventDetail = true
-                print("📊 showingEventDetail = \(self.showingEventDetail), selectedEventId = \(String(describing: self.selectedEventId))")
+                print("showingEventDetail = \(self.showingEventDetail), selectedEventId = \(String(describing: self.selectedEventId))")
             }
         } else if let teamId = UserDefaults.standard.string(forKey: "pendingTeamId"),
                   let eventId = UserDefaults.standard.string(forKey: "pendingTeamEventId") {
-            print("✅ Found pending team event deep link: teamId=\(teamId), eventId=\(eventId)")
+            print("Found pending team event deep link: teamId=\(teamId), eventId=\(eventId)")
             UserDefaults.standard.removeObject(forKey: "pendingTeamId")
             UserDefaults.standard.removeObject(forKey: "pendingTeamEventId")
 
             // Open team event with a slight delay
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                print("🚀 Opening team event detail for: teamId=\(teamId), eventId=\(eventId)")
+                print("Opening team event detail for: teamId=\(teamId), eventId=\(eventId)")
                 self.selectedTeamId = teamId
                 self.selectedTeamEventId = eventId
                 self.showingTeamEventDetail = true
-                print("📊 showingTeamEventDetail = \(self.showingTeamEventDetail)")
+                print("showingTeamEventDetail = \(self.showingTeamEventDetail)")
             }
         } else {
-            print("❌ No pending deep link found")
+            print("No pending deep link found")
         }
     }
 
     private func handleDeepLink(_ output: NotificationCenter.Publisher.Output) {
-        print("📬 Received deep link notification")
+        print("Received deep link notification")
         guard let userInfo = output.userInfo,
               let type = userInfo["type"] as? String else {
-            print("❌ No userInfo or type in notification")
+            print("No userInfo or type in notification")
             return
         }
 
-        print("📝 Notification type: \(type)")
+        print("Notification type: \(type)")
 
         if type == "event", let eventId = userInfo["eventId"] as? String {
-            print("✅ Opening event from deep link notification: \(eventId)")
+            print("Opening event from deep link notification: \(eventId)")
             selectedEventId = eventId
             showingEventDetail = true
-            print("📊 showingEventDetail = \(showingEventDetail), selectedEventId = \(String(describing: selectedEventId))")
+            print("showingEventDetail = \(showingEventDetail), selectedEventId = \(String(describing: selectedEventId))")
         } else if type == "teamEvent",
                   let teamId = userInfo["teamId"] as? String,
                   let eventId = userInfo["eventId"] as? String {
-            print("✅ Opening team event from deep link notification: teamId=\(teamId), eventId=\(eventId)")
+            print("Opening team event from deep link notification: teamId=\(teamId), eventId=\(eventId)")
             selectedTeamId = teamId
             selectedTeamEventId = eventId
             showingTeamEventDetail = true
-            print("📊 showingTeamEventDetail = \(showingTeamEventDetail)")
+            print("showingTeamEventDetail = \(showingTeamEventDetail)")
         }
     }
 }

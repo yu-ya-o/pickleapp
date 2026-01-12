@@ -3,6 +3,7 @@ import SwiftUI
 struct ProfileView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @EnvironmentObject var eventsViewModel: EventsViewModel
+    @Environment(\.openDrawer) var openDrawer
     @State private var showingSignOutAlert = false
     @State private var showingDeleteAccountAlert = false
     @State private var showingDeleteAccountError = false
@@ -13,15 +14,8 @@ struct ProfileView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // カスタムタイトル
-                Text("PickleHub")
-                    .font(.system(size: 28, weight: .black, design: .default))
-                    .italic()
-                    .kerning(-0.5)
-                    .foregroundColor(.black)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(Color.white)
+                // ハンバーガーメニューヘッダー
+                HamburgerHeaderView(title: "プロフィール", onMenuTap: openDrawer)
 
                 ScrollView {
                     if let user = authViewModel.currentUser {
