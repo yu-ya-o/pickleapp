@@ -22,6 +22,11 @@ export interface GoogleSignInResponse {
     duprSingles: number | null;
     myPaddle: string | null;
     isProfileComplete: boolean;
+    instagramUrl: string | null;
+    twitterUrl: string | null;
+    tiktokUrl: string | null;
+    lineUrl: string | null;
+    battleRecords: BattleRecord[] | null;
   };
   token: string; // JWT or session token
 }
@@ -50,11 +55,23 @@ export interface AppleSignInResponse {
     duprSingles: number | null;
     myPaddle: string | null;
     isProfileComplete: boolean;
+    instagramUrl: string | null;
+    twitterUrl: string | null;
+    tiktokUrl: string | null;
+    lineUrl: string | null;
+    battleRecords: BattleRecord[] | null;
   };
   token: string; // JWT or session token
 }
 
 // ============= USER PROFILE =============
+export interface BattleRecord {
+  id: string;
+  tournamentName: string;
+  yearMonth: string;
+  result: string;
+}
+
 export interface UpdateProfileRequest {
   nickname?: string;
   bio?: string;
@@ -67,6 +84,11 @@ export interface UpdateProfileRequest {
   duprSingles?: number;
   myPaddle?: string;
   profileImage?: string;
+  instagramUrl?: string;
+  twitterUrl?: string;
+  tiktokUrl?: string;
+  lineUrl?: string;
+  battleRecords?: BattleRecord[];
 }
 
 export interface UserProfileResponse {
@@ -85,6 +107,11 @@ export interface UserProfileResponse {
   duprSingles: number | null;
   myPaddle: string | null;
   isProfileComplete: boolean;
+  instagramUrl: string | null;
+  twitterUrl: string | null;
+  tiktokUrl: string | null;
+  lineUrl: string | null;
+  battleRecords: BattleRecord[] | null;
   createdAt: string;
   updatedAt: string;
 }

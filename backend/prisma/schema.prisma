@@ -36,6 +36,9 @@ model User {
   tiktokUrl             String?
   lineUrl               String?
 
+  // Battle Records (JSON array of {id, tournamentName, yearMonth, result})
+  battleRecords         Json?
+
   // Push Notifications
   fcmToken              String?   // Firebase Cloud Messaging token for push notifications
 
