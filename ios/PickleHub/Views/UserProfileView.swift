@@ -1,5 +1,14 @@
 import SwiftUI
 
+// Dark theme colors (same as ProfileView)
+private let darkBg = Color(red: 18/255, green: 18/255, blue: 30/255)
+private let cardBg = Color(red: 30/255, green: 30/255, blue: 45/255)
+private let cardBorder = Color(red: 55/255, green: 55/255, blue: 75/255)
+private let textPrimary = Color.white
+private let textSecondary = Color(red: 156/255, green: 163/255, blue: 175/255)
+private let textMuted = Color(red: 107/255, green: 114/255, blue: 128/255)
+private let accentPurple = Color(red: 139/255, green: 92/255, blue: 246/255)
+
 struct UserProfileView: View {
     let user: User
     @Environment(\.dismiss) var dismiss
@@ -18,7 +27,7 @@ struct UserProfileView: View {
                     Button(action: { dismiss() }) {
                         Image(systemName: "xmark")
                             .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+                            .foregroundColor(textPrimary)
                             .frame(width: 44, height: 44)
                     }
 
@@ -26,7 +35,7 @@ struct UserProfileView: View {
 
                     Text("プロフィール")
                         .font(.system(size: 18, weight: .bold))
-                        .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+                        .foregroundColor(textPrimary)
 
                     Spacer()
 
@@ -36,7 +45,7 @@ struct UserProfileView: View {
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
-                .background(Color.white)
+                .background(darkBg)
 
                 ScrollView {
                     VStack(spacing: 20) {
@@ -65,24 +74,24 @@ struct UserProfileView: View {
                             // 名前
                             Text(user.displayName)
                                 .font(.system(size: 22, weight: .bold))
-                                .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+                                .foregroundColor(textPrimary)
 
                             // 自己紹介
                             if let bio = user.bio, !bio.isEmpty {
                                 Text(bio)
                                     .font(.system(size: 14))
-                                    .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
+                                    .foregroundColor(textSecondary)
                                     .multilineTextAlignment(.center)
                                     .padding(.horizontal, 20)
                             }
 
                             // DUPR セクション
                             HStack(spacing: 12) {
-                                DUPRBox(
+                                DUPRBoxDark(
                                     label: "DUPR SINGLES",
                                     value: user.duprSingles != nil ? String(format: "%.3f", user.duprSingles!) : "-"
                                 )
-                                DUPRBox(
+                                DUPRBoxDark(
                                     label: "DUPR DOUBLES",
                                     value: user.duprDoubles != nil ? String(format: "%.3f", user.duprDoubles!) : "-"
                                 )
@@ -90,29 +99,33 @@ struct UserProfileView: View {
                             .padding(.horizontal, 16)
 
                             Divider()
+                                .background(cardBorder)
                                 .padding(.horizontal, 16)
 
                             // プロフィール詳細（2カラム）
                             VStack(spacing: 16) {
                                 HStack(spacing: 0) {
-                                    ProfileDetailItem(label: "REGION", value: user.region ?? "-")
-                                    ProfileDetailItem(label: "EXPERIENCE", value: user.pickleballExperience ?? "-")
+                                    ProfileDetailItemDark(label: "REGION", value: user.region ?? "-")
+                                    ProfileDetailItemDark(label: "EXPERIENCE", value: user.pickleballExperience ?? "-")
                                 }
                                 HStack(spacing: 0) {
-                                    ProfileDetailItem(label: "LEVEL", value: user.skillLevel ?? "-")
-                                    ProfileDetailItem(label: "GENDER", value: user.gender ?? "-")
+                                    ProfileDetailItemDark(label: "LEVEL", value: user.skillLevel ?? "-")
+                                    ProfileDetailItemDark(label: "GENDER", value: user.gender ?? "-")
                                 }
                                 HStack(spacing: 0) {
-                                    ProfileDetailItem(label: "AGE", value: user.ageGroup ?? "-")
-                                    ProfileDetailItem(label: "PADDLE", value: user.myPaddle ?? "-")
+                                    ProfileDetailItemDark(label: "AGE", value: user.ageGroup ?? "-")
+                                    ProfileDetailItemDark(label: "PADDLE", value: user.myPaddle ?? "-")
                                 }
                             }
                             .padding(.horizontal, 16)
                             .padding(.bottom, 16)
                         }
-                        .background(Color.white)
+                        .background(cardBg)
                         .cornerRadius(16)
-                        .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 2)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(cardBorder, lineWidth: 1)
+                        )
                         .padding(.horizontal, 16)
                         .padding(.top, 16)
 
@@ -120,22 +133,23 @@ struct UserProfileView: View {
                         VStack(alignment: .leading, spacing: 12) {
                             Text("TEAMS")
                                 .font(.system(size: 12, weight: .semibold))
-                                .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
+                                .foregroundColor(textMuted)
                                 .tracking(1)
                                 .padding(.horizontal, 16)
 
                             if viewModel.isLoading {
                                 ProgressView()
+                                    .tint(accentPurple)
                                     .padding(.horizontal, 16)
                             } else if viewModel.teams.isEmpty {
                                 Text("ありません")
                                     .font(.system(size: 14))
-                                    .foregroundColor(Color(red: 156/255, green: 163/255, blue: 175/255))
+                                    .foregroundColor(textMuted)
                                     .padding(.horizontal, 16)
                             } else {
                                 VStack(spacing: 8) {
                                     ForEach(viewModel.teams) { team in
-                                        TeamRowButton(team: team)
+                                        TeamRowButtonDark(team: team)
                                     }
                                 }
                                 .padding(.horizontal, 16)
@@ -146,7 +160,7 @@ struct UserProfileView: View {
                         VStack(alignment: .leading, spacing: 12) {
                             Text("BATTLE RECORD")
                                 .font(.system(size: 12, weight: .semibold))
-                                .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
+                                .foregroundColor(textMuted)
                                 .tracking(1)
                                 .padding(.horizontal, 16)
 
@@ -157,36 +171,37 @@ struct UserProfileView: View {
                                             VStack(alignment: .leading, spacing: 4) {
                                                 Text(record.tournamentName)
                                                     .font(.system(size: 15, weight: .medium))
-                                                    .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+                                                    .foregroundColor(textPrimary)
                                                 Text(record.yearMonth)
                                                     .font(.system(size: 13))
-                                                    .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
+                                                    .foregroundColor(textSecondary)
                                             }
                                             Spacer()
                                             Text(record.result)
                                                 .font(.system(size: 15, weight: .semibold))
-                                                .foregroundColor(record.result == "優勝" ? Color(red: 220/255, green: 38/255, blue: 38/255) : Color(red: 26/255, green: 26/255, blue: 46/255))
+                                                .foregroundColor(record.result == "優勝" ? Color(red: 251/255, green: 191/255, blue: 36/255) : textPrimary)
                                         }
                                         .padding(.vertical, 14)
                                         .padding(.horizontal, 16)
 
                                         if record.id != battleRecords.last?.id {
                                             Divider()
+                                                .background(cardBorder)
                                                 .padding(.leading, 16)
                                         }
                                     }
                                 }
-                                .background(Color.white)
+                                .background(cardBg)
                                 .cornerRadius(12)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .stroke(Color(red: 229/255, green: 231/255, blue: 235/255), lineWidth: 1)
+                                        .stroke(cardBorder, lineWidth: 1)
                                 )
                                 .padding(.horizontal, 16)
                             } else {
                                 Text("ありません")
                                     .font(.system(size: 14))
-                                    .foregroundColor(Color(red: 156/255, green: 163/255, blue: 175/255))
+                                    .foregroundColor(textMuted)
                                     .padding(.horizontal, 16)
                             }
                         }
@@ -195,7 +210,7 @@ struct UserProfileView: View {
                         VStack(alignment: .leading, spacing: 12) {
                             Text("SNS")
                                 .font(.system(size: 12, weight: .semibold))
-                                .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
+                                .foregroundColor(textMuted)
                                 .tracking(1)
                                 .padding(.horizontal, 16)
 
@@ -223,14 +238,14 @@ struct UserProfileView: View {
                             } else {
                                 Text("ありません")
                                     .font(.system(size: 14))
-                                    .foregroundColor(Color(red: 156/255, green: 163/255, blue: 175/255))
+                                    .foregroundColor(textMuted)
                                     .padding(.horizontal, 16)
                             }
                         }
                         .padding(.bottom, 32)
                     }
                 }
-                .background(Color(red: 249/255, green: 250/255, blue: 251/255))
+                .background(darkBg)
             }
             .navigationBarHidden(true)
         }
@@ -243,8 +258,8 @@ struct UserProfileView: View {
     }
 }
 
-// チーム行ボタン
-struct TeamRowButton: View {
+// チーム行ボタン（ダーク）
+struct TeamRowButtonDark: View {
     let team: Team
     @State private var showingTeamDetail = false
 
@@ -258,29 +273,29 @@ struct TeamRowButton: View {
                             .scaledToFill()
                     } placeholder: {
                         Circle()
-                            .fill(Color(red: 229/255, green: 231/255, blue: 235/255))
+                            .fill(cardBorder)
                     }
                     .frame(width: 40, height: 40)
                     .clipShape(Circle())
                 } else {
                     Circle()
-                        .fill(Color(red: 229/255, green: 231/255, blue: 235/255))
+                        .fill(cardBorder)
                         .frame(width: 40, height: 40)
                 }
 
                 Text(team.name)
                     .font(.system(size: 15, weight: .medium))
-                    .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+                    .foregroundColor(textPrimary)
 
                 Spacer()
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
-            .background(Color.white)
+            .background(cardBg)
             .cornerRadius(12)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color(red: 229/255, green: 231/255, blue: 235/255), lineWidth: 1)
+                    .stroke(cardBorder, lineWidth: 1)
             )
         }
         .sheet(isPresented: $showingTeamDetail) {

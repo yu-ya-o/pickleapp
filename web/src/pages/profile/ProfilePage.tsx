@@ -14,6 +14,15 @@ import { useDrawer } from '@/components/layout/MainLayout';
 import { getDisplayName, getSkillLevelLabel } from '@/lib/utils';
 import type { Team } from '@/types';
 
+// Dark theme colors
+const darkBg = '#12121e';
+const cardBg = '#1e1e2d';
+const cardBorder = '#37374b';
+const textPrimary = '#ffffff';
+const textSecondary = '#9ca3af';
+const textMuted = '#6b7280';
+const accentPurple = '#8b5cf6';
+
 export function ProfilePage() {
   const navigate = useNavigate();
   const { openDrawer } = useDrawer();
@@ -57,24 +66,21 @@ export function ProfilePage() {
     return null;
   }
 
-  // 仮の戦績データ
-  const battleRecords = [
-    { id: 1, date: '2025/12', tournament: '福岡オープン', result: '3位' },
-    { id: 2, date: '2025/11', tournament: '初心者大会', result: '優勝' },
-  ];
+  // Get battle records from user data
+  const battleRecords = (user as any).battleRecords || [];
 
-  // 仮のSNSデータ
+  // Get SNS links from user data
   const snsLinks = [
-    { id: 'instagram', name: 'Instagram', url: 'https://instagram.com/example', bgColor: 'linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)' },
-    { id: 'twitter', name: 'X (Twitter)', url: 'https://x.com/example', bgColor: '#000000' },
-    { id: 'tiktok', name: 'TikTok', url: 'https://tiktok.com/@example', bgColor: '#000000' },
-    { id: 'line', name: 'LINE', url: 'https://line.me/example', bgColor: '#06C755' },
-  ];
+    user.instagramUrl && { id: 'instagram', name: 'Instagram', url: user.instagramUrl, bgColor: 'linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)' },
+    user.twitterUrl && { id: 'twitter', name: 'X (Twitter)', url: user.twitterUrl, bgColor: '#000000' },
+    user.tiktokUrl && { id: 'tiktok', name: 'TikTok', url: user.tiktokUrl, bgColor: '#000000' },
+    user.lineUrl && { id: 'line', name: 'LINE', url: user.lineUrl, bgColor: '#06C755' },
+  ].filter(Boolean) as { id: string; name: string; url: string; bgColor: string }[];
 
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#F5F5F7',
+      background: darkBg,
       paddingBottom: '24px'
     }}>
       {/* Header */}
@@ -83,15 +89,15 @@ export function ProfilePage() {
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '12px 16px',
-        background: '#FFFFFF',
-        borderBottom: '1px solid #E5E5E5'
+        background: darkBg,
+        borderBottom: `1px solid ${cardBorder}`
       }}>
         <button
           onClick={openDrawer}
           className="md:hidden"
           style={{
-            background: '#F0F0F0',
-            border: 'none',
+            background: cardBg,
+            border: `1px solid ${cardBorder}`,
             borderRadius: '50%',
             width: '36px',
             height: '36px',
@@ -101,21 +107,21 @@ export function ProfilePage() {
             justifyContent: 'center'
           }}
         >
-          <Menu size={20} style={{ color: '#1a1a2e' }} />
+          <Menu size={20} style={{ color: textPrimary }} />
         </button>
         <h1 style={{
           fontSize: '24px',
           fontWeight: 900,
           fontStyle: 'italic',
-          color: '#1a1a2e'
+          color: textPrimary
         }}>
           PickleHub
         </h1>
         <button
           onClick={() => {/* TODO: Share */}}
           style={{
-            background: '#F0F0F0',
-            border: 'none',
+            background: cardBg,
+            border: `1px solid ${cardBorder}`,
             borderRadius: '50%',
             width: '36px',
             height: '36px',
@@ -125,26 +131,26 @@ export function ProfilePage() {
             justifyContent: 'center'
           }}
         >
-          <Share2 size={18} style={{ color: '#1a1a2e' }} />
+          <Share2 size={18} style={{ color: textPrimary }} />
         </button>
       </header>
 
       {/* Trading Card */}
       <div style={{ padding: '20px' }}>
         <div style={{
-          background: '#FFFFFF',
+          background: cardBg,
           borderRadius: '20px',
           padding: '4px',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
+          border: `1px solid ${cardBorder}`
         }}>
           {/* Card Inner with subtle border effect */}
           <div style={{
-            background: 'linear-gradient(145deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+            background: 'linear-gradient(145deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%)',
             borderRadius: '18px',
             padding: '3px'
           }}>
             <div style={{
-              background: '#FFFFFF',
+              background: cardBg,
               borderRadius: '16px',
               overflow: 'hidden'
             }}>
@@ -152,7 +158,7 @@ export function ProfilePage() {
               <div style={{
                 padding: '24px 20px',
                 textAlign: 'center',
-                borderBottom: '1px solid #E5E5E5'
+                borderBottom: `1px solid ${cardBorder}`
               }}>
                 {/* Profile Image with glow */}
                 <div style={{
@@ -162,14 +168,14 @@ export function ProfilePage() {
                   margin: '0 auto 16px',
                   padding: '3px',
                   background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                  boxShadow: '0 0 30px rgba(102, 126, 234, 0.3)'
+                  boxShadow: '0 0 30px rgba(102, 126, 234, 0.4)'
                 }}>
                   <div style={{
                     width: '100%',
                     height: '100%',
                     borderRadius: '50%',
                     overflow: 'hidden',
-                    backgroundColor: '#F5F5F7'
+                    backgroundColor: '#2d2d3d'
                   }}>
                     {user.profileImage ? (
                       <img
@@ -196,7 +202,7 @@ export function ProfilePage() {
                 <h2 style={{
                   fontSize: '22px',
                   fontWeight: 700,
-                  color: '#1a1a2e',
+                  color: textPrimary,
                   marginBottom: '12px',
                   letterSpacing: '0.5px'
                 }}>
@@ -207,7 +213,7 @@ export function ProfilePage() {
                 {user.bio && (
                   <p style={{
                     fontSize: '13px',
-                    color: '#888888',
+                    color: textSecondary,
                     lineHeight: '1.5',
                     maxWidth: '260px',
                     margin: '0 auto'
@@ -218,7 +224,7 @@ export function ProfilePage() {
               </div>
 
               {/* Stats Section */}
-              <div style={{ padding: '16px 20px', borderBottom: '1px solid #E5E5E5' }}>
+              <div style={{ padding: '16px 20px', borderBottom: `1px solid ${cardBorder}` }}>
                 <div style={{
                   display: 'grid',
                   gridTemplateColumns: '1fr 1fr',
@@ -226,29 +232,31 @@ export function ProfilePage() {
                 }}>
                   {/* DUPR Singles */}
                   <div style={{
-                    background: '#F5F5F7',
+                    background: '#181826',
                     borderRadius: '12px',
                     padding: '12px',
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    border: `1px solid ${cardBorder}`
                   }}>
-                    <p style={{ fontSize: '10px', color: '#888888', marginBottom: '4px', letterSpacing: '1px' }}>
+                    <p style={{ fontSize: '10px', color: textMuted, marginBottom: '4px', letterSpacing: '1px' }}>
                       DUPR SINGLES
                     </p>
-                    <p style={{ fontSize: '24px', fontWeight: 700, color: '#667eea' }}>
+                    <p style={{ fontSize: '24px', fontWeight: 700, color: user.duprSingles ? textPrimary : accentPurple }}>
                       {user.duprSingles || '-'}
                     </p>
                   </div>
                   {/* DUPR Doubles */}
                   <div style={{
-                    background: '#F5F5F7',
+                    background: '#181826',
                     borderRadius: '12px',
                     padding: '12px',
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    border: `1px solid ${cardBorder}`
                   }}>
-                    <p style={{ fontSize: '10px', color: '#888888', marginBottom: '4px', letterSpacing: '1px' }}>
+                    <p style={{ fontSize: '10px', color: textMuted, marginBottom: '4px', letterSpacing: '1px' }}>
                       DUPR DOUBLES
                     </p>
-                    <p style={{ fontSize: '24px', fontWeight: 700, color: '#764ba2' }}>
+                    <p style={{ fontSize: '24px', fontWeight: 700, color: user.duprDoubles ? textPrimary : accentPurple }}>
                       {user.duprDoubles || '-'}
                     </p>
                   </div>
@@ -263,28 +271,28 @@ export function ProfilePage() {
                   gap: '8px 16px'
                 }}>
                   <div style={{ padding: '8px 0' }}>
-                    <p style={{ fontSize: '10px', color: '#888888', letterSpacing: '1px', marginBottom: '4px' }}>REGION</p>
-                    <p style={{ fontSize: '14px', color: '#1a1a2e', fontWeight: 500 }}>{user.region || '-'}</p>
+                    <p style={{ fontSize: '10px', color: textMuted, letterSpacing: '1px', marginBottom: '4px' }}>REGION</p>
+                    <p style={{ fontSize: '14px', color: textPrimary, fontWeight: 500 }}>{user.region || '-'}</p>
                   </div>
                   <div style={{ padding: '8px 0' }}>
-                    <p style={{ fontSize: '10px', color: '#888888', letterSpacing: '1px', marginBottom: '4px' }}>EXPERIENCE</p>
-                    <p style={{ fontSize: '14px', color: '#1a1a2e', fontWeight: 500 }}>{user.pickleballExperience || '-'}</p>
+                    <p style={{ fontSize: '10px', color: textMuted, letterSpacing: '1px', marginBottom: '4px' }}>EXPERIENCE</p>
+                    <p style={{ fontSize: '14px', color: textPrimary, fontWeight: 500 }}>{user.pickleballExperience || '-'}</p>
                   </div>
                   <div style={{ padding: '8px 0' }}>
-                    <p style={{ fontSize: '10px', color: '#888888', letterSpacing: '1px', marginBottom: '4px' }}>LEVEL</p>
-                    <p style={{ fontSize: '14px', color: '#1a1a2e', fontWeight: 500 }}>{user.skillLevel ? getSkillLevelLabel(user.skillLevel) : '-'}</p>
+                    <p style={{ fontSize: '10px', color: textMuted, letterSpacing: '1px', marginBottom: '4px' }}>LEVEL</p>
+                    <p style={{ fontSize: '14px', color: textPrimary, fontWeight: 500 }}>{user.skillLevel ? getSkillLevelLabel(user.skillLevel) : '-'}</p>
                   </div>
                   <div style={{ padding: '8px 0' }}>
-                    <p style={{ fontSize: '10px', color: '#888888', letterSpacing: '1px', marginBottom: '4px' }}>GENDER</p>
-                    <p style={{ fontSize: '14px', color: '#1a1a2e', fontWeight: 500 }}>{user.gender || '-'}</p>
+                    <p style={{ fontSize: '10px', color: textMuted, letterSpacing: '1px', marginBottom: '4px' }}>GENDER</p>
+                    <p style={{ fontSize: '14px', color: textPrimary, fontWeight: 500 }}>{user.gender || '-'}</p>
                   </div>
                   <div style={{ padding: '8px 0' }}>
-                    <p style={{ fontSize: '10px', color: '#888888', letterSpacing: '1px', marginBottom: '4px' }}>AGE</p>
-                    <p style={{ fontSize: '14px', color: '#1a1a2e', fontWeight: 500 }}>{user.ageGroup || '-'}</p>
+                    <p style={{ fontSize: '10px', color: textMuted, letterSpacing: '1px', marginBottom: '4px' }}>AGE</p>
+                    <p style={{ fontSize: '14px', color: textPrimary, fontWeight: 500 }}>{user.ageGroup || '-'}</p>
                   </div>
                   <div style={{ padding: '8px 0' }}>
-                    <p style={{ fontSize: '10px', color: '#888888', letterSpacing: '1px', marginBottom: '4px' }}>PADDLE</p>
-                    <p style={{ fontSize: '14px', color: '#1a1a2e', fontWeight: 500 }}>{user.myPaddle || '-'}</p>
+                    <p style={{ fontSize: '10px', color: textMuted, letterSpacing: '1px', marginBottom: '4px' }}>PADDLE</p>
+                    <p style={{ fontSize: '14px', color: textPrimary, fontWeight: 500 }}>{user.myPaddle || '-'}</p>
                   </div>
                 </div>
               </div>
@@ -293,18 +301,18 @@ export function ProfilePage() {
         </div>
       </div>
 
-      {/* 所属チームセクション */}
-      {teams.length > 0 && (
-        <div style={{ padding: '0 20px 20px' }}>
-          <h3 style={{
-            fontSize: '14px',
-            fontWeight: 600,
-            color: '#888888',
-            marginBottom: '12px',
-            letterSpacing: '1px'
-          }}>
-            TEAMS
-          </h3>
+      {/* TEAMSセクション */}
+      <div style={{ padding: '0 20px 20px' }}>
+        <h3 style={{
+          fontSize: '12px',
+          fontWeight: 600,
+          color: textMuted,
+          marginBottom: '12px',
+          letterSpacing: '1px'
+        }}>
+          TEAMS
+        </h3>
+        {teams.length > 0 ? (
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
             {teams.map((team) => (
               <div
@@ -314,11 +322,11 @@ export function ProfilePage() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '10px',
-                  background: '#FFFFFF',
+                  background: cardBg,
                   borderRadius: '12px',
                   padding: '10px 14px',
                   cursor: 'pointer',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+                  border: `1px solid ${cardBorder}`
                 }}
               >
                 <div style={{
@@ -338,115 +346,125 @@ export function ProfilePage() {
                     '🏓'
                   )}
                 </div>
-                <span style={{ fontSize: '13px', color: '#1a1a2e', fontWeight: 500 }}>
+                <span style={{ fontSize: '13px', color: textPrimary, fontWeight: 500 }}>
                   {team.name}
                 </span>
               </div>
             ))}
           </div>
-        </div>
-      )}
+        ) : (
+          <p style={{ fontSize: '14px', color: textMuted }}>ありません</p>
+        )}
+      </div>
 
       {/* 戦績セクション */}
       <div style={{ padding: '0 20px 20px' }}>
         <h3 style={{
-          fontSize: '14px',
+          fontSize: '12px',
           fontWeight: 600,
-          color: '#888888',
+          color: textMuted,
           marginBottom: '12px',
           letterSpacing: '1px'
         }}>
           BATTLE RECORD
         </h3>
-        <div style={{
-          background: '#FFFFFF',
-          borderRadius: '12px',
-          overflow: 'hidden',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
-        }}>
-          {battleRecords.map((record, index) => (
-            <div
-              key={record.id}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                padding: '14px 16px',
-                borderBottom: index !== battleRecords.length - 1 ? '1px solid #E5E5E5' : 'none'
-              }}
-            >
-              <div style={{ flex: 1 }}>
-                <p style={{ fontSize: '14px', fontWeight: 500, color: '#1a1a2e' }}>
-                  {record.tournament}
-                </p>
-                <p style={{ fontSize: '12px', color: '#888888' }}>
-                  {record.date}
-                </p>
+        {battleRecords.length > 0 ? (
+          <div style={{
+            background: cardBg,
+            borderRadius: '12px',
+            overflow: 'hidden',
+            border: `1px solid ${cardBorder}`
+          }}>
+            {battleRecords.map((record: any, index: number) => (
+              <div
+                key={record.id}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '14px 16px',
+                  borderBottom: index !== battleRecords.length - 1 ? `1px solid ${cardBorder}` : 'none'
+                }}
+              >
+                <div style={{ flex: 1 }}>
+                  <p style={{ fontSize: '14px', fontWeight: 500, color: textPrimary }}>
+                    {record.tournamentName}
+                  </p>
+                  <p style={{ fontSize: '12px', color: textSecondary }}>
+                    {record.yearMonth}
+                  </p>
+                </div>
+                <span style={{
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  color: record.result === '優勝' ? '#fbbf24' : textPrimary
+                }}>
+                  {record.result}
+                </span>
               </div>
-              <span style={{
-                fontSize: '14px',
-                fontWeight: 600,
-                color: record.result === '優勝' ? '#F59E0B' : '#888888'
-              }}>
-                {record.result}
-              </span>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <p style={{ fontSize: '14px', color: textMuted }}>ありません</p>
+        )}
       </div>
 
       {/* SNS Links Section */}
       <div style={{ padding: '0 20px 20px' }}>
         <h3 style={{
-          fontSize: '14px',
+          fontSize: '12px',
           fontWeight: 600,
-          color: '#888888',
+          color: textMuted,
           marginBottom: '12px',
           letterSpacing: '1px'
         }}>
           SNS
         </h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          {snsLinks.map((sns) => (
-            <a
-              key={sns.id}
-              href={sns.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '14px 16px',
-                borderRadius: '12px',
-                textDecoration: 'none',
-                color: '#FFFFFF',
-                fontWeight: 500,
-                fontSize: '15px',
-                background: sns.bgColor,
-                gap: '8px'
-              }}
-            >
-              {sns.id === 'instagram' && <Instagram size={20} />}
-              {sns.id === 'twitter' && (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-              )}
-              {sns.id === 'tiktok' && (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-                </svg>
-              )}
-              {sns.id === 'line' && (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
-                </svg>
-              )}
-              <span>{sns.name}</span>
-              <ExternalLink size={16} style={{ marginLeft: 'auto', opacity: 0.7 }} />
-            </a>
-          ))}
-        </div>
+        {snsLinks.length > 0 ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {snsLinks.map((sns) => (
+              <a
+                key={sns.id}
+                href={sns.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '14px 16px',
+                  borderRadius: '12px',
+                  textDecoration: 'none',
+                  color: '#FFFFFF',
+                  fontWeight: 500,
+                  fontSize: '15px',
+                  background: sns.bgColor,
+                  gap: '8px'
+                }}
+              >
+                {sns.id === 'instagram' && <Instagram size={20} />}
+                {sns.id === 'twitter' && (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                )}
+                {sns.id === 'tiktok' && (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                  </svg>
+                )}
+                {sns.id === 'line' && (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+                  </svg>
+                )}
+                <span>{sns.name}</span>
+                <ExternalLink size={16} style={{ marginLeft: 'auto', opacity: 0.7 }} />
+              </a>
+            ))}
+          </div>
+        ) : (
+          <p style={{ fontSize: '14px', color: textMuted }}>ありません</p>
+        )}
       </div>
 
       {/* Action Buttons */}
@@ -459,18 +477,17 @@ export function ProfilePage() {
             alignItems: 'center',
             width: '100%',
             padding: '16px',
-            backgroundColor: '#FFFFFF',
-            border: 'none',
+            backgroundColor: cardBg,
+            border: `1px solid ${cardBorder}`,
             borderRadius: '12px',
             cursor: 'pointer',
-            marginBottom: '12px',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+            marginBottom: '12px'
           }}
         >
-          <span style={{ flex: 1, textAlign: 'left', color: '#1a1a2e', fontSize: '15px' }}>
+          <span style={{ flex: 1, textAlign: 'left', color: textPrimary, fontSize: '15px' }}>
             プロフィールを編集
           </span>
-          <ChevronRight size={20} style={{ color: '#888888' }} />
+          <ChevronRight size={20} style={{ color: textMuted }} />
         </button>
 
         {/* Logout */}
@@ -482,14 +499,14 @@ export function ProfilePage() {
             justifyContent: 'center',
             width: '100%',
             padding: '16px',
-            backgroundColor: 'rgba(255, 100, 100, 0.1)',
-            border: 'none',
+            backgroundColor: 'rgba(127, 29, 29, 0.3)',
+            border: '1px solid rgb(127, 29, 29)',
             borderRadius: '12px',
             cursor: 'pointer',
             marginBottom: '12px'
           }}
         >
-          <span style={{ color: '#EF4444', fontWeight: 500, fontSize: '15px' }}>ログアウト</span>
+          <span style={{ color: '#f87171', fontWeight: 500, fontSize: '15px' }}>ログアウト</span>
         </button>
 
         {/* Delete Account */}
@@ -501,13 +518,13 @@ export function ProfilePage() {
             justifyContent: 'center',
             width: '100%',
             padding: '16px',
-            backgroundColor: 'transparent',
-            border: '1px solid #E5E5E5',
+            backgroundColor: cardBg,
+            border: `1px solid ${cardBorder}`,
             borderRadius: '12px',
             cursor: 'pointer'
           }}
         >
-          <span style={{ color: '#888888', fontSize: '15px' }}>アカウントを削除</span>
+          <span style={{ color: textMuted, fontSize: '15px' }}>アカウントを削除</span>
         </button>
       </div>
 
