@@ -53,6 +53,19 @@ struct EditEventView: View {
 
     var body: some View {
         NavigationView {
+            VStack(spacing: 0) {
+                // PickleHub Header
+                HStack {
+                    Spacer()
+                    Text("PickleHub")
+                        .font(.system(size: 24, weight: .black))
+                        .italic()
+                        .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+                    Spacer()
+                }
+                .padding(.vertical, 12)
+                .background(Color.white)
+
             if isEventPast {
                 VStack(spacing: 20) {
                     Image(systemName: "clock.fill")
@@ -130,6 +143,7 @@ struct EditEventView: View {
                         }
                     }
                     .disabled(!isFormValid || isLoading)
+                }
                 }
             }
             .navigationTitle("イベントを編集")

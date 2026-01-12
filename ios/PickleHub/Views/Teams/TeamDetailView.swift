@@ -44,7 +44,20 @@ struct TeamDetailView: View {
     }
 
     var body: some View {
-        ScrollView {
+        VStack(spacing: 0) {
+            // PickleHub Header
+            HStack {
+                Spacer()
+                Text("PickleHub")
+                    .font(.system(size: 24, weight: .black))
+                    .italic()
+                    .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+                Spacer()
+            }
+            .padding(.vertical, 12)
+            .background(Color.white)
+
+            ScrollView {
             if let team = viewModel.team {
                 VStack(alignment: .leading, spacing: 20) {
                     // Header Image
@@ -353,6 +366,7 @@ struct TeamDetailView: View {
             } else if viewModel.isLoading {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
             }
         }
         .navigationTitle("チーム")
