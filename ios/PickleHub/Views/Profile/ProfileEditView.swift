@@ -23,6 +23,7 @@ struct ProfileEditView: View {
     @State private var twitterUrl: String
     @State private var tiktokUrl: String
     @State private var lineUrl: String
+    @State private var battleRecords: [BattleRecord]
 
     let regions = Prefectures.all
     let experiences = ["6ヶ月未満", "6ヶ月〜1年", "1〜2年", "2〜3年", "3年以上"]
@@ -46,6 +47,9 @@ struct ProfileEditView: View {
         _twitterUrl = State(initialValue: user.twitterUrl ?? "")
         _tiktokUrl = State(initialValue: user.tiktokUrl ?? "")
         _lineUrl = State(initialValue: user.lineUrl ?? "")
+        // Initialize battle records with existing data or one empty record
+        let existingRecords = user.battleRecords ?? []
+        _battleRecords = State(initialValue: existingRecords.isEmpty ? [BattleRecord()] : existingRecords)
     }
 
     var body: some View {
@@ -191,6 +195,28 @@ struct ProfileEditView: View {
                     }
                 }
 
+                Section(header: Text("戦歴")) {
+                    ForEach(battleRecords.indices, id: \.self) { index in
+                        BattleRecordRowView(
+                            record: $battleRecords[index],
+                            onDelete: battleRecords.count > 1 ? {
+                                battleRecords.remove(at: index)
+                            } : nil
+                        )
+                    }
+
+                    Button(action: {
+                        battleRecords.append(BattleRecord())
+                    }) {
+                        HStack {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(.twitterBlue)
+                            Text("戦歴を追加")
+                                .foregroundColor(.twitterBlue)
+                        }
+                    }
+                }
+
                 Section {
                     SNSLinksEditor(
                         instagramUrl: $instagramUrl,
@@ -283,6 +309,9 @@ struct ProfileEditView: View {
             let duprDoubles = duprDoublesText.isEmpty ? nil : Double(duprDoublesText)
             let duprSingles = duprSinglesText.isEmpty ? nil : Double(duprSinglesText)
 
+            // Filter out empty battle records
+            let validBattleRecords = battleRecords.filter { !$0.tournamentName.isEmpty }
+
             await viewModel.updateProfile(
                 nickname: nickname,
                 bio: bio.isEmpty ? nil : bio,
@@ -298,7 +327,8 @@ struct ProfileEditView: View {
                 instagramUrl: instagramUrl.isEmpty ? nil : instagramUrl,
                 twitterUrl: twitterUrl.isEmpty ? nil : twitterUrl,
                 tiktokUrl: tiktokUrl.isEmpty ? nil : tiktokUrl,
-                lineUrl: lineUrl.isEmpty ? nil : lineUrl
+                lineUrl: lineUrl.isEmpty ? nil : lineUrl,
+                battleRecords: validBattleRecords.isEmpty ? nil : validBattleRecords
             )
 
             if viewModel.errorMessage == nil {
@@ -334,7 +364,7 @@ class ProfileEditViewModel: ObservableObject {
         }
     }
 
-    func updateProfile(nickname: String, bio: String?, region: String, pickleballExperience: String, gender: String, ageGroup: String, skillLevel: String, duprDoubles: Double?, duprSingles: Double?, myPaddle: String?, profileImage: String?, instagramUrl: String?, twitterUrl: String?, tiktokUrl: String?, lineUrl: String?) async {
+    func updateProfile(nickname: String, bio: String?, region: String, pickleballExperience: String, gender: String, ageGroup: String, skillLevel: String, duprDoubles: Double?, duprSingles: Double?, myPaddle: String?, profileImage: String?, instagramUrl: String?, twitterUrl: String?, tiktokUrl: String?, lineUrl: String?, battleRecords: [BattleRecord]?) async {
         errorMessage = nil
 
         do {
@@ -353,7 +383,8 @@ class ProfileEditViewModel: ObservableObject {
                 instagramUrl: instagramUrl,
                 twitterUrl: twitterUrl,
                 tiktokUrl: tiktokUrl,
-                lineUrl: lineUrl
+                lineUrl: lineUrl,
+                battleRecords: battleRecords
             )
 
             let user = try await apiClient.updateProfile(request: request)

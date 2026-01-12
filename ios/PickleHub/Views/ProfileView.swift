@@ -129,6 +129,84 @@ struct ProfileView: View {
                             }
                             .padding(.horizontal)
 
+                            // Battle Records Section
+                            if let battleRecords = user.battleRecords, !battleRecords.isEmpty {
+                                VStack(alignment: .leading, spacing: 12) {
+                                    Text("戦歴")
+                                        .font(.headline)
+                                        .foregroundColor(.secondary)
+
+                                    VStack(spacing: 0) {
+                                        ForEach(battleRecords) { record in
+                                            HStack {
+                                                VStack(alignment: .leading, spacing: 4) {
+                                                    Text(record.tournamentName)
+                                                        .font(.subheadline)
+                                                        .fontWeight(.medium)
+                                                    Text(record.yearMonth)
+                                                        .font(.caption)
+                                                        .foregroundColor(.secondary)
+                                                }
+                                                Spacer()
+                                                Text(record.result)
+                                                    .font(.subheadline)
+                                                    .fontWeight(.semibold)
+                                                    .foregroundColor(record.result == "優勝" ? .red : .primary)
+                                            }
+                                            .padding(.vertical, 12)
+                                            .padding(.horizontal, 16)
+
+                                            if record.id != battleRecords.last?.id {
+                                                Divider()
+                                                    .padding(.leading, 16)
+                                            }
+                                        }
+                                    }
+                                    .background(
+                                        RoundedRectangle(cornerRadius: CornerRadius.medium)
+                                            .fill(Color(.systemGray6))
+                                    )
+                                }
+                                .padding(.horizontal)
+                            }
+
+                            // SNS Links Section
+                            if user.instagramUrl != nil || user.twitterUrl != nil || user.tiktokUrl != nil || user.lineUrl != nil {
+                                VStack(alignment: .leading, spacing: 12) {
+                                    Text("SNS")
+                                        .font(.headline)
+                                        .foregroundColor(.secondary)
+
+                                    VStack(spacing: 8) {
+                                        if let instagramUrl = user.instagramUrl, !instagramUrl.isEmpty {
+                                            SNSLinkButton(
+                                                platform: .instagram,
+                                                url: instagramUrl
+                                            )
+                                        }
+                                        if let twitterUrl = user.twitterUrl, !twitterUrl.isEmpty {
+                                            SNSLinkButton(
+                                                platform: .twitter,
+                                                url: twitterUrl
+                                            )
+                                        }
+                                        if let tiktokUrl = user.tiktokUrl, !tiktokUrl.isEmpty {
+                                            SNSLinkButton(
+                                                platform: .tiktok,
+                                                url: tiktokUrl
+                                            )
+                                        }
+                                        if let lineUrl = user.lineUrl, !lineUrl.isEmpty {
+                                            SNSLinkButton(
+                                                platform: .line,
+                                                url: lineUrl
+                                            )
+                                        }
+                                    }
+                                }
+                                .padding(.horizontal)
+                            }
+
                             Divider()
 
                             // Actions
