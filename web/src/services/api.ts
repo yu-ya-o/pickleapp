@@ -380,6 +380,37 @@ class ApiClient {
   async getTeamRankings(type: 'members' | 'events' = 'members'): Promise<TeamRanking[]> {
     return this.request<TeamRanking[]>(`/api/teams/rankings?type=${type}`);
   }
+
+  // Users
+  async getUserProfile(userId: string): Promise<UserProfile> {
+    return this.request<UserProfile>(`/api/users/${userId}`);
+  }
+
+  async getUserTeams(userId: string): Promise<Team[]> {
+    return this.request<Team[]>(`/api/users/${userId}/teams`);
+  }
+}
+
+// User Profile type
+export interface UserProfile {
+  id: string;
+  name: string;
+  nickname: string | null;
+  profileImage: string | null;
+  bio: string | null;
+  region: string | null;
+  pickleballExperience: string | null;
+  gender: string | null;
+  ageGroup: string | null;
+  skillLevel: string | null;
+  myPaddle: string | null;
+  duprSingles: number | null;
+  duprDoubles: number | null;
+  instagramUrl: string | null;
+  twitterUrl: string | null;
+  tiktokUrl: string | null;
+  lineUrl: string | null;
+  createdAt: string;
 }
 
 // Team Ranking type

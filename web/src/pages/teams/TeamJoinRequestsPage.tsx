@@ -109,7 +109,11 @@ export function TeamJoinRequestsPage() {
                 className="bg-white rounded-xl"
                 style={{ padding: '16px' }}
               >
-                <div className="flex items-center gap-3">
+                <div
+                  className="flex items-center gap-3"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => navigate(`/users/${request.user.id}`)}
+                >
                   <Avatar
                     src={request.user.profileImage}
                     alt={getDisplayName(request.user)}

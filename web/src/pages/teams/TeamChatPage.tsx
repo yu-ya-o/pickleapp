@@ -126,11 +126,16 @@ export function TeamChatPage() {
                 )}
               >
                 {!isOwn && (
-                  <Avatar
-                    src={message.user.profileImage}
-                    alt={getDisplayName(message.user)}
-                    size="sm"
-                  />
+                  <div
+                    onClick={() => navigate(`/users/${message.user.id}`)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <Avatar
+                      src={message.user.profileImage}
+                      alt={getDisplayName(message.user)}
+                      size="sm"
+                    />
+                  </div>
                 )}
                 <div
                   className={cn(
