@@ -28,15 +28,26 @@ export function UserProfilePage() {
     try {
       setIsLoading(true);
       setError(null);
-      const [userData, teamsData] = await Promise.all([
-        api.getUserProfile(userId!),
-        api.getUserTeams(userId!),
-      ]);
+
+      // Fetch user profile first
+      const userData = await api.getUserProfile(userId!);
       setUser(userData);
-      setTeams(teamsData);
+
+      // Fetch teams separately (don't block on failure)
+      try {
+        const teamsData = await api.getUserTeams(userId!);
+        setTeams(teamsData);
+      } catch (teamsError) {
+        console.error('Failed to load user teams:', teamsError);
+        // Teams are optional, don't show error for this
+      }
     } catch (error) {
       console.error('Failed to load user profile:', error);
-      setError(error instanceof Error ? error.message : 'プロフィールの読み込みに失敗しました');
+      if (error instanceof Error && error.message.includes('404')) {
+        setError('ユーザーが見つかりません');
+      } else {
+        setError(error instanceof Error ? error.message : 'プロフィールの読み込みに失敗しました');
+      }
     } finally {
       setIsLoading(false);
     }
