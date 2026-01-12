@@ -4,6 +4,8 @@ import { Menu, Instagram, ExternalLink } from 'lucide-react';
 import { api } from '@/services/api';
 import type { UserProfile } from '@/services/api';
 import { Loading } from '@/components/ui';
+import { SEO } from '@/components/SEO';
+import { generateUserMeta, generateUserJsonLd } from '@/lib/seo';
 import { useDrawer } from '@/components/layout/MainLayout';
 import { getDisplayName, getSkillLevelLabel } from '@/lib/utils';
 import type { Team } from '@/types';
@@ -78,12 +80,23 @@ export function ShareableProfilePage() {
   // Get battle records from user data
   const battleRecords = (user as any).battleRecords || [];
 
+  const seoMeta = generateUserMeta(user);
+  const seoJsonLd = generateUserJsonLd({ ...user, id: userId! });
+
   return (
     <div style={{
       minHeight: '100vh',
       background: '#F5F5F7',
       paddingBottom: '24px'
     }}>
+      <SEO
+        title={seoMeta.title}
+        description={seoMeta.description}
+        image={user.profileImage}
+        url={`/p/${userId}`}
+        type="profile"
+        jsonLd={seoJsonLd}
+      />
       {/* PickleHub Header */}
       <header style={{
         display: 'flex',
