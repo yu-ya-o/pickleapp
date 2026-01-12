@@ -23,6 +23,7 @@ import { RankingsPage } from '@/pages/rankings/RankingsPage';
 import { ChatPage } from '@/pages/chat/ChatPage';
 import { NotificationsPage } from '@/pages/NotificationsPage';
 import { ProfilePage } from '@/pages/profile/ProfilePage';
+import { UserProfilePage } from '@/pages/users/UserProfilePage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -56,6 +57,7 @@ function AppRoutes() {
       <Route path="/events/:id" element={<OptionalAuthRoute><EventDetailPage /></OptionalAuthRoute>} />
       <Route path="/teams/:id" element={<OptionalAuthRoute><TeamDetailPage /></OptionalAuthRoute>} />
       <Route path="/teams/:teamId/events/:eventId" element={<OptionalAuthRoute><TeamEventDetailPage /></OptionalAuthRoute>} />
+      <Route path="/users/:userId" element={<OptionalAuthRoute><UserProfilePage /></OptionalAuthRoute>} />
 
       {/* Protected fullscreen routes (auth required) */}
       <Route path="/events/create" element={<ProtectedRoute><CreateEventPage /></ProtectedRoute>} />

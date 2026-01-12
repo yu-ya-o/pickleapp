@@ -79,7 +79,8 @@ export function TeamMembersPage() {
                 <div key={member.id}>
                   <div
                     className="flex items-center gap-3"
-                    style={{ padding: '12px 16px' }}
+                    style={{ padding: '12px 16px', cursor: 'pointer' }}
+                    onClick={() => navigate(`/users/${member.user.id}`)}
                   >
                     <Avatar
                       src={member.user.profileImage}
