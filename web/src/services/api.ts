@@ -86,7 +86,7 @@ class ApiClient {
 
   async uploadProfileImage(file: File): Promise<{ imageUrl: string }> {
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append('file', file);
 
     const url = `${this.baseUrl}/api/upload/image`;
     const response = await fetch(url, {
@@ -101,7 +101,8 @@ class ApiClient {
       throw new Error('Failed to upload image');
     }
 
-    return response.json();
+    const result = await response.json();
+    return { imageUrl: result.url };
   }
 
   async deleteAccount(): Promise<void> {
