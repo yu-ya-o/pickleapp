@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Plus, MapPin, Calendar, Users, Search, Menu } from 'lucide-react';
 import { api } from '@/services/api';
 import { Loading } from '@/components/ui';
-import { EventsListSEO } from '@/components/SEO';
 import { useDrawer } from '@/components/layout/MainLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import { formatDateTime, getDisplayName } from '@/lib/utils';
@@ -96,7 +95,6 @@ export function EventsListPage() {
       minHeight: '100vh',
       background: '#F5F5F7'
     }}>
-      <EventsListSEO />
       {/* Header */}
       <header style={{
         position: 'sticky',

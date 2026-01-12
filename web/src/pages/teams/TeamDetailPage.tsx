@@ -13,8 +13,6 @@ import {
 import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, Loading, Modal } from '@/components/ui';
-import { SEO } from '@/components/SEO';
-import { generateTeamMeta, generateTeamJsonLd } from '@/lib/seo';
 import type { Team } from '@/types';
 
 export function TeamDetailPage() {
@@ -103,9 +101,6 @@ export function TeamDetailPage() {
   const isAdmin = team.userRole === 'admin' || isOwner;
   const isMember = team.isUserMember;
 
-  const seoMeta = generateTeamMeta(team);
-  const seoJsonLd = generateTeamJsonLd(team);
-
   // Menu item component
   const MenuItem = ({ icon: Icon, label, onClick }: { icon: React.ElementType; label: string; onClick: () => void }) => (
     <button
@@ -123,13 +118,6 @@ export function TeamDetailPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <SEO
-        title={seoMeta.title}
-        description={seoMeta.description}
-        image={team.iconImage}
-        url={`/teams/${team.id}`}
-        jsonLd={seoJsonLd}
-      />
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
         <div className="flex items-center justify-between" style={{ padding: '12px 16px' }}>

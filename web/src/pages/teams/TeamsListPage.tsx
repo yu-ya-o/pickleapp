@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Plus, Search, Users, MapPin, Crown, Menu } from 'lucide-react';
 import { api } from '@/services/api';
 import { Loading } from '@/components/ui';
-import { TeamsListSEO } from '@/components/SEO';
 import { useDrawer } from '@/components/layout/MainLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import { PREFECTURES } from '@/lib/prefectures';
@@ -73,7 +72,6 @@ export function TeamsListPage() {
       minHeight: '100vh',
       background: '#F5F5F7'
     }}>
-      <TeamsListSEO />
       {/* Header */}
       <header style={{
         position: 'sticky',

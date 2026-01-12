@@ -6,15 +6,13 @@ import {
   MapPin,
   Users,
   MessageCircle,
-  Edit as EditIcon,
+  Edit,
   Copy,
   Lock,
 } from 'lucide-react';
 import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, Loading, Modal, GoogleMap } from '@/components/ui';
-import { SEO } from '@/components/SEO';
-import { SITE_NAME, SKILL_LEVEL_LABELS } from '@/lib/seo';
 import {
   formatDateTime,
   getSkillLevelLabel,
@@ -145,18 +143,8 @@ export function TeamEventDetailPage() {
   const isFull = (event.availableSpots ?? 0) === 0;
   const currentParticipants = event.maxParticipants ? event.maxParticipants - (event.availableSpots ?? 0) : (event.participants?.length || 0);
 
-  const skillLabel = event.skillLevel ? SKILL_LEVEL_LABELS[event.skillLevel] || event.skillLevel : '';
-  const seoTitle = `${event.title} | ${event.team.name} | ${SITE_NAME}`;
-  const seoDescription = `${event.team.name}主催のピックルボールイベント。${event.location}で開催。${skillLabel ? skillLabel + '対象。' : ''}${event.description.slice(0, 80)}`;
-
   return (
     <div className="min-h-screen bg-white">
-      <SEO
-        title={seoTitle}
-        description={seoDescription}
-        image={event.team.iconImage}
-        url={`/teams/${teamId}/events/${eventId}`}
-      />
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
         <div className="flex items-center justify-between" style={{ padding: '12px 16px' }}>
@@ -396,7 +384,7 @@ export function TeamEventDetailPage() {
                       className="w-full flex items-center justify-center gap-2 font-medium rounded-xl"
                       style={{ backgroundColor: '#DBEAFE', color: 'var(--primary)', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
                     >
-                      <EditIcon size={18} />
+                      <Edit size={18} />
                       <span>イベントを編集</span>
                     </button>
 

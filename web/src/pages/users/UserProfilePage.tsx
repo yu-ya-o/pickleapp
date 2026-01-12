@@ -4,8 +4,6 @@ import { ChevronLeft, Instagram, ExternalLink } from 'lucide-react';
 import { api } from '@/services/api';
 import type { UserProfile } from '@/services/api';
 import { Loading } from '@/components/ui';
-import { SEO } from '@/components/SEO';
-import { generateUserMeta, generateUserJsonLd } from '@/lib/seo';
 import { getDisplayName, getSkillLevelLabel } from '@/lib/utils';
 import type { Team } from '@/types';
 
@@ -79,23 +77,12 @@ export function UserProfilePage() {
     user.lineUrl && { id: 'line', name: 'LINE', url: user.lineUrl, bgColor: '#06C755' },
   ].filter(Boolean) as { id: string; name: string; url: string; bgColor: string }[];
 
-  const seoMeta = generateUserMeta(user);
-  const seoJsonLd = generateUserJsonLd({ ...user, id: userId! });
-
   return (
     <div style={{
       minHeight: '100vh',
       background: '#F5F5F7',
       paddingBottom: '24px'
     }}>
-      <SEO
-        title={seoMeta.title}
-        description={seoMeta.description}
-        image={user.profileImage}
-        url={`/users/${userId}`}
-        type="profile"
-        jsonLd={seoJsonLd}
-      />
       {/* Header */}
       <header style={{
         display: 'flex',
