@@ -50,7 +50,7 @@ struct ProfileView: View {
                         VStack(spacing: 20) {
                             // プロフィールカード
                             VStack(spacing: 16) {
-                                // プロフィール画像
+                                // プロフィール画像（上にスペース）
                                 ZStack {
                                     Circle()
                                         .stroke(
@@ -68,6 +68,7 @@ struct ProfileView: View {
 
                                     ProfileImageView(url: user.profileImageURL, size: 100)
                                 }
+                                .padding(.top, 24)
 
                                 // 名前
                                 Text(user.displayName)
@@ -123,18 +124,30 @@ struct ProfileView: View {
                             .padding(.horizontal, 16)
                             .padding(.top, 16)
 
-                            // TEAMSセクション（将来的にチーム一覧を表示）
-                            // TODO: チーム一覧の取得と表示
+                            // TEAMSセクション
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text("TEAMS")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
+                                    .tracking(1)
+                                    .padding(.horizontal, 16)
 
-                            // BATTLE RECORDセクション
-                            if let battleRecords = user.battleRecords, !battleRecords.isEmpty {
-                                VStack(alignment: .leading, spacing: 12) {
-                                    Text("BATTLE RECORD")
-                                        .font(.system(size: 12, weight: .semibold))
-                                        .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
-                                        .tracking(1)
-                                        .padding(.horizontal, 16)
+                                // TODO: チーム一覧の取得と表示
+                                Text("ありません")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(Color(red: 156/255, green: 163/255, blue: 175/255))
+                                    .padding(.horizontal, 16)
+                            }
 
+                            // 戦績セクション
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text("戦績")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
+                                    .tracking(1)
+                                    .padding(.horizontal, 16)
+
+                                if let battleRecords = user.battleRecords, !battleRecords.isEmpty {
                                     VStack(spacing: 0) {
                                         ForEach(battleRecords) { record in
                                             HStack {
@@ -167,18 +180,28 @@ struct ProfileView: View {
                                             .stroke(Color(red: 229/255, green: 231/255, blue: 235/255), lineWidth: 1)
                                     )
                                     .padding(.horizontal, 16)
+                                } else {
+                                    Text("ありません")
+                                        .font(.system(size: 14))
+                                        .foregroundColor(Color(red: 156/255, green: 163/255, blue: 175/255))
+                                        .padding(.horizontal, 16)
                                 }
                             }
 
-                            // SNSセクション
-                            if user.instagramUrl != nil || user.twitterUrl != nil || user.tiktokUrl != nil || user.lineUrl != nil {
-                                VStack(alignment: .leading, spacing: 12) {
-                                    Text("SNS")
-                                        .font(.system(size: 12, weight: .semibold))
-                                        .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
-                                        .tracking(1)
-                                        .padding(.horizontal, 16)
+                            // SNSリンクセクション
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text("SNSリンク")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
+                                    .tracking(1)
+                                    .padding(.horizontal, 16)
 
+                                let hasSnLinks = (user.instagramUrl != nil && !user.instagramUrl!.isEmpty) ||
+                                                 (user.twitterUrl != nil && !user.twitterUrl!.isEmpty) ||
+                                                 (user.tiktokUrl != nil && !user.tiktokUrl!.isEmpty) ||
+                                                 (user.lineUrl != nil && !user.lineUrl!.isEmpty)
+
+                                if hasSnLinks {
                                     VStack(spacing: 8) {
                                         if let instagramUrl = user.instagramUrl, !instagramUrl.isEmpty {
                                             SNSLinkButton(platform: .instagram, url: instagramUrl)
@@ -194,6 +217,11 @@ struct ProfileView: View {
                                         }
                                     }
                                     .padding(.horizontal, 16)
+                                } else {
+                                    Text("ありません")
+                                        .font(.system(size: 14))
+                                        .foregroundColor(Color(red: 156/255, green: 163/255, blue: 175/255))
+                                        .padding(.horizontal, 16)
                                 }
                             }
 
