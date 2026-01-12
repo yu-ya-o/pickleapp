@@ -1,5 +1,14 @@
 import SwiftUI
 
+// Dark theme colors
+private let darkBg = Color(red: 18/255, green: 18/255, blue: 30/255)
+private let cardBg = Color(red: 30/255, green: 30/255, blue: 45/255)
+private let cardBorder = Color(red: 55/255, green: 55/255, blue: 75/255)
+private let textPrimary = Color.white
+private let textSecondary = Color(red: 156/255, green: 163/255, blue: 175/255)
+private let textMuted = Color(red: 107/255, green: 114/255, blue: 128/255)
+private let accentPurple = Color(red: 139/255, green: 92/255, blue: 246/255)
+
 struct ProfileView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @EnvironmentObject var eventsViewModel: EventsViewModel
@@ -21,7 +30,7 @@ struct ProfileView: View {
                     Button(action: openDrawer) {
                         Image(systemName: "line.3.horizontal")
                             .font(.system(size: 20, weight: .medium))
-                            .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+                            .foregroundColor(textPrimary)
                             .frame(width: 44, height: 44)
                     }
 
@@ -30,7 +39,7 @@ struct ProfileView: View {
                     Text("PickleHub")
                         .font(.system(size: 24, weight: .black))
                         .italic()
-                        .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+                        .foregroundColor(textPrimary)
 
                     Spacer()
 
@@ -39,13 +48,13 @@ struct ProfileView: View {
                     }) {
                         Image(systemName: "square.and.arrow.up")
                             .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+                            .foregroundColor(textPrimary)
                             .frame(width: 44, height: 44)
                     }
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
-                .background(Color.white)
+                .background(darkBg)
 
                 ScrollView {
                     if let user = authViewModel.currentUser {
@@ -75,24 +84,24 @@ struct ProfileView: View {
                                 // 名前
                                 Text(user.displayName)
                                     .font(.system(size: 22, weight: .bold))
-                                    .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+                                    .foregroundColor(textPrimary)
 
                                 // 自己紹介
                                 if let bio = user.bio, !bio.isEmpty {
                                     Text(bio)
                                         .font(.system(size: 14))
-                                        .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
+                                        .foregroundColor(textSecondary)
                                         .multilineTextAlignment(.center)
                                         .padding(.horizontal, 20)
                                 }
 
                                 // DUPR セクション
                                 HStack(spacing: 12) {
-                                    DUPRBox(
+                                    DUPRBoxDark(
                                         label: "DUPR SINGLES",
                                         value: user.duprSingles != nil ? String(format: "%.3f", user.duprSingles!) : "-"
                                     )
-                                    DUPRBox(
+                                    DUPRBoxDark(
                                         label: "DUPR DOUBLES",
                                         value: user.duprDoubles != nil ? String(format: "%.3f", user.duprDoubles!) : "-"
                                     )
@@ -100,29 +109,33 @@ struct ProfileView: View {
                                 .padding(.horizontal, 16)
 
                                 Divider()
+                                    .background(cardBorder)
                                     .padding(.horizontal, 16)
 
                                 // プロフィール詳細（2カラム）
                                 VStack(spacing: 16) {
                                     HStack(spacing: 0) {
-                                        ProfileDetailItem(label: "REGION", value: user.region ?? "-")
-                                        ProfileDetailItem(label: "EXPERIENCE", value: user.pickleballExperience ?? "-")
+                                        ProfileDetailItemDark(label: "REGION", value: user.region ?? "-")
+                                        ProfileDetailItemDark(label: "EXPERIENCE", value: user.pickleballExperience ?? "-")
                                     }
                                     HStack(spacing: 0) {
-                                        ProfileDetailItem(label: "LEVEL", value: user.skillLevel ?? "-")
-                                        ProfileDetailItem(label: "GENDER", value: user.gender ?? "-")
+                                        ProfileDetailItemDark(label: "LEVEL", value: user.skillLevel ?? "-")
+                                        ProfileDetailItemDark(label: "GENDER", value: user.gender ?? "-")
                                     }
                                     HStack(spacing: 0) {
-                                        ProfileDetailItem(label: "AGE", value: user.ageGroup ?? "-")
-                                        ProfileDetailItem(label: "PADDLE", value: user.myPaddle ?? "-")
+                                        ProfileDetailItemDark(label: "AGE", value: user.ageGroup ?? "-")
+                                        ProfileDetailItemDark(label: "PADDLE", value: user.myPaddle ?? "-")
                                     }
                                 }
                                 .padding(.horizontal, 16)
                                 .padding(.bottom, 16)
                             }
-                            .background(Color.white)
+                            .background(cardBg)
                             .cornerRadius(16)
-                            .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 2)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .stroke(cardBorder, lineWidth: 1)
+                            )
                             .padding(.horizontal, 16)
                             .padding(.top, 16)
 
@@ -130,17 +143,18 @@ struct ProfileView: View {
                             VStack(alignment: .leading, spacing: 12) {
                                 Text("TEAMS")
                                     .font(.system(size: 12, weight: .semibold))
-                                    .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
+                                    .foregroundColor(textMuted)
                                     .tracking(1)
                                     .padding(.horizontal, 16)
 
                                 if isLoadingTeams {
                                     ProgressView()
+                                        .tint(accentPurple)
                                         .padding(.horizontal, 16)
                                 } else if userTeams.isEmpty {
                                     Text("ありません")
                                         .font(.system(size: 14))
-                                        .foregroundColor(Color(red: 156/255, green: 163/255, blue: 175/255))
+                                        .foregroundColor(textMuted)
                                         .padding(.horizontal, 16)
                                 } else {
                                     VStack(spacing: 8) {
@@ -154,29 +168,29 @@ struct ProfileView: View {
                                                                 .scaledToFill()
                                                         } placeholder: {
                                                             Circle()
-                                                                .fill(Color(red: 229/255, green: 231/255, blue: 235/255))
+                                                                .fill(cardBorder)
                                                         }
                                                         .frame(width: 40, height: 40)
                                                         .clipShape(Circle())
                                                     } else {
                                                         Circle()
-                                                            .fill(Color(red: 229/255, green: 231/255, blue: 235/255))
+                                                            .fill(cardBorder)
                                                             .frame(width: 40, height: 40)
                                                     }
 
                                                     Text(team.name)
                                                         .font(.system(size: 15, weight: .medium))
-                                                        .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+                                                        .foregroundColor(textPrimary)
 
                                                     Spacer()
                                                 }
                                                 .padding(.horizontal, 16)
                                                 .padding(.vertical, 12)
-                                                .background(Color.white)
+                                                .background(cardBg)
                                                 .cornerRadius(12)
                                                 .overlay(
                                                     RoundedRectangle(cornerRadius: 12)
-                                                        .stroke(Color(red: 229/255, green: 231/255, blue: 235/255), lineWidth: 1)
+                                                        .stroke(cardBorder, lineWidth: 1)
                                                 )
                                             }
                                         }
@@ -187,9 +201,9 @@ struct ProfileView: View {
 
                             // 戦績セクション
                             VStack(alignment: .leading, spacing: 12) {
-                                Text("戦績")
+                                Text("BATTLE RECORD")
                                     .font(.system(size: 12, weight: .semibold))
-                                    .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
+                                    .foregroundColor(textMuted)
                                     .tracking(1)
                                     .padding(.horizontal, 16)
 
@@ -200,45 +214,46 @@ struct ProfileView: View {
                                                 VStack(alignment: .leading, spacing: 4) {
                                                     Text(record.tournamentName)
                                                         .font(.system(size: 15, weight: .medium))
-                                                        .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+                                                        .foregroundColor(textPrimary)
                                                     Text(record.yearMonth)
                                                         .font(.system(size: 13))
-                                                        .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
+                                                        .foregroundColor(textSecondary)
                                                 }
                                                 Spacer()
                                                 Text(record.result)
                                                     .font(.system(size: 15, weight: .semibold))
-                                                    .foregroundColor(record.result == "優勝" ? Color(red: 220/255, green: 38/255, blue: 38/255) : Color(red: 26/255, green: 26/255, blue: 46/255))
+                                                    .foregroundColor(record.result == "優勝" ? Color(red: 251/255, green: 191/255, blue: 36/255) : textPrimary)
                                             }
                                             .padding(.vertical, 14)
                                             .padding(.horizontal, 16)
 
                                             if record.id != battleRecords.last?.id {
                                                 Divider()
+                                                    .background(cardBorder)
                                                     .padding(.leading, 16)
                                             }
                                         }
                                     }
-                                    .background(Color.white)
+                                    .background(cardBg)
                                     .cornerRadius(12)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .stroke(Color(red: 229/255, green: 231/255, blue: 235/255), lineWidth: 1)
+                                            .stroke(cardBorder, lineWidth: 1)
                                     )
                                     .padding(.horizontal, 16)
                                 } else {
                                     Text("ありません")
                                         .font(.system(size: 14))
-                                        .foregroundColor(Color(red: 156/255, green: 163/255, blue: 175/255))
+                                        .foregroundColor(textMuted)
                                         .padding(.horizontal, 16)
                                 }
                             }
 
                             // SNSリンクセクション
                             VStack(alignment: .leading, spacing: 12) {
-                                Text("SNSリンク")
+                                Text("SNS")
                                     .font(.system(size: 12, weight: .semibold))
-                                    .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
+                                    .foregroundColor(textMuted)
                                     .tracking(1)
                                     .padding(.horizontal, 16)
 
@@ -266,7 +281,7 @@ struct ProfileView: View {
                                 } else {
                                     Text("ありません")
                                         .font(.system(size: 14))
-                                        .foregroundColor(Color(red: 156/255, green: 163/255, blue: 175/255))
+                                        .foregroundColor(textMuted)
                                         .padding(.horizontal, 16)
                                 }
                             }
@@ -278,19 +293,19 @@ struct ProfileView: View {
                                     HStack {
                                         Text("プロフィールを編集")
                                             .font(.system(size: 15))
-                                            .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+                                            .foregroundColor(textPrimary)
                                         Spacer()
                                         Image(systemName: "chevron.right")
                                             .font(.system(size: 14, weight: .medium))
-                                            .foregroundColor(Color(red: 156/255, green: 163/255, blue: 175/255))
+                                            .foregroundColor(textMuted)
                                     }
                                     .padding(.horizontal, 16)
                                     .padding(.vertical, 16)
-                                    .background(Color.white)
+                                    .background(cardBg)
                                     .cornerRadius(12)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .stroke(Color(red: 229/255, green: 231/255, blue: 235/255), lineWidth: 1)
+                                            .stroke(cardBorder, lineWidth: 1)
                                     )
                                 }
 
@@ -300,12 +315,16 @@ struct ProfileView: View {
                                         Spacer()
                                         Text("ログアウト")
                                             .font(.system(size: 15, weight: .medium))
-                                            .foregroundColor(Color(red: 220/255, green: 38/255, blue: 38/255))
+                                            .foregroundColor(Color(red: 248/255, green: 113/255, blue: 113/255))
                                         Spacer()
                                     }
                                     .padding(.vertical, 16)
-                                    .background(Color(red: 254/255, green: 226/255, blue: 226/255))
+                                    .background(Color(red: 127/255, green: 29/255, blue: 29/255).opacity(0.3))
                                     .cornerRadius(12)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(Color(red: 127/255, green: 29/255, blue: 29/255), lineWidth: 1)
+                                    )
                                 }
 
                                 // アカウントを削除
@@ -314,15 +333,15 @@ struct ProfileView: View {
                                         Spacer()
                                         Text("アカウントを削除")
                                             .font(.system(size: 15))
-                                            .foregroundColor(Color(red: 156/255, green: 163/255, blue: 175/255))
+                                            .foregroundColor(textMuted)
                                         Spacer()
                                     }
                                     .padding(.vertical, 16)
-                                    .background(Color(red: 249/255, green: 250/255, blue: 251/255))
+                                    .background(cardBg)
                                     .cornerRadius(12)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .stroke(Color(red: 229/255, green: 231/255, blue: 235/255), lineWidth: 1)
+                                            .stroke(cardBorder, lineWidth: 1)
                                     )
                                 }
                             }
@@ -331,10 +350,11 @@ struct ProfileView: View {
                         }
                     } else {
                         ProgressView()
+                            .tint(accentPurple)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
                 }
-                .background(Color(red: 249/255, green: 250/255, blue: 251/255))
+                .background(darkBg)
             }
             .navigationBarHidden(true)
             .sheet(isPresented: $showingEditProfile) {
@@ -403,8 +423,8 @@ struct ProfileView: View {
     }
 }
 
-// DUPR ボックスコンポーネント
-struct DUPRBox: View {
+// DUPR ボックスコンポーネント（ダーク）
+struct DUPRBoxDark: View {
     let label: String
     let value: String
 
@@ -412,26 +432,26 @@ struct DUPRBox: View {
         VStack(spacing: 8) {
             Text(label)
                 .font(.system(size: 11, weight: .medium))
-                .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
+                .foregroundColor(textMuted)
                 .tracking(0.5)
 
             Text(value)
                 .font(.system(size: 18, weight: .bold))
-                .foregroundColor(value == "-" ? Color(red: 99/255, green: 102/255, blue: 241/255) : Color(red: 26/255, green: 26/255, blue: 46/255))
+                .foregroundColor(value == "-" ? accentPurple : textPrimary)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 16)
-        .background(Color(red: 249/255, green: 250/255, blue: 251/255))
+        .background(Color(red: 24/255, green: 24/255, blue: 38/255))
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(Color(red: 229/255, green: 231/255, blue: 235/255), lineWidth: 1)
+                .stroke(cardBorder, lineWidth: 1)
         )
     }
 }
 
-// プロフィール詳細アイテムコンポーネント
-struct ProfileDetailItem: View {
+// プロフィール詳細アイテムコンポーネント（ダーク）
+struct ProfileDetailItemDark: View {
     let label: String
     let value: String
 
@@ -439,16 +459,35 @@ struct ProfileDetailItem: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(label)
                 .font(.system(size: 11, weight: .medium))
-                .foregroundColor(Color(red: 107/255, green: 114/255, blue: 128/255))
+                .foregroundColor(textMuted)
                 .tracking(0.5)
 
             Text(value)
                 .font(.system(size: 15, weight: .medium))
-                .foregroundColor(Color(red: 26/255, green: 26/255, blue: 46/255))
+                .foregroundColor(textPrimary)
                 .lineLimit(1)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.vertical, 4)
+    }
+}
+
+// Legacy components for compatibility
+struct DUPRBox: View {
+    let label: String
+    let value: String
+
+    var body: some View {
+        DUPRBoxDark(label: label, value: value)
+    }
+}
+
+struct ProfileDetailItem: View {
+    let label: String
+    let value: String
+
+    var body: some View {
+        ProfileDetailItemDark(label: label, value: value)
     }
 }
 
