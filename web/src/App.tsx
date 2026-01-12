@@ -54,7 +54,26 @@ function OptionalAuthRoute({ children }: { children: React.ReactNode }) {
 function AppRoutes() {
   return (
     <Routes>
-      {/* All routes with MainLayout - sidebar on PC, drawer on mobile */}
+      {/* Public viewable routes (no auth required) */}
+      <Route path="/events/:id" element={<OptionalAuthRoute><EventDetailPage /></OptionalAuthRoute>} />
+      <Route path="/teams/:id" element={<OptionalAuthRoute><TeamDetailPage /></OptionalAuthRoute>} />
+      <Route path="/teams/:teamId/events/:eventId" element={<OptionalAuthRoute><TeamEventDetailPage /></OptionalAuthRoute>} />
+      <Route path="/users/:userId" element={<OptionalAuthRoute><UserProfilePage /></OptionalAuthRoute>} />
+
+      {/* Protected fullscreen routes (auth required) */}
+      <Route path="/events/create" element={<ProtectedRoute><CreateEventPage /></ProtectedRoute>} />
+      <Route path="/events/:id/edit" element={<ProtectedRoute><CreateEventPage /></ProtectedRoute>} />
+      <Route path="/events/:eventId/chat" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
+
+      <Route path="/teams/:teamId/members" element={<ProtectedRoute><TeamMembersPage /></ProtectedRoute>} />
+      <Route path="/teams/:teamId/events" element={<ProtectedRoute><TeamEventsListPage /></ProtectedRoute>} />
+      <Route path="/teams/:teamId/requests" element={<ProtectedRoute><TeamJoinRequestsPage /></ProtectedRoute>} />
+      <Route path="/teams/:teamId/edit" element={<ProtectedRoute><TeamEditPage /></ProtectedRoute>} />
+      <Route path="/teams/:teamId/chat" element={<ProtectedRoute><TeamChatPage /></ProtectedRoute>} />
+      <Route path="/teams/:teamId/events/create" element={<ProtectedRoute><CreateTeamEventPage /></ProtectedRoute>} />
+      <Route path="/teams/:teamId/events/:eventId/edit" element={<ProtectedRoute><CreateTeamEventPage /></ProtectedRoute>} />
+
+      {/* Public routes with MainLayout (includes login page) */}
       <Route
         element={
           <OptionalAuthRoute>
@@ -65,29 +84,24 @@ function AppRoutes() {
         {/* Public pages */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/events" element={<EventsListPage />} />
-        <Route path="/events/:id" element={<EventDetailPage />} />
         <Route path="/teams" element={<TeamsListPage />} />
-        <Route path="/teams/:id" element={<TeamDetailPage />} />
-        <Route path="/teams/:teamId/events/:eventId" element={<TeamEventDetailPage />} />
-        <Route path="/users/:userId" element={<UserProfilePage />} />
         <Route path="/rankings" element={<RankingsPage />} />
+      </Route>
 
-        {/* Protected routes - require auth */}
-        <Route path="/events/create" element={<ProtectedRoute><CreateEventPage /></ProtectedRoute>} />
-        <Route path="/events/:id/edit" element={<ProtectedRoute><CreateEventPage /></ProtectedRoute>} />
-        <Route path="/events/:eventId/chat" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
+      {/* Protected routes with MainLayout */}
+      <Route
+        element={
+          <ProtectedRoute>
+            <MainLayout />
+          </ProtectedRoute>
+        }
+      >
+        {/* Notifications */}
+        <Route path="/notifications" element={<NotificationsPage />} />
 
-        <Route path="/teams/:teamId/members" element={<ProtectedRoute><TeamMembersPage /></ProtectedRoute>} />
-        <Route path="/teams/:teamId/events" element={<ProtectedRoute><TeamEventsListPage /></ProtectedRoute>} />
-        <Route path="/teams/:teamId/requests" element={<ProtectedRoute><TeamJoinRequestsPage /></ProtectedRoute>} />
-        <Route path="/teams/:teamId/edit" element={<ProtectedRoute><TeamEditPage /></ProtectedRoute>} />
-        <Route path="/teams/:teamId/chat" element={<ProtectedRoute><TeamChatPage /></ProtectedRoute>} />
-        <Route path="/teams/:teamId/events/create" element={<ProtectedRoute><CreateTeamEventPage /></ProtectedRoute>} />
-        <Route path="/teams/:teamId/events/:eventId/edit" element={<ProtectedRoute><CreateTeamEventPage /></ProtectedRoute>} />
-
-        <Route path="/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
-        <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-        <Route path="/profile/edit" element={<ProtectedRoute><ProfileEditPage /></ProtectedRoute>} />
+        {/* Profile */}
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profile/edit" element={<ProfileEditPage />} />
       </Route>
 
       {/* Redirect root to events */}
