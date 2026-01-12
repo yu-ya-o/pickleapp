@@ -280,6 +280,7 @@ class UserProfileViewModel: ObservableObject {
         instagramUrl: nil,
         twitterUrl: nil,
         tiktokUrl: nil,
-        lineUrl: nil
+        lineUrl: nil,
+        battleRecords: nil
     ))
 }
