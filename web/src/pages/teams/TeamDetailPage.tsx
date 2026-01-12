@@ -18,13 +18,14 @@ import type { Team } from '@/types';
 export function TeamDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [team, setTeam] = useState<Team | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showJoinRequestModal, setShowJoinRequestModal] = useState(false);
+  const [showLeaveModal, setShowLeaveModal] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -64,6 +65,19 @@ export function TeamDetailPage() {
       navigate('/teams');
     } catch (error) {
       console.error('Failed to delete team:', error);
+    }
+  };
+
+  const handleLeaveTeam = async () => {
+    if (!team || !user) return;
+    try {
+      setIsActionLoading(true);
+      await api.removeMember(team.id, user.id);
+      navigate('/teams');
+    } catch (error) {
+      console.error('Failed to leave team:', error);
+    } finally {
+      setIsActionLoading(false);
     }
   };
 
@@ -191,6 +205,15 @@ export function TeamDetailPage() {
                   onClick={() => navigate(`/teams/${team.id}/edit`)}
                 />
               </>
+            )}
+            {!isOwner && (
+              <button
+                onClick={() => setShowLeaveModal(true)}
+                className="w-full font-medium rounded-xl"
+                style={{ backgroundColor: '#FEE2E2', color: '#DC2626', padding: '14px', marginTop: '8px' }}
+              >
+                チームを退出
+              </button>
             )}
             {isOwner && (
               <button
@@ -342,6 +365,53 @@ export function TeamDetailPage() {
             disabled={isActionLoading}
           >
             {isActionLoading ? '処理中...' : '送信する'}
+          </button>
+        </div>
+      </Modal>
+
+      {/* Leave Team Confirmation Modal */}
+      <Modal
+        isOpen={showLeaveModal}
+        onClose={() => setShowLeaveModal(false)}
+        title="チームを退出"
+      >
+        <p style={{ color: '#666666', marginBottom: '24px' }}>
+          このチームから退出しますか？
+        </p>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <button
+            style={{
+              flex: 1,
+              fontWeight: 500,
+              borderRadius: '12px',
+              border: 'none',
+              cursor: 'pointer',
+              backgroundColor: '#F3F4F6',
+              color: '#374151',
+              padding: '14px'
+            }}
+            onClick={() => setShowLeaveModal(false)}
+          >
+            キャンセル
+          </button>
+          <button
+            style={{
+              flex: 1,
+              fontWeight: 500,
+              borderRadius: '12px',
+              border: 'none',
+              cursor: 'pointer',
+              backgroundColor: '#DC2626',
+              color: 'white',
+              padding: '14px'
+            }}
+            onClick={() => {
+              setShowLeaveModal(false);
+              handleLeaveTeam();
+            }}
+            disabled={isActionLoading}
+          >
+            {isActionLoading ? '処理中...' : '退出する'}
           </button>
         </div>
       </Modal>
