@@ -184,7 +184,7 @@ export function EventsListPage() {
                 boxShadow: segment === 'team' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
               }}
             >
-              マイサークルイベント
+              Myサークルイベント
             </button>
           </div>
         )}
