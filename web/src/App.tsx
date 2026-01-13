@@ -27,6 +27,7 @@ import { ProfilePage } from '@/pages/profile/ProfilePage';
 import { ProfileEditPage } from '@/pages/profile/ProfileEditPage';
 import { ShareableProfilePage } from '@/pages/profile/ShareableProfilePage';
 import { UserProfilePage } from '@/pages/users/UserProfilePage';
+import { LandingPage } from '@/pages/LandingPage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -111,8 +112,8 @@ function AppRoutes() {
         <Route path="/profile/edit" element={<ProfileEditPage />} />
       </Route>
 
-      {/* Redirect root to events */}
-      <Route path="/" element={<Navigate to="/events" replace />} />
+      {/* Landing page for unauthenticated users */}
+      <Route path="/" element={<LandingPage />} />
 
       {/* 404 */}
       <Route path="*" element={<Navigate to="/events" replace />} />
