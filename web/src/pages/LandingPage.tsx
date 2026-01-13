@@ -97,7 +97,7 @@ export function LandingPage() {
         }}>
           {/* Logo */}
           <img
-            src="/lp-logo.jpg"
+            src="/lp-logo.png"
             alt="PickleHub"
             style={{
               width: '200px',
