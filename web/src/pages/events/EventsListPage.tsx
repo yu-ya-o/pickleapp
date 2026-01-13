@@ -384,7 +384,7 @@ function EventCard({ event }: { event: Event | TeamEvent }) {
             justifyContent: 'center'
           }}>
             {displayImage ? (
-              <img src={displayImage} alt={displayName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={displayImage} alt={displayName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
             ) : (
               <span style={{ fontSize: '20px' }}>🏓</span>
             )}
@@ -470,7 +470,7 @@ function TeamEventCard({ event }: { event: TeamEvent }) {
             justifyContent: 'center'
           }}>
             {event.team.iconImage ? (
-              <img src={event.team.iconImage} alt={event.team.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={event.team.iconImage} alt={event.team.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
             ) : (
               <span style={{ fontSize: '20px' }}>🏓</span>
             )}

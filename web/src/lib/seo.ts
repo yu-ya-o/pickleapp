@@ -170,7 +170,9 @@ export function generateOrganizationJsonLd() {
     url: SITE_URL,
     logo: DEFAULT_OG_IMAGE,
     description: DEFAULT_DESCRIPTION,
-    sameAs: [],
+    sameAs: [
+      'https://twitter.com/picklehub',
+    ],
   };
 }
 
@@ -187,4 +189,61 @@ export function generateWebsiteJsonLd() {
       'query-input': 'required name=search_term_string',
     },
   };
+}
+
+// BreadcrumbList JSON-LD generators
+export interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
+export function generateBreadcrumbJsonLd(items: BreadcrumbItem[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: `${SITE_URL}${item.url}`,
+    })),
+  };
+}
+
+// Pre-defined breadcrumb generators for common pages
+export function generateEventBreadcrumb(eventTitle: string, eventId: string) {
+  return generateBreadcrumbJsonLd([
+    { name: 'ホーム', url: '/' },
+    { name: 'イベント一覧', url: '/events' },
+    { name: eventTitle, url: `/events/${eventId}` },
+  ]);
+}
+
+export function generateTeamBreadcrumb(teamName: string, teamId: string) {
+  return generateBreadcrumbJsonLd([
+    { name: 'ホーム', url: '/' },
+    { name: 'チーム一覧', url: '/teams' },
+    { name: teamName, url: `/teams/${teamId}` },
+  ]);
+}
+
+export function generateUserBreadcrumb(userName: string, userId: string) {
+  return generateBreadcrumbJsonLd([
+    { name: 'ホーム', url: '/' },
+    { name: userName, url: `/p/${userId}` },
+  ]);
+}
+
+export function generateTeamEventBreadcrumb(
+  teamName: string,
+  teamId: string,
+  eventTitle: string,
+  eventId: string
+) {
+  return generateBreadcrumbJsonLd([
+    { name: 'ホーム', url: '/' },
+    { name: 'チーム一覧', url: '/teams' },
+    { name: teamName, url: `/teams/${teamId}` },
+    { name: eventTitle, url: `/teams/${teamId}/events/${eventId}` },
+  ]);
 }

@@ -5,7 +5,7 @@ import { api } from '@/services/api';
 import type { UserProfile } from '@/services/api';
 import { Loading } from '@/components/ui';
 import { SEO } from '@/components/SEO';
-import { generateUserMeta, generateUserJsonLd } from '@/lib/seo';
+import { generateUserMeta, generateUserJsonLd, generateUserBreadcrumb } from '@/lib/seo';
 import { useDrawer } from '@/components/layout/MainLayout';
 import { getDisplayName, getSkillLevelLabel } from '@/lib/utils';
 import type { Team } from '@/types';
@@ -82,6 +82,7 @@ export function ShareableProfilePage() {
 
   const seoMeta = generateUserMeta(user);
   const seoJsonLd = generateUserJsonLd({ ...user, id: userId! });
+  const seoBreadcrumb = generateUserBreadcrumb(getDisplayName(user), userId!);
 
   return (
     <div style={{
@@ -92,10 +93,11 @@ export function ShareableProfilePage() {
       <SEO
         title={seoMeta.title}
         description={seoMeta.description}
+        keywords="ピックルボール, プレイヤー, pickleball, プロフィール"
         image={user.profileImage}
         url={`/p/${userId}`}
         type="profile"
-        jsonLd={seoJsonLd}
+        jsonLd={[seoJsonLd, seoBreadcrumb]}
       />
       {/* PickleHub Header */}
       <header style={{
@@ -124,14 +126,14 @@ export function ShareableProfilePage() {
         >
           <Menu size={20} style={{ color: '#1a1a2e' }} />
         </button>
-        <h1 style={{
+        <span style={{
           fontSize: '24px',
           fontWeight: 900,
           fontStyle: 'italic',
           color: '#1a1a2e'
         }}>
           PickleHub
-        </h1>
+        </span>
         <div style={{ width: '36px' }} className="md:hidden" />
       </header>
 
@@ -180,6 +182,7 @@ export function ShareableProfilePage() {
                         src={user.profileImage}
                         alt={getDisplayName(user)}
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        loading="lazy"
                       />
                     ) : (
                       <div style={{
@@ -196,7 +199,7 @@ export function ShareableProfilePage() {
                   </div>
                 </div>
 
-                <h2 style={{
+                <h1 style={{
                   fontSize: '22px',
                   fontWeight: 700,
                   color: '#1a1a2e',
@@ -204,7 +207,7 @@ export function ShareableProfilePage() {
                   letterSpacing: '0.5px'
                 }}>
                   {getDisplayName(user)}
-                </h2>
+                </h1>
 
                 {user.bio && (
                   <p style={{
@@ -333,7 +336,7 @@ export function ShareableProfilePage() {
                   overflow: 'hidden'
                 }}>
                   {team.iconImage ? (
-                    <img src={team.iconImage} alt={team.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src={team.iconImage} alt={team.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
                   ) : (
                     '🏓'
                   )}
