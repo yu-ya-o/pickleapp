@@ -55,7 +55,7 @@ export function MyEventsPage() {
       startTime: new Date(e.startTime),
     })),
     ...teamEvents
-      .filter((e) => e.isParticipating)
+      .filter((e) => e.isUserParticipating)
       .map((e) => ({
         type: 'teamEvent' as const,
         data: e,
