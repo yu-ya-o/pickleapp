@@ -14,7 +14,7 @@ import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, Loading, Modal, GoogleMap } from '@/components/ui';
 import { SEO } from '@/components/SEO';
-import { SITE_NAME, SKILL_LEVEL_LABELS } from '@/lib/seo';
+import { SITE_NAME, SKILL_LEVEL_LABELS, generateTeamEventBreadcrumb } from '@/lib/seo';
 import {
   formatDateTime,
   getSkillLevelLabel,
@@ -148,14 +148,17 @@ export function TeamEventDetailPage() {
   const skillLabel = event.skillLevel ? SKILL_LEVEL_LABELS[event.skillLevel] || event.skillLevel : '';
   const seoTitle = `${event.title} | ${event.team.name} | ${SITE_NAME}`;
   const seoDescription = `${event.team.name}主催のピックルボールイベント。${event.location}で開催。${skillLabel ? skillLabel + '対象。' : ''}${event.description.slice(0, 80)}`;
+  const seoBreadcrumb = generateTeamEventBreadcrumb(event.team.name, teamId!, event.title, eventId!);
 
   return (
     <div className="min-h-screen bg-white">
       <SEO
         title={seoTitle}
         description={seoDescription}
+        keywords="ピックルボール, チームイベント, pickleball, イベント募集"
         image={event.team.iconImage}
         url={`/teams/${teamId}/events/${eventId}`}
+        jsonLd={seoBreadcrumb}
       />
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
@@ -167,7 +170,7 @@ export function TeamEventDetailPage() {
             <ChevronLeft size={24} />
             <span>前の画面に戻る</span>
           </button>
-          <h1 className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">イベント</h1>
+          <span className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">イベント</span>
           <div style={{ width: '60px' }} />
         </div>
       </header>
@@ -181,12 +184,13 @@ export function TeamEventDetailPage() {
             alt={event.team.name}
             className="rounded-full object-cover"
             style={{ width: '180px', height: '180px' }}
+            loading="lazy"
           />
         </div>
 
         {/* Event Title & Level */}
         <div style={{ padding: '16px' }}>
-          <h2 className="text-2xl font-bold">{event.title}</h2>
+          <h1 className="text-2xl font-bold">{event.title}</h1>
           {event.skillLevel && (
             <p className="text-gray-500" style={{ marginTop: '4px' }}>
               {getSkillLevelLabel(event.skillLevel)}

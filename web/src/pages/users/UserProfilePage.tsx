@@ -5,7 +5,7 @@ import { api } from '@/services/api';
 import type { UserProfile } from '@/services/api';
 import { Loading } from '@/components/ui';
 import { SEO } from '@/components/SEO';
-import { generateUserMeta, generateUserJsonLd } from '@/lib/seo';
+import { generateUserMeta, generateUserJsonLd, generateUserBreadcrumb } from '@/lib/seo';
 import { getDisplayName, getSkillLevelLabel } from '@/lib/utils';
 import type { Team } from '@/types';
 
@@ -81,6 +81,7 @@ export function UserProfilePage() {
 
   const seoMeta = generateUserMeta(user);
   const seoJsonLd = generateUserJsonLd({ ...user, id: userId! });
+  const seoBreadcrumb = generateUserBreadcrumb(getDisplayName(user), userId!);
 
   return (
     <div style={{
@@ -91,10 +92,11 @@ export function UserProfilePage() {
       <SEO
         title={seoMeta.title}
         description={seoMeta.description}
+        keywords="ピックルボール, プレイヤー, pickleball, プロフィール"
         image={user.profileImage}
         url={`/users/${userId}`}
         type="profile"
-        jsonLd={seoJsonLd}
+        jsonLd={[seoJsonLd, seoBreadcrumb]}
       />
       {/* Header */}
       <header style={{
@@ -177,6 +179,7 @@ export function UserProfilePage() {
                         src={user.profileImage}
                         alt={getDisplayName(user)}
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        loading="lazy"
                       />
                     ) : (
                       <div style={{
@@ -334,7 +337,7 @@ export function UserProfilePage() {
                   overflow: 'hidden'
                 }}>
                   {team.iconImage ? (
-                    <img src={team.iconImage} alt={team.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src={team.iconImage} alt={team.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
                   ) : (
                     '🏓'
                   )}

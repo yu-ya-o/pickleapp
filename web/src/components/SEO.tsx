@@ -6,11 +6,14 @@ import {
   DEFAULT_DESCRIPTION,
   DEFAULT_OG_IMAGE,
   TWITTER_HANDLE,
+  generateOrganizationJsonLd,
+  generateWebsiteJsonLd,
 } from '@/lib/seo';
 
 interface SEOProps {
   title?: string;
   description?: string;
+  keywords?: string;
   image?: string | null;
   url?: string;
   type?: 'website' | 'article' | 'profile';
@@ -21,6 +24,7 @@ interface SEOProps {
 export function SEO({
   title = DEFAULT_TITLE,
   description = DEFAULT_DESCRIPTION,
+  keywords,
   image,
   url,
   type = 'website',
@@ -39,6 +43,7 @@ export function SEO({
       {/* Basic Meta Tags */}
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
+      {keywords && <meta name="keywords" content={keywords} />}
       <link rel="canonical" href={canonicalUrl} />
 
       {noindex && <meta name="robots" content="noindex, nofollow" />}
@@ -73,11 +78,16 @@ export function SEO({
 
 // Pre-configured SEO components for common pages
 export function EventsListSEO() {
+  const organizationJsonLd = generateOrganizationJsonLd();
+  const websiteJsonLd = generateWebsiteJsonLd();
+
   return (
     <SEO
       title="ピックルボールイベント一覧 - 全国の募集情報"
       description="全国のピックルボールイベント・大会情報を掲載。初心者歓迎のイベントから上級者向けトーナメントまで、参加者募集中のイベントを探せます。今すぐ参加しよう！"
+      keywords="ピックルボール, ピックルボール イベント, pickleball, イベント募集, 大会, 初心者, コミュニティ, 日本"
       url="/events"
+      jsonLd={[organizationJsonLd, websiteJsonLd]}
     />
   );
 }
@@ -87,6 +97,7 @@ export function TeamsListSEO() {
     <SEO
       title="チーム一覧"
       description="ピックルボールチームを探そう。全国のチームに参加して、仲間と一緒にプレイしましょう。"
+      keywords="ピックルボール, チーム, pickleball, チーム募集, メンバー募集, サークル"
       url="/teams"
     />
   );
@@ -97,6 +108,7 @@ export function RankingsSEO() {
     <SEO
       title="ランキング"
       description="ピックルボールプレイヤーのランキング。アクティブなプレイヤーをチェックしよう。"
+      keywords="ピックルボール, ランキング, pickleball, プレイヤー, DUPR"
       url="/rankings"
     />
   );

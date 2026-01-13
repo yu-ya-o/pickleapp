@@ -14,7 +14,7 @@ import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, Loading, Modal } from '@/components/ui';
 import { SEO } from '@/components/SEO';
-import { generateTeamMeta, generateTeamJsonLd } from '@/lib/seo';
+import { generateTeamMeta, generateTeamJsonLd, generateTeamBreadcrumb } from '@/lib/seo';
 import type { Team } from '@/types';
 
 export function TeamDetailPage() {
@@ -105,6 +105,7 @@ export function TeamDetailPage() {
 
   const seoMeta = generateTeamMeta(team);
   const seoJsonLd = generateTeamJsonLd(team);
+  const seoBreadcrumb = generateTeamBreadcrumb(team.name, team.id);
 
   // Menu item component
   const MenuItem = ({ icon: Icon, label, onClick }: { icon: React.ElementType; label: string; onClick: () => void }) => (
@@ -126,9 +127,10 @@ export function TeamDetailPage() {
       <SEO
         title={seoMeta.title}
         description={seoMeta.description}
+        keywords="ピックルボール, チーム, pickleball, チーム募集, メンバー募集"
         image={team.iconImage}
         url={`/teams/${team.id}`}
-        jsonLd={seoJsonLd}
+        jsonLd={[seoJsonLd, seoBreadcrumb]}
       />
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
@@ -140,7 +142,7 @@ export function TeamDetailPage() {
             <ChevronLeft size={24} />
             <span>前の画面に戻る</span>
           </button>
-          <h1 className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">チーム</h1>
+          <span className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">チーム</span>
           <div style={{ width: '60px' }} />
         </div>
       </header>
@@ -150,8 +152,9 @@ export function TeamDetailPage() {
         <div style={{ height: '200px' }} className="bg-gray-200">
           <img
             src={team.headerImage}
-            alt=""
+            alt={`${team.name}のヘッダー画像`}
             className="w-full h-full object-cover"
+            loading="lazy"
           />
         </div>
       )}
@@ -166,7 +169,7 @@ export function TeamDetailPage() {
           />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <h2 className="text-xl font-bold break-words">{team.name}</h2>
+              <h1 className="text-xl font-bold break-words">{team.name}</h1>
               {isOwner && <Crown size={20} className="text-yellow-500 flex-shrink-0" />}
             </div>
             {team.description && (

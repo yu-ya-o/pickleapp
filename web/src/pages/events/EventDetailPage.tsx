@@ -15,7 +15,7 @@ import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, Loading, Modal, GoogleMap } from '@/components/ui';
 import { SEO } from '@/components/SEO';
-import { generateEventMeta, generateEventJsonLd } from '@/lib/seo';
+import { generateEventMeta, generateEventJsonLd, generateEventBreadcrumb } from '@/lib/seo';
 import {
   formatDateTime,
   getSkillLevelLabel,
@@ -151,14 +151,16 @@ export function EventDetailPage() {
 
   const seoMeta = generateEventMeta(event);
   const seoJsonLd = generateEventJsonLd(event);
+  const seoBreadcrumb = generateEventBreadcrumb(event.title, event.id);
 
   return (
     <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
       <SEO
         title={seoMeta.title}
         description={seoMeta.description}
+        keywords="ピックルボール, ピックルボール イベント, pickleball, イベント募集"
         url={`/events/${event.id}`}
-        jsonLd={seoJsonLd}
+        jsonLd={[seoJsonLd, seoBreadcrumb]}
       />
       {/* Header */}
       <header style={{
@@ -190,14 +192,14 @@ export function EventDetailPage() {
           >
             <Menu size={20} style={{ color: '#1a1a2e' }} />
           </button>
-          <h1 style={{
+          <span style={{
             fontSize: '24px',
             fontWeight: 900,
             fontStyle: 'italic',
             color: '#1a1a2e'
           }}>
             PickleHub
-          </h1>
+          </span>
           <div style={{ width: '36px' }} />
         </div>
       </header>
@@ -232,7 +234,7 @@ export function EventDetailPage() {
         }}>
           {/* Event Title & Level */}
           <div style={{ padding: '16px' }}>
-            <h2 style={{ fontSize: '24px', fontWeight: 700, color: '#1a1a2e' }}>{event.title}</h2>
+            <h1 style={{ fontSize: '24px', fontWeight: 700, color: '#1a1a2e' }}>{event.title}</h1>
             <p style={{ marginTop: '4px', color: '#888888' }}>
               {getSkillLevelLabel(event.skillLevel)}
             </p>
