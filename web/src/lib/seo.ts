@@ -2,8 +2,8 @@
 
 export const SITE_URL = 'https://picklehub.jp';
 export const SITE_NAME = 'PickleHub';
-export const DEFAULT_TITLE = 'PickleHub - ピックルボールイベント・チーム募集';
-export const DEFAULT_DESCRIPTION = '全国のピックルボールイベントを探して参加しよう！初心者歓迎のイベントから上級者向け大会まで。チーム募集・メンバー募集も。日本最大級のピックルボールコミュニティ。';
+export const DEFAULT_TITLE = 'PickleHub - ピックルボールイベント・サークル募集';
+export const DEFAULT_DESCRIPTION = '全国のピックルボールイベントを探して参加しよう！初心者歓迎のイベントから上級者向け大会まで。サークル募集・メンバー募集も。日本最大級のピックルボールコミュニティ。';
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
 export const TWITTER_HANDLE = '@picklehub';
 
@@ -59,7 +59,7 @@ export function generateTeamMeta(team: {
 
   return {
     title: `${team.name} | ${SITE_NAME}`,
-    description: `${team.name}は${regionLabel ? regionLabel + 'の' : ''}ピックルボールチームです。メンバー${team.memberCount}人。${team.description?.slice(0, 80) || 'PickleHubでチームに参加しよう！'}`,
+    description: `${team.name}は${regionLabel ? regionLabel + 'の' : ''}ピックルボールサークルです。メンバー${team.memberCount}人。${team.description?.slice(0, 80) || 'PickleHubでサークルに参加しよう！'}`,
   };
 }
 
@@ -137,7 +137,7 @@ export function generateTeamJsonLd(team: {
     '@context': 'https://schema.org',
     '@type': 'SportsTeam',
     name: team.name,
-    description: team.description || `${team.name} - ピックルボールチーム`,
+    description: team.description || `${team.name} - ピックルボールサークル`,
     sport: 'Pickleball',
     ...(team.iconImage && { logo: team.iconImage }),
     numberOfEmployees: team.memberCount,
@@ -222,7 +222,7 @@ export function generateEventBreadcrumb(eventTitle: string, eventId: string) {
 export function generateTeamBreadcrumb(teamName: string, teamId: string) {
   return generateBreadcrumbJsonLd([
     { name: 'ホーム', url: '/' },
-    { name: 'チーム一覧', url: '/teams' },
+    { name: 'サークル一覧', url: '/teams' },
     { name: teamName, url: `/teams/${teamId}` },
   ]);
 }
@@ -242,7 +242,7 @@ export function generateTeamEventBreadcrumb(
 ) {
   return generateBreadcrumbJsonLd([
     { name: 'ホーム', url: '/' },
-    { name: 'チーム一覧', url: '/teams' },
+    { name: 'サークル一覧', url: '/teams' },
     { name: teamName, url: `/teams/${teamId}` },
     { name: eventTitle, url: `/teams/${teamId}/events/${eventId}` },
   ]);

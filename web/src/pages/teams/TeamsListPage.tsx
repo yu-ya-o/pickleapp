@@ -165,7 +165,7 @@ export function TeamsListPage() {
             <Search size={16} style={{ color: '#888888', flexShrink: 0 }} />
             <input
               type="text"
-              placeholder="チームを検索"
+              placeholder="サークルを検索"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
@@ -224,9 +224,9 @@ export function TeamsListPage() {
                 <div style={{ textAlign: 'center', paddingTop: '80px' }}>
                   <Users size={56} style={{ color: '#CCCCCC', margin: '0 auto' }} />
                   <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#1a1a2e', marginTop: '20px', marginBottom: '8px' }}>
-                    チームが見つかりません
+                    サークルが見つかりません
                   </h3>
-                  <p style={{ color: '#888888' }}>新しいチームを作成しましょう</p>
+                  <p style={{ color: '#888888' }}>新しいサークルを作成しましょう</p>
                 </div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>

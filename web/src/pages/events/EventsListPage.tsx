@@ -184,7 +184,7 @@ export function EventsListPage() {
                 boxShadow: segment === 'team' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
               }}
             >
-              マイチームイベント
+              マイサークルイベント
             </button>
           </div>
         )}
@@ -300,10 +300,10 @@ export function EventsListPage() {
           <div style={{ textAlign: 'center', paddingTop: '80px' }}>
             <Users size={56} style={{ color: '#CCCCCC', margin: '0 auto' }} />
             <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#1a1a2e', marginTop: '20px', marginBottom: '8px' }}>
-              チームイベントが見つかりません
+              サークルイベントが見つかりません
             </h3>
             <p style={{ color: '#888888' }}>
-              チームに参加してイベントを確認しましょう
+              サークルに参加してイベントを確認しましょう
             </p>
           </div>
         ) : (

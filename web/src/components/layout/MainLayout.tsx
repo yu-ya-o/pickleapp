@@ -30,13 +30,13 @@ export function MainLayout() {
   const navItems = isAuthenticated
     ? [
         { to: '/events', icon: Calendar, label: 'イベント' },
-        { to: '/teams', icon: Users, label: 'チーム' },
+        { to: '/teams', icon: Users, label: 'サークル' },
         { to: '/rankings', icon: Trophy, label: 'ランキング' },
         { to: '/profile', icon: User, label: 'プロフィール' },
       ]
     : [
         { to: '/events', icon: Calendar, label: 'イベント' },
-        { to: '/teams', icon: Users, label: 'チーム' },
+        { to: '/teams', icon: Users, label: 'サークル' },
         { to: '/rankings', icon: Trophy, label: 'ランキング' },
         { to: '/login', icon: LogIn, label: 'ログイン' },
       ];
@@ -56,7 +56,7 @@ export function MainLayout() {
       return true;
     }
 
-    // Prevent /teams/123/events/456 from highlighting チーム tab
+    // Prevent /teams/123/events/456 from highlighting サークル tab
     if (to === '/teams' && path.includes('/events/')) {
       return false;
     }

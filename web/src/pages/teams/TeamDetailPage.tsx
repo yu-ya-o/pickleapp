@@ -94,7 +94,7 @@ export function TeamDetailPage() {
   if (!team) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500">チームが見つかりません</p>
+        <p className="text-gray-500">サークルが見つかりません</p>
       </div>
     );
   }
@@ -127,7 +127,7 @@ export function TeamDetailPage() {
       <SEO
         title={seoMeta.title}
         description={seoMeta.description}
-        keywords="ピックルボール, チーム, pickleball, チーム募集, メンバー募集"
+        keywords="ピックルボール, サークル, pickleball, サークル募集, メンバー募集"
         image={team.iconImage}
         url={`/teams/${team.id}`}
         jsonLd={[seoJsonLd, seoBreadcrumb]}
@@ -142,7 +142,7 @@ export function TeamDetailPage() {
             <ChevronLeft size={24} />
             <span>前の画面に戻る</span>
           </button>
-          <span className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">チーム</span>
+          <span className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">サークル</span>
           <div style={{ width: '60px' }} />
         </div>
       </header>
@@ -199,12 +199,12 @@ export function TeamDetailPage() {
             />
             <MenuItem
               icon={Calendar}
-              label="チームイベント"
+              label="サークルイベント"
               onClick={() => navigate(`/teams/${team.id}/events`)}
             />
             <MenuItem
               icon={MessageCircle}
-              label="チームチャット"
+              label="サークルチャット"
               onClick={() => navigate(`/teams/${team.id}/chat`)}
             />
             {isAdmin && (
@@ -216,7 +216,7 @@ export function TeamDetailPage() {
                 />
                 <MenuItem
                   icon={Edit}
-                  label="チームを編集"
+                  label="サークルを編集"
                   onClick={() => navigate(`/teams/${team.id}/edit`)}
                 />
               </>
@@ -227,7 +227,7 @@ export function TeamDetailPage() {
                 className="w-full font-medium rounded-xl"
                 style={{ backgroundColor: '#FEE2E2', color: '#DC2626', padding: '14px', marginTop: '8px' }}
               >
-                チームを退出
+                サークルを退出
               </button>
             )}
             {isOwner && (
@@ -236,7 +236,7 @@ export function TeamDetailPage() {
                 className="w-full font-medium rounded-xl"
                 style={{ backgroundColor: '#FEE2E2', color: '#DC2626', padding: '14px', marginTop: '8px' }}
               >
-                チームを削除
+                サークルを削除
               </button>
             )}
           </div>
@@ -271,10 +271,10 @@ export function TeamDetailPage() {
       <Modal
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
-        title="チームを削除"
+        title="サークルを削除"
       >
         <p className="text-gray-600 mb-6">
-          このチームを削除しますか？この操作は取り消せません。
+          このサークルを削除しますか？この操作は取り消せません。
         </p>
         <div className="flex gap-3">
           <button
@@ -301,7 +301,7 @@ export function TeamDetailPage() {
         title="ログインが必要です"
       >
         <p style={{ color: '#666666', marginBottom: '24px' }}>
-          チームに参加リクエストを送るにはログインしてください。
+          サークルに参加リクエストを送るにはログインしてください。
         </p>
         <div style={{ display: 'flex', gap: '12px' }}>
           <button
@@ -344,7 +344,7 @@ export function TeamDetailPage() {
         title="参加リクエスト"
       >
         <p style={{ color: '#666666', marginBottom: '24px' }}>
-          このチームに参加リクエストを送信しますか？
+          このサークルに参加リクエストを送信しますか？
         </p>
         <div style={{ display: 'flex', gap: '12px' }}>
           <button
@@ -388,10 +388,10 @@ export function TeamDetailPage() {
       <Modal
         isOpen={showLeaveModal}
         onClose={() => setShowLeaveModal(false)}
-        title="チームを退出"
+        title="サークルを退出"
       >
         <p style={{ color: '#666666', marginBottom: '24px' }}>
-          このチームから退出しますか？
+          このサークルから退出しますか？
         </p>
         <div style={{ display: 'flex', gap: '12px' }}>
           <button

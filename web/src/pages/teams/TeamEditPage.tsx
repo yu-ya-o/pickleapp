@@ -94,7 +94,7 @@ export function TeamEditPage() {
   if (!team) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500">チームが見つかりません</p>
+        <p className="text-gray-500">サークルが見つかりません</p>
       </div>
     );
   }
@@ -111,7 +111,7 @@ export function TeamEditPage() {
             <ChevronLeft size={24} />
             <span>前の画面に戻る</span>
           </button>
-          <h1 className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">チームを編集</h1>
+          <h1 className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">サークルを編集</h1>
           <div style={{ width: '60px' }} />
         </div>
       </header>
@@ -121,7 +121,7 @@ export function TeamEditPage() {
         {/* Team Icon */}
         <div style={{ marginBottom: '24px' }}>
           <label className="block text-sm text-gray-500" style={{ marginBottom: '8px' }}>
-            チームアイコン
+            サークルアイコン
           </label>
           <div className="bg-white rounded-xl" style={{ padding: '20px' }}>
             <div className="flex flex-col items-center">
@@ -187,21 +187,21 @@ export function TeamEditPage() {
         {/* Team Info */}
         <div style={{ marginBottom: '24px' }}>
           <label className="block text-sm text-gray-500" style={{ marginBottom: '8px' }}>
-            チーム情報
+            サークル情報
           </label>
           <div className="bg-white rounded-xl overflow-hidden">
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="チーム名"
+              placeholder="サークル名"
               className="w-full border-b border-gray-100 focus:outline-none"
               style={{ padding: '14px 16px' }}
             />
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="チームの説明"
+              placeholder="サークルの説明"
               rows={4}
               className="w-full resize-none focus:outline-none"
               style={{ padding: '14px 16px' }}

@@ -67,7 +67,7 @@ export function TeamEventsListPage() {
             <ChevronLeft size={24} />
             <span>前の画面に戻る</span>
           </button>
-          <h1 className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">チームイベント</h1>
+          <h1 className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">サークルイベント</h1>
           {isAdmin ? (
             <button
               onClick={() => navigate(`/teams/${teamId}/events/create`)}
