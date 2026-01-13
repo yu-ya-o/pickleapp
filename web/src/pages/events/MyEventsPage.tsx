@@ -35,6 +35,9 @@ export function MyEventsPage() {
         api.getMyReservations(),
         api.getMyTeamEvents(),
       ]);
+      console.log('reservations:', reservations);
+      console.log('myTeamEvents:', myTeamEvents);
+      console.log('participating team events:', myTeamEvents.filter((e) => e.isUserParticipating));
       setReservedEvents(reservations);
       setTeamEvents(myTeamEvents);
     } catch (err) {
