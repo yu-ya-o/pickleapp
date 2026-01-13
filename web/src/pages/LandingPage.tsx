@@ -95,14 +95,6 @@ export function LandingPage() {
           textAlign: 'center',
           paddingBottom: '40px'
         }}>
-          {/* Pickle emoji */}
-          <div style={{
-            fontSize: '64px',
-            marginBottom: '24px'
-          }}>
-            🥒
-          </div>
-
           <h2 style={{
             fontSize: '32px',
             fontWeight: 800,
@@ -283,12 +275,6 @@ export function LandingPage() {
         background: '#1a1a2e',
         textAlign: 'center'
       }}>
-        <div style={{
-          fontSize: '48px',
-          marginBottom: '24px'
-        }}>
-          🏓
-        </div>
         <h3 style={{
           fontSize: '24px',
           fontWeight: 700,
@@ -431,10 +417,9 @@ function EventCard({ event }: { event: (Event | TeamEvent) & { type: 'event' | '
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: '20px',
         flexShrink: 0
       }}>
-        🏓
+        <Calendar size={20} color="#22c55e" />
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{
