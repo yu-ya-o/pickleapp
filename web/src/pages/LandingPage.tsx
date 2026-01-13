@@ -60,9 +60,7 @@ export function LandingPage() {
           fontSize: '24px',
           fontWeight: 700,
           fontStyle: 'italic',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent'
+          color: '#1a1a2e'
         }}>
           PickleHub
         </h1>
@@ -70,7 +68,7 @@ export function LandingPage() {
           to="/login"
           style={{
             padding: '8px 20px',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: '#22c55e',
             color: '#FFFFFF',
             borderRadius: '20px',
             textDecoration: 'none',
@@ -84,7 +82,7 @@ export function LandingPage() {
 
       {/* Hero Section */}
       <section style={{
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
         padding: '48px 20px',
         textAlign: 'center',
         color: '#FFFFFF'
@@ -115,7 +113,7 @@ export function LandingPage() {
             display: 'inline-block',
             padding: '14px 32px',
             background: '#FFFFFF',
-            color: '#667eea',
+            color: '#22c55e',
             borderRadius: '30px',
             textDecoration: 'none',
             fontSize: '16px',
@@ -177,7 +175,7 @@ export function LandingPage() {
               to="/events"
               style={{
                 fontSize: '14px',
-                color: '#667eea',
+                color: '#22c55e',
                 textDecoration: 'none',
                 display: 'flex',
                 alignItems: 'center',
@@ -221,7 +219,7 @@ export function LandingPage() {
           style={{
             display: 'inline-block',
             padding: '14px 40px',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: '#22c55e',
             color: '#FFFFFF',
             borderRadius: '30px',
             textDecoration: 'none',
@@ -275,11 +273,11 @@ function FeatureCard({ icon, title, description }: {
         width: '50px',
         height: '50px',
         borderRadius: '12px',
-        background: 'linear-gradient(135deg, #667eea20 0%, #764ba220 100%)',
+        background: '#22c55e15',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        color: '#667eea',
+        color: '#22c55e',
         flexShrink: 0
       }}>
         {icon}
@@ -324,7 +322,7 @@ function EventPreviewCard({ event }: { event: (Event | TeamEvent) & { type: 'eve
     >
       <div style={{
         fontSize: '12px',
-        color: '#667eea',
+        color: '#22c55e',
         marginBottom: '4px'
       }}>
         {formatDateTime(event.startTime)}
