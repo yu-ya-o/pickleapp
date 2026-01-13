@@ -10,6 +10,7 @@ import { LoginPage } from '@/pages/LoginPage';
 import { EventsListPage } from '@/pages/events/EventsListPage';
 import { EventDetailPage } from '@/pages/events/EventDetailPage';
 import { CreateEventPage } from '@/pages/events/CreateEventPage';
+import { MyEventsPage } from '@/pages/events/MyEventsPage';
 import { TeamsListPage } from '@/pages/teams/TeamsListPage';
 import { TeamDetailPage } from '@/pages/teams/TeamDetailPage';
 import { TeamEventDetailPage } from '@/pages/teams/TeamEventDetailPage';
@@ -99,6 +100,9 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       >
+        {/* My Events */}
+        <Route path="/my-events" element={<MyEventsPage />} />
+
         {/* Notifications */}
         <Route path="/notifications" element={<NotificationsPage />} />
 

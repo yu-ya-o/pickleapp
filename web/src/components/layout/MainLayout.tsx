@@ -1,6 +1,6 @@
 import { useState, createContext, useContext } from 'react';
 import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Calendar, Users, Trophy, User, X, LogIn, LogOut } from 'lucide-react';
+import { Calendar, CalendarCheck, Users, Trophy, User, X, LogIn, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -30,6 +30,7 @@ export function MainLayout() {
   const navItems = isAuthenticated
     ? [
         { to: '/events', icon: Calendar, label: 'イベント' },
+        { to: '/my-events', icon: CalendarCheck, label: 'マイイベント' },
         { to: '/teams', icon: Users, label: 'サークル' },
         { to: '/rankings', icon: Trophy, label: 'ランキング' },
         { to: '/profile', icon: User, label: 'プロフィール' },
