@@ -2,8 +2,8 @@
 
 export const SITE_URL = 'https://picklehub.jp';
 export const SITE_NAME = 'PickleHub';
-export const DEFAULT_TITLE = 'PickleHub - ピックルボールコミュニティ';
-export const DEFAULT_DESCRIPTION = 'PickleHubは日本のピックルボールコミュニティプラットフォームです。イベントを探して参加したり、チームを作成したり、仲間とつながりましょう。';
+export const DEFAULT_TITLE = 'PickleHub - ピックルボールイベント・チーム募集';
+export const DEFAULT_DESCRIPTION = '全国のピックルボールイベントを探して参加しよう！初心者歓迎のイベントから上級者向け大会まで。チーム募集・メンバー募集も。日本最大級のピックルボールコミュニティ。';
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
 export const TWITTER_HANDLE = '@picklehub';
 

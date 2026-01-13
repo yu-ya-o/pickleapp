@@ -75,8 +75,8 @@ export function SEO({
 export function EventsListSEO() {
   return (
     <SEO
-      title="イベント一覧"
-      description="ピックルボールのイベントを探そう。初心者から上級者まで、あなたにぴったりのイベントが見つかります。"
+      title="ピックルボールイベント一覧 - 全国の募集情報"
+      description="全国のピックルボールイベント・大会情報を掲載。初心者歓迎のイベントから上級者向けトーナメントまで、参加者募集中のイベントを探せます。今すぐ参加しよう！"
       url="/events"
     />
   );
