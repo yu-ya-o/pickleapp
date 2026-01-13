@@ -175,6 +175,10 @@ export function MyEventsPage() {
         <div>通常イベント: {reservedEvents.length}件</div>
         <div>サークルイベント: {teamEvents.length}件 (参加中: {teamEvents.filter(e => e.isUserParticipating).length}件)</div>
         <div>これから: {upcomingEvents.length}件 / これまで: {pastEvents.length}件</div>
+        <div style={{ marginTop: '4px', borderTop: '1px solid #ddd', paddingTop: '4px' }}>未来のサークルイベント:</div>
+        {teamEvents.filter(e => new Date(e.startTime) >= new Date()).map(e => (
+          <div key={e.id}>{e.title}: 参加={String(e.isUserParticipating)}</div>
+        ))}
       </div>
 
       {/* Content */}
