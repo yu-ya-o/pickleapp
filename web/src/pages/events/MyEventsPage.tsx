@@ -41,9 +41,6 @@ export function MyEventsPage() {
       const uniqueTeamEvents = allTeamEvents.filter((event, index, self) =>
         index === self.findIndex((e) => e.id === event.id)
       );
-      console.log('reservations:', reservations);
-      console.log('upcomingTeamEvents:', upcomingTeamEvents);
-      console.log('pastTeamEvents:', pastTeamEvents);
       setReservedEvents(reservations);
       setTeamEvents(uniqueTeamEvents);
     } catch (err) {
@@ -175,17 +172,6 @@ export function MyEventsPage() {
           </button>
         </div>
       </header>
-
-      {/* Debug Info */}
-      <div style={{ padding: '8px 16px', background: '#FEF3C7', fontSize: '12px' }}>
-        <div>通常イベント: {reservedEvents.length}件</div>
-        <div>サークルイベント: {teamEvents.length}件 (参加中: {teamEvents.filter(e => e.isUserParticipating).length}件)</div>
-        <div>これから: {upcomingEvents.length}件 / これまで: {pastEvents.length}件</div>
-        <div style={{ marginTop: '4px', borderTop: '1px solid #ddd', paddingTop: '4px' }}>未来のサークルイベント:</div>
-        {teamEvents.filter(e => new Date(e.startTime) >= new Date()).map(e => (
-          <div key={e.id}>{e.title}: 参加={String(e.isUserParticipating)}</div>
-        ))}
-      </div>
 
       {/* Content */}
       <div style={{ padding: '16px', paddingBottom: '24px' }}>
