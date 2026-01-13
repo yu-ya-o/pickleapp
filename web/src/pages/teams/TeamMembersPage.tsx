@@ -43,7 +43,7 @@ export function TeamMembersPage() {
   if (!team) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500">チームが見つかりません</p>
+        <p className="text-gray-500">サークルが見つかりません</p>
       </div>
     );
   }

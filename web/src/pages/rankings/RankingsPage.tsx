@@ -152,7 +152,7 @@ export function RankingsPage() {
             <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#1a1a2e', marginTop: '20px', marginBottom: '8px' }}>
               ランキングがありません
             </h3>
-            <p style={{ color: '#888888' }}>チームが登録されるとランキングが表示されます</p>
+            <p style={{ color: '#888888' }}>サークルが登録されるとランキングが表示されます</p>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>

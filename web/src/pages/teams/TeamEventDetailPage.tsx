@@ -155,7 +155,7 @@ export function TeamEventDetailPage() {
       <SEO
         title={seoTitle}
         description={seoDescription}
-        keywords="ピックルボール, チームイベント, pickleball, イベント募集"
+        keywords="ピックルボール, サークルイベント, pickleball, イベント募集"
         image={event.team.iconImage}
         url={`/teams/${teamId}/events/${eventId}`}
         jsonLd={seoBreadcrumb}

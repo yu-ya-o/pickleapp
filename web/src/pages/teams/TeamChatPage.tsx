@@ -149,7 +149,7 @@ export function TeamChatPage() {
             whiteSpace: 'nowrap',
             padding: '0 8px'
           }}>
-            {team?.name || 'チームチャット'}
+            {team?.name || 'サークルチャット'}
           </h1>
           <button
             onClick={() => navigate(-1)}

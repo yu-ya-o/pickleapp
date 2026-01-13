@@ -95,9 +95,9 @@ export function EventsListSEO() {
 export function TeamsListSEO() {
   return (
     <SEO
-      title="チーム一覧"
-      description="ピックルボールチームを探そう。全国のチームに参加して、仲間と一緒にプレイしましょう。"
-      keywords="ピックルボール, チーム, pickleball, チーム募集, メンバー募集, サークル"
+      title="サークル一覧"
+      description="ピックルボールサークルを探そう。全国のサークルに参加して、仲間と一緒にプレイしましょう。"
+      keywords="ピックルボール, サークル, pickleball, サークル募集, メンバー募集"
       url="/teams"
     />
   );
