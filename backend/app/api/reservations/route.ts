@@ -163,15 +163,17 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    const response: ReservationResponse[] = reservations.map((r) => ({
-      id: r.id,
-      status: r.status,
-      createdAt: r.createdAt.toISOString(),
-      user: r.user,
-      eventId: r.eventId,
+    // Return events with reservation info
+    const events = reservations.map((r) => ({
+      ...r.event,
+      startTime: r.event.startTime.toISOString(),
+      endTime: r.event.endTime.toISOString(),
+      createdAt: r.event.createdAt.toISOString(),
+      updatedAt: r.event.updatedAt.toISOString(),
+      reservationId: r.id,
     }));
 
-    return NextResponse.json(response);
+    return NextResponse.json(events);
   } catch (error) {
     return errorResponse(error);
   }
