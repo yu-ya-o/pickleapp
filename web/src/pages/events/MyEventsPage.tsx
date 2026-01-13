@@ -31,15 +31,21 @@ export function MyEventsPage() {
     try {
       setIsLoading(true);
       setError(null);
-      const [reservations, myTeamEvents] = await Promise.all([
+      const [reservations, upcomingTeamEvents, pastTeamEvents] = await Promise.all([
         api.getMyReservations(),
-        api.getMyTeamEvents(),
+        api.getMyTeamEvents(true),  // upcoming
+        api.getMyTeamEvents(false), // past (will use ?past=true or no param)
       ]);
+      // Merge and dedupe team events
+      const allTeamEvents = [...upcomingTeamEvents, ...pastTeamEvents];
+      const uniqueTeamEvents = allTeamEvents.filter((event, index, self) =>
+        index === self.findIndex((e) => e.id === event.id)
+      );
       console.log('reservations:', reservations);
-      console.log('myTeamEvents:', myTeamEvents);
-      console.log('participating team events:', myTeamEvents.filter((e) => e.isUserParticipating));
+      console.log('upcomingTeamEvents:', upcomingTeamEvents);
+      console.log('pastTeamEvents:', pastTeamEvents);
       setReservedEvents(reservations);
-      setTeamEvents(myTeamEvents);
+      setTeamEvents(uniqueTeamEvents);
     } catch (err) {
       console.error('Failed to load my events:', err);
       setError('イベントの読み込みに失敗しました');
