@@ -170,6 +170,13 @@ export function MyEventsPage() {
         </div>
       </header>
 
+      {/* Debug Info */}
+      <div style={{ padding: '8px 16px', background: '#FEF3C7', fontSize: '12px' }}>
+        <div>通常イベント: {reservedEvents.length}件</div>
+        <div>サークルイベント: {teamEvents.length}件 (参加中: {teamEvents.filter(e => e.isUserParticipating).length}件)</div>
+        <div>これから: {upcomingEvents.length}件 / これまで: {pastEvents.length}件</div>
+      </div>
+
       {/* Content */}
       <div style={{ padding: '16px', paddingBottom: '24px' }}>
         {isLoading ? (
