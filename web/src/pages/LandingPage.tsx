@@ -95,17 +95,16 @@ export function LandingPage() {
           textAlign: 'center',
           paddingBottom: '40px'
         }}>
-          <h2 style={{
-            fontSize: '32px',
-            fontWeight: 800,
-            color: '#1a1a2e',
-            marginBottom: '16px',
-            lineHeight: 1.3
-          }}>
-            ピックルボールの
-            <br />
-            <span style={{ color: '#22c55e' }}>仲間</span>を見つけよう
-          </h2>
+          {/* Logo */}
+          <img
+            src="/lp-logo.jpg"
+            alt="PickleHub"
+            style={{
+              width: '200px',
+              height: 'auto',
+              marginBottom: '24px'
+            }}
+          />
 
           <p style={{
             fontSize: '15px',
