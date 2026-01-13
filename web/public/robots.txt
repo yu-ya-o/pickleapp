@@ -11,4 +11,4 @@ Disallow: /*/edit
 Disallow: /*/create
 
 # Sitemap
-Sitemap: https://picklehub.jp/sitemap.xml
+Sitemap: https://pickleapp.onrender.com/sitemap.xml
