@@ -32,6 +32,8 @@ export async function GET(request: NextRequest) {
 
     const teamIds = userTeams.map((t) => t.teamId);
 
+    const past = searchParams.get('past') === 'true';
+
     // Build where clause
     const where: any = {
       teamId: {
@@ -44,12 +46,13 @@ export async function GET(request: NextRequest) {
       where.endTime = {
         gte: new Date(),
       };
-    } else {
+    } else if (past) {
       // Past events: endTime < now
       where.endTime = {
         lt: new Date(),
       };
     }
+    // If neither upcoming nor past, return all events
 
     // Get all events for these teams
     const events = await prisma.teamEvent.findMany({
