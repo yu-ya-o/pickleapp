@@ -27,7 +27,6 @@ import { ProfilePage } from '@/pages/profile/ProfilePage';
 import { ProfileEditPage } from '@/pages/profile/ProfileEditPage';
 import { ShareableProfilePage } from '@/pages/profile/ShareableProfilePage';
 import { UserProfilePage } from '@/pages/users/UserProfilePage';
-import { LandingPage } from '@/pages/LandingPage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
