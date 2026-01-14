@@ -112,8 +112,8 @@ function AppRoutes() {
         <Route path="/profile/edit" element={<ProfileEditPage />} />
       </Route>
 
-      {/* Landing page for unauthenticated users */}
-      <Route path="/" element={<LandingPage />} />
+      {/* Redirect root to events */}
+      <Route path="/" element={<Navigate to="/events" replace />} />
 
       {/* 404 */}
       <Route path="*" element={<Navigate to="/events" replace />} />
