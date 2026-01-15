@@ -1,6 +1,6 @@
 import { useState, createContext, useContext } from 'react';
 import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Calendar, CalendarCheck, Users, Trophy, User, X, LogIn, LogOut } from 'lucide-react';
+import { Home, Calendar, CalendarCheck, Users, Trophy, User, X, LogIn, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -29,6 +29,7 @@ export function MainLayout() {
   // Build nav items based on auth state
   const navItems = isAuthenticated
     ? [
+        { to: '/', icon: Home, label: 'ホーム', exact: true },
         { to: '/events', icon: Calendar, label: 'イベント' },
         { to: '/my-events', icon: CalendarCheck, label: 'マイイベント' },
         { to: '/teams', icon: Users, label: 'サークル' },
@@ -36,6 +37,7 @@ export function MainLayout() {
         { to: '/profile', icon: User, label: 'プロフィール' },
       ]
     : [
+        { to: '/', icon: Home, label: 'ホーム', exact: true },
         { to: '/events', icon: Calendar, label: 'イベント' },
         { to: '/teams', icon: Users, label: 'サークル' },
         { to: '/rankings', icon: Trophy, label: 'ランキング' },
@@ -49,8 +51,13 @@ export function MainLayout() {
   };
 
   // Determine which tab should be active
-  const isTabActive = (to: string) => {
+  const isTabActive = (to: string, exact?: boolean) => {
     const path = location.pathname;
+
+    // Exact match for home
+    if (exact) {
+      return path === to;
+    }
 
     // Team events (e.g., /teams/123/events/456) should highlight イベント tab
     if (to === '/events' && path.includes('/teams/') && path.includes('/events/')) {
@@ -79,8 +86,8 @@ export function MainLayout() {
           {/* Navigation */}
           <nav className="flex-1 px-4 pb-4">
             <ul className="space-y-1">
-              {navItems.map(({ to, icon: Icon, label }) => {
-                const isActive = isTabActive(to);
+              {navItems.map(({ to, icon: Icon, label, exact }) => {
+                const isActive = isTabActive(to, exact);
                 return (
                   <li key={to}>
                     <NavLink
@@ -173,8 +180,8 @@ export function MainLayout() {
 
           {/* Drawer Navigation */}
           <nav style={{ padding: '16px' }}>
-            {navItems.map(({ to, icon: Icon, label }) => {
-              const isActive = isTabActive(to);
+            {navItems.map(({ to, icon: Icon, label, exact }) => {
+              const isActive = isTabActive(to, exact);
               return (
                 <NavLink
                   key={to}

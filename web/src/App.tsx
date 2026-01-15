@@ -7,6 +7,7 @@ import { config } from '@/lib/config';
 
 // Pages
 import { LoginPage } from '@/pages/LoginPage';
+import { HomePage } from '@/pages/HomePage';
 import { EventsListPage } from '@/pages/events/EventsListPage';
 import { EventDetailPage } from '@/pages/events/EventDetailPage';
 import { CreateEventPage } from '@/pages/events/CreateEventPage';
@@ -84,6 +85,7 @@ function AppRoutes() {
         }
       >
         {/* Public pages */}
+        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/events" element={<EventsListPage />} />
         <Route path="/teams" element={<TeamsListPage />} />
@@ -111,11 +113,8 @@ function AppRoutes() {
         <Route path="/profile/edit" element={<ProfileEditPage />} />
       </Route>
 
-      {/* Redirect root to events */}
-      <Route path="/" element={<Navigate to="/events" replace />} />
-
       {/* 404 */}
-      <Route path="*" element={<Navigate to="/events" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
