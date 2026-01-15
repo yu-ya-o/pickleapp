@@ -1,0 +1,532 @@
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Calendar, Users, MapPin, ChevronRight, Flame, Clock, UserPlus, Menu } from 'lucide-react';
+import { api } from '@/services/api';
+import { Loading } from '@/components/ui';
+import { useDrawer } from '@/components/layout/MainLayout';
+import { formatDateTime, getDisplayName } from '@/lib/utils';
+import { PREFECTURES } from '@/lib/prefectures';
+import type { Event, Team, TeamEvent } from '@/types';
+
+// 今週末の日付範囲を取得
+function getWeekendRange() {
+  const today = new Date();
+  const dayOfWeek = today.getDay();
+  const daysUntilSaturday = (6 - dayOfWeek + 7) % 7 || 7;
+  const saturday = new Date(today);
+  saturday.setDate(today.getDate() + daysUntilSaturday);
+  saturday.setHours(0, 0, 0, 0);
+
+  const sunday = new Date(saturday);
+  sunday.setDate(saturday.getDate() + 1);
+  sunday.setHours(23, 59, 59, 999);
+
+  return { saturday, sunday };
+}
+
+export function HomePage() {
+  const { openDrawer } = useDrawer();
+  const [weekendEvents, setWeekendEvents] = useState<(Event | TeamEvent)[]>([]);
+  const [recentEvents, setRecentEvents] = useState<(Event | TeamEvent)[]>([]);
+  const [featuredTeams, setFeaturedTeams] = useState<Team[]>([]);
+  const [recruitingTeams, setRecruitingTeams] = useState<Team[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [stats, setStats] = useState({ eventCount: 0, teamCount: 0 });
+
+  useEffect(() => {
+    loadHomeData();
+  }, []);
+
+  const loadHomeData = async () => {
+    try {
+      setIsLoading(true);
+      const [allEvents, publicTeamEvents, allTeams] = await Promise.all([
+        api.getEvents({ status: 'active', upcoming: true }),
+        api.getPublicTeamEvents(true),
+        api.getTeams({}),
+      ]);
+
+      // すべてのイベントを統合
+      const combinedEvents = [...allEvents, ...publicTeamEvents];
+
+      // 今週末のイベント
+      const { saturday, sunday } = getWeekendRange();
+      const weekend = combinedEvents.filter((event) => {
+        const eventDate = new Date(event.startTime);
+        return eventDate >= saturday && eventDate <= sunday;
+      });
+      setWeekendEvents(weekend.slice(0, 6));
+
+      // 新着イベント（直近追加されたもの）
+      const sorted = [...combinedEvents].sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      setRecentEvents(sorted.slice(0, 5));
+
+      // 注目のチーム（メンバー数順）
+      const sortedTeams = [...allTeams].sort((a, b) => b.memberCount - a.memberCount);
+      setFeaturedTeams(sortedTeams.slice(0, 6));
+
+      // 参加者募集中（公開チーム）
+      const publicTeams = allTeams.filter((t) => t.visibility === 'public');
+      setRecruitingTeams(publicTeams.slice(0, 5));
+
+      setStats({
+        eventCount: combinedEvents.length,
+        teamCount: allTeams.length,
+      });
+    } catch (error) {
+      console.error('Failed to load home data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div style={{ minHeight: '100vh', background: '#F5F5F7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Loading size="lg" />
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
+      {/* Hero Header */}
+      <header style={{
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        color: '#FFFFFF',
+        padding: '16px'
+      }}>
+        {/* Title Row */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: '16px'
+        }}>
+          <button
+            onClick={openDrawer}
+            className="md:hidden"
+            style={{
+              background: 'rgba(255,255,255,0.2)',
+              border: 'none',
+              borderRadius: '50%',
+              width: '36px',
+              height: '36px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <Menu size={20} style={{ color: '#FFFFFF' }} />
+          </button>
+          <h1 style={{
+            fontSize: '24px',
+            fontWeight: 900,
+            fontStyle: 'italic'
+          }}>
+            PickleHub
+          </h1>
+          <div style={{ width: '36px' }} className="md:hidden" />
+        </div>
+
+        <p style={{ fontSize: '15px', opacity: 0.9, marginBottom: '16px' }}>
+          イベントもサークルも、ここで見つかる。
+        </p>
+
+        {/* Stats */}
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <div style={{
+            background: 'rgba(255,255,255,0.15)',
+            backdropFilter: 'blur(10px)',
+            borderRadius: '12px',
+            padding: '12px 16px'
+          }}>
+            <div style={{ fontSize: '24px', fontWeight: 700 }}>{stats.eventCount}</div>
+            <div style={{ fontSize: '12px', opacity: 0.8 }}>イベント</div>
+          </div>
+          <div style={{
+            background: 'rgba(255,255,255,0.15)',
+            backdropFilter: 'blur(10px)',
+            borderRadius: '12px',
+            padding: '12px 16px'
+          }}>
+            <div style={{ fontSize: '24px', fontWeight: 700 }}>{stats.teamCount}</div>
+            <div style={{ fontSize: '12px', opacity: 0.8 }}>サークル</div>
+          </div>
+        </div>
+      </header>
+
+      <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        {/* 今週末のイベント */}
+        <section>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Flame size={20} style={{ color: '#F59E0B' }} />
+              <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>今週末のイベント</h2>
+            </div>
+            <Link to="/events" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: '#667eea', textDecoration: 'none' }}>
+              もっと見る
+              <ChevronRight size={16} />
+            </Link>
+          </div>
+          {weekendEvents.length === 0 ? (
+            <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '24px', textAlign: 'center', color: '#888888' }}>
+              今週末のイベントはまだありません
+            </div>
+          ) : (
+            <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '8px', margin: '0 -16px', padding: '0 16px 8px' }}>
+              {weekendEvents.map((event) => (
+                <EventCard key={event.id} event={event} />
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* 注目のサークル */}
+        <section>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Users size={20} style={{ color: '#667eea' }} />
+              <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>注目のサークル</h2>
+            </div>
+            <Link to="/teams" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: '#667eea', textDecoration: 'none' }}>
+              もっと見る
+              <ChevronRight size={16} />
+            </Link>
+          </div>
+          {featuredTeams.length === 0 ? (
+            <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '24px', textAlign: 'center', color: '#888888' }}>
+              サークルはまだありません
+            </div>
+          ) : (
+            <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '8px', margin: '0 -16px', padding: '0 16px 8px' }}>
+              {featuredTeams.map((team) => (
+                <TeamCard key={team.id} team={team} />
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* 地域から探す */}
+        <section>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+            <MapPin size={20} style={{ color: '#EC4899' }} />
+            <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>地域から探す</h2>
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+            {PREFECTURES.slice(0, 12).map((pref) => (
+              <Link
+                key={pref}
+                to={`/events?region=${encodeURIComponent(pref)}`}
+                style={{
+                  padding: '8px 14px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E5E5E5',
+                  borderRadius: '20px',
+                  fontSize: '13px',
+                  color: '#1a1a2e',
+                  textDecoration: 'none',
+                  transition: 'all 0.2s'
+                }}
+              >
+                {pref}
+              </Link>
+            ))}
+            <Link
+              to="/events"
+              style={{
+                padding: '8px 14px',
+                background: '#F0F0F0',
+                borderRadius: '20px',
+                fontSize: '13px',
+                color: '#888888',
+                textDecoration: 'none'
+              }}
+            >
+              すべて見る...
+            </Link>
+          </div>
+        </section>
+
+        {/* 新着イベント */}
+        <section>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Clock size={20} style={{ color: '#10B981' }} />
+              <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>新着イベント</h2>
+            </div>
+            <Link to="/events" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: '#667eea', textDecoration: 'none' }}>
+              もっと見る
+              <ChevronRight size={16} />
+            </Link>
+          </div>
+          <div style={{ background: '#FFFFFF', borderRadius: '16px', overflow: 'hidden' }}>
+            {recentEvents.length === 0 ? (
+              <div style={{ padding: '24px', textAlign: 'center', color: '#888888' }}>
+                イベントはまだありません
+              </div>
+            ) : (
+              recentEvents.map((event, index) => (
+                <EventListItem key={event.id} event={event} isLast={index === recentEvents.length - 1} />
+              ))
+            )}
+          </div>
+        </section>
+
+        {/* メンバー募集中サークル */}
+        <section>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <UserPlus size={20} style={{ color: '#3B82F6' }} />
+              <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>メンバー募集中</h2>
+            </div>
+            <Link to="/teams" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: '#667eea', textDecoration: 'none' }}>
+              もっと見る
+              <ChevronRight size={16} />
+            </Link>
+          </div>
+          <div style={{ background: '#FFFFFF', borderRadius: '16px', overflow: 'hidden' }}>
+            {recruitingTeams.length === 0 ? (
+              <div style={{ padding: '24px', textAlign: 'center', color: '#888888' }}>
+                募集中のサークルはありません
+              </div>
+            ) : (
+              recruitingTeams.map((team, index) => (
+                <TeamListItem key={team.id} team={team} isLast={index === recruitingTeams.length - 1} />
+              ))
+            )}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+// イベントカード（横スクロール用）
+function EventCard({ event }: { event: Event | TeamEvent }) {
+  const isTeamEvent = 'team' in event;
+  const linkTo = isTeamEvent
+    ? `/teams/${(event as TeamEvent).team.id}/events/${event.id}`
+    : `/events/${event.id}`;
+  const displayImage = isTeamEvent
+    ? (event as TeamEvent).team.iconImage
+    : event.creator.profileImage;
+  const displayName = isTeamEvent
+    ? (event as TeamEvent).team.name
+    : getDisplayName(event.creator);
+
+  return (
+    <Link
+      to={linkTo}
+      style={{
+        display: 'block',
+        background: '#FFFFFF',
+        borderRadius: '16px',
+        padding: '14px',
+        minWidth: '260px',
+        textDecoration: 'none',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+      }}
+    >
+      <div style={{ display: 'flex', gap: '12px' }}>
+        <div style={{
+          width: '44px',
+          height: '44px',
+          borderRadius: '10px',
+          overflow: 'hidden',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0
+        }}>
+          {displayImage ? (
+            <img src={displayImage} alt={displayName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          ) : (
+            <span style={{ fontSize: '18px' }}>🏓</span>
+          )}
+        </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <h3 style={{
+            fontSize: '14px',
+            fontWeight: 600,
+            color: '#1a1a2e',
+            marginBottom: '4px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap'
+          }}>
+            {event.title}
+          </h3>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+            <Calendar size={12} style={{ color: '#667eea' }} />
+            <span style={{ fontSize: '12px', color: '#888888' }}>{formatDateTime(event.startTime)}</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <MapPin size={12} style={{ color: '#667eea' }} />
+            <span style={{ fontSize: '12px', color: '#888888', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {event.location}
+            </span>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+// サークルカード（横スクロール用）
+function TeamCard({ team }: { team: Team }) {
+  return (
+    <Link
+      to={`/teams/${team.id}`}
+      style={{
+        display: 'block',
+        background: '#FFFFFF',
+        borderRadius: '16px',
+        padding: '14px',
+        minWidth: '200px',
+        textDecoration: 'none',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+      }}
+    >
+      <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+        <div style={{
+          width: '44px',
+          height: '44px',
+          borderRadius: '10px',
+          overflow: 'hidden',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0
+        }}>
+          {team.iconImage ? (
+            <img src={team.iconImage} alt={team.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          ) : (
+            <span style={{ fontSize: '18px' }}>🏓</span>
+          )}
+        </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <h3 style={{
+            fontSize: '14px',
+            fontWeight: 600,
+            color: '#1a1a2e',
+            marginBottom: '4px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap'
+          }}>
+            {team.name}
+          </h3>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <Users size={12} style={{ color: '#667eea' }} />
+            <span style={{ fontSize: '12px', color: '#888888' }}>{team.memberCount}人</span>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+// イベントリストアイテム（縦リスト用）
+function EventListItem({ event, isLast }: { event: Event | TeamEvent; isLast: boolean }) {
+  const isTeamEvent = 'team' in event;
+  const linkTo = isTeamEvent
+    ? `/teams/${(event as TeamEvent).team.id}/events/${event.id}`
+    : `/events/${event.id}`;
+  const displayImage = isTeamEvent
+    ? (event as TeamEvent).team.iconImage
+    : event.creator.profileImage;
+  const displayName = isTeamEvent
+    ? (event as TeamEvent).team.name
+    : getDisplayName(event.creator);
+
+  return (
+    <Link
+      to={linkTo}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '14px 16px',
+        borderBottom: isLast ? 'none' : '1px solid #F0F0F0',
+        textDecoration: 'none'
+      }}
+    >
+      <div style={{
+        width: '40px',
+        height: '40px',
+        borderRadius: '10px',
+        overflow: 'hidden',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0
+      }}>
+        {displayImage ? (
+          <img src={displayImage} alt={displayName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        ) : (
+          <span style={{ fontSize: '16px' }}>🏓</span>
+        )}
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <h4 style={{ fontSize: '14px', fontWeight: 600, color: '#1a1a2e', marginBottom: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          {event.title}
+        </h4>
+        <p style={{ fontSize: '12px', color: '#888888' }}>
+          {formatDateTime(event.startTime)} / {event.location.split(' ')[0]}
+        </p>
+      </div>
+      <ChevronRight size={16} style={{ color: '#CCCCCC', flexShrink: 0 }} />
+    </Link>
+  );
+}
+
+// サークルリストアイテム（縦リスト用）
+function TeamListItem({ team, isLast }: { team: Team; isLast: boolean }) {
+  return (
+    <Link
+      to={`/teams/${team.id}`}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '14px 16px',
+        borderBottom: isLast ? 'none' : '1px solid #F0F0F0',
+        textDecoration: 'none'
+      }}
+    >
+      <div style={{
+        width: '40px',
+        height: '40px',
+        borderRadius: '10px',
+        overflow: 'hidden',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0
+      }}>
+        {team.iconImage ? (
+          <img src={team.iconImage} alt={team.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        ) : (
+          <span style={{ fontSize: '16px' }}>🏓</span>
+        )}
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <h4 style={{ fontSize: '14px', fontWeight: 600, color: '#1a1a2e', marginBottom: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          {team.name}
+        </h4>
+        <p style={{ fontSize: '12px', color: '#888888' }}>
+          {team.region || '地域未設定'} / {team.memberCount}人
+        </p>
+      </div>
+      <ChevronRight size={16} style={{ color: '#CCCCCC', flexShrink: 0 }} />
+    </Link>
+  );
+}
