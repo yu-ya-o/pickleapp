@@ -96,14 +96,60 @@ export function HomePage() {
       <header style={{
         background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
         color: '#FFFFFF',
-        padding: '16px'
+        padding: '24px 16px 32px',
+        position: 'relative',
+        overflow: 'hidden'
       }}>
+        {/* Pickleball pattern background */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          opacity: 0.15,
+          backgroundImage: `
+            radial-gradient(circle at 20% 30%, #fff 8px, transparent 8px),
+            radial-gradient(circle at 80% 20%, #fff 12px, transparent 12px),
+            radial-gradient(circle at 60% 70%, #fff 6px, transparent 6px),
+            radial-gradient(circle at 10% 80%, #fff 10px, transparent 10px),
+            radial-gradient(circle at 90% 60%, #fff 7px, transparent 7px),
+            radial-gradient(circle at 40% 10%, #fff 5px, transparent 5px),
+            radial-gradient(circle at 70% 90%, #fff 9px, transparent 9px),
+            radial-gradient(circle at 30% 50%, #fff 4px, transparent 4px)
+          `,
+          pointerEvents: 'none'
+        }} />
+
+        {/* Decorative ball */}
+        <div style={{
+          position: 'absolute',
+          top: '-30px',
+          right: '-30px',
+          width: '150px',
+          height: '150px',
+          borderRadius: '50%',
+          background: 'rgba(255,255,255,0.1)',
+          border: '3px solid rgba(255,255,255,0.2)'
+        }} />
+        <div style={{
+          position: 'absolute',
+          bottom: '-40px',
+          left: '-20px',
+          width: '100px',
+          height: '100px',
+          borderRadius: '50%',
+          background: 'rgba(255,255,255,0.08)',
+          border: '2px solid rgba(255,255,255,0.15)'
+        }} />
         {/* Title Row */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          marginBottom: '16px'
+          marginBottom: '20px',
+          position: 'relative',
+          zIndex: 1
         }}>
           <button
             onClick={openDrawer}
@@ -123,38 +169,49 @@ export function HomePage() {
             <Menu size={20} style={{ color: '#FFFFFF' }} />
           </button>
           <h1 style={{
-            fontSize: '24px',
+            fontSize: '32px',
             fontWeight: 900,
-            fontStyle: 'italic'
+            fontStyle: 'italic',
+            textShadow: '0 2px 4px rgba(0,0,0,0.1)'
           }}>
             PickleHub
           </h1>
           <div style={{ width: '36px' }} className="md:hidden" />
         </div>
 
-        <p style={{ fontSize: '15px', opacity: 0.9, marginBottom: '16px' }}>
+        <p style={{
+          fontSize: '20px',
+          fontWeight: 600,
+          opacity: 0.95,
+          marginBottom: '24px',
+          textShadow: '0 1px 2px rgba(0,0,0,0.1)',
+          position: 'relative',
+          zIndex: 1
+        }}>
           全国のピックルボール情報、まるっとここに。
         </p>
 
         {/* Stats */}
-        <div style={{ display: 'flex', gap: '12px' }}>
+        <div style={{ display: 'flex', gap: '12px', position: 'relative', zIndex: 1 }}>
           <div style={{
-            background: 'rgba(255,255,255,0.15)',
+            background: 'rgba(255,255,255,0.2)',
             backdropFilter: 'blur(10px)',
-            borderRadius: '12px',
-            padding: '12px 16px'
+            borderRadius: '16px',
+            padding: '16px 20px',
+            border: '1px solid rgba(255,255,255,0.3)'
           }}>
-            <div style={{ fontSize: '24px', fontWeight: 700 }}>{stats.eventCount}</div>
-            <div style={{ fontSize: '12px', opacity: 0.8 }}>イベント</div>
+            <div style={{ fontSize: '28px', fontWeight: 700 }}>{stats.eventCount}</div>
+            <div style={{ fontSize: '13px', opacity: 0.9 }}>イベント</div>
           </div>
           <div style={{
-            background: 'rgba(255,255,255,0.15)',
+            background: 'rgba(255,255,255,0.2)',
             backdropFilter: 'blur(10px)',
-            borderRadius: '12px',
-            padding: '12px 16px'
+            borderRadius: '16px',
+            padding: '16px 20px',
+            border: '1px solid rgba(255,255,255,0.3)'
           }}>
-            <div style={{ fontSize: '24px', fontWeight: 700 }}>{stats.teamCount}</div>
-            <div style={{ fontSize: '12px', opacity: 0.8 }}>サークル</div>
+            <div style={{ fontSize: '28px', fontWeight: 700 }}>{stats.teamCount}</div>
+            <div style={{ fontSize: '13px', opacity: 0.9 }}>サークル</div>
           </div>
         </div>
       </header>
