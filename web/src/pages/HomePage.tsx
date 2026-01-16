@@ -133,7 +133,7 @@ export function HomePage() {
         </div>
 
         <p style={{ fontSize: '15px', opacity: 0.9, marginBottom: '16px' }}>
-          イベントもサークルも、ここで見つかる。
+          全国のピックルボール情報、まるっとここに。
         </p>
 
         {/* Stats */}
