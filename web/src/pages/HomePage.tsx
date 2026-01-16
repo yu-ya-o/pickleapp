@@ -172,7 +172,7 @@ export function HomePage() {
             fontSize: '32px',
             fontWeight: 900,
             fontStyle: 'italic',
-            textShadow: '0 2px 4px rgba(0,0,0,0.1)'
+            color: '#1a1a2e'
           }}>
             PickleHub
           </h1>
