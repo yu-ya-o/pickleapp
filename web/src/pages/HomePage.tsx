@@ -94,7 +94,7 @@ export function HomePage() {
     <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
       {/* Hero Header */}
       <header style={{
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
         color: '#FFFFFF',
         padding: '16px'
       }}>
@@ -133,7 +133,7 @@ export function HomePage() {
         </div>
 
         <p style={{ fontSize: '15px', opacity: 0.9, marginBottom: '16px' }}>
-          イベントもサークルも、ここで見つかる。
+          全国のピックルボール情報、まるっとここに。
         </p>
 
         {/* Stats */}
@@ -167,7 +167,7 @@ export function HomePage() {
               <Flame size={20} style={{ color: '#F59E0B' }} />
               <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>今週末のイベント</h2>
             </div>
-            <Link to="/events" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: '#667eea', textDecoration: 'none' }}>
+            <Link to="/events" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: '#65A30D', textDecoration: 'none' }}>
               もっと見る
               <ChevronRight size={16} />
             </Link>
@@ -189,10 +189,10 @@ export function HomePage() {
         <section>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Users size={20} style={{ color: '#667eea' }} />
+              <Users size={20} style={{ color: '#65A30D' }} />
               <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>注目のサークル</h2>
             </div>
-            <Link to="/teams" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: '#667eea', textDecoration: 'none' }}>
+            <Link to="/teams" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: '#65A30D', textDecoration: 'none' }}>
               もっと見る
               <ChevronRight size={16} />
             </Link>
@@ -258,7 +258,7 @@ export function HomePage() {
               <Clock size={20} style={{ color: '#10B981' }} />
               <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>新着イベント</h2>
             </div>
-            <Link to="/events" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: '#667eea', textDecoration: 'none' }}>
+            <Link to="/events" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: '#65A30D', textDecoration: 'none' }}>
               もっと見る
               <ChevronRight size={16} />
             </Link>
@@ -283,7 +283,7 @@ export function HomePage() {
               <UserPlus size={20} style={{ color: '#3B82F6' }} />
               <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>メンバー募集中</h2>
             </div>
-            <Link to="/teams" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: '#667eea', textDecoration: 'none' }}>
+            <Link to="/teams" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: '#65A30D', textDecoration: 'none' }}>
               もっと見る
               <ChevronRight size={16} />
             </Link>
@@ -337,7 +337,7 @@ function EventCard({ event }: { event: Event | TeamEvent }) {
           height: '44px',
           borderRadius: '10px',
           overflow: 'hidden',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -362,11 +362,11 @@ function EventCard({ event }: { event: Event | TeamEvent }) {
             {event.title}
           </h3>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
-            <Calendar size={12} style={{ color: '#667eea' }} />
+            <Calendar size={12} style={{ color: '#65A30D' }} />
             <span style={{ fontSize: '12px', color: '#888888' }}>{formatDateTime(event.startTime)}</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <MapPin size={12} style={{ color: '#667eea' }} />
+            <MapPin size={12} style={{ color: '#65A30D' }} />
             <span style={{ fontSize: '12px', color: '#888888', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {event.location}
             </span>
@@ -398,7 +398,7 @@ function TeamCard({ team }: { team: Team }) {
           height: '44px',
           borderRadius: '10px',
           overflow: 'hidden',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -423,7 +423,7 @@ function TeamCard({ team }: { team: Team }) {
             {team.name}
           </h3>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <Users size={12} style={{ color: '#667eea' }} />
+            <Users size={12} style={{ color: '#65A30D' }} />
             <span style={{ fontSize: '12px', color: '#888888' }}>{team.memberCount}人</span>
           </div>
         </div>
@@ -462,7 +462,7 @@ function EventListItem({ event, isLast }: { event: Event | TeamEvent; isLast: bo
         height: '40px',
         borderRadius: '10px',
         overflow: 'hidden',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -506,7 +506,7 @@ function TeamListItem({ team, isLast }: { team: Team; isLast: boolean }) {
         height: '40px',
         borderRadius: '10px',
         overflow: 'hidden',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
