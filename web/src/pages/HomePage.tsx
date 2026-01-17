@@ -92,8 +92,51 @@ export function HomePage() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
-      {/* Hero Header */}
+      {/* Header - 他のページと統一 */}
       <header style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 30,
+        background: '#FFFFFF',
+        borderBottom: '1px solid #E5E5E5',
+        padding: '12px 16px'
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between'
+        }}>
+          <button
+            onClick={openDrawer}
+            className="md:hidden"
+            style={{
+              background: '#F0F0F0',
+              border: 'none',
+              borderRadius: '50%',
+              width: '36px',
+              height: '36px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <Menu size={20} style={{ color: '#1a1a2e' }} />
+          </button>
+          <h1 style={{
+            fontSize: '24px',
+            fontWeight: 900,
+            fontStyle: 'italic',
+            color: '#1a1a2e'
+          }}>
+            PickleHub
+          </h1>
+          <div style={{ width: '36px' }} className="md:hidden" />
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section style={{
         background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
         color: '#FFFFFF',
         padding: '24px 16px 32px',
@@ -142,42 +185,6 @@ export function HomePage() {
           background: 'rgba(255,255,255,0.08)',
           border: '2px solid rgba(255,255,255,0.15)'
         }} />
-        {/* Title Row */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginBottom: '20px',
-          position: 'relative',
-          zIndex: 1
-        }}>
-          <button
-            onClick={openDrawer}
-            className="md:hidden"
-            style={{
-              background: 'rgba(255,255,255,0.2)',
-              border: 'none',
-              borderRadius: '50%',
-              width: '36px',
-              height: '36px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            <Menu size={20} style={{ color: '#FFFFFF' }} />
-          </button>
-          <h1 style={{
-            fontSize: '32px',
-            fontWeight: 900,
-            fontStyle: 'italic',
-            color: '#1a1a2e'
-          }}>
-            PickleHub
-          </h1>
-          <div style={{ width: '36px' }} className="md:hidden" />
-        </div>
 
         <p style={{
           fontSize: '20px',
@@ -214,7 +221,7 @@ export function HomePage() {
             <div style={{ fontSize: '13px', opacity: 0.9 }}>サークル</div>
           </div>
         </div>
-      </header>
+      </section>
 
       <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
         {/* 今週末のイベント */}
