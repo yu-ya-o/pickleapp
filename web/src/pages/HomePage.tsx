@@ -137,11 +137,14 @@ export function HomePage() {
 
       {/* Hero Section */}
       <section style={{
-        background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
+        background: `linear-gradient(135deg, rgba(163, 230, 53, 0.9) 0%, rgba(101, 163, 13, 0.95) 100%), url('https://images.unsplash.com/photo-1684495643649-9dc9feaa0d54?auto=format&fit=crop&w=1200&q=80')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         color: '#FFFFFF',
-        padding: '24px 16px 32px',
+        padding: '40px 20px 48px',
         position: 'relative',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        minHeight: '200px'
       }}>
         {/* Pickleball pattern background */}
         <div style={{
@@ -150,7 +153,7 @@ export function HomePage() {
           left: 0,
           right: 0,
           bottom: 0,
-          opacity: 0.15,
+          opacity: 0.1,
           backgroundImage: `
             radial-gradient(circle at 20% 30%, #fff 8px, transparent 8px),
             radial-gradient(circle at 80% 20%, #fff 12px, transparent 12px),
@@ -167,58 +170,59 @@ export function HomePage() {
         {/* Decorative ball */}
         <div style={{
           position: 'absolute',
-          top: '-30px',
-          right: '-30px',
-          width: '150px',
-          height: '150px',
+          top: '-40px',
+          right: '-40px',
+          width: '180px',
+          height: '180px',
           borderRadius: '50%',
           background: 'rgba(255,255,255,0.1)',
           border: '3px solid rgba(255,255,255,0.2)'
         }} />
         <div style={{
           position: 'absolute',
-          bottom: '-40px',
-          left: '-20px',
-          width: '100px',
-          height: '100px',
+          bottom: '-50px',
+          left: '-30px',
+          width: '120px',
+          height: '120px',
           borderRadius: '50%',
           background: 'rgba(255,255,255,0.08)',
           border: '2px solid rgba(255,255,255,0.15)'
         }} />
 
         <p style={{
-          fontSize: '20px',
-          fontWeight: 600,
-          opacity: 0.95,
-          marginBottom: '24px',
-          textShadow: '0 1px 2px rgba(0,0,0,0.1)',
+          fontSize: '24px',
+          fontWeight: 700,
+          opacity: 1,
+          marginBottom: '32px',
+          textShadow: '0 2px 8px rgba(0,0,0,0.2)',
           position: 'relative',
-          zIndex: 1
+          zIndex: 1,
+          lineHeight: 1.4
         }}>
-          全国のピックルボール情報、まるっとここに。
+          全国のピックルボール情報、<br />まるっとここに。
         </p>
 
         {/* Stats */}
-        <div style={{ display: 'flex', gap: '12px', position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'flex', gap: '16px', position: 'relative', zIndex: 1 }}>
           <div style={{
-            background: 'rgba(255,255,255,0.2)',
+            background: 'rgba(255,255,255,0.25)',
             backdropFilter: 'blur(10px)',
-            borderRadius: '16px',
-            padding: '16px 20px',
+            borderRadius: '20px',
+            padding: '20px 24px',
             border: '1px solid rgba(255,255,255,0.3)'
           }}>
-            <div style={{ fontSize: '28px', fontWeight: 700 }}>{stats.eventCount}</div>
-            <div style={{ fontSize: '13px', opacity: 0.9 }}>イベント</div>
+            <div style={{ fontSize: '32px', fontWeight: 700, textShadow: '0 1px 4px rgba(0,0,0,0.15)' }}>{stats.eventCount}</div>
+            <div style={{ fontSize: '14px', opacity: 0.95 }}>イベント</div>
           </div>
           <div style={{
-            background: 'rgba(255,255,255,0.2)',
+            background: 'rgba(255,255,255,0.25)',
             backdropFilter: 'blur(10px)',
-            borderRadius: '16px',
-            padding: '16px 20px',
+            borderRadius: '20px',
+            padding: '20px 24px',
             border: '1px solid rgba(255,255,255,0.3)'
           }}>
-            <div style={{ fontSize: '28px', fontWeight: 700 }}>{stats.teamCount}</div>
-            <div style={{ fontSize: '13px', opacity: 0.9 }}>サークル</div>
+            <div style={{ fontSize: '32px', fontWeight: 700, textShadow: '0 1px 4px rgba(0,0,0,0.15)' }}>{stats.teamCount}</div>
+            <div style={{ fontSize: '14px', opacity: 0.95 }}>サークル</div>
           </div>
         </div>
       </section>
