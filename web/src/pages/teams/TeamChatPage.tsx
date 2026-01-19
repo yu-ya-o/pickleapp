@@ -4,6 +4,7 @@ import { Send } from 'lucide-react';
 import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, Loading } from '@/components/ui';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { getDisplayName } from '@/lib/utils';
 import type { TeamChatRoom, Team } from '@/types';
 
@@ -131,23 +132,26 @@ export function TeamChatPage() {
         top: 0,
         zIndex: 30
       }}>
+        {/* Breadcrumb */}
+        <div style={{ padding: '12px 16px' }}>
+          <Breadcrumb
+            items={[
+              { label: 'サークル', href: '/teams' },
+              { label: team?.name || 'サークル', href: teamId ? `/teams/${teamId}` : undefined },
+              { label: 'チャット' }
+            ]}
+          />
+        </div>
         <div style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '12px 16px'
+          padding: '0 16px 12px'
         }}>
-          <div style={{ width: '60px' }} />
           <h1 style={{
             fontSize: '16px',
             fontWeight: 600,
-            color: '#1a1a2e',
-            textAlign: 'center',
-            flex: 1,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            padding: '0 8px'
+            color: '#1a1a2e'
           }}>
             {team?.name || 'サークルチャット'}
           </h1>

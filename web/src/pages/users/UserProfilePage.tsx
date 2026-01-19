@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, Instagram, ExternalLink } from 'lucide-react';
+import { Instagram, ExternalLink } from 'lucide-react';
 import { api } from '@/services/api';
 import type { UserProfile } from '@/services/api';
 import { Loading } from '@/components/ui';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { SEO } from '@/components/SEO';
 import { generateUserMeta, generateUserJsonLd, generateUserBreadcrumb } from '@/lib/seo';
 import { getDisplayName, getSkillLevelLabel } from '@/lib/utils';
@@ -100,36 +101,26 @@ export function UserProfilePage() {
       />
       {/* Header */}
       <header style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '12px 16px',
         background: '#FFFFFF',
         borderBottom: '1px solid #E5E5E5'
       }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            background: 'transparent',
-            border: 'none',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            color: '#667eea',
-            fontWeight: 500
-          }}
-        >
-          <ChevronLeft size={24} />
-          <span>戻る</span>
-        </button>
-        <h1 style={{
-          fontSize: '18px',
-          fontWeight: 600,
-          color: '#1a1a2e'
-        }}>
-          プロフィール
-        </h1>
-        <div style={{ width: '60px' }} />
+        {/* Breadcrumb */}
+        <div style={{ padding: '12px 16px' }}>
+          <Breadcrumb
+            items={[
+              { label: getDisplayName(user) }
+            ]}
+          />
+        </div>
+        <div style={{ padding: '0 16px 12px' }}>
+          <h1 style={{
+            fontSize: '18px',
+            fontWeight: 600,
+            color: '#1a1a2e'
+          }}>
+            {getDisplayName(user)}
+          </h1>
+        </div>
       </header>
 
       {/* Trading Card */}
