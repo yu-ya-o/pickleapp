@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Calendar, MapPin, Menu } from 'lucide-react';
 import { api } from '@/services/api';
 import { Loading } from '@/components/ui';
-import { useDrawer } from '@/components/layout/MainLayout';
+import { useDrawer } from '@/contexts/DrawerContext';
 import { formatDateTime, getDisplayName } from '@/lib/utils';
 import type { Event, TeamEvent } from '@/types';
 

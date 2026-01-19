@@ -5,7 +5,7 @@ import { api } from '@/services/api';
 import type { TeamRanking } from '@/services/api';
 import { Loading } from '@/components/ui';
 import { RankingsSEO } from '@/components/SEO';
-import { useDrawer } from '@/components/layout/MainLayout';
+import { useDrawer } from '@/contexts/DrawerContext';
 
 type RankingType = 'members' | 'events';
 

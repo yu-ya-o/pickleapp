@@ -3,7 +3,7 @@ import { GoogleLogin, type CredentialResponse } from '@react-oauth/google';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
 import { Menu } from 'lucide-react';
-import { useDrawer } from '@/components/layout/MainLayout';
+import { useDrawer } from '@/contexts/DrawerContext';
 import { LoginSEO } from '@/components/SEO';
 
 export function LoginPage() {

@@ -4,7 +4,7 @@ import { Plus, Search, Users, MapPin, Crown, Menu } from 'lucide-react';
 import { api } from '@/services/api';
 import { Loading } from '@/components/ui';
 import { TeamsListSEO } from '@/components/SEO';
-import { useDrawer } from '@/components/layout/MainLayout';
+import { useDrawer } from '@/contexts/DrawerContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { PREFECTURES } from '@/lib/prefectures';
 import type { Team } from '@/types';

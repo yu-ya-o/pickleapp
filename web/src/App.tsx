@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import { DrawerProvider } from '@/contexts/DrawerContext';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { LoadingPage } from '@/components/ui';
 import { config } from '@/lib/config';
@@ -124,7 +125,9 @@ function App() {
     <GoogleOAuthProvider clientId={config.googleClientId}>
       <BrowserRouter>
         <AuthProvider>
-          <AppRoutes />
+          <DrawerProvider>
+            <AppRoutes />
+          </DrawerProvider>
         </AuthProvider>
       </BrowserRouter>
     </GoogleOAuthProvider>

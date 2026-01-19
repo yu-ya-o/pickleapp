@@ -1,5 +1,5 @@
 import { Menu } from 'lucide-react';
-import { useDrawer } from '@/components/layout/MainLayout';
+import { useDrawer } from '@/contexts/DrawerContext';
 
 interface PageHeaderProps {
   rightElement?: React.ReactNode;

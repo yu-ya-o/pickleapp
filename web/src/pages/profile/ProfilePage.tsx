@@ -9,7 +9,7 @@ import {
 import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/services/api';
 import { Button, Modal } from '@/components/ui';
-import { useDrawer } from '@/components/layout/MainLayout';
+import { useDrawer } from '@/contexts/DrawerContext';
 import { getDisplayName, getSkillLevelLabel } from '@/lib/utils';
 import type { Team } from '@/types';
 

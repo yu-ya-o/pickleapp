@@ -4,7 +4,7 @@ import { Plus, MapPin, Calendar, Users, Search, Menu } from 'lucide-react';
 import { api } from '@/services/api';
 import { Loading } from '@/components/ui';
 import { EventsListSEO } from '@/components/SEO';
-import { useDrawer } from '@/components/layout/MainLayout';
+import { useDrawer } from '@/contexts/DrawerContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { formatDateTime, getDisplayName } from '@/lib/utils';
 import { PREFECTURES } from '@/lib/prefectures';

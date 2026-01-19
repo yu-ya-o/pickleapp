@@ -6,7 +6,7 @@ import type { UserProfile } from '@/services/api';
 import { Loading } from '@/components/ui';
 import { SEO } from '@/components/SEO';
 import { generateUserMeta, generateUserJsonLd, generateUserBreadcrumb } from '@/lib/seo';
-import { useDrawer } from '@/components/layout/MainLayout';
+import { useDrawer } from '@/contexts/DrawerContext';
 import { getDisplayName, getSkillLevelLabel } from '@/lib/utils';
 import type { Team } from '@/types';
 
