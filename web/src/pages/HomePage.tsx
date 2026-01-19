@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, Users, MapPin, ChevronRight, Flame, Clock, UserPlus, Menu } from 'lucide-react';
+import { Calendar, Users, MapPin, ChevronRight, Flame, Clock, UserPlus, Menu, Smartphone } from 'lucide-react';
 import { api } from '@/services/api';
 import { Loading } from '@/components/ui';
 import { useDrawer } from '@/components/layout/MainLayout';
@@ -228,6 +228,52 @@ export function HomePage() {
       </section>
 
       <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        {/* App Store Banner */}
+        <a
+          href="https://apps.apple.com/jp/app/picklehub-%E3%83%94%E3%83%83%E3%82%AF%E3%83%AB%E3%83%9C%E3%83%BC%E3%83%AB%E3%81%AE%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88%E3%82%B5%E3%83%BC%E3%82%AF%E3%83%AB%E6%8E%A2%E3%81%97/id6755670670"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px',
+            background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+            borderRadius: '16px',
+            padding: '16px 20px',
+            textDecoration: 'none',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+          }}
+        >
+          <div style={{
+            width: '48px',
+            height: '48px',
+            background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
+            borderRadius: '12px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0
+          }}>
+            <Smartphone size={24} style={{ color: '#FFFFFF' }} />
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: '12px', color: '#888888', marginBottom: '2px' }}>
+              iOSアプリで、もっと便利に
+            </div>
+            <div style={{ fontSize: '16px', fontWeight: 700, color: '#FFFFFF' }}>
+              App Storeでダウンロード
+            </div>
+          </div>
+          <div style={{
+            background: '#FFFFFF',
+            borderRadius: '8px',
+            padding: '8px 12px',
+            flexShrink: 0
+          }}>
+            <span style={{ fontSize: '13px', fontWeight: 600, color: '#1a1a2e' }}>入手</span>
+          </div>
+        </a>
+
         {/* 今週末のイベント */}
         <section>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
