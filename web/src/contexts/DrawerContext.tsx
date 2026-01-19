@@ -77,18 +77,18 @@ export function DrawerProvider({ children }: { children: React.ReactNode }) {
     <DrawerContext.Provider value={{ isOpen: isDrawerOpen, openDrawer, closeDrawer }}>
       {children}
 
-      {/* Mobile Drawer Overlay */}
+      {/* Drawer Overlay */}
       {isDrawerOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-50 md:hidden"
+          className="fixed inset-0 bg-black/50 z-50"
           onClick={closeDrawer}
         />
       )}
 
-      {/* Mobile Drawer Menu - 左から出る */}
+      {/* Drawer Menu - 左から出る */}
       <div
         className={cn(
-          'fixed top-0 left-0 bottom-0 w-72 bg-white z-50 transform transition-transform duration-300 ease-out md:hidden',
+          'fixed top-0 left-0 bottom-0 w-72 bg-white z-50 transform transition-transform duration-300 ease-out',
           isDrawerOpen ? 'translate-x-0' : '-translate-x-full'
         )}
         style={{ boxShadow: isDrawerOpen ? '4px 0 20px rgba(0,0,0,0.1)' : 'none' }}

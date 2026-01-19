@@ -25,7 +25,6 @@ export function PageHeader({ rightElement }: PageHeaderProps) {
           justifyContent: 'space-between',
           padding: '12px 16px',
         }}
-        className="md:hidden"
       >
         <button
           onClick={openDrawer}

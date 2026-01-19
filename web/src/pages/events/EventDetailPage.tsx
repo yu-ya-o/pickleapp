@@ -154,7 +154,7 @@ export function EventDetailPage() {
   const seoBreadcrumb = generateEventBreadcrumb(event.title, event.id);
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
+    <div style={{ minHeight: '100vh', background: '#F5F5F7', overflowX: 'hidden' }}>
       <SEO
         title={seoMeta.title}
         description={seoMeta.description}

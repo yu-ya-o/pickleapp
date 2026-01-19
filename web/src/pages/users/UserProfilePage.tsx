@@ -89,7 +89,8 @@ export function UserProfilePage() {
     <div style={{
       minHeight: '100vh',
       background: '#F5F5F7',
-      paddingBottom: '24px'
+      paddingBottom: '24px',
+      overflowX: 'hidden'
     }}>
       <SEO
         title={seoMeta.title}

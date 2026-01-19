@@ -124,7 +124,7 @@ export function TeamDetailPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 overflow-x-hidden">
       <SEO
         title={seoMeta.title}
         description={seoMeta.description}
