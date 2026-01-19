@@ -1,5 +1,5 @@
 import { Menu } from 'lucide-react';
-import { useDrawer } from '@/components/layout/MainLayout';
+import { useDrawer } from '@/contexts/DrawerContext';
 
 interface PageHeaderProps {
   rightElement?: React.ReactNode;
@@ -25,7 +25,6 @@ export function PageHeader({ rightElement }: PageHeaderProps) {
           justifyContent: 'space-between',
           padding: '12px 16px',
         }}
-        className="md:hidden"
       >
         <button
           onClick={openDrawer}

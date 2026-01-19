@@ -152,7 +152,7 @@ export function TeamEventDetailPage() {
   const seoBreadcrumb = generateTeamEventBreadcrumb(event.team.name, teamId!, event.title, eventId!);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-x-hidden">
       <SEO
         title={seoTitle}
         description={seoDescription}
