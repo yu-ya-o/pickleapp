@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-  ChevronLeft,
   ChevronRight,
   Users,
   Calendar,
@@ -13,6 +12,7 @@ import {
 import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, Loading, Modal } from '@/components/ui';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { SEO } from '@/components/SEO';
 import { generateTeamMeta, generateTeamJsonLd, generateTeamBreadcrumb } from '@/lib/seo';
 import type { Team } from '@/types';
@@ -134,16 +134,17 @@ export function TeamDetailPage() {
       />
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="flex items-center justify-between" style={{ padding: '12px 16px' }}>
-          <button
-            onClick={() => navigate('/teams')}
-            className="flex items-center text-[var(--primary)] font-medium"
-          >
-            <ChevronLeft size={24} />
-            <span>前の画面に戻る</span>
-          </button>
-          <span className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">サークル</span>
-          <div style={{ width: '60px' }} />
+        {/* Breadcrumb */}
+        <div style={{ padding: '12px 16px' }}>
+          <Breadcrumb
+            items={[
+              { label: 'サークル', href: '/teams' },
+              { label: team.name }
+            ]}
+          />
+        </div>
+        <div style={{ padding: '0 16px 12px' }}>
+          <h1 className="font-semibold text-lg">{team.name}</h1>
         </div>
       </header>
 

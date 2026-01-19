@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, Image, Instagram, Music } from 'lucide-react';
+import { Image, Instagram, Music } from 'lucide-react';
 import { api } from '@/services/api';
 import { Loading } from '@/components/ui';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import type { Team } from '@/types';
 
 const REGIONS = [
@@ -103,16 +104,18 @@ export function TeamEditPage() {
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="flex items-center justify-between" style={{ padding: '12px 16px' }}>
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center text-[var(--primary)] font-medium"
-          >
-            <ChevronLeft size={24} />
-            <span>前の画面に戻る</span>
-          </button>
-          <h1 className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">サークルを編集</h1>
-          <div style={{ width: '60px' }} />
+        {/* Breadcrumb */}
+        <div style={{ padding: '12px 16px' }}>
+          <Breadcrumb
+            items={[
+              { label: 'サークル', href: '/teams' },
+              { label: team.name, href: `/teams/${teamId}` },
+              { label: '編集' }
+            ]}
+          />
+        </div>
+        <div style={{ padding: '0 16px 12px' }}>
+          <h1 className="font-semibold text-lg">サークルを編集</h1>
         </div>
       </header>
 

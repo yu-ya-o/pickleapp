@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
-  ChevronLeft,
   Calendar,
   MapPin,
   Users,
@@ -13,6 +12,7 @@ import {
 import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, Loading, Modal, GoogleMap } from '@/components/ui';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { SEO } from '@/components/SEO';
 import { SITE_NAME, SKILL_LEVEL_LABELS, generateTeamEventBreadcrumb } from '@/lib/seo';
 import {
@@ -162,16 +162,19 @@ export function TeamEventDetailPage() {
       />
       {/* Header */}
       <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        <div className="flex items-center justify-between" style={{ padding: '12px 16px' }}>
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center text-[var(--primary)] font-medium"
-          >
-            <ChevronLeft size={24} />
-            <span>前の画面に戻る</span>
-          </button>
-          <span className="font-semibold text-lg absolute left-1/2 transform -translate-x-1/2">イベント</span>
-          <div style={{ width: '60px' }} />
+        {/* Breadcrumb */}
+        <div style={{ padding: '12px 16px' }}>
+          <Breadcrumb
+            items={[
+              { label: 'サークル', href: '/teams' },
+              { label: event.team.name, href: `/teams/${teamId}` },
+              { label: 'イベント', href: `/teams/${teamId}/events` },
+              { label: event.title }
+            ]}
+          />
+        </div>
+        <div style={{ padding: '0 16px 12px' }}>
+          <h1 className="font-semibold text-lg">{event.title}</h1>
         </div>
       </header>
 

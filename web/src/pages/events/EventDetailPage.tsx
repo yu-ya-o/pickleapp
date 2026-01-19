@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
-  ChevronLeft,
   Calendar,
   MapPin,
   Users,
@@ -14,6 +13,7 @@ import {
 import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, Loading, Modal, GoogleMap } from '@/components/ui';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { SEO } from '@/components/SEO';
 import { generateEventMeta, generateEventJsonLd, generateEventBreadcrumb } from '@/lib/seo';
 import {
@@ -204,24 +204,15 @@ export function EventDetailPage() {
         </div>
       </header>
 
-      {/* Back Link */}
-      <button
-        onClick={() => navigate(-1)}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '4px',
-          padding: '12px 16px',
-          background: 'transparent',
-          border: 'none',
-          cursor: 'pointer',
-          color: '#1a1a2e',
-          fontSize: '14px'
-        }}
-      >
-        <ChevronLeft size={20} style={{ color: '#1a1a2e' }} />
-        <span>前の画面に戻る</span>
-      </button>
+      {/* Breadcrumb */}
+      <div style={{ padding: '12px 16px' }}>
+        <Breadcrumb
+          items={[
+            { label: 'イベント', href: '/events' },
+            { label: event.title }
+          ]}
+        />
+      </div>
 
       {/* Content */}
       <div style={{ padding: '0 16px', paddingBottom: '200px' }}>
