@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, Users, MapPin, ChevronRight, Flame, Clock, UserPlus, Menu, Smartphone } from 'lucide-react';
+import { Calendar, Users, MapPin, ChevronRight, Flame, Clock, UserPlus, Menu } from 'lucide-react';
 import { api } from '@/services/api';
 import { Loading } from '@/components/ui';
 import { useDrawer } from '@/components/layout/MainLayout';
@@ -244,18 +244,16 @@ export function HomePage() {
             boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
           }}
         >
-          <div style={{
-            width: '48px',
-            height: '48px',
-            background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
-            borderRadius: '12px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0
-          }}>
-            <Smartphone size={24} style={{ color: '#FFFFFF' }} />
-          </div>
+          <img
+            src="/app-icon.jpg"
+            alt="PickleHub App"
+            style={{
+              width: '48px',
+              height: '48px',
+              borderRadius: '12px',
+              flexShrink: 0
+            }}
+          />
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: '12px', color: '#888888', marginBottom: '2px' }}>
               iOSアプリで、もっと便利に
