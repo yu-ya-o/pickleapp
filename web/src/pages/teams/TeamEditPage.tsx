@@ -4,6 +4,7 @@ import { Image, Instagram, Music } from 'lucide-react';
 import { api } from '@/services/api';
 import { Loading } from '@/components/ui';
 import { PageHeader } from '@/components/PageHeader';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import type { Team } from '@/types';
 
 const REGIONS = [
@@ -102,14 +103,18 @@ export function TeamEditPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <PageHeader
-        title="サークルを編集"
-        breadcrumbItems={[
-          { label: 'サークル', href: '/teams' },
-          { label: team.name, href: `/teams/${teamId}` },
-          { label: '編集' }
-        ]}
-      />
+      <PageHeader />
+
+      {/* Breadcrumb */}
+      <div style={{ padding: '12px 16px', background: '#F5F5F7' }}>
+        <Breadcrumb
+          items={[
+            { label: 'サークル', href: '/teams' },
+            { label: team.name, href: `/teams/${teamId}` },
+            { label: '編集' }
+          ]}
+        />
+      </div>
 
       {/* Content */}
       <div style={{ padding: '16px', paddingBottom: '120px' }}>

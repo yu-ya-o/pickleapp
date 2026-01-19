@@ -5,6 +5,7 @@ import { api } from '@/services/api';
 import type { UserProfile } from '@/services/api';
 import { Loading } from '@/components/ui';
 import { PageHeader } from '@/components/PageHeader';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { SEO } from '@/components/SEO';
 import { generateUserMeta, generateUserJsonLd, generateUserBreadcrumb } from '@/lib/seo';
 import { getDisplayName, getSkillLevelLabel } from '@/lib/utils';
@@ -99,12 +100,16 @@ export function UserProfilePage() {
         type="profile"
         jsonLd={[seoJsonLd, seoBreadcrumb]}
       />
-      <PageHeader
-        title={getDisplayName(user)}
-        breadcrumbItems={[
-          { label: getDisplayName(user) }
-        ]}
-      />
+      <PageHeader />
+
+      {/* Breadcrumb */}
+      <div style={{ padding: '12px 16px', background: '#F5F5F7' }}>
+        <Breadcrumb
+          items={[
+            { label: getDisplayName(user) }
+          ]}
+        />
+      </div>
 
       {/* Trading Card */}
       <div style={{ padding: '20px' }}>

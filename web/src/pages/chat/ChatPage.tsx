@@ -6,6 +6,7 @@ import { wsClient } from '@/services/websocket';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, Loading } from '@/components/ui';
 import { PageHeader } from '@/components/PageHeader';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { getDisplayName } from '@/lib/utils';
 import type { Message, ChatRoom, Event } from '@/types';
 
@@ -132,12 +133,6 @@ export function ChatPage() {
       flexDirection: 'column'
     }}>
       <PageHeader
-        title={event?.title || 'チャット'}
-        breadcrumbItems={[
-          { label: 'イベント', href: '/events' },
-          { label: event?.title || 'イベント', href: eventId ? `/events/${eventId}` : undefined },
-          { label: 'チャット' }
-        ]}
         rightElement={
           <button
             onClick={() => navigate(-1)}
@@ -154,6 +149,17 @@ export function ChatPage() {
           </button>
         }
       />
+
+      {/* Breadcrumb */}
+      <div style={{ padding: '12px 16px', background: '#FFFFFF', borderBottom: '1px solid #E5E5E5' }}>
+        <Breadcrumb
+          items={[
+            { label: 'イベント', href: '/events' },
+            { label: event?.title || 'イベント', href: eventId ? `/events/${eventId}` : undefined },
+            { label: 'チャット' }
+          ]}
+        />
+      </div>
 
       {/* Messages */}
       <div style={{
