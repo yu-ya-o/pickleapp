@@ -106,14 +106,6 @@ export function HomePage() {
           alignItems: 'center',
           justifyContent: 'space-between'
         }}>
-          <h1 style={{
-            fontSize: '24px',
-            fontWeight: 900,
-            fontStyle: 'italic',
-            color: '#1a1a2e'
-          }}>
-            PickleHub
-          </h1>
           <button
             onClick={openDrawer}
             className="md:hidden"
@@ -131,6 +123,15 @@ export function HomePage() {
           >
             <Menu size={20} style={{ color: '#1a1a2e' }} />
           </button>
+          <h1 style={{
+            fontSize: '24px',
+            fontWeight: 900,
+            fontStyle: 'italic',
+            color: '#1a1a2e'
+          }}>
+            PickleHub
+          </h1>
+          <div style={{ width: '36px' }} className="md:hidden" />
         </div>
       </header>
 
