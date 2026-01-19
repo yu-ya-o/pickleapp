@@ -136,7 +136,7 @@ export function MainLayout() {
           />
         )}
 
-        {/* Mobile Drawer Menu */}
+        {/* Mobile Drawer Menu - 左から出る */}
         <div
           className={cn(
             'fixed top-0 left-0 bottom-0 w-72 bg-white z-50 transform transition-transform duration-300 ease-out md:hidden',
