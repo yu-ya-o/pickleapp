@@ -136,13 +136,13 @@ export function MainLayout() {
           />
         )}
 
-        {/* Mobile Drawer Menu - 右から出る */}
+        {/* Mobile Drawer Menu - 左から出る */}
         <div
           className={cn(
-            'fixed top-0 right-0 bottom-0 w-72 bg-white z-50 transform transition-transform duration-300 ease-out md:hidden',
-            isDrawerOpen ? 'translate-x-0' : 'translate-x-full'
+            'fixed top-0 left-0 bottom-0 w-72 bg-white z-50 transform transition-transform duration-300 ease-out md:hidden',
+            isDrawerOpen ? 'translate-x-0' : '-translate-x-full'
           )}
-          style={{ boxShadow: isDrawerOpen ? '-4px 0 20px rgba(0,0,0,0.1)' : 'none' }}
+          style={{ boxShadow: isDrawerOpen ? '4px 0 20px rgba(0,0,0,0.1)' : 'none' }}
         >
           {/* Drawer Header */}
           <div style={{
