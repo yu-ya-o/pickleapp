@@ -58,26 +58,15 @@ function OptionalAuthRoute({ children }: { children: React.ReactNode }) {
 function AppRoutes() {
   return (
     <Routes>
-      {/* Public viewable routes (no auth required) */}
-      <Route path="/events/:id" element={<OptionalAuthRoute><EventDetailPage /></OptionalAuthRoute>} />
-      <Route path="/teams/:id" element={<OptionalAuthRoute><TeamDetailPage /></OptionalAuthRoute>} />
-      <Route path="/teams/:teamId/events/:eventId" element={<OptionalAuthRoute><TeamEventDetailPage /></OptionalAuthRoute>} />
-      <Route path="/users/:userId" element={<OptionalAuthRoute><UserProfilePage /></OptionalAuthRoute>} />
-
-      {/* Protected fullscreen routes (auth required) */}
+      {/* Fullscreen routes - no sidebar (chat, create/edit forms) */}
       <Route path="/events/create" element={<ProtectedRoute><CreateEventPage /></ProtectedRoute>} />
       <Route path="/events/:id/edit" element={<ProtectedRoute><CreateEventPage /></ProtectedRoute>} />
       <Route path="/events/:eventId/chat" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
-
-      <Route path="/teams/:teamId/members" element={<ProtectedRoute><TeamMembersPage /></ProtectedRoute>} />
-      <Route path="/teams/:teamId/events" element={<ProtectedRoute><TeamEventsListPage /></ProtectedRoute>} />
-      <Route path="/teams/:teamId/requests" element={<ProtectedRoute><TeamJoinRequestsPage /></ProtectedRoute>} />
-      <Route path="/teams/:teamId/edit" element={<ProtectedRoute><TeamEditPage /></ProtectedRoute>} />
       <Route path="/teams/:teamId/chat" element={<ProtectedRoute><TeamChatPage /></ProtectedRoute>} />
       <Route path="/teams/:teamId/events/create" element={<ProtectedRoute><CreateTeamEventPage /></ProtectedRoute>} />
       <Route path="/teams/:teamId/events/:eventId/edit" element={<ProtectedRoute><CreateTeamEventPage /></ProtectedRoute>} />
 
-      {/* Public routes with MainLayout (includes login page) */}
+      {/* Public routes with MainLayout */}
       <Route
         element={
           <OptionalAuthRoute>
@@ -89,9 +78,12 @@ function AppRoutes() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/events" element={<EventsListPage />} />
+        <Route path="/events/:id" element={<EventDetailPage />} />
         <Route path="/teams" element={<TeamsListPage />} />
+        <Route path="/teams/:id" element={<TeamDetailPage />} />
+        <Route path="/teams/:teamId/events/:eventId" element={<TeamEventDetailPage />} />
         <Route path="/rankings" element={<RankingsPage />} />
-        {/* Shareable profile page */}
+        <Route path="/users/:userId" element={<UserProfilePage />} />
         <Route path="/p/:userId" element={<ShareableProfilePage />} />
       </Route>
 
@@ -112,6 +104,12 @@ function AppRoutes() {
         {/* Profile */}
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/profile/edit" element={<ProfileEditPage />} />
+
+        {/* Team management */}
+        <Route path="/teams/:teamId/members" element={<TeamMembersPage />} />
+        <Route path="/teams/:teamId/events" element={<TeamEventsListPage />} />
+        <Route path="/teams/:teamId/requests" element={<TeamJoinRequestsPage />} />
+        <Route path="/teams/:teamId/edit" element={<TeamEditPage />} />
       </Route>
 
       {/* 404 */}
