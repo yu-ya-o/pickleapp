@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { api } from '@/services/api';
-import { Breadcrumb } from '@/components/Breadcrumb';
+import { PageHeader } from '@/components/PageHeader';
 import { Input, Textarea, Select, LocationAutocomplete, Loading, DateTimeInput } from '@/components/ui';
 import { PREFECTURE_OPTIONS } from '@/lib/prefectures';
 
@@ -154,21 +154,13 @@ export function CreateEventPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        {/* Breadcrumb */}
-        <div style={{ padding: '12px 16px' }}>
-          <Breadcrumb
-            items={[
-              { label: 'イベント', href: '/events' },
-              { label: isEditMode ? '編集' : isDuplicateMode ? '複製' : '新規作成' }
-            ]}
-          />
-        </div>
-        <div style={{ padding: '0 16px 12px' }}>
-          <h1 className="font-semibold text-lg">{pageTitle}</h1>
-        </div>
-      </header>
+      <PageHeader
+        title={pageTitle}
+        breadcrumbItems={[
+          { label: 'イベント', href: '/events' },
+          { label: isEditMode ? '編集' : isDuplicateMode ? '複製' : '新規作成' }
+        ]}
+      />
 
       {/* Content */}
       <div style={{ padding: '16px', paddingBottom: '100px' }}>

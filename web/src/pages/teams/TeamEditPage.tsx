@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Image, Instagram, Music } from 'lucide-react';
 import { api } from '@/services/api';
 import { Loading } from '@/components/ui';
-import { Breadcrumb } from '@/components/Breadcrumb';
+import { PageHeader } from '@/components/PageHeader';
 import type { Team } from '@/types';
 
 const REGIONS = [
@@ -102,22 +102,14 @@ export function TeamEditPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        {/* Breadcrumb */}
-        <div style={{ padding: '12px 16px' }}>
-          <Breadcrumb
-            items={[
-              { label: 'サークル', href: '/teams' },
-              { label: team.name, href: `/teams/${teamId}` },
-              { label: '編集' }
-            ]}
-          />
-        </div>
-        <div style={{ padding: '0 16px 12px' }}>
-          <h1 className="font-semibold text-lg">サークルを編集</h1>
-        </div>
-      </header>
+      <PageHeader
+        title="サークルを編集"
+        breadcrumbItems={[
+          { label: 'サークル', href: '/teams' },
+          { label: team.name, href: `/teams/${teamId}` },
+          { label: '編集' }
+        ]}
+      />
 
       {/* Content */}
       <div style={{ padding: '16px', paddingBottom: '120px' }}>

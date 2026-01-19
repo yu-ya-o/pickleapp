@@ -8,12 +8,11 @@ import {
   Edit as EditIcon,
   Copy,
   Lock,
-  Menu,
 } from 'lucide-react';
 import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, Loading, Modal, GoogleMap } from '@/components/ui';
-import { Breadcrumb } from '@/components/Breadcrumb';
+import { PageHeader } from '@/components/PageHeader';
 import { SEO } from '@/components/SEO';
 import { generateEventMeta, generateEventJsonLd, generateEventBreadcrumb } from '@/lib/seo';
 import {
@@ -162,57 +161,12 @@ export function EventDetailPage() {
         url={`/events/${event.id}`}
         jsonLd={[seoJsonLd, seoBreadcrumb]}
       />
-      {/* Header */}
-      <header style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 30,
-        background: '#FFFFFF',
-        borderBottom: '1px solid #E5E5E5',
-        padding: '12px 16px'
-      }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}>
-          <button
-            onClick={() => navigate('/events')}
-            style={{
-              background: '#F0F0F0',
-              border: 'none',
-              borderRadius: '50%',
-              width: '36px',
-              height: '36px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            <Menu size={20} style={{ color: '#1a1a2e' }} />
-          </button>
-          <span style={{
-            fontSize: '24px',
-            fontWeight: 900,
-            fontStyle: 'italic',
-            color: '#1a1a2e'
-          }}>
-            PickleHub
-          </span>
-          <div style={{ width: '36px' }} />
-        </div>
-      </header>
-
-      {/* Breadcrumb */}
-      <div style={{ padding: '12px 16px' }}>
-        <Breadcrumb
-          items={[
-            { label: 'イベント', href: '/events' },
-            { label: event.title }
-          ]}
-        />
-      </div>
+      <PageHeader
+        breadcrumbItems={[
+          { label: 'イベント', href: '/events' },
+          { label: event.title }
+        ]}
+      />
 
       {/* Content */}
       <div style={{ padding: '0 16px', paddingBottom: '200px' }}>

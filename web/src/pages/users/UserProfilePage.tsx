@@ -4,7 +4,7 @@ import { Instagram, ExternalLink } from 'lucide-react';
 import { api } from '@/services/api';
 import type { UserProfile } from '@/services/api';
 import { Loading } from '@/components/ui';
-import { Breadcrumb } from '@/components/Breadcrumb';
+import { PageHeader } from '@/components/PageHeader';
 import { SEO } from '@/components/SEO';
 import { generateUserMeta, generateUserJsonLd, generateUserBreadcrumb } from '@/lib/seo';
 import { getDisplayName, getSkillLevelLabel } from '@/lib/utils';
@@ -99,29 +99,12 @@ export function UserProfilePage() {
         type="profile"
         jsonLd={[seoJsonLd, seoBreadcrumb]}
       />
-      {/* Header */}
-      <header style={{
-        background: '#FFFFFF',
-        borderBottom: '1px solid #E5E5E5'
-      }}>
-        {/* Breadcrumb */}
-        <div style={{ padding: '12px 16px' }}>
-          <Breadcrumb
-            items={[
-              { label: getDisplayName(user) }
-            ]}
-          />
-        </div>
-        <div style={{ padding: '0 16px 12px' }}>
-          <h1 style={{
-            fontSize: '18px',
-            fontWeight: 600,
-            color: '#1a1a2e'
-          }}>
-            {getDisplayName(user)}
-          </h1>
-        </div>
-      </header>
+      <PageHeader
+        title={getDisplayName(user)}
+        breadcrumbItems={[
+          { label: getDisplayName(user) }
+        ]}
+      />
 
       {/* Trading Card */}
       <div style={{ padding: '20px' }}>

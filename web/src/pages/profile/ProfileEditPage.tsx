@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Camera, Plus, Trash2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/services/api';
-import { Breadcrumb } from '@/components/Breadcrumb';
+import { PageHeader } from '@/components/PageHeader';
 
 const regions = [
   '北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県',
@@ -149,32 +149,13 @@ export function ProfileEditPage() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
-      {/* Header */}
-      <header style={{
-        background: '#FFFFFF',
-        borderBottom: '1px solid #E5E5E5',
-        position: 'sticky',
-        top: 0,
-        zIndex: 10
-      }}>
-        {/* Breadcrumb */}
-        <div style={{ padding: '12px 16px' }}>
-          <Breadcrumb
-            items={[
-              { label: 'プロフィール', href: '/profile' },
-              { label: '編集' }
-            ]}
-          />
-        </div>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '0 16px 12px'
-        }}>
-          <h1 style={{ fontSize: '17px', fontWeight: 600, color: '#1a1a2e' }}>
-            プロフィール編集
-          </h1>
+      <PageHeader
+        title="プロフィール編集"
+        breadcrumbItems={[
+          { label: 'プロフィール', href: '/profile' },
+          { label: '編集' }
+        ]}
+        rightElement={
           <button
             onClick={handleSave}
             disabled={!isFormValid || isLoading}
@@ -183,14 +164,14 @@ export function ProfileEditPage() {
               border: 'none',
               cursor: isFormValid && !isLoading ? 'pointer' : 'not-allowed',
               color: isFormValid && !isLoading ? '#667eea' : '#9ca3af',
-              fontSize: '15px',
+              fontSize: '14px',
               fontWeight: 600
             }}
           >
             {isLoading ? '保存中...' : '保存'}
           </button>
-        </div>
-      </header>
+        }
+      />
 
       <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
         {error && (
