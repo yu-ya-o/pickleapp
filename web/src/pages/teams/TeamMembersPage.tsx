@@ -4,6 +4,7 @@ import { Crown } from 'lucide-react';
 import { api } from '@/services/api';
 import { Avatar, Loading } from '@/components/ui';
 import { PageHeader } from '@/components/PageHeader';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { useAuth } from '@/contexts/AuthContext';
 import { getDisplayName } from '@/lib/utils';
 import type { Team } from '@/types';
@@ -51,14 +52,18 @@ export function TeamMembersPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <PageHeader
-        title={`メンバー (${team.memberCount})`}
-        breadcrumbItems={[
-          { label: 'サークル', href: '/teams' },
-          { label: team.name, href: `/teams/${teamId}` },
-          { label: 'メンバー' }
-        ]}
-      />
+      <PageHeader />
+
+      {/* Breadcrumb */}
+      <div style={{ padding: '12px 16px', background: '#F5F5F7' }}>
+        <Breadcrumb
+          items={[
+            { label: 'サークル', href: '/teams' },
+            { label: team.name, href: `/teams/${teamId}` },
+            { label: 'メンバー' }
+          ]}
+        />
+      </div>
 
       {/* Members List */}
       <div style={{ padding: '16px' }}>

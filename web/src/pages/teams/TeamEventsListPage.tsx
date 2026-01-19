@@ -4,6 +4,7 @@ import { Plus, Calendar, MapPin, Users, ChevronRight } from 'lucide-react';
 import { api } from '@/services/api';
 import { Avatar, Loading } from '@/components/ui';
 import { PageHeader } from '@/components/PageHeader';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import type { Team, TeamEvent } from '@/types';
 
 export function TeamEventsListPage() {
@@ -59,12 +60,6 @@ export function TeamEventsListPage() {
   return (
     <div className="min-h-screen bg-gray-100">
       <PageHeader
-        title="サークルイベント"
-        breadcrumbItems={[
-          { label: 'サークル', href: '/teams' },
-          { label: team?.name || 'サークル', href: `/teams/${teamId}` },
-          { label: 'イベント' }
-        ]}
         rightElement={isAdmin ? (
           <button
             onClick={() => navigate(`/teams/${teamId}/events/create`)}
@@ -74,6 +69,17 @@ export function TeamEventsListPage() {
           </button>
         ) : undefined}
       />
+
+      {/* Breadcrumb */}
+      <div style={{ padding: '12px 16px', background: '#F5F5F7' }}>
+        <Breadcrumb
+          items={[
+            { label: 'サークル', href: '/teams' },
+            { label: team?.name || 'サークル', href: `/teams/${teamId}` },
+            { label: 'イベント' }
+          ]}
+        />
+      </div>
 
       {/* Events List */}
       <div style={{ padding: '0' }}>

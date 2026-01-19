@@ -5,6 +5,7 @@ import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, Loading } from '@/components/ui';
 import { PageHeader } from '@/components/PageHeader';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { getDisplayName } from '@/lib/utils';
 import type { TeamChatRoom, Team } from '@/types';
 
@@ -125,12 +126,6 @@ export function TeamChatPage() {
       flexDirection: 'column'
     }}>
       <PageHeader
-        title={team?.name || 'サークルチャット'}
-        breadcrumbItems={[
-          { label: 'サークル', href: '/teams' },
-          { label: team?.name || 'サークル', href: teamId ? `/teams/${teamId}` : undefined },
-          { label: 'チャット' }
-        ]}
         rightElement={
           <button
             onClick={() => navigate(-1)}
@@ -147,6 +142,17 @@ export function TeamChatPage() {
           </button>
         }
       />
+
+      {/* Breadcrumb */}
+      <div style={{ padding: '12px 16px', background: '#FFFFFF', borderBottom: '1px solid #E5E5E5' }}>
+        <Breadcrumb
+          items={[
+            { label: 'サークル', href: '/teams' },
+            { label: team?.name || 'サークル', href: teamId ? `/teams/${teamId}` : undefined },
+            { label: 'チャット' }
+          ]}
+        />
+      </div>
 
       {/* Messages */}
       <div style={{

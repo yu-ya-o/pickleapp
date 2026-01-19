@@ -1,15 +1,11 @@
 import { Menu } from 'lucide-react';
 import { useDrawer } from '@/components/layout/MainLayout';
-import { Breadcrumb } from '@/components/Breadcrumb';
-import type { BreadcrumbItem } from '@/components/Breadcrumb';
 
 interface PageHeaderProps {
-  title?: string;
-  breadcrumbItems?: BreadcrumbItem[];
   rightElement?: React.ReactNode;
 }
 
-export function PageHeader({ title, breadcrumbItems, rightElement }: PageHeaderProps) {
+export function PageHeader({ rightElement }: PageHeaderProps) {
   const { openDrawer } = useDrawer();
 
   return (
@@ -22,7 +18,6 @@ export function PageHeader({ title, breadcrumbItems, rightElement }: PageHeaderP
         borderBottom: '1px solid #E5E5E5',
       }}
     >
-      {/* Top row: Hamburger | PickleHub | Right element */}
       <div
         style={{
           display: 'flex',
@@ -62,20 +57,6 @@ export function PageHeader({ title, breadcrumbItems, rightElement }: PageHeaderP
           {rightElement}
         </div>
       </div>
-
-      {/* Breadcrumb row */}
-      {breadcrumbItems && breadcrumbItems.length > 0 && (
-        <div style={{ padding: '8px 16px' }}>
-          <Breadcrumb items={breadcrumbItems} />
-        </div>
-      )}
-
-      {/* Title row (optional) */}
-      {title && (
-        <div style={{ padding: '0 16px 12px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 600, color: '#1a1a2e' }}>{title}</h2>
-        </div>
-      )}
     </header>
   );
 }

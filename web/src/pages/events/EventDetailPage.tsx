@@ -13,6 +13,7 @@ import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, Loading, Modal, GoogleMap } from '@/components/ui';
 import { PageHeader } from '@/components/PageHeader';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { SEO } from '@/components/SEO';
 import { generateEventMeta, generateEventJsonLd, generateEventBreadcrumb } from '@/lib/seo';
 import {
@@ -161,12 +162,17 @@ export function EventDetailPage() {
         url={`/events/${event.id}`}
         jsonLd={[seoJsonLd, seoBreadcrumb]}
       />
-      <PageHeader
-        breadcrumbItems={[
-          { label: 'イベント', href: '/events' },
-          { label: event.title }
-        ]}
-      />
+      <PageHeader />
+
+      {/* Breadcrumb */}
+      <div style={{ padding: '12px 16px', background: '#F5F5F7' }}>
+        <Breadcrumb
+          items={[
+            { label: 'イベント', href: '/events' },
+            { label: event.title }
+          ]}
+        />
+      </div>
 
       {/* Content */}
       <div style={{ padding: '0 16px', paddingBottom: '200px' }}>

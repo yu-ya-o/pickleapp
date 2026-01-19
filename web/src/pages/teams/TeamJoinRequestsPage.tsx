@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '@/services/api';
 import { Avatar, Loading } from '@/components/ui';
 import { PageHeader } from '@/components/PageHeader';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { getDisplayName } from '@/lib/utils';
 
 interface JoinRequest {
@@ -80,14 +81,18 @@ export function TeamJoinRequestsPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <PageHeader
-        title="参加リクエスト"
-        breadcrumbItems={[
-          { label: 'サークル', href: '/teams' },
-          { label: 'サークル', href: `/teams/${teamId}` },
-          { label: '参加リクエスト' }
-        ]}
-      />
+      <PageHeader />
+
+      {/* Breadcrumb */}
+      <div style={{ padding: '12px 16px', background: '#F5F5F7' }}>
+        <Breadcrumb
+          items={[
+            { label: 'サークル', href: '/teams' },
+            { label: 'サークル', href: `/teams/${teamId}` },
+            { label: '参加リクエスト' }
+          ]}
+        />
+      </div>
 
       {/* Requests List */}
       <div style={{ padding: '16px' }}>

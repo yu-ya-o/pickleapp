@@ -13,6 +13,7 @@ import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, Loading, Modal, GoogleMap } from '@/components/ui';
 import { PageHeader } from '@/components/PageHeader';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { SEO } from '@/components/SEO';
 import { SITE_NAME, SKILL_LEVEL_LABELS, generateTeamEventBreadcrumb } from '@/lib/seo';
 import {
@@ -160,15 +161,19 @@ export function TeamEventDetailPage() {
         url={`/teams/${teamId}/events/${eventId}`}
         jsonLd={seoBreadcrumb}
       />
-      <PageHeader
-        title={event.title}
-        breadcrumbItems={[
-          { label: 'サークル', href: '/teams' },
-          { label: event.team.name, href: `/teams/${teamId}` },
-          { label: 'イベント', href: `/teams/${teamId}/events` },
-          { label: event.title }
-        ]}
-      />
+      <PageHeader />
+
+      {/* Breadcrumb */}
+      <div style={{ padding: '12px 16px', background: '#FFFFFF' }}>
+        <Breadcrumb
+          items={[
+            { label: 'サークル', href: '/teams' },
+            { label: event.team.name, href: `/teams/${teamId}` },
+            { label: 'イベント', href: `/teams/${teamId}/events` },
+            { label: event.title }
+          ]}
+        />
+      </div>
 
       {/* Content */}
       <div style={{ paddingBottom: '200px' }}>

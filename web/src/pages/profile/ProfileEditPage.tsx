@@ -4,6 +4,7 @@ import { Camera, Plus, Trash2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/services/api';
 import { PageHeader } from '@/components/PageHeader';
+import { Breadcrumb } from '@/components/Breadcrumb';
 
 const regions = [
   '北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県',
@@ -150,11 +151,6 @@ export function ProfileEditPage() {
   return (
     <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
       <PageHeader
-        title="プロフィール編集"
-        breadcrumbItems={[
-          { label: 'プロフィール', href: '/profile' },
-          { label: '編集' }
-        ]}
         rightElement={
           <button
             onClick={handleSave}
@@ -172,6 +168,16 @@ export function ProfileEditPage() {
           </button>
         }
       />
+
+      {/* Breadcrumb */}
+      <div style={{ padding: '12px 16px', background: '#F5F5F7' }}>
+        <Breadcrumb
+          items={[
+            { label: 'プロフィール', href: '/profile' },
+            { label: '編集' }
+          ]}
+        />
+      </div>
 
       <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
         {error && (
