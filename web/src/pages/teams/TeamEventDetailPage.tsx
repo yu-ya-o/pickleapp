@@ -12,7 +12,7 @@ import {
 import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, Loading, Modal, GoogleMap } from '@/components/ui';
-import { Breadcrumb } from '@/components/Breadcrumb';
+import { PageHeader } from '@/components/PageHeader';
 import { SEO } from '@/components/SEO';
 import { SITE_NAME, SKILL_LEVEL_LABELS, generateTeamEventBreadcrumb } from '@/lib/seo';
 import {
@@ -160,23 +160,15 @@ export function TeamEventDetailPage() {
         url={`/teams/${teamId}/events/${eventId}`}
         jsonLd={seoBreadcrumb}
       />
-      {/* Header */}
-      <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        {/* Breadcrumb */}
-        <div style={{ padding: '12px 16px' }}>
-          <Breadcrumb
-            items={[
-              { label: 'サークル', href: '/teams' },
-              { label: event.team.name, href: `/teams/${teamId}` },
-              { label: 'イベント', href: `/teams/${teamId}/events` },
-              { label: event.title }
-            ]}
-          />
-        </div>
-        <div style={{ padding: '0 16px 12px' }}>
-          <h1 className="font-semibold text-lg">{event.title}</h1>
-        </div>
-      </header>
+      <PageHeader
+        title={event.title}
+        breadcrumbItems={[
+          { label: 'サークル', href: '/teams' },
+          { label: event.team.name, href: `/teams/${teamId}` },
+          { label: 'イベント', href: `/teams/${teamId}/events` },
+          { label: event.title }
+        ]}
+      />
 
       {/* Content */}
       <div style={{ paddingBottom: '200px' }}>

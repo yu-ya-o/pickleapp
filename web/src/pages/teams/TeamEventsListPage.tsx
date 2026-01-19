@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Plus, Calendar, MapPin, Users, ChevronRight } from 'lucide-react';
 import { api } from '@/services/api';
 import { Avatar, Loading } from '@/components/ui';
-import { Breadcrumb } from '@/components/Breadcrumb';
+import { PageHeader } from '@/components/PageHeader';
 import type { Team, TeamEvent } from '@/types';
 
 export function TeamEventsListPage() {
@@ -58,30 +58,22 @@ export function TeamEventsListPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        {/* Breadcrumb */}
-        <div style={{ padding: '12px 16px' }}>
-          <Breadcrumb
-            items={[
-              { label: 'サークル', href: '/teams' },
-              { label: team?.name || 'サークル', href: `/teams/${teamId}` },
-              { label: 'イベント' }
-            ]}
-          />
-        </div>
-        <div className="flex items-center justify-between" style={{ padding: '0 16px 12px' }}>
-          <h1 className="font-semibold text-lg">サークルイベント</h1>
-          {isAdmin && (
-            <button
-              onClick={() => navigate(`/teams/${teamId}/events/create`)}
-              className="text-[var(--primary)]"
-            >
-              <Plus size={24} />
-            </button>
-          )}
-        </div>
-      </header>
+      <PageHeader
+        title="サークルイベント"
+        breadcrumbItems={[
+          { label: 'サークル', href: '/teams' },
+          { label: team?.name || 'サークル', href: `/teams/${teamId}` },
+          { label: 'イベント' }
+        ]}
+        rightElement={isAdmin ? (
+          <button
+            onClick={() => navigate(`/teams/${teamId}/events/create`)}
+            className="text-[var(--primary)]"
+          >
+            <Plus size={24} />
+          </button>
+        ) : undefined}
+      />
 
       {/* Events List */}
       <div style={{ padding: '0' }}>

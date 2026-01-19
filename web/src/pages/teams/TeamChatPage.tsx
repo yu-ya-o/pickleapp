@@ -4,7 +4,7 @@ import { Send } from 'lucide-react';
 import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, Loading } from '@/components/ui';
-import { Breadcrumb } from '@/components/Breadcrumb';
+import { PageHeader } from '@/components/PageHeader';
 import { getDisplayName } from '@/lib/utils';
 import type { TeamChatRoom, Team } from '@/types';
 
@@ -124,53 +124,29 @@ export function TeamChatPage() {
       display: 'flex',
       flexDirection: 'column'
     }}>
-      {/* Header */}
-      <header style={{
-        background: '#FFFFFF',
-        borderBottom: '1px solid #E5E5E5',
-        position: 'sticky',
-        top: 0,
-        zIndex: 30
-      }}>
-        {/* Breadcrumb */}
-        <div style={{ padding: '12px 16px' }}>
-          <Breadcrumb
-            items={[
-              { label: 'サークル', href: '/teams' },
-              { label: team?.name || 'サークル', href: teamId ? `/teams/${teamId}` : undefined },
-              { label: 'チャット' }
-            ]}
-          />
-        </div>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '0 16px 12px'
-        }}>
-          <h1 style={{
-            fontSize: '16px',
-            fontWeight: 600,
-            color: '#1a1a2e'
-          }}>
-            {team?.name || 'サークルチャット'}
-          </h1>
+      <PageHeader
+        title={team?.name || 'サークルチャット'}
+        breadcrumbItems={[
+          { label: 'サークル', href: '/teams' },
+          { label: team?.name || 'サークル', href: teamId ? `/teams/${teamId}` : undefined },
+          { label: 'チャット' }
+        ]}
+        rightElement={
           <button
             onClick={() => navigate(-1)}
             style={{
               background: 'transparent',
               border: 'none',
               color: '#1DA1F2',
-              fontSize: '16px',
+              fontSize: '14px',
               fontWeight: 500,
-              cursor: 'pointer',
-              padding: '4px 8px'
+              cursor: 'pointer'
             }}
           >
             完了
           </button>
-        </div>
-      </header>
+        }
+      />
 
       {/* Messages */}
       <div style={{

@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Crown } from 'lucide-react';
 import { api } from '@/services/api';
 import { Avatar, Loading } from '@/components/ui';
-import { Breadcrumb } from '@/components/Breadcrumb';
+import { PageHeader } from '@/components/PageHeader';
 import { useAuth } from '@/contexts/AuthContext';
 import { getDisplayName } from '@/lib/utils';
 import type { Team } from '@/types';
@@ -51,22 +51,14 @@ export function TeamMembersPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        {/* Breadcrumb */}
-        <div style={{ padding: '12px 16px' }}>
-          <Breadcrumb
-            items={[
-              { label: 'サークル', href: '/teams' },
-              { label: team.name, href: `/teams/${teamId}` },
-              { label: 'メンバー' }
-            ]}
-          />
-        </div>
-        <div style={{ padding: '0 16px 12px' }}>
-          <h1 className="font-semibold text-lg">メンバー ({team.memberCount})</h1>
-        </div>
-      </header>
+      <PageHeader
+        title={`メンバー (${team.memberCount})`}
+        breadcrumbItems={[
+          { label: 'サークル', href: '/teams' },
+          { label: team.name, href: `/teams/${teamId}` },
+          { label: 'メンバー' }
+        ]}
+      />
 
       {/* Members List */}
       <div style={{ padding: '16px' }}>

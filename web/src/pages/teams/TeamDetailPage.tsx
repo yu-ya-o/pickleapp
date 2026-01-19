@@ -12,7 +12,7 @@ import {
 import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, Loading, Modal } from '@/components/ui';
-import { Breadcrumb } from '@/components/Breadcrumb';
+import { PageHeader } from '@/components/PageHeader';
 import { SEO } from '@/components/SEO';
 import { generateTeamMeta, generateTeamJsonLd, generateTeamBreadcrumb } from '@/lib/seo';
 import type { Team } from '@/types';
@@ -132,21 +132,13 @@ export function TeamDetailPage() {
         url={`/teams/${team.id}`}
         jsonLd={[seoJsonLd, seoBreadcrumb]}
       />
-      {/* Header */}
-      <header className="bg-white border-b border-[var(--border)] sticky top-0 z-30">
-        {/* Breadcrumb */}
-        <div style={{ padding: '12px 16px' }}>
-          <Breadcrumb
-            items={[
-              { label: 'サークル', href: '/teams' },
-              { label: team.name }
-            ]}
-          />
-        </div>
-        <div style={{ padding: '0 16px 12px' }}>
-          <h1 className="font-semibold text-lg">{team.name}</h1>
-        </div>
-      </header>
+      <PageHeader
+        title={team.name}
+        breadcrumbItems={[
+          { label: 'サークル', href: '/teams' },
+          { label: team.name }
+        ]}
+      />
 
       {/* Header Image */}
       {team.headerImage && (
