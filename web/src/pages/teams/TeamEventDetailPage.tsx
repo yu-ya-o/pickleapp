@@ -167,9 +167,7 @@ export function TeamEventDetailPage() {
       <div style={{ padding: '12px 16px', background: '#FFFFFF' }}>
         <Breadcrumb
           items={[
-            { label: 'サークル', href: '/teams' },
-            { label: event.team.name, href: `/teams/${teamId}` },
-            { label: 'イベント', href: `/teams/${teamId}/events` },
+            { label: 'イベント', href: '/events' },
             { label: event.title }
           ]}
         />
