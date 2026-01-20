@@ -146,7 +146,7 @@ export function HomePage() {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         color: '#FFFFFF',
-        padding: '40px 20px 48px',
+        padding: '40px 20px 100px',
         position: 'relative',
         overflow: 'hidden',
         minHeight: '200px'
