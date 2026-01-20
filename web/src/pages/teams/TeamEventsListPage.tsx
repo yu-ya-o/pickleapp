@@ -96,7 +96,7 @@ export function TeamEventsListPage() {
             return (
               <Link
                 key={event.id}
-                to={`/teams/${teamId}/events/${event.id}`}
+                to={`/teams/${teamId}/events/${event.id}?from=team`}
                 className="flex items-center gap-3 bg-white border-b border-gray-100"
                 style={{ padding: '12px 16px' }}
               >

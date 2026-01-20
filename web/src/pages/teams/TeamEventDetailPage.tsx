@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom';
 import {
   Calendar,
   MapPin,
@@ -26,6 +26,8 @@ import type { TeamEvent } from '@/types';
 export function TeamEventDetailPage() {
   const { teamId, eventId } = useParams<{ teamId: string; eventId: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const fromTeam = searchParams.get('from') === 'team';
   const { user, isAuthenticated } = useAuth();
   const [event, setEvent] = useState<TeamEvent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -166,7 +168,11 @@ export function TeamEventDetailPage() {
       {/* Breadcrumb */}
       <div style={{ padding: '12px 16px', background: '#FFFFFF' }}>
         <Breadcrumb
-          items={[
+          items={fromTeam ? [
+            { label: 'サークル', href: '/teams' },
+            { label: event.team.name, href: `/teams/${teamId}` },
+            { label: event.title }
+          ] : [
             { label: 'イベント', href: '/events' },
             { label: event.title }
           ]}
