@@ -208,26 +208,46 @@ export function HomePage() {
         </p>
 
         {/* Stats */}
-        <div style={{ display: 'flex', gap: '12px', position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'flex', gap: '10px', position: 'relative', zIndex: 1 }}>
           <div style={{
             background: '#FFFFFF',
-            borderRadius: '14px',
-            padding: '14px 20px',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            borderRadius: '12px',
+            padding: '12px 18px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
             textAlign: 'center'
           }}>
-            <div style={{ fontSize: '28px', fontWeight: 700, color: '#1a1a2e', lineHeight: 1 }}>{stats.eventCount}</div>
-            <div style={{ fontSize: '12px', color: '#666666', marginTop: '4px' }}>イベント</div>
+            <div style={{
+              fontSize: '24px',
+              fontWeight: 700,
+              background: 'linear-gradient(135deg, #65A30D 0%, #3f6212 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              lineHeight: 1
+            }}>
+              {stats.eventCount}
+            </div>
+            <div style={{ fontSize: '11px', color: '#666666', fontWeight: 500, marginTop: '4px' }}>累計イベント</div>
           </div>
           <div style={{
             background: '#FFFFFF',
-            borderRadius: '14px',
-            padding: '14px 20px',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            borderRadius: '12px',
+            padding: '12px 18px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
             textAlign: 'center'
           }}>
-            <div style={{ fontSize: '28px', fontWeight: 700, color: '#1a1a2e', lineHeight: 1 }}>{stats.teamCount}</div>
-            <div style={{ fontSize: '12px', color: '#666666', marginTop: '4px' }}>サークル</div>
+            <div style={{
+              fontSize: '24px',
+              fontWeight: 700,
+              background: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              lineHeight: 1
+            }}>
+              {stats.teamCount}
+            </div>
+            <div style={{ fontSize: '11px', color: '#666666', fontWeight: 500, marginTop: '4px' }}>サークル</div>
           </div>
         </div>
       </section>
