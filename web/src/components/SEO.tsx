@@ -46,7 +46,7 @@ export function SEO({
       {keywords && <meta name="keywords" content={keywords} />}
       <link rel="canonical" href={canonicalUrl} />
 
-      {noindex && <meta name="robots" content="noindex, nofollow" />}
+      <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
 
       {/* Open Graph Tags */}
       <meta property="og:site_name" content={SITE_NAME} />
