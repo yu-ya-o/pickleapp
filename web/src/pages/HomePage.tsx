@@ -208,26 +208,72 @@ export function HomePage() {
         </p>
 
         {/* Stats */}
-        <div style={{ display: 'flex', gap: '16px', position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'flex', gap: '12px', position: 'relative', zIndex: 1 }}>
           <div style={{
-            background: 'rgba(255,255,255,0.25)',
-            backdropFilter: 'blur(10px)',
-            borderRadius: '20px',
-            padding: '20px 24px',
-            border: '1px solid rgba(255,255,255,0.3)'
+            flex: 1,
+            background: '#FFFFFF',
+            borderRadius: '16px',
+            padding: '20px',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+            textAlign: 'center'
           }}>
-            <div style={{ fontSize: '32px', fontWeight: 700, textShadow: '0 1px 4px rgba(0,0,0,0.15)' }}>{stats.eventCount}</div>
-            <div style={{ fontSize: '14px', opacity: 0.95 }}>累計イベント</div>
+            <div style={{
+              width: '48px',
+              height: '48px',
+              borderRadius: '12px',
+              background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 12px'
+            }}>
+              <Calendar size={24} style={{ color: '#FFFFFF' }} />
+            </div>
+            <div style={{
+              fontSize: '36px',
+              fontWeight: 800,
+              background: 'linear-gradient(135deg, #65A30D 0%, #3f6212 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              lineHeight: 1.1
+            }}>
+              {stats.eventCount}
+            </div>
+            <div style={{ fontSize: '13px', color: '#666666', fontWeight: 500, marginTop: '4px' }}>累計イベント</div>
           </div>
           <div style={{
-            background: 'rgba(255,255,255,0.25)',
-            backdropFilter: 'blur(10px)',
-            borderRadius: '20px',
-            padding: '20px 24px',
-            border: '1px solid rgba(255,255,255,0.3)'
+            flex: 1,
+            background: '#FFFFFF',
+            borderRadius: '16px',
+            padding: '20px',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+            textAlign: 'center'
           }}>
-            <div style={{ fontSize: '32px', fontWeight: 700, textShadow: '0 1px 4px rgba(0,0,0,0.15)' }}>{stats.teamCount}</div>
-            <div style={{ fontSize: '14px', opacity: 0.95 }}>サークル</div>
+            <div style={{
+              width: '48px',
+              height: '48px',
+              borderRadius: '12px',
+              background: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 12px'
+            }}>
+              <Users size={24} style={{ color: '#FFFFFF' }} />
+            </div>
+            <div style={{
+              fontSize: '36px',
+              fontWeight: 800,
+              background: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              lineHeight: 1.1
+            }}>
+              {stats.teamCount}
+            </div>
+            <div style={{ fontSize: '13px', color: '#666666', fontWeight: 500, marginTop: '4px' }}>サークル</div>
           </div>
         </div>
       </section>
