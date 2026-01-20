@@ -10,5 +10,5 @@ Disallow: /*/chat
 Disallow: /*/edit
 Disallow: /*/create
 
-# Sitemap (served from backend API)
-Sitemap: https://pickleapp.onrender.com/sitemap.xml
+# Sitemap
+Sitemap: https://picklehub.jp/sitemap.xml
