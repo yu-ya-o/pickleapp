@@ -208,30 +208,26 @@ export function HomePage() {
         </p>
 
         {/* Stats */}
-        <div style={{ display: 'flex', gap: '10px', position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'flex', gap: '12px', position: 'relative', zIndex: 1 }}>
           <div style={{
             background: '#FFFFFF',
-            borderRadius: '24px',
-            padding: '10px 18px',
+            borderRadius: '14px',
+            padding: '14px 20px',
             boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px'
+            textAlign: 'center'
           }}>
-            <span style={{ fontSize: '20px', fontWeight: 700, color: '#1a1a2e' }}>{stats.eventCount}</span>
-            <span style={{ fontSize: '13px', color: '#666666' }}>イベント</span>
+            <div style={{ fontSize: '28px', fontWeight: 700, color: '#1a1a2e', lineHeight: 1 }}>{stats.eventCount}</div>
+            <div style={{ fontSize: '12px', color: '#666666', marginTop: '4px' }}>イベント</div>
           </div>
           <div style={{
             background: '#FFFFFF',
-            borderRadius: '24px',
-            padding: '10px 18px',
+            borderRadius: '14px',
+            padding: '14px 20px',
             boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px'
+            textAlign: 'center'
           }}>
-            <span style={{ fontSize: '20px', fontWeight: 700, color: '#1a1a2e' }}>{stats.teamCount}</span>
-            <span style={{ fontSize: '13px', color: '#666666' }}>サークル</span>
+            <div style={{ fontSize: '28px', fontWeight: 700, color: '#1a1a2e', lineHeight: 1 }}>{stats.teamCount}</div>
+            <div style={{ fontSize: '12px', color: '#666666', marginTop: '4px' }}>サークル</div>
           </div>
         </div>
       </section>
