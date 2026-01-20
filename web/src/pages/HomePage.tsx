@@ -40,10 +40,12 @@ export function HomePage() {
   const loadHomeData = async () => {
     try {
       setIsLoading(true);
-      const [allEvents, publicTeamEvents, allTeams] = await Promise.all([
+      const [allEvents, publicTeamEvents, allTeams, allEventsTotal, allTeamEventsTotal] = await Promise.all([
         api.getEvents({ status: 'active', upcoming: true }),
         api.getPublicTeamEvents(true),
         api.getTeams({}),
+        api.getEvents({}), // 過去含む全イベント
+        api.getPublicTeamEvents(false), // 過去含む全チームイベント
       ]);
 
       // すべてのイベントを統合
@@ -71,8 +73,11 @@ export function HomePage() {
       const publicTeams = allTeams.filter((t) => t.visibility === 'public');
       setRecruitingTeams(publicTeams.slice(0, 5));
 
+      // 累計イベント数（過去含む）
+      const totalEventCount = allEventsTotal.length + allTeamEventsTotal.length;
+
       setStats({
-        eventCount: combinedEvents.length,
+        eventCount: totalEventCount,
         teamCount: allTeams.length,
       });
     } catch (error) {
@@ -212,7 +217,7 @@ export function HomePage() {
             border: '1px solid rgba(255,255,255,0.3)'
           }}>
             <div style={{ fontSize: '32px', fontWeight: 700, textShadow: '0 1px 4px rgba(0,0,0,0.15)' }}>{stats.eventCount}</div>
-            <div style={{ fontSize: '14px', opacity: 0.95 }}>イベント</div>
+            <div style={{ fontSize: '14px', opacity: 0.95 }}>累計イベント</div>
           </div>
           <div style={{
             background: 'rgba(255,255,255,0.25)',
