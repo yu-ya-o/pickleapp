@@ -130,7 +130,7 @@ export function TeamsListPage() {
             padding: '8px 12px',
             minWidth: '100px'
           }}>
-            <MapPin size={16} style={{ color: '#667eea', flexShrink: 0 }} />
+            <MapPin size={16} style={{ color: '#65A30D', flexShrink: 0 }} />
             <select
               value={selectedRegion}
               onChange={(e) => setSelectedRegion(e.target.value)}
@@ -250,11 +250,11 @@ export function TeamsListPage() {
             right: '16px',
             width: '56px',
             height: '56px',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
             color: '#FFFFFF',
             borderRadius: '50%',
             border: 'none',
-            boxShadow: '0 4px 20px rgba(102, 126, 234, 0.4)',
+            boxShadow: '0 4px 20px rgba(101, 163, 13, 0.4)',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -291,7 +291,7 @@ function TeamCard({ team, isMyTeam }: { team: Team; isMyTeam?: boolean }) {
             height: '50px',
             borderRadius: '12px',
             overflow: 'hidden',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -339,7 +339,7 @@ function TeamCard({ team, isMyTeam }: { team: Team; isMyTeam?: boolean }) {
 
           {/* Member count */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Users size={14} style={{ color: '#667eea' }} />
+            <Users size={14} style={{ color: '#65A30D' }} />
             <span style={{ fontSize: '13px', color: '#888888' }}>{team.memberCount}人</span>
           </div>
         </div>

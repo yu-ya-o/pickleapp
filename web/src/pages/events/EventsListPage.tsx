@@ -201,7 +201,7 @@ export function EventsListPage() {
             padding: '8px 12px',
             minWidth: '100px'
           }}>
-            <MapPin size={16} style={{ color: '#667eea', flexShrink: 0 }} />
+            <MapPin size={16} style={{ color: '#65A30D', flexShrink: 0 }} />
             <select
               value={selectedRegion}
               onChange={(e) => setSelectedRegion(e.target.value)}
@@ -269,7 +269,7 @@ export function EventsListPage() {
               style={{
                 marginTop: '16px',
                 padding: '10px 24px',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
                 color: '#FFFFFF',
                 border: 'none',
                 borderRadius: '8px',
@@ -325,11 +325,11 @@ export function EventsListPage() {
             right: '16px',
             width: '56px',
             height: '56px',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
             color: '#FFFFFF',
             borderRadius: '50%',
             border: 'none',
-            boxShadow: '0 4px 20px rgba(102, 126, 234, 0.4)',
+            boxShadow: '0 4px 20px rgba(101, 163, 13, 0.4)',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -378,7 +378,7 @@ function EventCard({ event }: { event: Event | TeamEvent }) {
             height: '50px',
             borderRadius: '12px',
             overflow: 'hidden',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -395,7 +395,7 @@ function EventCard({ event }: { event: Event | TeamEvent }) {
         <div style={{ flex: 1, minWidth: 0 }}>
           {/* Date */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-            <Calendar size={14} style={{ color: '#667eea' }} />
+            <Calendar size={14} style={{ color: '#65A30D' }} />
             <span style={{ fontSize: '13px', color: '#888888' }}>
               {formatDateTime(event.startTime)}
             </span>
@@ -416,7 +416,7 @@ function EventCard({ event }: { event: Event | TeamEvent }) {
 
           {/* Location */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <MapPin size={14} style={{ color: '#667eea' }} />
+            <MapPin size={14} style={{ color: '#65A30D' }} />
             <span style={{
               fontSize: '13px',
               color: '#888888',
@@ -464,7 +464,7 @@ function TeamEventCard({ event }: { event: TeamEvent }) {
             height: '50px',
             borderRadius: '12px',
             overflow: 'hidden',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -481,7 +481,7 @@ function TeamEventCard({ event }: { event: TeamEvent }) {
         <div style={{ flex: 1, minWidth: 0 }}>
           {/* Date */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-            <Calendar size={14} style={{ color: '#667eea' }} />
+            <Calendar size={14} style={{ color: '#65A30D' }} />
             <span style={{ fontSize: '13px', color: '#888888' }}>
               {formatDateTime(event.startTime)}
             </span>
@@ -502,7 +502,7 @@ function TeamEventCard({ event }: { event: TeamEvent }) {
 
           {/* Location */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <MapPin size={14} style={{ color: '#667eea' }} />
+            <MapPin size={14} style={{ color: '#65A30D' }} />
             <span style={{
               fontSize: '13px',
               color: '#888888',

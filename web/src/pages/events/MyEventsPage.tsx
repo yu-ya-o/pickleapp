@@ -190,7 +190,7 @@ export function MyEventsPage() {
               style={{
                 marginTop: '16px',
                 padding: '10px 24px',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
                 color: '#FFFFFF',
                 border: 'none',
                 borderRadius: '8px',
@@ -259,7 +259,7 @@ function MyEventCard({ event }: { event: MyEvent }) {
             height: '50px',
             borderRadius: '12px',
             overflow: 'hidden',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -276,7 +276,7 @@ function MyEventCard({ event }: { event: MyEvent }) {
         <div style={{ flex: 1, minWidth: 0 }}>
           {/* Date */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-            <Calendar size={14} style={{ color: '#667eea' }} />
+            <Calendar size={14} style={{ color: '#65A30D' }} />
             <span style={{ fontSize: '13px', color: '#888888' }}>
               {formatDateTime(data.startTime)}
             </span>
@@ -297,7 +297,7 @@ function MyEventCard({ event }: { event: MyEvent }) {
 
           {/* Location */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <MapPin size={14} style={{ color: '#667eea' }} />
+            <MapPin size={14} style={{ color: '#65A30D' }} />
             <span style={{
               fontSize: '13px',
               color: '#888888',
