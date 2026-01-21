@@ -324,7 +324,7 @@ export function TeamDetailPage() {
               borderRadius: '12px',
               border: 'none',
               cursor: 'pointer',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
               color: 'white',
               padding: '14px'
             }}

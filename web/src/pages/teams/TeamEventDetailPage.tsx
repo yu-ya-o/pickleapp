@@ -129,7 +129,7 @@ export function TeamEventDetailPage() {
           style={{
             marginTop: '16px',
             padding: '10px 24px',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
             color: '#FFFFFF',
             border: 'none',
             borderRadius: '8px',
@@ -333,7 +333,7 @@ export function TeamEventDetailPage() {
                 disabled={isFull}
                 className="w-full font-medium rounded-xl disabled:opacity-50"
                 style={{
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
                   color: '#FFFFFF',
                   padding: '14px',
                   boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
@@ -381,7 +381,7 @@ export function TeamEventDetailPage() {
                         onClick={() => setShowJoinModal(true)}
                         disabled={isActionLoading || isFull}
                         className="w-full font-medium rounded-xl disabled:opacity-50"
-                        style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: '#FFFFFF', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
+                        style={{ background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)', color: '#FFFFFF', padding: '14px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
                       >
                         {isFull ? '満員' : '参加する'}
                       </button>
@@ -531,7 +531,7 @@ export function TeamEventDetailPage() {
               borderRadius: '12px',
               border: 'none',
               cursor: 'pointer',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
               color: 'white',
               padding: '14px'
             }}

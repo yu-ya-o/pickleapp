@@ -144,8 +144,8 @@ export function DrawerProvider({ children }: { children: React.ReactNode }) {
                   borderRadius: '12px',
                   textDecoration: 'none',
                   marginBottom: '4px',
-                  background: isActive ? 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)' : 'transparent',
-                  color: isActive ? '#667eea' : '#1a1a2e',
+                  background: isActive ? 'linear-gradient(135deg, rgba(163, 230, 53, 0.1) 0%, rgba(101, 163, 13, 0.1) 100%)' : 'transparent',
+                  color: isActive ? '#65A30D' : '#1a1a2e',
                   fontWeight: isActive ? 600 : 400,
                   fontSize: '15px',
                   transition: 'background 0.2s'

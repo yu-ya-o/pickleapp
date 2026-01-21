@@ -130,7 +130,7 @@ export function EventDetailPage() {
           style={{
             marginTop: '16px',
             padding: '10px 24px',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
             color: '#FFFFFF',
             border: 'none',
             borderRadius: '8px',
@@ -204,13 +204,13 @@ export function EventDetailPage() {
           <div style={{ padding: '16px', borderTop: '1px solid #E5E5E5' }}>
             {/* Date/Time */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-              <Calendar size={20} style={{ color: '#667eea' }} />
+              <Calendar size={20} style={{ color: '#65A30D' }} />
               <span style={{ color: '#1a1a2e' }}>{formatDateTime(event.startTime)} 〜 {formatDateTime(event.endTime).split(' ')[1]}</span>
             </div>
 
             {/* Region */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-              <MapPin size={20} style={{ color: '#667eea' }} />
+              <MapPin size={20} style={{ color: '#65A30D' }} />
               <span style={{ color: '#1a1a2e' }}>{event.region}</span>
             </div>
 
@@ -239,7 +239,7 @@ export function EventDetailPage() {
                   href={`https://www.google.com/maps/search/?api=1&query=${event.latitude},${event.longitude}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#667eea', marginTop: '8px', textDecoration: 'none' }}
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#65A30D', marginTop: '8px', textDecoration: 'none' }}
                 >
                   <span>📍</span>
                   <span>タップしてGoogle Mapsで開く</span>
@@ -249,8 +249,8 @@ export function EventDetailPage() {
 
             {/* Participants */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-              <Users size={20} style={{ color: '#667eea' }} />
-              <span style={{ color: '#667eea', fontWeight: 500 }}>
+              <Users size={20} style={{ color: '#65A30D' }} />
+              <span style={{ color: '#65A30D', fontWeight: 500 }}>
                 {currentParticipants}/{event.maxParticipants}人
               </span>
             </div>
@@ -323,7 +323,7 @@ export function EventDetailPage() {
                 borderRadius: '12px',
                 border: 'none',
                 cursor: 'pointer',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
                 color: '#FFFFFF',
                 padding: '14px',
                 boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
@@ -348,7 +348,7 @@ export function EventDetailPage() {
                   borderRadius: '12px',
                   border: 'none',
                   cursor: 'pointer',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
                   padding: '14px',
                   boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                 }}
@@ -369,7 +369,7 @@ export function EventDetailPage() {
                     border: 'none',
                     cursor: 'pointer',
                     backgroundColor: isJoined ? '#FEE2E2' : '#DBEAFE',
-                    color: isJoined ? '#DC2626' : '#667eea',
+                    color: isJoined ? '#DC2626' : '#65A30D',
                     padding: '14px',
                     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                     opacity: (isActionLoading || (!isJoined && isFull)) ? 0.5 : 1
@@ -393,7 +393,7 @@ export function EventDetailPage() {
                         borderRadius: '12px',
                         border: 'none',
                         cursor: 'pointer',
-                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
                         color: '#FFFFFF',
                         padding: '14px',
                         boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
@@ -438,7 +438,7 @@ export function EventDetailPage() {
                       border: 'none',
                       cursor: 'pointer',
                       backgroundColor: '#DBEAFE',
-                      color: '#667eea',
+                      color: '#65A30D',
                       padding: '14px',
                       boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                     }}
@@ -604,7 +604,7 @@ export function EventDetailPage() {
               borderRadius: '12px',
               border: 'none',
               cursor: 'pointer',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
               color: 'white',
               padding: '14px'
             }}

@@ -146,7 +146,7 @@ export function ShareableProfilePage() {
           boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
         }}>
           <div style={{
-            background: 'linear-gradient(145deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+            background: 'linear-gradient(145deg, rgba(163, 230, 53, 0.1) 0%, rgba(101, 163, 13, 0.1) 100%)',
             borderRadius: '18px',
             padding: '3px'
           }}>
@@ -167,8 +167,8 @@ export function ShareableProfilePage() {
                   borderRadius: '50%',
                   margin: '0 auto 16px',
                   padding: '3px',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                  boxShadow: '0 0 30px rgba(102, 126, 234, 0.3)'
+                  background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
+                  boxShadow: '0 0 30px rgba(101, 163, 13, 0.3)'
                 }}>
                   <div style={{
                     width: '100%',
@@ -238,7 +238,7 @@ export function ShareableProfilePage() {
                     <p style={{ fontSize: '10px', color: '#888888', marginBottom: '4px', letterSpacing: '1px' }}>
                       DUPR SINGLES
                     </p>
-                    <p style={{ fontSize: '24px', fontWeight: 700, color: '#667eea' }}>
+                    <p style={{ fontSize: '24px', fontWeight: 700, color: '#65A30D' }}>
                       {user.duprSingles || '-'}
                     </p>
                   </div>
@@ -251,7 +251,7 @@ export function ShareableProfilePage() {
                     <p style={{ fontSize: '10px', color: '#888888', marginBottom: '4px', letterSpacing: '1px' }}>
                       DUPR DOUBLES
                     </p>
-                    <p style={{ fontSize: '24px', fontWeight: 700, color: '#764ba2' }}>
+                    <p style={{ fontSize: '24px', fontWeight: 700, color: '#4d7c0f' }}>
                       {user.duprDoubles || '-'}
                     </p>
                   </div>

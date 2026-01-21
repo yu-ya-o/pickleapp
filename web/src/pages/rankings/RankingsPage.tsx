@@ -206,7 +206,7 @@ export function RankingsPage() {
                     height: '50px',
                     borderRadius: '12px',
                     overflow: 'hidden',
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -246,9 +246,9 @@ export function RankingsPage() {
                     )}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                       {rankingType === 'events' ? (
-                        <Calendar size={14} style={{ color: '#667eea' }} />
+                        <Calendar size={14} style={{ color: '#65A30D' }} />
                       ) : (
-                        <Users size={14} style={{ color: '#667eea' }} />
+                        <Users size={14} style={{ color: '#65A30D' }} />
                       )}
                       <span style={{ fontSize: '13px', color: '#888888' }}>
                         {rankingType === 'events'
