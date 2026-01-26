@@ -97,7 +97,7 @@ export function UserProfilePage() {
         description={seoMeta.description}
         keywords="ピックルボール, プレイヤー, pickleball, プロフィール"
         image={user.profileImage}
-        url={`/users/${userId}`}
+        url={`/p/${userId}`}
         type="profile"
         jsonLd={[seoJsonLd, seoBreadcrumb]}
       />

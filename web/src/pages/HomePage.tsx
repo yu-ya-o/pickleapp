@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Calendar, Users, MapPin, ChevronRight, Flame, Clock, UserPlus, Menu } from 'lucide-react';
 import { api } from '@/services/api';
 import { Loading } from '@/components/ui';
+import { SEO } from '@/components/SEO';
+import { generateOrganizationJsonLd, generateWebsiteJsonLd } from '@/lib/seo';
 import { useDrawer } from '@/contexts/DrawerContext';
 import { formatDateTime, getDisplayName } from '@/lib/utils';
 import { PREFECTURES } from '@/lib/prefectures';
@@ -95,8 +97,18 @@ export function HomePage() {
     );
   }
 
+  const organizationJsonLd = generateOrganizationJsonLd();
+  const websiteJsonLd = generateWebsiteJsonLd();
+
   return (
     <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
+      <SEO
+        title="PickleHub - ピックルボールイベント・サークル募集"
+        description="全国のピックルボールイベントを探して参加しよう！初心者歓迎のイベントから上級者向け大会まで。サークル募集・メンバー募集も。日本最大級のピックルボールコミュニティ。"
+        keywords="ピックルボール, ピックルボール イベント, pickleball, イベント募集, サークル募集, 大会, 初心者, コミュニティ, 日本"
+        url="/"
+        jsonLd={[organizationJsonLd, websiteJsonLd]}
+      />
       {/* Header - 他のページと統一 */}
       <header style={{
         position: 'sticky',
