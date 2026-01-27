@@ -28,7 +28,11 @@ export function TeamEventsListPage() {
         api.getTeamEvents(teamId!),
       ]);
       setTeam(teamData);
-      setEvents(eventsData);
+      // 日付の直近順（新しいものが先）にソート
+      const sortedEvents = [...eventsData].sort(
+        (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+      );
+      setEvents(sortedEvents);
     } catch (error) {
       console.error('Failed to load data:', error);
     } finally {
