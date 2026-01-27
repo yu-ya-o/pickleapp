@@ -42,12 +42,25 @@ export function HomePage() {
   const loadHomeData = async () => {
     try {
       setIsLoading(true);
-      const [allEvents, publicTeamEvents, allTeams, statsData] = await Promise.all([
+      const [allEvents, publicTeamEvents, allTeams] = await Promise.all([
         api.getEvents({ status: 'active', upcoming: true }),
         api.getPublicTeamEvents(true),
         api.getTeams({}),
-        api.getStats(), // 累計統計（プライベートイベント含む）
       ]);
+
+      // 統計データを別途取得（失敗してもページは表示）
+      let statsData = { eventCount: 0, teamCount: 0 };
+      try {
+        statsData = await api.getStats();
+      } catch {
+        // フォールバック: 取得できたデータから計算
+        const allEventsTotal = await api.getEvents({}).catch(() => []);
+        const allTeamEventsTotal = await api.getPublicTeamEvents(false).catch(() => []);
+        statsData = {
+          eventCount: allEventsTotal.length + allTeamEventsTotal.length,
+          teamCount: allTeams.length,
+        };
+      }
 
       // すべてのイベントを統合
       const combinedEvents = [...allEvents, ...publicTeamEvents];
