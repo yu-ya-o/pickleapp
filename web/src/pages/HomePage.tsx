@@ -54,11 +54,23 @@ export function HomePage() {
         statsData = await api.getStats();
       } catch (error) {
         console.error('Failed to fetch stats, using fallback:', error);
-        // フォールバック: 既に取得したデータから計算
-        statsData = {
-          eventCount: allEvents.length + publicTeamEvents.length,
-          teamCount: allTeams.length,
-        };
+        // フォールバック: 全イベント（過去含む）を取得して計算
+        try {
+          const [allEventsForStats, allTeamEventsForStats] = await Promise.all([
+            api.getEvents({}),
+            api.getPublicTeamEvents(),
+          ]);
+          statsData = {
+            eventCount: allEventsForStats.length + allTeamEventsForStats.length,
+            teamCount: allTeams.length,
+          };
+        } catch {
+          // 最終フォールバック: 既に取得したデータを使用
+          statsData = {
+            eventCount: allEvents.length + publicTeamEvents.length,
+            teamCount: allTeams.length,
+          };
+        }
       }
 
       // すべてのイベントを統合
