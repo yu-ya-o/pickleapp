@@ -22,6 +22,7 @@ import { TeamMembersPage } from '@/pages/teams/TeamMembersPage';
 import { TeamEventsListPage } from '@/pages/teams/TeamEventsListPage';
 import { TeamJoinRequestsPage } from '@/pages/teams/TeamJoinRequestsPage';
 import { TeamEditPage } from '@/pages/teams/TeamEditPage';
+import { CreateTeamPage } from '@/pages/teams/CreateTeamPage';
 import { RankingsPage } from '@/pages/rankings/RankingsPage';
 import { ChatPage } from '@/pages/chat/ChatPage';
 import { NotificationsPage } from '@/pages/NotificationsPage';
@@ -62,6 +63,7 @@ function AppRoutes() {
       <Route path="/events/create" element={<ProtectedRoute><CreateEventPage /></ProtectedRoute>} />
       <Route path="/events/:id/edit" element={<ProtectedRoute><CreateEventPage /></ProtectedRoute>} />
       <Route path="/events/:eventId/chat" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
+      <Route path="/teams/create" element={<ProtectedRoute><CreateTeamPage /></ProtectedRoute>} />
       <Route path="/teams/:teamId/chat" element={<ProtectedRoute><TeamChatPage /></ProtectedRoute>} />
       <Route path="/teams/:teamId/events/create" element={<ProtectedRoute><CreateTeamEventPage /></ProtectedRoute>} />
       <Route path="/teams/:teamId/events/:eventId/edit" element={<ProtectedRoute><CreateTeamEventPage /></ProtectedRoute>} />
