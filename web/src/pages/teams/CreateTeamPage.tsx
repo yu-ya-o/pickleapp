@@ -18,6 +18,7 @@ const REGIONS = [
 export function CreateTeamPage() {
   const navigate = useNavigate();
   const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -52,14 +53,18 @@ export function CreateTeamPage() {
   };
 
   const handleCreate = async () => {
-    if (!name.trim()) return;
+    if (!name.trim()) {
+      setError('サークル名を入力してください');
+      return;
+    }
 
     try {
       setIsSaving(true);
+      setError(null);
       const newTeam = await api.createTeam({
         name,
         description,
-        region,
+        region: region || undefined,
         iconImage: iconImage || undefined,
         headerImage: headerImage || undefined,
         instagramUrl: instagramUrl || undefined,
@@ -68,8 +73,9 @@ export function CreateTeamPage() {
         lineUrl: lineUrl || undefined,
       } as any);
       navigate(`/teams/${newTeam.id}`);
-    } catch (error) {
-      console.error('Failed to create team:', error);
+    } catch (err: any) {
+      console.error('Failed to create team:', err);
+      setError(err.message || 'サークルの作成に失敗しました');
     } finally {
       setIsSaving(false);
     }
@@ -311,6 +317,13 @@ export function CreateTeamPage() {
             </div>
           </div>
         </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl" style={{ padding: '12px 16px', marginBottom: '16px' }}>
+            {error}
+          </div>
+        )}
 
         {/* Create Button */}
         <button
