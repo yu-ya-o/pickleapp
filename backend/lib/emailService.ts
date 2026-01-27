@@ -229,8 +229,8 @@ export function generateWeeklyTeamEventsEmail(params: WeeklyTeamEventsEmailParam
 </head>
 <body>
   <div class="header">
-    <h1>今週のサークルイベント</h1>
-    <p>所属サークルの近日開催イベント</p>
+    <h1>所属サークルの近日開催イベント</h1>
+    <p>参加をお待ちしています！</p>
   </div>
   <div class="content">
     <p>${params.recipientName}さん、こんにちは！</p>
@@ -241,7 +241,7 @@ export function generateWeeklyTeamEventsEmail(params: WeeklyTeamEventsEmailParam
     <p style="margin-top: 20px;">気になるイベントがあれば、ぜひ参加してみてください！</p>
   </div>
   <div class="footer">
-    <p>このメールは PickleHub から毎週水曜日に自動送信されています。</p>
+    <p>このメールは PickleHub から自動送信されています。</p>
     <p>© ${new Date().getFullYear()} PickleHub</p>
   </div>
 </body>
@@ -250,7 +250,7 @@ export function generateWeeklyTeamEventsEmail(params: WeeklyTeamEventsEmailParam
 
   return {
     to: params.recipientEmail,
-    subject: `【週刊】所属サークルの近日イベント - PickleHub`,
+    subject: `所属サークルの近日開催イベント - PickleHub`,
     html,
   };
 }
