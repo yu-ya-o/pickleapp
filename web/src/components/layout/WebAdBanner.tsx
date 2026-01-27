@@ -26,11 +26,11 @@ export function WebAdBanner() {
     <div className="fixed bottom-0 left-0 right-0 z-50 md:left-64 lg:left-72 bg-white">
       <ins
         className="adsbygoogle"
-        style={{ display: 'block', width: '100%', height: '50px' }}
-        data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-        data-ad-slot="XXXXXXXXXX"
-        data-ad-format="horizontal"
-        data-full-width-responsive="false"
+        style={{ display: 'block' }}
+        data-ad-client="ca-pub-2543138582776514"
+        data-ad-slot="7732342593"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
       />
     </div>
   );
