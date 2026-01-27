@@ -52,12 +52,11 @@ export function HomePage() {
       let statsData = { eventCount: 0, teamCount: 0 };
       try {
         statsData = await api.getStats();
-      } catch {
-        // フォールバック: 取得できたデータから計算
-        const allEventsTotal = await api.getEvents({}).catch(() => []);
-        const allTeamEventsTotal = await api.getPublicTeamEvents(false).catch(() => []);
+      } catch (error) {
+        console.error('Failed to fetch stats, using fallback:', error);
+        // フォールバック: 既に取得したデータから計算
         statsData = {
-          eventCount: allEventsTotal.length + allTeamEventsTotal.length,
+          eventCount: allEvents.length + publicTeamEvents.length,
           teamCount: allTeams.length,
         };
       }
