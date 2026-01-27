@@ -23,7 +23,7 @@ type OrganizerType = 'personal' | { teamId: string };
 
 export function CreateEventPage() {
   const navigate = useNavigate();
-  const { id: editId } = useParams<{ id: string }>();
+  const { id: editId, teamId: urlTeamId } = useParams<{ id: string; teamId: string }>();
   const [searchParams] = useSearchParams();
   const duplicateId = searchParams.get('duplicate');
 
@@ -33,7 +33,9 @@ export function CreateEventPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingEvent, setIsLoadingEvent] = useState(isEditMode || isDuplicateMode);
   const [eligibleTeams, setEligibleTeams] = useState<Team[]>([]);
-  const [selectedOrganizer, setSelectedOrganizer] = useState<OrganizerType>('personal');
+  const [selectedOrganizer, setSelectedOrganizer] = useState<OrganizerType>(
+    urlTeamId ? { teamId: urlTeamId } : 'personal'
+  );
   const [visibility, setVisibility] = useState<'public' | 'private'>('public');
   const [formData, setFormData] = useState({
     title: '',

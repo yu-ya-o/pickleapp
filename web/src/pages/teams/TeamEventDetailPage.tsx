@@ -145,8 +145,9 @@ export function TeamEventDetailPage() {
 
   const isCreator = event.creator.id === user?.id;
   const isJoined = event.isUserParticipating;
-  const isFull = (event.availableSpots ?? 0) === 0;
-  const currentParticipants = event.maxParticipants ? event.maxParticipants - (event.availableSpots ?? 0) : (event.participants?.length || 0);
+  // availableSpotsがnull/undefinedの場合は無制限なのでisFull=false
+  const isFull = event.availableSpots !== null && event.availableSpots !== undefined && event.availableSpots === 0;
+  const currentParticipants = event.participants?.length || 0;
 
   const skillLabel = event.skillLevel ? SKILL_LEVEL_LABELS[event.skillLevel] || event.skillLevel : '';
   const seoTitle = `${event.title} | ${event.team.name} | ${SITE_NAME}`;

@@ -89,9 +89,9 @@ export function TeamEventsListPage() {
           </p>
         ) : (
           events.map((event) => {
-            const maxParticipants = event.maxParticipants ?? 0;
-            const currentParticipants = maxParticipants - (event.availableSpots ?? maxParticipants);
-            const isFull = (event.availableSpots ?? maxParticipants) === 0;
+            const currentParticipants = event.participantCount || 0;
+            // availableSpotsがnull/undefinedの場合は無制限なのでisFull=false
+            const isFull = event.availableSpots !== null && event.availableSpots !== undefined && event.availableSpots === 0;
 
             return (
               <Link

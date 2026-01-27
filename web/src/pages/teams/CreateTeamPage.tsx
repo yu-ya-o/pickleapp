@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Image, Instagram, Music } from 'lucide-react';
+import { Image } from 'lucide-react';
 import { api } from '@/services/api';
 import { PageHeader } from '@/components/PageHeader';
 import { Breadcrumb } from '@/components/Breadcrumb';
@@ -236,85 +236,61 @@ export function CreateTeamPage() {
 
             {/* Instagram */}
             <div style={{ marginBottom: '16px' }}>
-              <div className="flex items-center gap-2" style={{ marginBottom: '8px' }}>
-                <div
-                  className="rounded-lg flex items-center justify-center"
-                  style={{ width: '24px', height: '24px', background: 'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)' }}
-                >
-                  <Instagram size={14} className="text-white" />
-                </div>
-                <span className="text-sm font-medium">Instagram</span>
-              </div>
+              <label className="block text-sm text-gray-500" style={{ marginBottom: '8px' }}>
+                Instagram
+              </label>
               <input
                 type="url"
                 value={instagramUrl}
                 onChange={(e) => setInstagramUrl(e.target.value)}
                 placeholder="https://instagram.com/username"
-                className="w-full border border-gray-200 rounded-lg text-[var(--primary)] focus:outline-none focus:border-[var(--primary)]"
-                style={{ padding: '10px 12px' }}
+                className="w-full border border-gray-200 rounded-lg focus:outline-none focus:border-[var(--primary)]"
+                style={{ padding: '12px 16px' }}
               />
             </div>
 
-            {/* Twitter/X */}
+            {/* X (Twitter) */}
             <div style={{ marginBottom: '16px' }}>
-              <div className="flex items-center gap-2" style={{ marginBottom: '8px' }}>
-                <div
-                  className="rounded-lg flex items-center justify-center bg-blue-400"
-                  style={{ width: '24px', height: '24px' }}
-                >
-                  <span className="text-white text-xs font-bold">X</span>
-                </div>
-                <span className="text-sm font-medium">Twitter/X</span>
-              </div>
+              <label className="block text-sm text-gray-500" style={{ marginBottom: '8px' }}>
+                X (Twitter)
+              </label>
               <input
                 type="url"
                 value={twitterUrl}
                 onChange={(e) => setTwitterUrl(e.target.value)}
-                placeholder="https://twitter.com/username"
-                className="w-full border border-gray-200 rounded-lg text-[var(--primary)] focus:outline-none focus:border-[var(--primary)]"
-                style={{ padding: '10px 12px' }}
+                placeholder="https://x.com/username"
+                className="w-full border border-gray-200 rounded-lg focus:outline-none focus:border-[var(--primary)]"
+                style={{ padding: '12px 16px' }}
               />
             </div>
 
             {/* TikTok */}
             <div style={{ marginBottom: '16px' }}>
-              <div className="flex items-center gap-2" style={{ marginBottom: '8px' }}>
-                <div
-                  className="rounded-lg flex items-center justify-center bg-black"
-                  style={{ width: '24px', height: '24px' }}
-                >
-                  <Music size={14} className="text-white" />
-                </div>
-                <span className="text-sm font-medium">TikTok</span>
-              </div>
+              <label className="block text-sm text-gray-500" style={{ marginBottom: '8px' }}>
+                TikTok
+              </label>
               <input
                 type="url"
                 value={tiktokUrl}
                 onChange={(e) => setTiktokUrl(e.target.value)}
                 placeholder="https://tiktok.com/@username"
-                className="w-full border border-gray-200 rounded-lg text-[var(--primary)] focus:outline-none focus:border-[var(--primary)]"
-                style={{ padding: '10px 12px' }}
+                className="w-full border border-gray-200 rounded-lg focus:outline-none focus:border-[var(--primary)]"
+                style={{ padding: '12px 16px' }}
               />
             </div>
 
             {/* LINE */}
             <div>
-              <div className="flex items-center gap-2" style={{ marginBottom: '8px' }}>
-                <div
-                  className="rounded-lg flex items-center justify-center"
-                  style={{ width: '24px', height: '24px', backgroundColor: '#06C755' }}
-                >
-                  <span className="text-white text-xs font-bold">L</span>
-                </div>
-                <span className="text-sm font-medium">LINE</span>
-              </div>
+              <label className="block text-sm text-gray-500" style={{ marginBottom: '8px' }}>
+                LINE
+              </label>
               <input
                 type="url"
                 value={lineUrl}
                 onChange={(e) => setLineUrl(e.target.value)}
-                placeholder="https://line.me/ti/p/username"
-                className="w-full border border-gray-200 rounded-lg text-[var(--primary)] focus:outline-none focus:border-[var(--primary)]"
-                style={{ padding: '10px 12px' }}
+                placeholder="https://line.me/ti/p/..."
+                className="w-full border border-gray-200 rounded-lg focus:outline-none focus:border-[var(--primary)]"
+                style={{ padding: '12px 16px' }}
               />
             </div>
           </div>
