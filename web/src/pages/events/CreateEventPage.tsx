@@ -5,6 +5,7 @@ import { PageHeader } from '@/components/PageHeader';
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { Input, Textarea, Select, LocationAutocomplete, Loading, DateTimeInput } from '@/components/ui';
 import { PREFECTURE_OPTIONS } from '@/lib/prefectures';
+import type { Team } from '@/types';
 
 const SKILL_LEVELS = [
   { value: 'all', label: '全レベル' },
@@ -12,6 +13,13 @@ const SKILL_LEVELS = [
   { value: 'intermediate', label: '中級者' },
   { value: 'advanced', label: '上級者' },
 ];
+
+const VISIBILITY_OPTIONS = [
+  { value: 'public', label: '全体公開' },
+  { value: 'private', label: 'チームのみ公開' },
+];
+
+type OrganizerType = 'personal' | { teamId: string };
 
 export function CreateEventPage() {
   const navigate = useNavigate();
@@ -24,6 +32,9 @@ export function CreateEventPage() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingEvent, setIsLoadingEvent] = useState(isEditMode || isDuplicateMode);
+  const [eligibleTeams, setEligibleTeams] = useState<Team[]>([]);
+  const [selectedOrganizer, setSelectedOrganizer] = useState<OrganizerType>('personal');
+  const [visibility, setVisibility] = useState<'public' | 'private'>('public');
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -38,6 +49,22 @@ export function CreateEventPage() {
     skillLevel: 'all',
     price: '',
   });
+
+  // Load eligible teams (owner or admin)
+  useEffect(() => {
+    const loadEligibleTeams = async () => {
+      try {
+        const myTeams = await api.getTeams({ myTeams: true });
+        const filtered = myTeams.filter(
+          (team) => team.userRole === 'owner' || team.userRole === 'admin'
+        );
+        setEligibleTeams(filtered);
+      } catch (error) {
+        console.error('Failed to load teams:', error);
+      }
+    };
+    loadEligibleTeams();
+  }, []);
 
   // Load event data for edit or duplicate mode
   useEffect(() => {
@@ -108,32 +135,67 @@ export function CreateEventPage() {
     }));
   };
 
+  const handleOrganizerChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    if (value === 'personal') {
+      setSelectedOrganizer('personal');
+    } else {
+      setSelectedOrganizer({ teamId: value });
+    }
+  };
+
+  const isTeamEvent = selectedOrganizer !== 'personal';
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
       setIsLoading(true);
-      const eventData = {
-        title: formData.title,
-        description: formData.description,
-        location: formData.location,
-        address: formData.address || undefined,
-        latitude: formData.latitude || undefined,
-        longitude: formData.longitude || undefined,
-        region: formData.region,
-        startTime: new Date(formData.startTime).toISOString(),
-        endTime: new Date(formData.endTime).toISOString(),
-        maxParticipants: parseInt(formData.maxParticipants),
-        skillLevel: formData.skillLevel as 'all' | 'beginner' | 'intermediate' | 'advanced',
-        price: formData.price ? parseInt(formData.price) : undefined,
-      };
 
-      if (isEditMode && editId) {
-        await api.updateEvent(editId, eventData);
-        navigate(`/events/${editId}`);
+      if (isTeamEvent && typeof selectedOrganizer === 'object') {
+        // チームイベント作成
+        const teamEventData = {
+          title: formData.title,
+          description: formData.description,
+          location: formData.location,
+          address: formData.address || undefined,
+          latitude: formData.latitude || undefined,
+          longitude: formData.longitude || undefined,
+          region: formData.region,
+          startTime: new Date(formData.startTime).toISOString(),
+          endTime: new Date(formData.endTime).toISOString(),
+          maxParticipants: formData.maxParticipants ? parseInt(formData.maxParticipants) : undefined,
+          skillLevel: formData.skillLevel as 'all' | 'beginner' | 'intermediate' | 'advanced',
+          price: formData.price ? parseInt(formData.price) : undefined,
+          visibility: visibility,
+        };
+
+        const newEvent = await api.createTeamEvent(selectedOrganizer.teamId, teamEventData);
+        navigate(`/teams/${selectedOrganizer.teamId}/events/${newEvent.id}`);
       } else {
-        const newEvent = await api.createEvent(eventData);
-        navigate(`/events/${newEvent.id}`);
+        // 個人イベント作成/編集
+        const eventData = {
+          title: formData.title,
+          description: formData.description,
+          location: formData.location,
+          address: formData.address || undefined,
+          latitude: formData.latitude || undefined,
+          longitude: formData.longitude || undefined,
+          region: formData.region,
+          startTime: new Date(formData.startTime).toISOString(),
+          endTime: new Date(formData.endTime).toISOString(),
+          maxParticipants: parseInt(formData.maxParticipants) || 999,
+          skillLevel: formData.skillLevel as 'all' | 'beginner' | 'intermediate' | 'advanced',
+          price: formData.price ? parseInt(formData.price) : undefined,
+        };
+
+        if (isEditMode && editId) {
+          await api.updateEvent(editId, eventData);
+          navigate(`/events/${editId}`);
+        } else {
+          const newEvent = await api.createEvent(eventData);
+          navigate(`/events/${newEvent.id}`);
+        }
       }
     } catch (error) {
       console.error('Failed to save event:', error);
@@ -152,6 +214,15 @@ export function CreateEventPage() {
 
   const submitLabel = isEditMode ? '保存する' : 'イベントを作成';
 
+  // Build organizer options
+  const organizerOptions = [
+    { value: 'personal', label: '自分' },
+    ...eligibleTeams.map((team) => ({
+      value: team.id,
+      label: team.name,
+    })),
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       <PageHeader />
@@ -169,6 +240,28 @@ export function CreateEventPage() {
       {/* Content */}
       <div style={{ padding: '16px', paddingBottom: '100px' }}>
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* 主催者選択 - 新規作成時のみ表示 */}
+          {!isEditMode && (
+            <Select
+              label="主催者"
+              name="organizer"
+              value={typeof selectedOrganizer === 'string' ? selectedOrganizer : selectedOrganizer.teamId}
+              onChange={handleOrganizerChange}
+              options={organizerOptions}
+            />
+          )}
+
+          {/* 公開範囲 - チームイベント時のみ表示 */}
+          {isTeamEvent && (
+            <Select
+              label="公開範囲"
+              name="visibility"
+              value={visibility}
+              onChange={(e) => setVisibility(e.target.value as 'public' | 'private')}
+              options={VISIBILITY_OPTIONS}
+            />
+          )}
+
           <Input
             label="タイトル"
             name="title"
@@ -227,8 +320,8 @@ export function CreateEventPage() {
               type="number"
               value={formData.maxParticipants}
               onChange={handleChange}
-              placeholder="例: 8"
-              required
+              placeholder={isTeamEvent ? '任意' : '例: 8'}
+              required={!isTeamEvent}
             />
             <Input
               label="参加費（円）"
