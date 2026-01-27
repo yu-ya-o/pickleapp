@@ -29,6 +29,28 @@ export function CreateTeamPage() {
   const [tiktokUrl, setTiktokUrl] = useState('');
   const [lineUrl, setLineUrl] = useState('');
 
+  const handleIconUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const result = await api.uploadProfileImage(file);
+      setIconImage(result.imageUrl);
+    } catch (error) {
+      console.error('Failed to upload icon:', error);
+    }
+  };
+
+  const handleHeaderUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const result = await api.uploadProfileImage(file);
+      setHeaderImage(result.imageUrl);
+    } catch (error) {
+      console.error('Failed to upload header:', error);
+    }
+  };
+
   const handleCreate = async () => {
     if (!name.trim()) return;
 
@@ -91,13 +113,19 @@ export function CreateTeamPage() {
                   <Image size={40} className="text-gray-400" />
                 </div>
               )}
-              <button
-                className="flex items-center gap-2 text-[var(--primary)] font-medium"
+              <label
+                className="flex items-center gap-2 text-[var(--primary)] font-medium cursor-pointer"
                 style={{ marginTop: '12px' }}
               >
                 <Image size={18} />
                 <span>画像を追加</span>
-              </button>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleIconUpload}
+                  className="hidden"
+                />
+              </label>
             </div>
           </div>
         </div>
@@ -124,13 +152,19 @@ export function CreateTeamPage() {
                   <Image size={40} className="text-gray-400" />
                 </div>
               )}
-              <button
-                className="flex items-center gap-2 text-[var(--primary)] font-medium"
+              <label
+                className="flex items-center gap-2 text-[var(--primary)] font-medium cursor-pointer"
                 style={{ marginTop: '12px' }}
               >
                 <Image size={18} />
                 <span>ヘッダー画像を追加</span>
-              </button>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleHeaderUpload}
+                  className="hidden"
+                />
+              </label>
             </div>
           </div>
         </div>
