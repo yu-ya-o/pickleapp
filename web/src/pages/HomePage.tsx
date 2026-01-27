@@ -34,6 +34,7 @@ export function HomePage() {
   const [recruitingTeams, setRecruitingTeams] = useState<Team[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({ eventCount: 0, teamCount: 0 });
+  const [statsSource, setStatsSource] = useState<string>('');
 
   useEffect(() => {
     loadHomeData();
@@ -50,8 +51,10 @@ export function HomePage() {
 
       // 統計データを別途取得（失敗してもページは表示）
       let statsData = { eventCount: 0, teamCount: 0 };
+      let source = '';
       try {
         statsData = await api.getStats();
+        source = 'API';
       } catch (error) {
         console.error('Failed to fetch stats, using fallback:', error);
         // フォールバック: 全イベント（過去含む）を取得して計算
@@ -64,14 +67,17 @@ export function HomePage() {
             eventCount: allEventsForStats.length + allTeamEventsForStats.length,
             teamCount: allTeams.length,
           };
+          source = 'Fallback1';
         } catch {
           // 最終フォールバック: 既に取得したデータを使用
           statsData = {
             eventCount: allEvents.length + publicTeamEvents.length,
             teamCount: allTeams.length,
           };
+          source = 'Fallback2';
         }
       }
+      setStatsSource(source);
 
       // すべてのイベントを統合
       const combinedEvents = [...allEvents, ...publicTeamEvents];
@@ -286,6 +292,19 @@ export function HomePage() {
             </div>
             <div style={{ fontSize: '9px', color: '#666666', fontWeight: 500, marginTop: '2px' }}>サークル</div>
           </div>
+          {/* デバッグ用：後で削除 */}
+          {statsSource && (
+            <div style={{
+              background: statsSource === 'API' ? '#10B981' : '#EF4444',
+              color: '#fff',
+              padding: '4px 8px',
+              borderRadius: '4px',
+              fontSize: '10px',
+              fontWeight: 600,
+            }}>
+              {statsSource}
+            </div>
+          )}
         </div>
       </section>
 
