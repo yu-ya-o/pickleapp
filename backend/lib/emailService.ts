@@ -250,7 +250,7 @@ export function generateWeeklyTeamEventsEmail(params: WeeklyTeamEventsEmailParam
 
   return {
     to: params.recipientEmail,
-    subject: `所属サークルの近日イベント - PickleHub`,
+    subject: `所属サークルの近日開催イベント - PickleHub`,
     html,
   };
 }
