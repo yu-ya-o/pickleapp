@@ -29,6 +29,7 @@ export function CreateTeamPage() {
   const [twitterUrl, setTwitterUrl] = useState('');
   const [tiktokUrl, setTiktokUrl] = useState('');
   const [lineUrl, setLineUrl] = useState('');
+  const visibility = 'public'; // デフォルトで全体公開
 
   const handleIconUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -63,7 +64,8 @@ export function CreateTeamPage() {
       setError(null);
       const newTeam = await api.createTeam({
         name,
-        description,
+        description: description || ' ', // API requires description
+        visibility,
         region: region || undefined,
         iconImage: iconImage || undefined,
         headerImage: headerImage || undefined,
