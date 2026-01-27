@@ -11,3 +11,10 @@ services:
     schedule: "0 2 * * *"  # 11:00 JST (2:00 UTC)
     buildCommand: npm install && npx prisma generate
     startCommand: node -e "fetch(process.env.RENDER_EXTERNAL_URL + '/api/cron/event-reminder', {headers: {'Authorization': 'Bearer ' + process.env.CRON_SECRET}}).then(r => r.json()).then(console.log)"
+
+  - type: cron
+    name: weekly-team-events-email
+    env: node
+    schedule: "0 12 * * 3"  # 21:00 JST (12:00 UTC) every Wednesday
+    buildCommand: npm install && npx prisma generate
+    startCommand: node -e "fetch(process.env.RENDER_EXTERNAL_URL + '/api/cron/weekly-team-events', {headers: {'Authorization': 'Bearer ' + process.env.CRON_SECRET}}).then(r => r.json()).then(console.log)"
