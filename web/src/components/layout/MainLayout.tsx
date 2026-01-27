@@ -2,6 +2,7 @@ import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Home, Calendar, CalendarCheck, Users, Trophy, User, LogIn, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
+import { WebAdBanner } from './WebAdBanner';
 
 export function MainLayout() {
   const location = useLocation();
@@ -104,9 +105,12 @@ export function MainLayout() {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 md:ml-64 lg:ml-72 overflow-x-hidden">
+      <main className="flex-1 md:ml-64 lg:ml-72 overflow-x-hidden pb-16">
         <Outlet />
       </main>
+
+      {/* 下部固定広告バナー */}
+      <WebAdBanner />
     </div>
   );
 }
