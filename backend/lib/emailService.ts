@@ -91,6 +91,170 @@ interface EventReminderEmailParams {
 /**
  * Generate event reminder email HTML
  */
+interface WeeklyTeamEventsEmailParams {
+  recipientEmail: string;
+  recipientName: string;
+  events: Array<{
+    teamName: string;
+    eventTitle: string;
+    eventDate: string;
+    eventTime: string;
+    eventLocation: string;
+    eventAddress?: string;
+    eventUrl: string;
+  }>;
+}
+
+/**
+ * Generate weekly team events digest email HTML
+ */
+export function generateWeeklyTeamEventsEmail(params: WeeklyTeamEventsEmailParams): SendEmailParams {
+  const eventCards = params.events.map(event => `
+      <div class="event-card">
+        <div class="team-name">${event.teamName}</div>
+        <div class="event-title">${event.eventTitle}</div>
+        <div class="event-detail">
+          <span class="event-detail-icon">📅</span>
+          <span>${event.eventDate}</span>
+        </div>
+        <div class="event-detail">
+          <span class="event-detail-icon">🕐</span>
+          <span>${event.eventTime}</span>
+        </div>
+        <div class="event-detail">
+          <span class="event-detail-icon">📍</span>
+          <span>${event.eventLocation}${event.eventAddress ? ` (${event.eventAddress})` : ''}</span>
+        </div>
+        <div class="button-container">
+          <a href="${event.eventUrl}" class="button-small">詳細を見る</a>
+        </div>
+      </div>
+  `).join('');
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>今週のサークルイベント</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .header {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 12px 12px 0 0;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .header p {
+      margin: 10px 0 0;
+      opacity: 0.9;
+    }
+    .content {
+      background: #f9fafb;
+      padding: 30px;
+      border-radius: 0 0 12px 12px;
+    }
+    .event-card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-left: 4px solid #3b82f6;
+    }
+    .team-name {
+      font-size: 12px;
+      color: #3b82f6;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 5px;
+    }
+    .event-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #1f2937;
+      margin-bottom: 12px;
+    }
+    .event-detail {
+      display: flex;
+      align-items: center;
+      margin: 8px 0;
+      color: #555;
+      font-size: 14px;
+    }
+    .event-detail-icon {
+      width: 24px;
+      margin-right: 10px;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      color: #888;
+      font-size: 12px;
+    }
+    .button-small {
+      display: inline-block;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+    .button-container {
+      text-align: right;
+    }
+    .no-events {
+      text-align: center;
+      color: #666;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>今週のサークルイベント</h1>
+    <p>所属サークルの近日開催イベント</p>
+  </div>
+  <div class="content">
+    <p>${params.recipientName}さん、こんにちは！</p>
+    <p>所属サークルで予定されている近日のイベントをお知らせします。</p>
+
+    ${params.events.length > 0 ? eventCards : '<div class="no-events">現在予定されているイベントはありません</div>'}
+
+    <p style="margin-top: 20px;">気になるイベントがあれば、ぜひ参加してみてください！</p>
+  </div>
+  <div class="footer">
+    <p>このメールは PickleHub から毎週水曜日に自動送信されています。</p>
+    <p>© ${new Date().getFullYear()} PickleHub</p>
+  </div>
+</body>
+</html>
+`;
+
+  return {
+    to: params.recipientEmail,
+    subject: `【週刊】所属サークルの近日イベント - PickleHub`,
+    html,
+  };
+}
+
 export function generateEventReminderEmail(params: EventReminderEmailParams): SendEmailParams {
   const html = `
 <!DOCTYPE html>
