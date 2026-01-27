@@ -42,12 +42,11 @@ export function HomePage() {
   const loadHomeData = async () => {
     try {
       setIsLoading(true);
-      const [allEvents, publicTeamEvents, allTeams, allEventsTotal, allTeamEventsTotal] = await Promise.all([
+      const [allEvents, publicTeamEvents, allTeams, statsData] = await Promise.all([
         api.getEvents({ status: 'active', upcoming: true }),
         api.getPublicTeamEvents(true),
         api.getTeams({}),
-        api.getEvents({}), // 過去含む全イベント
-        api.getPublicTeamEvents(false), // 過去含む全チームイベント
+        api.getStats(), // 累計統計（プライベートイベント含む）
       ]);
 
       // すべてのイベントを統合
@@ -75,13 +74,7 @@ export function HomePage() {
       const publicTeams = allTeams.filter((t) => t.visibility === 'public');
       setRecruitingTeams(publicTeams.slice(0, 5));
 
-      // 累計イベント数（過去含む）
-      const totalEventCount = allEventsTotal.length + allTeamEventsTotal.length;
-
-      setStats({
-        eventCount: totalEventCount,
-        teamCount: allTeams.length,
-      });
+      setStats(statsData);
     } catch (error) {
       console.error('Failed to load home data:', error);
     } finally {
