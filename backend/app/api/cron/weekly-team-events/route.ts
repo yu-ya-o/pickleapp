@@ -50,12 +50,20 @@ export async function GET(request: NextRequest) {
     // Web URL for event links
     const webUrl = process.env.WEB_URL || 'https://picklehub.jp';
 
+    // Test mode: only send to TEST_EMAIL if set
+    const testEmail = process.env.TEST_EMAIL;
+    if (testEmail) {
+      console.log(`TEST MODE: Only sending to ${testEmail}`);
+    }
+
     // Get all users who are members of at least one team
     const usersWithTeams = await prisma.user.findMany({
       where: {
         teamMemberships: {
           some: {},
         },
+        // Filter by TEST_EMAIL if set
+        ...(testEmail && { email: testEmail }),
       },
       select: {
         id: true,
