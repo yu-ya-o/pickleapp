@@ -20,6 +20,10 @@ export async function GET() {
     return NextResponse.json({
       eventCount: eventCount + teamEventCount,
       teamCount,
+    }, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+      },
     });
   } catch (error) {
     return errorResponse(error);
