@@ -198,7 +198,6 @@ export function generateEventReminderEmail(params: EventReminderEmailParams): Se
 
     <p>⚠️ 参加が難しくなった場合は、主催者にご迷惑をおかけしないよう、お早めにご連絡をお願いします。</p>
     <p>💡 マナーを守って、みんなで楽しいピックルボールを！</p>
-    <p>忘れ物がないように準備して、楽しいピックルボールを！</p>
     <p>当日お会いできることを楽しみにしています。</p>
   </div>
   <div class="footer">
