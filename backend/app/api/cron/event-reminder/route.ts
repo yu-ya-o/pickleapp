@@ -132,6 +132,9 @@ export async function GET(request: NextRequest) {
       });
     };
 
+    // Web URL for event links
+    const webUrl = process.env.WEB_URL || 'https://picklehub.jp';
+
     // Process regular events
     for (const event of events) {
       const eventDate = formatDateJST(event.startTime);
@@ -170,6 +173,7 @@ export async function GET(request: NextRequest) {
             eventTime,
             eventLocation: event.location,
             eventAddress: event.address || undefined,
+            eventUrl: `${webUrl}/events/${event.id}`,
           })
         );
       }
@@ -216,6 +220,7 @@ export async function GET(request: NextRequest) {
             eventTime,
             eventLocation: event.location,
             eventAddress: event.address || undefined,
+            eventUrl: `${webUrl}/teams/${event.teamId}/events/${event.id}`,
           })
         );
       }

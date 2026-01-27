@@ -85,6 +85,7 @@ interface EventReminderEmailParams {
   eventTime: string;
   eventLocation: string;
   eventAddress?: string;
+  eventUrl: string;
 }
 
 /**
@@ -152,6 +153,19 @@ export function generateEventReminderEmail(params: EventReminderEmailParams): Se
       color: #888;
       font-size: 12px;
     }
+    .button {
+      display: inline-block;
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      color: white;
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+    .button-container {
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -176,6 +190,10 @@ export function generateEventReminderEmail(params: EventReminderEmailParams): Se
         <span class="event-detail-icon">📍</span>
         <span>${params.eventLocation}${params.eventAddress ? ` (${params.eventAddress})` : ''}</span>
       </div>
+    </div>
+
+    <div class="button-container">
+      <a href="${params.eventUrl}" class="button">イベント詳細を見る</a>
     </div>
 
     <p>忘れ物がないように準備して、楽しいピックルボールを！</p>
