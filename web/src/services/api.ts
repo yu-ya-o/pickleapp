@@ -384,7 +384,8 @@ class ApiClient {
 
   // Stats
   async getStats(): Promise<{ eventCount: number; teamCount: number }> {
-    return this.request<{ eventCount: number; teamCount: number }>('/api/stats');
+    // キャッシュ防止のためタイムスタンプを追加
+    return this.request<{ eventCount: number; teamCount: number }>(`/api/stats?_t=${Date.now()}`);
   }
 
   // Users
