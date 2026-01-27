@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
 import { getUserFromAuth } from '@/lib/auth';
 import { errorResponse } from '@/lib/errors';
 import { prisma } from '@/lib/prisma';
@@ -50,11 +51,11 @@ export async function DELETE(request: NextRequest) {
     // Check if any team would be left without an owner or admin
     // BUT allow deletion if user is the only member
     const teamsWithoutLeadership = userTeamMemberships.filter(
-      (membership) => {
+      (membership: typeof userTeamMemberships[number]) => {
         const team = membership.team;
         const totalMembers = team.members.length;
         const otherLeaders = team.members.filter(
-          (m) =>
+          (m: { userId: string; role: string }) =>
             m.userId !== userId && (m.role === 'owner' || m.role === 'admin')
         ).length;
 
@@ -68,7 +69,7 @@ export async function DELETE(request: NextRequest) {
 
     if (teamsWithoutLeadership.length > 0) {
       const teamNames = teamsWithoutLeadership
-        .map((m) => m.team.name)
+        .map((m: typeof userTeamMemberships[number]) => m.team.name)
         .join(', ');
       return NextResponse.json(
         {
@@ -79,7 +80,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Start a transaction to ensure all operations complete or none do
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       // 1. Delete all events created by the user
       // This will cascade delete related reservations, chat rooms, and messages
       await tx.event.deleteMany({
@@ -132,7 +133,7 @@ export async function DELETE(request: NextRequest) {
         await tx.team.deleteMany({
           where: {
             id: {
-              in: soloTeams.map((t) => t.id),
+              in: soloTeams.map((t: { id: string }) => t.id),
             },
           },
         });

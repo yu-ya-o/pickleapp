@@ -85,12 +85,14 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       });
     }
 
-    const messages: MessageResponse[] = chatRoom.messages.map((m) => ({
-      id: m.id,
-      content: m.content,
-      createdAt: m.createdAt.toISOString(),
-      user: m.user,
-    }));
+    const messages: MessageResponse[] = chatRoom.messages.map(
+      (m: (typeof chatRoom.messages)[number]) => ({
+        id: m.id,
+        content: m.content,
+        createdAt: m.createdAt.toISOString(),
+        user: m.user,
+      })
+    );
 
     const response: ChatRoomResponse = {
       id: chatRoom.id,
