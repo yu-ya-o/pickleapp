@@ -29,7 +29,7 @@ export function CreateTeamPage() {
   const [twitterUrl, setTwitterUrl] = useState('');
   const [tiktokUrl, setTiktokUrl] = useState('');
   const [lineUrl, setLineUrl] = useState('');
-  const [visibility, setVisibility] = useState<'public' | 'private'>('public');
+  const visibility = 'public'; // デフォルトで全体公開
 
   const handleIconUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -224,29 +224,6 @@ export function CreateTeamPage() {
                     {r}
                   </option>
                 ))}
-              </select>
-            </div>
-          </div>
-        </div>
-
-        {/* Visibility */}
-        <div style={{ marginBottom: '24px' }}>
-          <label className="block text-sm text-gray-500" style={{ marginBottom: '8px' }}>
-            公開設定
-          </label>
-          <div className="bg-white rounded-xl">
-            <div
-              className="flex items-center justify-between"
-              style={{ padding: '14px 16px' }}
-            >
-              <span>公開範囲</span>
-              <select
-                value={visibility}
-                onChange={(e) => setVisibility(e.target.value as 'public' | 'private')}
-                className="text-[var(--primary)] font-medium focus:outline-none bg-transparent cursor-pointer"
-              >
-                <option value="public">全体公開</option>
-                <option value="private">非公開</option>
               </select>
             </div>
           </div>
