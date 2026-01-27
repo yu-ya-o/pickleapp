@@ -382,6 +382,11 @@ class ApiClient {
     return this.request<TeamRanking[]>(`/api/teams/rankings?type=${type}`);
   }
 
+  // Stats
+  async getStats(): Promise<{ eventCount: number; teamCount: number }> {
+    return this.request<{ eventCount: number; teamCount: number }>('/api/stats');
+  }
+
   // Users
   async getUserProfile(userId: string): Promise<UserProfile> {
     return this.request<UserProfile>(`/api/users/${userId}`);
