@@ -246,7 +246,7 @@ export function TeamsListPage() {
           onClick={() => navigate('/teams/create')}
           style={{
             position: 'fixed',
-            bottom: '24px',
+            bottom: '80px',
             right: '16px',
             width: '56px',
             height: '56px',
@@ -259,7 +259,7 @@ export function TeamsListPage() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 50
+            zIndex: 60
           }}
         >
           <Plus size={24} />
