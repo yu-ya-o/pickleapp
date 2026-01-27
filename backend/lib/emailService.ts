@@ -196,10 +196,9 @@ export function generateEventReminderEmail(params: EventReminderEmailParams): Se
       <a href="${params.eventUrl}" class="button">イベント詳細を見る</a>
     </div>
 
-    <p>忘れ物がないように準備して、楽しいピックルボールを！</p>
     <p>⚠️ 参加が難しくなった場合は、主催者にご迷惑をおかけしないよう、お早めにご連絡をお願いします。</p>
     <p>💡 マナーを守って、みんなで楽しいピックルボールを！</p>
-    <p>当日お会いできることを楽しみにしています。</p>
+    <p>忘れ物がないように準備して、当日お会いできることを楽しみにしています。</p>
   </div>
   <div class="footer">
     <p>このメールは PickleHub から自動送信されています。</p>
