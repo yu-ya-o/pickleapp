@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: picklehub-backend
+    env: node
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: npm start
+
+  - type: cron
+    name: event-reminder-email
+    env: node
+    schedule: "23 1 * * *"  # 10:23 JST (1:23 UTC)
+    buildCommand: npm install && npx prisma generate
+    startCommand: node -e "fetch(process.env.RENDER_EXTERNAL_URL + '/api/cron/event-reminder', {headers: {'Authorization': 'Bearer ' + process.env.CRON_SECRET}}).then(r => r.json()).then(console.log)"

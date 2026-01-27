@@ -10,9 +10,15 @@ import { notifyEventReminder } from '@/lib/notifications';
  */
 export async function GET(request: NextRequest) {
   try {
-    // Verify cron secret (optional but recommended for security)
+    // Verify cron secret (via header or URL parameter)
     const authHeader = request.headers.get('authorization');
-    if (process.env.CRON_SECRET && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    const urlSecret = request.nextUrl.searchParams.get('secret');
+    const isAuthorized =
+      !process.env.CRON_SECRET ||
+      authHeader === `Bearer ${process.env.CRON_SECRET}` ||
+      urlSecret === process.env.CRON_SECRET;
+
+    if (!isAuthorized) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
