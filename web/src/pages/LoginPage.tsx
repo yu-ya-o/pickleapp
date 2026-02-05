@@ -24,7 +24,7 @@ export function LoginPage() {
 
     try {
       await signInWithGoogle(credentialResponse.credential);
-      navigate('/events');
+      navigate('/profile');
     } catch (err) {
       console.error('Sign in error:', err);
       setError('ログインに失敗しました。もう一度お試しください。');
