@@ -29,6 +29,7 @@ export interface GoogleSignInResponse {
     battleRecords: BattleRecord[] | null;
   };
   token: string; // JWT or session token
+  isNewUser: boolean;
 }
 
 export interface AppleSignInRequest {
@@ -62,6 +63,7 @@ export interface AppleSignInResponse {
     battleRecords: BattleRecord[] | null;
   };
   token: string; // JWT or session token
+  isNewUser: boolean;
 }
 
 // ============= USER PROFILE =============

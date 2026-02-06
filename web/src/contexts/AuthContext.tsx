@@ -13,7 +13,7 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  signInWithGoogle: (idToken: string) => Promise<void>;
+  signInWithGoogle: (idToken: string) => Promise<{ isNewUser: boolean }>;
   signOut: () => void;
   updateUser: (user: User) => void;
   refreshUser: () => Promise<void>;
@@ -50,6 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signInWithGoogle = async (idToken: string) => {
     const response = await api.signInWithGoogle(idToken);
     setUser(response.user);
+    return { isNewUser: response.isNewUser };
   };
 
   const signOut = () => {
