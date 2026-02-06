@@ -236,4 +236,5 @@ export interface ApiResponse<T> {
 export interface AuthResponse {
   token: string;
   user: User;
+  isNewUser: boolean;
 }

@@ -23,8 +23,8 @@ export function LoginPage() {
     setError(null);
 
     try {
-      await signInWithGoogle(credentialResponse.credential);
-      navigate('/profile');
+      const { isNewUser } = await signInWithGoogle(credentialResponse.credential);
+      navigate(isNewUser ? '/profile/edit' : '/profile');
     } catch (err) {
       console.error('Sign in error:', err);
       setError('ログインに失敗しました。もう一度お試しください。');

@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     const payload = await verifyAppleToken(body.identityToken);
 
     // Find or create user
-    const user = await findOrCreateAppleUser(
+    const { user, isNewUser } = await findOrCreateAppleUser(
       payload,
       body.email,
       body.fullName
@@ -56,6 +56,7 @@ export async function POST(request: NextRequest) {
         battleRecords: user.battleRecords as any[] | null,
       },
       token,
+      isNewUser,
     };
 
     return NextResponse.json(response);

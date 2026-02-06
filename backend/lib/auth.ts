@@ -71,7 +71,10 @@ export async function findOrCreateUser(payload: GooglePayload) {
     where: { googleId: payload.sub },
   });
 
+  let isNewUser = false;
+
   if (!user) {
+    isNewUser = true;
     user = await prisma.user.create({
       data: {
         email: payload.email,
@@ -91,7 +94,7 @@ export async function findOrCreateUser(payload: GooglePayload) {
     });
   }
 
-  return user;
+  return { user, isNewUser };
 }
 
 /**
@@ -133,7 +136,10 @@ export async function findOrCreateAppleUser(
     where: { appleId: payload.sub },
   });
 
+  let isNewUser = false;
+
   if (!user) {
+    isNewUser = true;
     // For new users, use provided email or payload email
     const userEmail = email || payload.email;
 
@@ -150,7 +156,7 @@ export async function findOrCreateAppleUser(
     });
   }
 
-  return user;
+  return { user, isNewUser };
 }
 
 /**

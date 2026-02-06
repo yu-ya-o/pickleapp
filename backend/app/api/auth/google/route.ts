@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     const payload = await verifyGoogleToken(body.idToken);
 
     // Find or create user
-    const user = await findOrCreateUser(payload);
+    const { user, isNewUser } = await findOrCreateUser(payload);
 
     // In production, generate JWT token
     // For simplicity, we'll return userId as token
@@ -52,6 +52,7 @@ export async function POST(request: NextRequest) {
         battleRecords: user.battleRecords as any[] | null,
       },
       token,
+      isNewUser,
     };
 
     return NextResponse.json(response);
