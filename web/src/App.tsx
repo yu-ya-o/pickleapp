@@ -30,6 +30,8 @@ import { ProfilePage } from '@/pages/profile/ProfilePage';
 import { ProfileEditPage } from '@/pages/profile/ProfileEditPage';
 import { ShareableProfilePage } from '@/pages/profile/ShareableProfilePage';
 import { UserProfilePage } from '@/pages/users/UserProfilePage';
+import { TournamentDetailPage } from '@/pages/tournaments/TournamentDetailPage';
+import { CreateTournamentPage } from '@/pages/tournaments/CreateTournamentPage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -67,6 +69,8 @@ function AppRoutes() {
       <Route path="/teams/:teamId/chat" element={<ProtectedRoute><TeamChatPage /></ProtectedRoute>} />
       <Route path="/teams/:teamId/events/create" element={<ProtectedRoute><CreateEventPage /></ProtectedRoute>} />
       <Route path="/teams/:teamId/events/:eventId/edit" element={<ProtectedRoute><CreateTeamEventPage /></ProtectedRoute>} />
+      <Route path="/tournaments/create" element={<ProtectedRoute><CreateTournamentPage /></ProtectedRoute>} />
+      <Route path="/tournaments/:id/edit" element={<ProtectedRoute><CreateTournamentPage /></ProtectedRoute>} />
 
       {/* Public routes with MainLayout */}
       <Route
@@ -84,6 +88,7 @@ function AppRoutes() {
         <Route path="/teams" element={<TeamsListPage />} />
         <Route path="/teams/:id" element={<TeamDetailPage />} />
         <Route path="/teams/:teamId/events/:eventId" element={<TeamEventDetailPage />} />
+        <Route path="/tournaments/:id" element={<TournamentDetailPage />} />
         <Route path="/rankings" element={<RankingsPage />} />
         <Route path="/users/:userId" element={<UserProfilePage />} />
         <Route path="/p/:userId" element={<ShareableProfilePage />} />

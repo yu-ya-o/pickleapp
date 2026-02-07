@@ -225,6 +225,40 @@ export interface TeamInviteUrl {
   createdBy: string;
 }
 
+// Tournament
+export interface Tournament {
+  id: string;
+  title: string;
+  description: string;
+  eventDate: string;
+  organizer: string;
+  venue: string;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
+  events: string;
+  matchFormat: string;
+  applicationDeadline: string;
+  entryFee: string;
+  paymentMethod: string;
+  tournamentUrl?: string;
+  contactInfo: string;
+  snsUrls?: {
+    twitter?: string;
+    instagram?: string;
+    line?: string;
+  };
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  creator: {
+    id: string;
+    name: string;
+    nickname?: string;
+    profileImage?: string;
+  };
+}
+
 // API Response types
 export interface ApiResponse<T> {
   data?: T;

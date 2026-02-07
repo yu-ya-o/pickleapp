@@ -58,6 +58,7 @@ model User {
   teamEventParticipations TeamEventParticipant[]
   teamMessages        TeamMessage[]
   notifications       Notification[]
+  tournamentsCreated  Tournament[]        @relation("TournamentCreator")
 
   @@index([googleId])
   @@index([appleId])
@@ -334,6 +335,39 @@ model Notification {
   @@index([isRead])
   @@index([createdAt])
   @@index([userId, isRead])
+}
+
+// ============= TOURNAMENT MODEL =============
+
+model Tournament {
+  id                    String    @id @default(uuid())
+  title                 String                          // 大会名
+  description           String    @db.Text              // 大会概要
+  eventDate             String                          // 開催日（テキスト表示用、例: "2026年3月15日（日）"）
+  organizer             String                          // 主催
+  venue                 String                          // 会場
+  address               String?                         // 会場住所
+  latitude              Float?                          // 緯度
+  longitude             Float?                          // 経度
+  events                String                          // 種目（例: "男子ダブルス / 女子ダブルス / ミックスダブルス"）
+  matchFormat           String                          // 試合形式（例: "総当たりリーグ戦 → 決勝トーナメント"）
+  applicationDeadline   String                          // 申込期限（例: "2026年3月1日（土）23:59まで"）
+  entryFee              String                          // 参加費用（例: "1人 3,000円"）
+  paymentMethod         String                          // 支払方法（例: "当日現金払い"）
+  tournamentUrl         String?                         // 大会URL
+  contactInfo           String                          // 問合せ先（例: "example@email.com"）
+  snsUrls               Json?                           // SNS {"twitter": "...", "instagram": "...", "line": "..."}
+  status                String    @default("active")    // "active", "cancelled", "completed"
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relations
+  creatorId             String
+  creator               User      @relation("TournamentCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+
+  @@index([creatorId])
+  @@index([status])
+  @@index([createdAt])
 }
 
 // ============= COURT MODEL =============
