@@ -23,10 +23,7 @@ export function LoginPage() {
     setError(null);
 
     try {
-      const result = await signInWithGoogle(credentialResponse.credential);
-      // 新規登録時はプロフィール編集画面へ、既存ユーザーはプロフィール画面へ
-      // isNewUserがundefinedの場合もプロフィール編集画面へ（バックエンド未対応時のフォールバック）
-      const isNewUser = result.isNewUser !== false;
+      const { isNewUser } = await signInWithGoogle(credentialResponse.credential);
       navigate(isNewUser ? '/profile/edit' : '/profile');
     } catch (err) {
       console.error('Sign in error:', err);
