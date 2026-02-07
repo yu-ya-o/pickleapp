@@ -58,7 +58,7 @@ export function CreateTournamentPage() {
         entryFee: tournament.entryFee,
         paymentMethod: tournament.paymentMethod,
         tournamentUrl: tournament.tournamentUrl || '',
-        contactInfo: tournament.contactInfo,
+        contactInfo: tournament.contactInfo || '',
         snsTwitter: tournament.snsUrls?.twitter || '',
         snsInstagram: tournament.snsUrls?.instagram || '',
         snsLine: tournament.snsUrls?.line || '',
