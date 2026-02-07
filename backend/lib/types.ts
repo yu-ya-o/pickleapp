@@ -441,6 +441,87 @@ export interface TeamEventParticipantResponse {
   };
 }
 
+// ============= TOURNAMENTS =============
+export interface CreateTournamentRequest {
+  title: string;
+  description: string;
+  eventDate: string;
+  organizer: string;
+  venue: string;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
+  events: string;
+  matchFormat: string;
+  applicationDeadline: string;
+  entryFee: string;
+  paymentMethod: string;
+  tournamentUrl?: string;
+  contactInfo: string;
+  snsUrls?: {
+    twitter?: string;
+    instagram?: string;
+    line?: string;
+  };
+}
+
+export interface UpdateTournamentRequest {
+  title?: string;
+  description?: string;
+  eventDate?: string;
+  organizer?: string;
+  venue?: string;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
+  events?: string;
+  matchFormat?: string;
+  applicationDeadline?: string;
+  entryFee?: string;
+  paymentMethod?: string;
+  tournamentUrl?: string;
+  contactInfo?: string;
+  snsUrls?: {
+    twitter?: string;
+    instagram?: string;
+    line?: string;
+  };
+  status?: 'active' | 'cancelled' | 'completed';
+}
+
+export interface TournamentResponse {
+  id: string;
+  title: string;
+  description: string;
+  eventDate: string;
+  organizer: string;
+  venue: string;
+  address: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  events: string;
+  matchFormat: string;
+  applicationDeadline: string;
+  entryFee: string;
+  paymentMethod: string;
+  tournamentUrl: string | null;
+  contactInfo: string;
+  snsUrls: {
+    twitter?: string;
+    instagram?: string;
+    line?: string;
+  } | null;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  creator: {
+    id: string;
+    name: string;
+    nickname: string | null;
+    profileImage: string | null;
+  };
+}
+
 // ============= TEAM CHAT =============
 export interface TeamChatRoomResponse {
   id: string;

@@ -11,6 +11,7 @@ import type {
   TeamInviteUrl,
   TeamMember,
   AuthResponse,
+  Tournament,
 } from '@/types';
 
 class ApiClient {
@@ -373,6 +374,38 @@ class ApiClient {
 
   async deleteNotification(id: string): Promise<void> {
     await this.request(`/api/notifications/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Tournaments
+  async getTournaments(params?: { status?: string }): Promise<Tournament[]> {
+    const searchParams = new URLSearchParams();
+    if (params?.status) searchParams.set('status', params.status);
+    const query = searchParams.toString();
+    return this.request<Tournament[]>(`/api/tournaments${query ? `?${query}` : ''}`);
+  }
+
+  async getTournament(id: string): Promise<Tournament> {
+    return this.request<Tournament>(`/api/tournaments/${id}`);
+  }
+
+  async createTournament(data: Partial<Tournament>): Promise<Tournament> {
+    return this.request<Tournament>('/api/tournaments', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateTournament(id: string, data: Partial<Tournament>): Promise<Tournament> {
+    return this.request<Tournament>(`/api/tournaments/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteTournament(id: string): Promise<void> {
+    await this.request(`/api/tournaments/${id}`, {
       method: 'DELETE',
     });
   }
