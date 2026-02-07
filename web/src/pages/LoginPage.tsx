@@ -24,6 +24,7 @@ export function LoginPage() {
 
     try {
       const { isNewUser } = await signInWithGoogle(credentialResponse.credential);
+      console.log('isNewUser:', isNewUser);
       navigate(isNewUser ? '/profile/edit' : '/profile');
     } catch (err) {
       console.error('Sign in error:', err);
