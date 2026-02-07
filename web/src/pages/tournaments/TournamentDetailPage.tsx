@@ -1,15 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
-  Calendar,
-  MapPin,
   Trophy,
-  Users,
-  Clock,
-  CreditCard,
-  Wallet,
-  Globe,
-  Mail,
   Edit as EditIcon,
   ExternalLink,
 } from 'lucide-react';
@@ -97,6 +89,12 @@ export function TournamentDetailPage() {
 
   const isCreator = tournament.creator.id === user?.id;
 
+  // SNS links for table display
+  const snsText: string[] = [];
+  if (tournament.snsUrls?.twitter) snsText.push('X (Twitter)');
+  if (tournament.snsUrls?.instagram) snsText.push('Instagram');
+  if (tournament.snsUrls?.line) snsText.push('LINE');
+
   return (
     <div style={{ minHeight: '100vh', background: '#F5F5F7', overflowX: 'hidden' }}>
       <SEO
@@ -119,163 +117,151 @@ export function TournamentDetailPage() {
 
       {/* Content */}
       <div style={{ padding: '0 16px', paddingBottom: '200px' }}>
-        {/* Card Container */}
+        {/* Title */}
+        <h1 style={{
+          fontSize: '20px',
+          fontWeight: 700,
+          color: '#1a1a2e',
+          lineHeight: 1.4,
+          marginBottom: '16px',
+        }}>
+          {tournament.title}
+        </h1>
+
+        {/* 大会概要 Section */}
+        <SectionHeader title="大会概要" />
         <div style={{
           background: '#FFFFFF',
-          borderRadius: '16px',
+          padding: '16px',
+          marginBottom: '16px',
+          borderBottomLeftRadius: '8px',
+          borderBottomRightRadius: '8px',
           boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-          overflow: 'hidden'
         }}>
-          {/* Title */}
-          <div style={{ padding: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-              <Trophy size={24} style={{ color: '#65A30D' }} />
-              <span style={{ fontSize: '12px', fontWeight: 600, color: '#65A30D', background: '#F0FDF4', padding: '2px 8px', borderRadius: '4px' }}>大会</span>
-            </div>
-            <h1 style={{ fontSize: '24px', fontWeight: 700, color: '#1a1a2e' }}>{tournament.title}</h1>
-          </div>
+          <p style={{ whiteSpace: 'pre-wrap', lineHeight: 1.8, color: '#333333', fontSize: '14px' }}>
+            {tournament.description}
+          </p>
+        </div>
 
-          {/* Description */}
-          {tournament.description && (
-            <div style={{ padding: '0 16px 16px' }}>
-              <p style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6, color: '#1a1a2e' }}>
-                {tournament.description}
-              </p>
-            </div>
-          )}
-
-          {/* Basic Info */}
-          <div style={{ padding: '16px', borderTop: '1px solid #E5E5E5' }}>
-            <h3 style={{ fontWeight: 700, marginBottom: '16px', color: '#1a1a2e', fontSize: '16px' }}>基本情報</h3>
-
-            {/* Event Date */}
-            <InfoRow icon={<Calendar size={20} style={{ color: '#65A30D' }} />} label="開催日" value={tournament.eventDate} />
-
-            {/* Organizer */}
-            <InfoRow icon={<Users size={20} style={{ color: '#65A30D' }} />} label="主催" value={tournament.organizer} />
-
-            {/* Venue */}
-            <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
-              <div style={{ minWidth: '20px', paddingTop: '2px' }}>
-                <MapPin size={20} style={{ color: '#65A30D' }} />
-              </div>
-              <div style={{ flex: 1 }}>
-                <p style={{ fontSize: '12px', color: '#888888', marginBottom: '2px' }}>会場</p>
-                <p style={{ fontWeight: 500, color: '#1a1a2e' }}>{tournament.venue}</p>
-                {tournament.address && (
-                  <p style={{ fontSize: '14px', color: '#888888', marginTop: '2px' }}>{tournament.address}</p>
+        {/* 基本情報 Section */}
+        <SectionHeader title="基本情報" />
+        <div style={{
+          background: '#FFFFFF',
+          marginBottom: '16px',
+          borderBottomLeftRadius: '8px',
+          borderBottomRightRadius: '8px',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+          overflow: 'hidden',
+        }}>
+          <TableRow label="大会名" value={tournament.title} />
+          <TableRow label="開催日" value={tournament.eventDate} />
+          <TableRow label="主催" value={tournament.organizer} />
+          <TableRow label="会場">
+            <span>{tournament.venue}</span>
+            {tournament.address && (
+              <span style={{ display: 'block', fontSize: '13px', color: '#888888', marginTop: '2px' }}>
+                ({tournament.address})
+              </span>
+            )}
+          </TableRow>
+          <TableRow label="種目" value={tournament.events} />
+          <TableRow label="試合形式" value={tournament.matchFormat} />
+          <TableRow label="申込期限" value={tournament.applicationDeadline} />
+          <TableRow label="参加費用" value={tournament.entryFee} />
+          <TableRow label="支払方法" value={tournament.paymentMethod} />
+          <TableRow label="大会URL">
+            {tournament.tournamentUrl ? (
+              <a
+                href={tournament.tournamentUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: '#1D9BF0', textDecoration: 'none', wordBreak: 'break-all', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+              >
+                {tournament.tournamentUrl}
+                <ExternalLink size={12} />
+              </a>
+            ) : (
+              <span style={{ color: '#CCCCCC' }}>-</span>
+            )}
+          </TableRow>
+          <TableRow label="問合せ先" value={tournament.contactInfo} />
+          <TableRow label="SNS" isLast>
+            {snsText.length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                {tournament.snsUrls?.twitter && (
+                  <a href={tournament.snsUrls.twitter} target="_blank" rel="noopener noreferrer" style={{ color: '#1D9BF0', textDecoration: 'none', fontSize: '14px' }}>
+                    X (Twitter)
+                  </a>
+                )}
+                {tournament.snsUrls?.instagram && (
+                  <a href={tournament.snsUrls.instagram} target="_blank" rel="noopener noreferrer" style={{ color: '#E4405F', textDecoration: 'none', fontSize: '14px' }}>
+                    Instagram
+                  </a>
+                )}
+                {tournament.snsUrls?.line && (
+                  <a href={tournament.snsUrls.line} target="_blank" rel="noopener noreferrer" style={{ color: '#00B900', textDecoration: 'none', fontSize: '14px' }}>
+                    LINE
+                  </a>
                 )}
               </div>
-            </div>
-
-            {/* Google Map */}
-            {tournament.latitude && tournament.longitude && (
-              <div style={{ marginBottom: '12px', marginLeft: '32px' }}>
-                <GoogleMap
-                  latitude={tournament.latitude}
-                  longitude={tournament.longitude}
-                  title={tournament.venue}
-                />
-                <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${tournament.latitude},${tournament.longitude}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#65A30D', marginTop: '8px', textDecoration: 'none', fontSize: '14px' }}
-                >
-                  <span>Google Mapsで開く</span>
-                  <ExternalLink size={14} />
-                </a>
-              </div>
+            ) : (
+              <span style={{ color: '#CCCCCC' }}>-</span>
             )}
+          </TableRow>
+        </div>
 
-            {/* Events/Sports */}
-            <InfoRow icon={<Trophy size={20} style={{ color: '#65A30D' }} />} label="種目" value={tournament.events} />
-
-            {/* Match Format */}
-            <InfoRow icon={<Users size={20} style={{ color: '#65A30D' }} />} label="試合形式" value={tournament.matchFormat} />
-
-            {/* Application Deadline */}
-            <InfoRow icon={<Clock size={20} style={{ color: '#65A30D' }} />} label="申込期限" value={tournament.applicationDeadline} />
-
-            {/* Entry Fee */}
-            <InfoRow icon={<CreditCard size={20} style={{ color: '#65A30D' }} />} label="参加費用" value={tournament.entryFee} />
-
-            {/* Payment Method */}
-            <InfoRow icon={<Wallet size={20} style={{ color: '#65A30D' }} />} label="支払方法" value={tournament.paymentMethod} />
-
-            {/* Tournament URL */}
-            {tournament.tournamentUrl && (
-              <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
-                <div style={{ minWidth: '20px', paddingTop: '2px' }}>
-                  <Globe size={20} style={{ color: '#65A30D' }} />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <p style={{ fontSize: '12px', color: '#888888', marginBottom: '2px' }}>大会URL</p>
-                  <a
-                    href={tournament.tournamentUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: '#1D9BF0', textDecoration: 'none', wordBreak: 'break-all' }}
-                  >
-                    {tournament.tournamentUrl}
-                  </a>
-                </div>
-              </div>
-            )}
-
-            {/* Contact */}
-            <InfoRow icon={<Mail size={20} style={{ color: '#65A30D' }} />} label="問合せ先" value={tournament.contactInfo} />
-
-            {/* SNS */}
-            {tournament.snsUrls && Object.values(tournament.snsUrls).some(Boolean) && (
-              <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
-                <div style={{ minWidth: '20px', paddingTop: '2px' }}>
-                  <Globe size={20} style={{ color: '#65A30D' }} />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <p style={{ fontSize: '12px', color: '#888888', marginBottom: '4px' }}>SNS</p>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    {tournament.snsUrls.twitter && (
-                      <a href={tournament.snsUrls.twitter} target="_blank" rel="noopener noreferrer" style={{ color: '#1D9BF0', textDecoration: 'none', fontSize: '14px' }}>
-                        X (Twitter)
-                      </a>
-                    )}
-                    {tournament.snsUrls.instagram && (
-                      <a href={tournament.snsUrls.instagram} target="_blank" rel="noopener noreferrer" style={{ color: '#E4405F', textDecoration: 'none', fontSize: '14px' }}>
-                        Instagram
-                      </a>
-                    )}
-                    {tournament.snsUrls.line && (
-                      <a href={tournament.snsUrls.line} target="_blank" rel="noopener noreferrer" style={{ color: '#00B900', textDecoration: 'none', fontSize: '14px' }}>
-                        LINE
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Creator Section */}
-          <div style={{ padding: '16px', borderTop: '1px solid #E5E5E5' }}>
-            <h3 style={{ fontWeight: 700, marginBottom: '12px', color: '#1a1a2e' }}>投稿者</h3>
-            <Link
-              to={`/users/${tournament.creator.id}`}
-              style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}
+        {/* Google Map */}
+        {tournament.latitude && tournament.longitude && (
+          <div style={{
+            background: '#FFFFFF',
+            borderRadius: '8px',
+            padding: '16px',
+            marginBottom: '16px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+          }}>
+            <GoogleMap
+              latitude={tournament.latitude}
+              longitude={tournament.longitude}
+              title={tournament.venue}
+            />
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${tournament.latitude},${tournament.longitude}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#65A30D', marginTop: '8px', textDecoration: 'none', fontSize: '14px' }}
             >
-              <Avatar
-                src={tournament.creator.profileImage}
-                alt={getDisplayName(tournament.creator)}
-                size="lg"
-              />
-              <span style={{ fontWeight: 500, color: '#1a1a2e' }}>{getDisplayName(tournament.creator)}</span>
-            </Link>
+              Google Mapsで開く
+              <ExternalLink size={14} />
+            </a>
           </div>
+        )}
+
+        {/* 投稿者 Section */}
+        <SectionHeader title="投稿者" />
+        <div style={{
+          background: '#FFFFFF',
+          padding: '16px',
+          marginBottom: '16px',
+          borderBottomLeftRadius: '8px',
+          borderBottomRightRadius: '8px',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+        }}>
+          <Link
+            to={`/users/${tournament.creator.id}`}
+            style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}
+          >
+            <Avatar
+              src={tournament.creator.profileImage}
+              alt={getDisplayName(tournament.creator)}
+              size="lg"
+            />
+            <span style={{ fontWeight: 500, color: '#1a1a2e' }}>{getDisplayName(tournament.creator)}</span>
+          </Link>
         </div>
 
         {/* Creator Actions */}
         {isCreator && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '16px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '8px' }}>
             <button
               onClick={() => navigate(`/tournaments/${tournament.id}/edit`)}
               style={{
@@ -348,15 +334,67 @@ export function TournamentDetailPage() {
   );
 }
 
-function InfoRow({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
+/** セクションヘッダー（緑帯） */
+function SectionHeader({ title }: { title: string }) {
   return (
-    <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
-      <div style={{ minWidth: '20px', paddingTop: '2px' }}>
-        {icon}
+    <div style={{
+      background: 'linear-gradient(135deg, #65A30D 0%, #4d7c0f 100%)',
+      padding: '10px 16px',
+      borderTopLeftRadius: '8px',
+      borderTopRightRadius: '8px',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+    }}>
+      <span style={{ fontSize: '14px' }}>🏓</span>
+      <span style={{ color: '#FFFFFF', fontWeight: 700, fontSize: '16px' }}>{title}</span>
+    </div>
+  );
+}
+
+/** テーブル行（ラベル + 値） */
+function TableRow({
+  label,
+  value,
+  children,
+  isLast,
+}: {
+  label: string;
+  value?: string;
+  children?: React.ReactNode;
+  isLast?: boolean;
+}) {
+  return (
+    <div style={{
+      display: 'flex',
+      borderBottom: isLast ? 'none' : '1px solid #E5E5E5',
+      minHeight: '48px',
+    }}>
+      {/* Label */}
+      <div style={{
+        width: '100px',
+        minWidth: '100px',
+        background: '#F9FAFB',
+        padding: '12px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRight: '1px solid #E5E5E5',
+      }}>
+        <span style={{ fontSize: '13px', fontWeight: 600, color: '#374151', textAlign: 'center' }}>{label}</span>
       </div>
-      <div style={{ flex: 1 }}>
-        <p style={{ fontSize: '12px', color: '#888888', marginBottom: '2px' }}>{label}</p>
-        <p style={{ fontWeight: 500, color: '#1a1a2e', whiteSpace: 'pre-wrap' }}>{value}</p>
+      {/* Value */}
+      <div style={{
+        flex: 1,
+        padding: '12px',
+        display: 'flex',
+        alignItems: 'center',
+      }}>
+        {children || (
+          <span style={{ fontSize: '14px', color: '#333333', whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>
+            {value || <span style={{ color: '#CCCCCC' }}>-</span>}
+          </span>
+        )}
       </div>
     </div>
   );
