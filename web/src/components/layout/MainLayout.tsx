@@ -1,5 +1,5 @@
 import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Calendar, CalendarCheck, Users, Trophy, Medal, User, LogIn, LogOut } from 'lucide-react';
+import { Home, Calendar, CalendarCheck, Users, Trophy, User, LogIn, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
 import { WebAdBanner } from './WebAdBanner';
