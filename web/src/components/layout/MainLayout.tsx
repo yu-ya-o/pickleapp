@@ -16,7 +16,7 @@ export function MainLayout() {
         { to: '/events', icon: Calendar, label: 'イベント' },
         { to: '/my-events', icon: CalendarCheck, label: 'マイイベント' },
         { to: '/teams', icon: Users, label: 'サークル' },
-        { to: '/tournaments', icon: Medal, label: '大会' },
+        // { to: '/tournaments', icon: Medal, label: '大会' }, // テスト中のため非表示
         { to: '/rankings', icon: Trophy, label: 'ランキング' },
         { to: '/profile', icon: User, label: 'プロフィール' },
       ]
@@ -24,7 +24,7 @@ export function MainLayout() {
         { to: '/', icon: Home, label: 'ホーム', exact: true },
         { to: '/events', icon: Calendar, label: 'イベント' },
         { to: '/teams', icon: Users, label: 'サークル' },
-        { to: '/tournaments', icon: Medal, label: '大会' },
+        // { to: '/tournaments', icon: Medal, label: '大会' }, // テスト中のため非表示
         { to: '/rankings', icon: Trophy, label: 'ランキング' },
         { to: '/login', icon: LogIn, label: 'ログイン' },
       ];
