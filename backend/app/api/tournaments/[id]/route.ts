@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { getUserFromAuth } from '@/lib/auth';
 import {
@@ -114,7 +115,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     if (body.paymentMethod !== undefined) updateData.paymentMethod = body.paymentMethod;
     if (body.tournamentUrl !== undefined) updateData.tournamentUrl = body.tournamentUrl;
     if (body.contactInfo !== undefined) updateData.contactInfo = body.contactInfo;
-    if (body.snsUrls !== undefined) updateData.snsUrls = body.snsUrls;
+    if (body.snsUrls !== undefined) updateData.snsUrls = body.snsUrls ? (body.snsUrls as Prisma.InputJsonValue) : Prisma.JsonNull;
     if (body.status !== undefined) updateData.status = body.status;
 
     const updated = await prisma.tournament.update({

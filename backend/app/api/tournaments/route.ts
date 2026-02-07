@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { getUserFromAuth } from '@/lib/auth';
 import { errorResponse, UnauthorizedError, BadRequestError } from '@/lib/errors';
@@ -116,7 +117,7 @@ export async function POST(request: NextRequest) {
         paymentMethod: body.paymentMethod,
         tournamentUrl: body.tournamentUrl || null,
         contactInfo: body.contactInfo,
-        snsUrls: body.snsUrls || null,
+        snsUrls: body.snsUrls ? (body.snsUrls as Prisma.InputJsonValue) : Prisma.JsonNull,
         creatorId: user.id,
       },
       include: {
