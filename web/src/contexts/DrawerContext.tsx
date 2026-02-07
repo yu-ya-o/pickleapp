@@ -1,6 +1,6 @@
 import { useState, createContext, useContext } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Calendar, CalendarCheck, Users, Trophy, Medal, User, X, LogIn, LogOut } from 'lucide-react';
+import { Home, Calendar, CalendarCheck, Users, Trophy, User, X, LogIn, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
 
