@@ -355,7 +355,7 @@ model Tournament {
   entryFee              String                          // 参加費用（例: "1人 3,000円"）
   paymentMethod         String                          // 支払方法（例: "当日現金払い"）
   tournamentUrl         String?                         // 大会URL
-  contactInfo           String                          // 問合せ先（例: "example@email.com"）
+  contactInfo           String?                         // 問合せ先（例: "example@email.com"）
   snsUrls               Json?                           // SNS {"twitter": "...", "instagram": "...", "line": "..."}
   status                String    @default("active")    // "active", "cancelled", "completed"
   createdAt             DateTime  @default(now())

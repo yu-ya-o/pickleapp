@@ -94,8 +94,7 @@ export async function POST(request: NextRequest) {
       !body.matchFormat ||
       !body.applicationDeadline ||
       !body.entryFee ||
-      !body.paymentMethod ||
-      !body.contactInfo
+      !body.paymentMethod
     ) {
       throw new BadRequestError('Missing required fields');
     }
@@ -116,7 +115,7 @@ export async function POST(request: NextRequest) {
         entryFee: body.entryFee,
         paymentMethod: body.paymentMethod,
         tournamentUrl: body.tournamentUrl || null,
-        contactInfo: body.contactInfo,
+        contactInfo: body.contactInfo || null,
         snsUrls: body.snsUrls ? (body.snsUrls as Prisma.InputJsonValue) : Prisma.JsonNull,
         creatorId: user.id,
       },

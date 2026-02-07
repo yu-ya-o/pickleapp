@@ -457,7 +457,7 @@ export interface CreateTournamentRequest {
   entryFee: string;
   paymentMethod: string;
   tournamentUrl?: string;
-  contactInfo: string;
+  contactInfo?: string;
   snsUrls?: {
     twitter?: string;
     instagram?: string;
@@ -505,7 +505,7 @@ export interface TournamentResponse {
   entryFee: string;
   paymentMethod: string;
   tournamentUrl: string | null;
-  contactInfo: string;
+  contactInfo: string | null;
   snsUrls: {
     twitter?: string;
     instagram?: string;

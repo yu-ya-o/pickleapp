@@ -184,7 +184,7 @@ export function TournamentDetailPage() {
               <span style={{ color: '#CCCCCC' }}>-</span>
             )}
           </TableRow>
-          <TableRow label="問合せ先" value={tournament.contactInfo} />
+          <TableRow label="問合せ先" value={tournament.contactInfo || undefined} />
           <TableRow label="SNS" isLast>
             {snsText.length > 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>

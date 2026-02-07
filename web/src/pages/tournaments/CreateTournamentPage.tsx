@@ -210,21 +210,21 @@ export function CreateTournamentPage() {
             required
           />
 
-          <Input
+          <Textarea
             label="種目"
             name="events"
             value={formData.events}
             onChange={handleChange}
-            placeholder="例: 男子ダブルス / 女子ダブルス / ミックスダブルス"
+            placeholder={"例:\n男子ダブルス\n女子ダブルス\nミックスダブルス"}
             required
           />
 
-          <Input
+          <Textarea
             label="試合形式"
             name="matchFormat"
             value={formData.matchFormat}
             onChange={handleChange}
-            placeholder="例: 総当たりリーグ戦 → 決勝トーナメント"
+            placeholder={"例:\n総当たりリーグ戦 → 決勝トーナメント\n11点マッチ\nデュースなし"}
             required
           />
 
@@ -237,21 +237,21 @@ export function CreateTournamentPage() {
             required
           />
 
-          <Input
+          <Textarea
             label="参加費用"
             name="entryFee"
             value={formData.entryFee}
             onChange={handleChange}
-            placeholder="例: 1人 3,000円"
+            placeholder={"例:\n1人 3,000円（税込）\nペアあたりの金額です"}
             required
           />
 
-          <Input
+          <Textarea
             label="支払方法"
             name="paymentMethod"
             value={formData.paymentMethod}
             onChange={handleChange}
-            placeholder="例: 当日現金払い"
+            placeholder={"例:\n当日現金払い\n事前振込も可"}
             required
           />
 
@@ -269,7 +269,6 @@ export function CreateTournamentPage() {
             value={formData.contactInfo}
             onChange={handleChange}
             placeholder="例: example@email.com"
-            required
           />
 
           {/* SNS Section */}
