@@ -242,7 +242,7 @@ export interface Tournament {
   entryFee: string;
   paymentMethod: string;
   tournamentUrl?: string;
-  contactInfo: string;
+  contactInfo?: string;
   snsUrls?: {
     twitter?: string;
     instagram?: string;
