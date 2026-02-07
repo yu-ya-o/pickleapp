@@ -1,5 +1,5 @@
 import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Calendar, CalendarCheck, Users, Trophy, User, LogIn, LogOut } from 'lucide-react';
+import { Home, Calendar, CalendarCheck, Users, Trophy, Medal, User, LogIn, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
 import { WebAdBanner } from './WebAdBanner';
@@ -16,6 +16,7 @@ export function MainLayout() {
         { to: '/events', icon: Calendar, label: 'イベント' },
         { to: '/my-events', icon: CalendarCheck, label: 'マイイベント' },
         { to: '/teams', icon: Users, label: 'サークル' },
+        { to: '/tournaments', icon: Medal, label: '大会' },
         { to: '/rankings', icon: Trophy, label: 'ランキング' },
         { to: '/profile', icon: User, label: 'プロフィール' },
       ]
@@ -23,6 +24,7 @@ export function MainLayout() {
         { to: '/', icon: Home, label: 'ホーム', exact: true },
         { to: '/events', icon: Calendar, label: 'イベント' },
         { to: '/teams', icon: Users, label: 'サークル' },
+        { to: '/tournaments', icon: Medal, label: '大会' },
         { to: '/rankings', icon: Trophy, label: 'ランキング' },
         { to: '/login', icon: LogIn, label: 'ログイン' },
       ];

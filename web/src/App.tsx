@@ -30,6 +30,7 @@ import { ProfilePage } from '@/pages/profile/ProfilePage';
 import { ProfileEditPage } from '@/pages/profile/ProfileEditPage';
 import { ShareableProfilePage } from '@/pages/profile/ShareableProfilePage';
 import { UserProfilePage } from '@/pages/users/UserProfilePage';
+import { TournamentsListPage } from '@/pages/tournaments/TournamentsListPage';
 import { TournamentDetailPage } from '@/pages/tournaments/TournamentDetailPage';
 import { CreateTournamentPage } from '@/pages/tournaments/CreateTournamentPage';
 
@@ -88,6 +89,7 @@ function AppRoutes() {
         <Route path="/teams" element={<TeamsListPage />} />
         <Route path="/teams/:id" element={<TeamDetailPage />} />
         <Route path="/teams/:teamId/events/:eventId" element={<TeamEventDetailPage />} />
+        <Route path="/tournaments" element={<TournamentsListPage />} />
         <Route path="/tournaments/:id" element={<TournamentDetailPage />} />
         <Route path="/rankings" element={<RankingsPage />} />
         <Route path="/users/:userId" element={<UserProfilePage />} />
