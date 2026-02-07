@@ -24,8 +24,9 @@ export function LoginPage() {
 
     try {
       const result = await signInWithGoogle(credentialResponse.credential);
-      // isNewUserがundefinedの場合はプロフィール画面へ
-      const isNewUser = result.isNewUser === true;
+      // 新規登録時はプロフィール編集画面へ、既存ユーザーはプロフィール画面へ
+      // isNewUserがundefinedの場合もプロフィール編集画面へ（バックエンド未対応時のフォールバック）
+      const isNewUser = result.isNewUser !== false;
       navigate(isNewUser ? '/profile/edit' : '/profile');
     } catch (err) {
       console.error('Sign in error:', err);
