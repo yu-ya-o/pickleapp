@@ -241,6 +241,7 @@ export interface Tournament {
   applicationDeadline: string;
   entryFee: string;
   paymentMethod: string;
+  coverImage?: string;
   tournamentUrl?: string;
   contactInfo?: string;
   snsUrls?: {

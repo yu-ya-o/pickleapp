@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Image as ImageIcon } from 'lucide-react';
 import { api } from '@/services/api';
 import { PageHeader } from '@/components/PageHeader';
 import { Breadcrumb } from '@/components/Breadcrumb';
@@ -12,6 +13,8 @@ export function CreateTournamentPage() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingTournament, setIsLoadingTournament] = useState(isEditMode);
+  const [coverImage, setCoverImage] = useState('');
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -43,6 +46,7 @@ export function CreateTournamentPage() {
     try {
       setIsLoadingTournament(true);
       const tournament = await api.getTournament(id);
+      setCoverImage(tournament.coverImage || '');
       setFormData({
         title: tournament.title,
         description: tournament.description,
@@ -94,6 +98,20 @@ export function CreateTournamentPage() {
     }));
   };
 
+  const handleCoverImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      setIsUploadingImage(true);
+      const result = await api.uploadProfileImage(file);
+      setCoverImage(result.imageUrl);
+    } catch (error) {
+      console.error('Failed to upload cover image:', error);
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -119,6 +137,7 @@ export function CreateTournamentPage() {
         applicationDeadline: formData.applicationDeadline,
         entryFee: formData.entryFee,
         paymentMethod: formData.paymentMethod,
+        coverImage: coverImage || undefined,
         tournamentUrl: formData.tournamentUrl || undefined,
         contactInfo: formData.contactInfo,
         snsUrls: Object.keys(snsUrls).length > 0 ? snsUrls : undefined,
@@ -165,6 +184,89 @@ export function CreateTournamentPage() {
       {/* Content */}
       <div style={{ padding: '16px', paddingBottom: '100px' }}>
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Cover Image Upload */}
+          <div>
+            <p style={{ fontSize: '14px', fontWeight: 600, color: '#374151', marginBottom: '8px' }}>カバー画像（任意）</p>
+            <div style={{
+              background: '#FFFFFF',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+            }}>
+              {coverImage ? (
+                <div style={{ position: 'relative' }}>
+                  <img
+                    src={coverImage}
+                    alt="カバー画像"
+                    style={{
+                      width: '100%',
+                      height: '200px',
+                      objectFit: 'cover',
+                      display: 'block',
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setCoverImage('')}
+                    style={{
+                      position: 'absolute',
+                      top: '8px',
+                      right: '8px',
+                      background: 'rgba(0,0,0,0.6)',
+                      color: '#FFFFFF',
+                      border: 'none',
+                      borderRadius: '50%',
+                      width: '28px',
+                      height: '28px',
+                      cursor: 'pointer',
+                      fontSize: '14px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ) : (
+                <div style={{
+                  height: '200px',
+                  background: '#F3F4F6',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                }}>
+                  <ImageIcon size={40} style={{ color: '#9CA3AF' }} />
+                  <span style={{ fontSize: '13px', color: '#9CA3AF' }}>大会のバナー画像を設定できます</span>
+                </div>
+              )}
+              <label style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                padding: '12px',
+                cursor: isUploadingImage ? 'wait' : 'pointer',
+                borderTop: '1px solid #E5E5E5',
+                color: 'var(--primary)',
+                fontWeight: 500,
+                fontSize: '14px',
+              }}>
+                <ImageIcon size={18} />
+                <span>{isUploadingImage ? 'アップロード中...' : coverImage ? '画像を変更' : '画像を追加'}</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleCoverImageUpload}
+                  disabled={isUploadingImage}
+                  style={{ display: 'none' }}
+                />
+              </label>
+            </div>
+          </div>
+
           <Input
             label="大会名"
             name="title"

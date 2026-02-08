@@ -128,6 +128,81 @@ export function TournamentDetailPage() {
           {tournament.title}
         </h1>
 
+        {/* Cover Image */}
+        <div style={{
+          marginBottom: '16px',
+          borderRadius: '8px',
+          overflow: 'hidden',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+        }}>
+          {tournament.coverImage ? (
+            <img
+              src={tournament.coverImage}
+              alt={tournament.title}
+              style={{
+                width: '100%',
+                height: 'auto',
+                minHeight: '180px',
+                maxHeight: '300px',
+                objectFit: 'cover',
+                display: 'block',
+              }}
+            />
+          ) : (
+            <div style={{
+              width: '100%',
+              height: '200px',
+              background: 'linear-gradient(135deg, #1e3a5f 0%, #2d5a87 40%, #1e3a5f 70%, #4a9bd9 100%)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative',
+              overflow: 'hidden',
+            }}>
+              {/* Decorative diagonal stripes */}
+              <div style={{
+                position: 'absolute',
+                top: '-20%',
+                right: '-10%',
+                width: '60%',
+                height: '140%',
+                background: 'linear-gradient(135deg, transparent 30%, rgba(74,155,217,0.3) 50%, transparent 70%)',
+                transform: 'rotate(-15deg)',
+              }} />
+              <div style={{
+                position: 'absolute',
+                bottom: '-10%',
+                left: '-5%',
+                width: '40%',
+                height: '80%',
+                background: 'linear-gradient(135deg, rgba(100,200,255,0.2) 0%, transparent 60%)',
+                transform: 'rotate(10deg)',
+              }} />
+              <span style={{
+                fontSize: '28px',
+                fontWeight: 900,
+                color: '#FFFFFF',
+                textShadow: '2px 2px 8px rgba(0,0,0,0.3)',
+                letterSpacing: '2px',
+                zIndex: 1,
+              }}>
+                PICKLEBALL
+              </span>
+              <span style={{
+                fontSize: '20px',
+                fontWeight: 700,
+                color: '#FFFFFF',
+                textShadow: '2px 2px 8px rgba(0,0,0,0.3)',
+                zIndex: 1,
+                marginTop: '4px',
+              }}>
+                TOURNAMENT
+              </span>
+            </div>
+          )}
+        </div>
+
         {/* 大会概要 Section */}
         <SectionHeader title="大会概要" />
         <div style={{

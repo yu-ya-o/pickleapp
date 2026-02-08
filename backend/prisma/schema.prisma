@@ -354,6 +354,7 @@ model Tournament {
   applicationDeadline   String                          // 申込期限（例: "2026年3月1日（土）23:59まで"）
   entryFee              String                          // 参加費用（例: "1人 3,000円"）
   paymentMethod         String                          // 支払方法（例: "当日現金払い"）
+  coverImage            String?                         // カバー画像URL（Cloudinary）
   tournamentUrl         String?                         // 大会URL
   contactInfo           String?                         // 問合せ先（例: "example@email.com"）
   snsUrls               Json?                           // SNS {"twitter": "...", "instagram": "...", "line": "..."}

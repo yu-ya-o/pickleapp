@@ -56,6 +56,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       applicationDeadline: tournament.applicationDeadline,
       entryFee: tournament.entryFee,
       paymentMethod: tournament.paymentMethod,
+      coverImage: tournament.coverImage,
       tournamentUrl: tournament.tournamentUrl,
       contactInfo: tournament.contactInfo,
       snsUrls: tournament.snsUrls as TournamentResponse['snsUrls'],
@@ -113,6 +114,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     if (body.applicationDeadline !== undefined) updateData.applicationDeadline = body.applicationDeadline;
     if (body.entryFee !== undefined) updateData.entryFee = body.entryFee;
     if (body.paymentMethod !== undefined) updateData.paymentMethod = body.paymentMethod;
+    if (body.coverImage !== undefined) updateData.coverImage = body.coverImage;
     if (body.tournamentUrl !== undefined) updateData.tournamentUrl = body.tournamentUrl;
     if (body.contactInfo !== undefined) updateData.contactInfo = body.contactInfo;
     if (body.snsUrls !== undefined) updateData.snsUrls = body.snsUrls ? (body.snsUrls as Prisma.InputJsonValue) : Prisma.JsonNull;
@@ -148,6 +150,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       applicationDeadline: updated.applicationDeadline,
       entryFee: updated.entryFee,
       paymentMethod: updated.paymentMethod,
+      coverImage: updated.coverImage,
       tournamentUrl: updated.tournamentUrl,
       contactInfo: updated.contactInfo,
       snsUrls: updated.snsUrls as TournamentResponse['snsUrls'],
