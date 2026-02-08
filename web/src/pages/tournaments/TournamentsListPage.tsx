@@ -236,7 +236,7 @@ export function TournamentsListPage() {
                         color: '#FFFFFF',
                         fontWeight: 600,
                         fontSize: '13px',
-                        padding: '8px 32px',
+                        padding: '8px 48px',
                         borderRadius: '6px',
                       }}
                     >
