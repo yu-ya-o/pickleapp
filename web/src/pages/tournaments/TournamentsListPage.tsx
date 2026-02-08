@@ -137,19 +137,32 @@ export function TournamentsListPage() {
                   boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
                 }}>
                   <div style={{ display: 'flex', gap: '14px' }}>
-                    {/* Icon */}
+                    {/* Thumbnail */}
                     <div style={{ flexShrink: 0 }}>
-                      <div style={{
-                        width: '50px',
-                        height: '50px',
-                        borderRadius: '12px',
-                        background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                      }}>
-                        <Medal size={24} style={{ color: '#FFFFFF' }} />
-                      </div>
+                      {tournament.coverImage ? (
+                        <img
+                          src={tournament.coverImage}
+                          alt=""
+                          style={{
+                            width: '50px',
+                            height: '50px',
+                            borderRadius: '12px',
+                            objectFit: 'cover',
+                          }}
+                        />
+                      ) : (
+                        <div style={{
+                          width: '50px',
+                          height: '50px',
+                          borderRadius: '12px',
+                          background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}>
+                          <Medal size={24} style={{ color: '#FFFFFF' }} />
+                        </div>
+                      )}
                     </div>
 
                     {/* Info */}

@@ -456,6 +456,7 @@ export interface CreateTournamentRequest {
   applicationDeadline: string;
   entryFee: string;
   paymentMethod: string;
+  coverImage?: string;
   tournamentUrl?: string;
   contactInfo?: string;
   snsUrls?: {
@@ -479,6 +480,7 @@ export interface UpdateTournamentRequest {
   applicationDeadline?: string;
   entryFee?: string;
   paymentMethod?: string;
+  coverImage?: string;
   tournamentUrl?: string;
   contactInfo?: string;
   snsUrls?: {
@@ -504,6 +506,7 @@ export interface TournamentResponse {
   applicationDeadline: string;
   entryFee: string;
   paymentMethod: string;
+  coverImage: string | null;
   tournamentUrl: string | null;
   contactInfo: string | null;
   snsUrls: {
