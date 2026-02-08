@@ -421,7 +421,6 @@ function SectionHeader({ title }: { title: string }) {
       alignItems: 'center',
       gap: '8px',
     }}>
-      <span style={{ fontSize: '14px' }}>🏓</span>
       <span style={{ color: '#FFFFFF', fontWeight: 700, fontSize: '16px' }}>{title}</span>
     </div>
   );
