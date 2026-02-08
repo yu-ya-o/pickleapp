@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Plus, Medal, Calendar, MapPin, Menu } from 'lucide-react';
+import { Plus, Medal, Menu } from 'lucide-react';
 import { api } from '@/services/api';
 import { Loading } from '@/components/ui';
 import { SEO } from '@/components/SEO';
@@ -123,94 +123,108 @@ export function TournamentsListPage() {
             <p style={{ color: '#888888' }}>最初の大会を作成しましょう！</p>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             {tournaments.map((tournament) => (
               <Link
                 key={tournament.id}
                 to={`/tournaments/${tournament.id}`}
                 style={{ textDecoration: 'none' }}
               >
-                <div style={{
-                  background: '#FFFFFF',
-                  borderRadius: '16px',
-                  padding: '16px',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-                }}>
-                  <div style={{ display: 'flex', gap: '14px' }}>
-                    {/* Thumbnail */}
-                    <div style={{ flexShrink: 0 }}>
-                      {tournament.coverImage ? (
-                        <img
-                          src={tournament.coverImage}
-                          alt=""
-                          style={{
-                            width: '50px',
-                            height: '50px',
-                            borderRadius: '12px',
-                            objectFit: 'cover',
-                          }}
-                        />
-                      ) : (
-                        <div style={{
-                          width: '50px',
-                          height: '50px',
-                          borderRadius: '12px',
-                          background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center'
-                        }}>
-                          <Medal size={24} style={{ color: '#FFFFFF' }} />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Info */}
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      {/* Date */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-                        <Calendar size={14} style={{ color: '#65A30D' }} />
-                        <span style={{ fontSize: '13px', color: '#888888' }}>
-                          {tournament.eventDate}
-                        </span>
-                      </div>
-
-                      {/* Title */}
-                      <h3 style={{
-                        fontSize: '16px',
-                        fontWeight: 600,
-                        color: '#1a1a2e',
-                        marginBottom: '6px',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap'
-                      }}>
-                        {tournament.title}
-                      </h3>
-
-                      {/* Venue */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <MapPin size={14} style={{ color: '#65A30D' }} />
-                        <span style={{
-                          fontSize: '13px',
-                          color: '#888888',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap'
-                        }}>
-                          {tournament.venue}
-                        </span>
-                      </div>
-
-                      {/* Organizer */}
+                <div
+                  style={{
+                    background: '#FFFFFF',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                  }}
+                >
+                  {/* Banner Image */}
+                  <div style={{ position: 'relative' }}>
+                    {tournament.coverImage ? (
+                      <img
+                        src={tournament.coverImage}
+                        alt=""
+                        style={{
+                          width: '100%',
+                          height: '200px',
+                          objectFit: 'cover',
+                          display: 'block',
+                        }}
+                      />
+                    ) : (
                       <div style={{
-                        marginTop: '8px',
-                        fontSize: '12px',
-                        color: '#AAAAAA'
+                        width: '100%',
+                        height: '200px',
+                        background: 'linear-gradient(135deg, #1e3a5f 0%, #2d5a87 40%, #1e3a5f 70%, #4a9bd9 100%)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        position: 'relative',
+                        overflow: 'hidden',
                       }}>
-                        主催: {tournament.organizer}
+                        <div style={{
+                          position: 'absolute',
+                          top: '-20%',
+                          right: '-10%',
+                          width: '60%',
+                          height: '140%',
+                          background: 'linear-gradient(135deg, transparent 30%, rgba(74,155,217,0.3) 50%, transparent 70%)',
+                          transform: 'rotate(-15deg)',
+                        }} />
+                        <div style={{
+                          position: 'absolute',
+                          bottom: '-10%',
+                          left: '-5%',
+                          width: '40%',
+                          height: '80%',
+                          background: 'linear-gradient(135deg, rgba(100,200,255,0.2) 0%, transparent 60%)',
+                          transform: 'rotate(10deg)',
+                        }} />
+                        <span style={{
+                          fontSize: '28px',
+                          fontWeight: 900,
+                          color: '#FFFFFF',
+                          textShadow: '2px 2px 8px rgba(0,0,0,0.3)',
+                          letterSpacing: '2px',
+                          zIndex: 1,
+                        }}>
+                          PICKLEBALL
+                        </span>
+                        <span style={{
+                          fontSize: '20px',
+                          fontWeight: 700,
+                          color: '#FFFFFF',
+                          textShadow: '2px 2px 8px rgba(0,0,0,0.3)',
+                          zIndex: 1,
+                          marginTop: '4px',
+                        }}>
+                          TOURNAMENT
+                        </span>
                       </div>
-                    </div>
+                    )}
+                  </div>
+
+                  {/* Title */}
+                  <div style={{ padding: '12px 16px 0' }}>
+                    <h3 style={{
+                      fontSize: '15px',
+                      fontWeight: 700,
+                      color: '#1a1a2e',
+                      lineHeight: 1.4,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}>
+                      {tournament.eventDate} {tournament.title}
+                    </h3>
+                  </div>
+
+                  {/* Info Table */}
+                  <div style={{ padding: '8px 0 16px', margin: '0 16px' }}>
+                    <InfoRow label="開催日" value={tournament.eventDate} />
+                    <InfoRow label="会場" value={tournament.address ? `${tournament.venue}（${tournament.address}）` : tournament.venue} />
+                    <InfoRow label="種目" value={tournament.events} isLast />
                   </div>
                 </div>
               </Link>
@@ -244,6 +258,38 @@ export function TournamentsListPage() {
           <Plus size={24} />
         </button>
       )}
+    </div>
+  );
+}
+
+/** カード内の情報行 */
+function InfoRow({ label, value, isLast }: { label: string; value: string; isLast?: boolean }) {
+  return (
+    <div style={{
+      display: 'flex',
+      borderBottom: isLast ? 'none' : '1px solid #E5E5E5',
+      minHeight: '40px',
+    }}>
+      <div style={{
+        width: '72px',
+        minWidth: '72px',
+        background: '#F9FAFB',
+        padding: '8px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRight: '1px solid #E5E5E5',
+      }}>
+        <span style={{ fontSize: '12px', fontWeight: 600, color: '#374151' }}>{label}</span>
+      </div>
+      <div style={{
+        flex: 1,
+        padding: '8px 10px',
+        display: 'flex',
+        alignItems: 'center',
+      }}>
+        <span style={{ fontSize: '13px', color: '#333333', lineHeight: 1.5 }}>{value}</span>
+      </div>
     </div>
   );
 }
