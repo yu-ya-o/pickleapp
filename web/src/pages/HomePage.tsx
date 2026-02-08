@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, Users, MapPin, ChevronRight, Flame, Clock, UserPlus, Menu } from 'lucide-react';
+import { Calendar, Users, MapPin, ChevronRight, Flame, Clock, UserPlus, Medal, Menu } from 'lucide-react';
 import { api } from '@/services/api';
 import { Loading } from '@/components/ui';
 import { SEO } from '@/components/SEO';
@@ -8,7 +8,7 @@ import { generateOrganizationJsonLd, generateWebsiteJsonLd } from '@/lib/seo';
 import { useDrawer } from '@/contexts/DrawerContext';
 import { formatDateTime, getDisplayName } from '@/lib/utils';
 import { PREFECTURES } from '@/lib/prefectures';
-import type { Event, Team, TeamEvent } from '@/types';
+import type { Event, Team, TeamEvent, Tournament } from '@/types';
 
 // 今週末の日付範囲を取得
 function getWeekendRange() {
@@ -32,6 +32,7 @@ export function HomePage() {
   const [recentEvents, setRecentEvents] = useState<(Event | TeamEvent)[]>([]);
   const [featuredTeams, setFeaturedTeams] = useState<Team[]>([]);
   const [recruitingTeams, setRecruitingTeams] = useState<Team[]>([]);
+  const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({ eventCount: 0, teamCount: 0 });
 
@@ -42,10 +43,11 @@ export function HomePage() {
   const loadHomeData = async () => {
     try {
       setIsLoading(true);
-      const [allEvents, publicTeamEvents, allTeams] = await Promise.all([
+      const [allEvents, publicTeamEvents, allTeams, allTournaments] = await Promise.all([
         api.getEvents({ status: 'active', upcoming: true }),
         api.getPublicTeamEvents(true),
         api.getTeams({}),
+        api.getTournaments({ status: 'active' }).catch(() => [] as Tournament[]),
       ]);
 
       // 統計データを別途取得（失敗してもページは表示）
@@ -97,6 +99,9 @@ export function HomePage() {
       // 参加者募集中（公開チーム）
       const publicTeams = allTeams.filter((t) => t.visibility === 'public');
       setRecruitingTeams(publicTeams.slice(0, 5));
+
+      // 大会情報（新着順）
+      setTournaments(allTournaments.slice(0, 5));
 
       setStats(statsData);
     } catch (error) {
@@ -384,6 +389,31 @@ export function HomePage() {
           )}
         </section>
 
+        {/* 大会情報 */}
+        <section>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Medal size={20} style={{ color: '#F59E0B' }} />
+              <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>大会情報</h2>
+            </div>
+            <Link to="/tournaments" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: '#65A30D', textDecoration: 'none' }}>
+              もっと見る
+              <ChevronRight size={16} />
+            </Link>
+          </div>
+          <div style={{ background: '#FFFFFF', borderRadius: '16px', overflow: 'hidden' }}>
+            {tournaments.length === 0 ? (
+              <div style={{ padding: '24px', textAlign: 'center', color: '#888888' }}>
+                大会情報はまだありません
+              </div>
+            ) : (
+              tournaments.map((tournament, index) => (
+                <TournamentListItem key={tournament.id} tournament={tournament} isLast={index === tournaments.length - 1} />
+              ))
+            )}
+          </div>
+        </section>
+
         {/* 地域から探す */}
         <section>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
@@ -654,6 +684,50 @@ function EventListItem({ event, isLast }: { event: Event | TeamEvent; isLast: bo
         </h4>
         <p style={{ fontSize: '12px', color: '#888888' }}>
           {formatDateTime(event.startTime)} / {event.location.split(' ')[0]}
+        </p>
+      </div>
+      <ChevronRight size={16} style={{ color: '#CCCCCC', flexShrink: 0 }} />
+    </Link>
+  );
+}
+
+// 大会リストアイテム（縦リスト用）
+function TournamentListItem({ tournament, isLast }: { tournament: Tournament; isLast: boolean }) {
+  return (
+    <Link
+      to={`/tournaments/${tournament.id}`}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '14px 16px',
+        borderBottom: isLast ? 'none' : '1px solid #F0F0F0',
+        textDecoration: 'none'
+      }}
+    >
+      <div style={{
+        width: '40px',
+        height: '40px',
+        borderRadius: '10px',
+        overflow: 'hidden',
+        background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0
+      }}>
+        {tournament.coverImage ? (
+          <img src={tournament.coverImage} alt={tournament.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        ) : (
+          <Medal size={18} style={{ color: '#FFFFFF' }} />
+        )}
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <h4 style={{ fontSize: '14px', fontWeight: 600, color: '#1a1a2e', marginBottom: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          {tournament.title}
+        </h4>
+        <p style={{ fontSize: '12px', color: '#888888' }}>
+          {tournament.eventDate} / {tournament.venue}
         </p>
       </div>
       <ChevronRight size={16} style={{ color: '#CCCCCC', flexShrink: 0 }} />
