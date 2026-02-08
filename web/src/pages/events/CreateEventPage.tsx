@@ -79,7 +79,6 @@ export function CreateEventPage() {
   const loadEventData = async (eventId: string) => {
     try {
       setIsLoadingEvent(true);
-      const event = await api.getEvent(eventId);
 
       // Format datetime for input fields (local time)
       const formatDateTimeLocal = (isoString: string) => {
@@ -92,20 +91,41 @@ export function CreateEventPage() {
         return `${year}-${month}-${day}T${hours}:${minutes}`;
       };
 
-      setFormData({
-        title: event.title,
-        description: event.description || '',
-        location: event.location,
-        address: event.address || '',
-        latitude: event.latitude || null,
-        longitude: event.longitude || null,
-        region: event.region,
-        startTime: formatDateTimeLocal(event.startTime),
-        endTime: formatDateTimeLocal(event.endTime),
-        maxParticipants: String(event.maxParticipants),
-        skillLevel: event.skillLevel || 'all',
-        price: event.price ? String(event.price) : '',
-      });
+      // Use team event API when urlTeamId is present (team event duplication)
+      if (urlTeamId) {
+        const teamEvent = await api.getTeamEvent(urlTeamId, eventId);
+        setFormData({
+          title: teamEvent.title,
+          description: teamEvent.description || '',
+          location: teamEvent.location,
+          address: teamEvent.address || '',
+          latitude: teamEvent.latitude || null,
+          longitude: teamEvent.longitude || null,
+          region: teamEvent.region,
+          startTime: formatDateTimeLocal(teamEvent.startTime),
+          endTime: formatDateTimeLocal(teamEvent.endTime),
+          maxParticipants: teamEvent.maxParticipants ? String(teamEvent.maxParticipants) : '',
+          skillLevel: teamEvent.skillLevel || 'all',
+          price: teamEvent.price ? String(teamEvent.price) : '',
+        });
+        setVisibility(teamEvent.visibility || 'public');
+      } else {
+        const event = await api.getEvent(eventId);
+        setFormData({
+          title: event.title,
+          description: event.description || '',
+          location: event.location,
+          address: event.address || '',
+          latitude: event.latitude || null,
+          longitude: event.longitude || null,
+          region: event.region,
+          startTime: formatDateTimeLocal(event.startTime),
+          endTime: formatDateTimeLocal(event.endTime),
+          maxParticipants: String(event.maxParticipants),
+          skillLevel: event.skillLevel || 'all',
+          price: event.price ? String(event.price) : '',
+        });
+      }
     } catch (error) {
       console.error('Failed to load event:', error);
     } finally {
