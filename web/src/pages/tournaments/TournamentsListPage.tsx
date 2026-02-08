@@ -146,7 +146,7 @@ export function TournamentsListPage() {
                         alt=""
                         style={{
                           width: '100%',
-                          height: '200px',
+                          height: '160px',
                           objectFit: 'cover',
                           display: 'block',
                         }}
@@ -154,7 +154,7 @@ export function TournamentsListPage() {
                     ) : (
                       <div style={{
                         width: '100%',
-                        height: '200px',
+                        height: '160px',
                         background: 'linear-gradient(135deg, #1e3a5f 0%, #2d5a87 40%, #1e3a5f 70%, #4a9bd9 100%)',
                         display: 'flex',
                         flexDirection: 'column',
@@ -182,7 +182,7 @@ export function TournamentsListPage() {
                           transform: 'rotate(10deg)',
                         }} />
                         <span style={{
-                          fontSize: '28px',
+                          fontSize: '24px',
                           fontWeight: 900,
                           color: '#FFFFFF',
                           textShadow: '2px 2px 8px rgba(0,0,0,0.3)',
@@ -192,7 +192,7 @@ export function TournamentsListPage() {
                           PICKLEBALL
                         </span>
                         <span style={{
-                          fontSize: '20px',
+                          fontSize: '17px',
                           fontWeight: 700,
                           color: '#FFFFFF',
                           textShadow: '2px 2px 8px rgba(0,0,0,0.3)',
@@ -216,15 +216,33 @@ export function TournamentsListPage() {
                       textOverflow: 'ellipsis',
                       whiteSpace: 'nowrap',
                     }}>
-                      {tournament.eventDate} {tournament.title}
+                      {tournament.title}
                     </h3>
                   </div>
 
                   {/* Info Table */}
-                  <div style={{ padding: '8px 0 16px', margin: '0 16px' }}>
+                  <div style={{ padding: '8px 0', margin: '0 16px' }}>
                     <InfoRow label="開催日" value={tournament.eventDate} />
                     <InfoRow label="会場" value={tournament.address ? `${tournament.venue}（${tournament.address}）` : tournament.venue} />
                     <InfoRow label="種目" value={tournament.events} isLast />
+                  </div>
+
+                  {/* Detail Button */}
+                  <div style={{ padding: '8px 16px 16px' }}>
+                    <span
+                      style={{
+                        display: 'block',
+                        textAlign: 'center',
+                        background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
+                        color: '#FFFFFF',
+                        fontWeight: 600,
+                        fontSize: '15px',
+                        padding: '12px',
+                        borderRadius: '8px',
+                      }}
+                    >
+                      詳細を見る
+                    </span>
                   </div>
                 </div>
               </Link>
