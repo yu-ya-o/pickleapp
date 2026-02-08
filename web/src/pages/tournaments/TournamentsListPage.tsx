@@ -228,17 +228,16 @@ export function TournamentsListPage() {
                   </div>
 
                   {/* Detail Button */}
-                  <div style={{ padding: '8px 16px 16px' }}>
+                  <div style={{ padding: '8px 16px 14px', textAlign: 'center' }}>
                     <span
                       style={{
-                        display: 'block',
-                        textAlign: 'center',
+                        display: 'inline-block',
                         background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
                         color: '#FFFFFF',
                         fontWeight: 600,
-                        fontSize: '15px',
-                        padding: '12px',
-                        borderRadius: '8px',
+                        fontSize: '13px',
+                        padding: '8px 32px',
+                        borderRadius: '6px',
                       }}
                     >
                       詳細を見る
