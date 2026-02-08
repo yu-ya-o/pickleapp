@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Image as ImageIcon } from 'lucide-react';
 import { api } from '@/services/api';
 import { PageHeader } from '@/components/PageHeader';
@@ -9,8 +9,8 @@ import { Input, Textarea, Loading, LocationAutocomplete } from '@/components/ui'
 export function CreateTournamentPage() {
   const navigate = useNavigate();
   const { id: editId } = useParams<{ id: string }>();
-  const [searchParams] = useSearchParams();
-  const duplicateFromId = searchParams.get('from');
+  const location = useLocation();
+  const duplicateFromId = new URLSearchParams(location.search).get('from');
   const isEditMode = !!editId;
 
   const [isLoading, setIsLoading] = useState(false);
@@ -38,13 +38,13 @@ export function CreateTournamentPage() {
     snsLine: '',
   });
 
+  const loadSourceId = editId || duplicateFromId;
+
   useEffect(() => {
-    if (editId) {
-      loadTournamentData(editId);
-    } else if (duplicateFromId) {
-      loadTournamentData(duplicateFromId);
+    if (loadSourceId) {
+      loadTournamentData(loadSourceId);
     }
-  }, [editId, duplicateFromId]);
+  }, [loadSourceId]);
 
   const loadTournamentData = async (id: string) => {
     try {
