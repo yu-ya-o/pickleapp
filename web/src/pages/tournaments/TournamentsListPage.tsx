@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Plus, Medal, Menu } from 'lucide-react';
+import { Plus, Medal, MapPin, Search, Menu } from 'lucide-react';
 import { api } from '@/services/api';
 import { Loading } from '@/components/ui';
 import { SEO } from '@/components/SEO';
 import { useDrawer } from '@/contexts/DrawerContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { PREFECTURES } from '@/lib/prefectures';
 import type { Tournament } from '@/types';
 
 export function TournamentsListPage() {
@@ -15,6 +16,8 @@ export function TournamentsListPage() {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedRegion, setSelectedRegion] = useState('');
 
   useEffect(() => {
     loadTournaments();
@@ -33,6 +36,27 @@ export function TournamentsListPage() {
       setIsLoading(false);
     }
   };
+
+  const filteredTournaments = tournaments.filter((t) => {
+    // Prefecture filter
+    if (selectedRegion) {
+      const addr = (t.address || '').toLowerCase() + (t.venue || '').toLowerCase();
+      if (!addr.includes(selectedRegion.toLowerCase())) return false;
+    }
+    // Free text search
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      return (
+        t.title.toLowerCase().includes(query) ||
+        t.description.toLowerCase().includes(query) ||
+        t.venue.toLowerCase().includes(query) ||
+        (t.address || '').toLowerCase().includes(query) ||
+        t.organizer.toLowerCase().includes(query) ||
+        t.events.toLowerCase().includes(query)
+      );
+    }
+    return true;
+  });
 
   return (
     <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
@@ -84,6 +108,68 @@ export function TournamentsListPage() {
           </h1>
           <div style={{ width: '36px' }} className="md:hidden" />
         </div>
+
+        {/* Search Bar */}
+        <div style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
+          {/* Region Filter */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: '#F0F0F0',
+            borderRadius: '10px',
+            padding: '8px 12px',
+            minWidth: '100px'
+          }}>
+            <MapPin size={16} style={{ color: '#65A30D', flexShrink: 0 }} />
+            <select
+              value={selectedRegion}
+              onChange={(e) => setSelectedRegion(e.target.value)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: '#1a1a2e',
+                fontSize: '14px',
+                outline: 'none',
+                cursor: 'pointer'
+              }}
+            >
+              <option value="">全国</option>
+              {PREFECTURES.map((pref) => (
+                <option key={pref} value={pref}>
+                  {pref}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Search Input */}
+          <div style={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: '#F0F0F0',
+            borderRadius: '10px',
+            padding: '8px 12px'
+          }}>
+            <Search size={16} style={{ color: '#888888', flexShrink: 0 }} />
+            <input
+              type="text"
+              placeholder="大会を検索"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                flex: 1,
+                background: 'transparent',
+                border: 'none',
+                color: '#1a1a2e',
+                fontSize: '14px',
+                outline: 'none'
+              }}
+            />
+          </div>
+        </div>
       </header>
 
       {/* Content */}
@@ -114,17 +200,19 @@ export function TournamentsListPage() {
               再試行
             </button>
           </div>
-        ) : tournaments.length === 0 ? (
+        ) : filteredTournaments.length === 0 ? (
           <div style={{ textAlign: 'center', paddingTop: '80px' }}>
             <Medal size={56} style={{ color: '#CCCCCC', margin: '0 auto' }} />
             <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#1a1a2e', marginTop: '20px', marginBottom: '8px' }}>
-              大会情報はまだありません
+              {tournaments.length === 0 ? '大会情報はまだありません' : '大会が見つかりません'}
             </h3>
-            <p style={{ color: '#888888' }}>最初の大会を作成しましょう！</p>
+            <p style={{ color: '#888888' }}>
+              {tournaments.length === 0 ? '最初の大会を作成しましょう！' : '検索条件を変更してお試しください'}
+            </p>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            {tournaments.map((tournament) => (
+            {filteredTournaments.map((tournament) => (
               <Link
                 key={tournament.id}
                 to={`/tournaments/${tournament.id}`}
