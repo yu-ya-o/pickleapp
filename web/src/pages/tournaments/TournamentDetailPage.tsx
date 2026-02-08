@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
   Trophy,
   Edit as EditIcon,
+  Copy,
   ExternalLink,
 } from 'lucide-react';
 import { api } from '@/services/api';
@@ -357,6 +358,28 @@ export function TournamentDetailPage() {
             >
               <EditIcon size={18} />
               <span>大会情報を編集</span>
+            </button>
+
+            <button
+              onClick={() => navigate(`/tournaments/create?from=${tournament.id}`)}
+              style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                fontWeight: 500,
+                borderRadius: '12px',
+                border: 'none',
+                cursor: 'pointer',
+                backgroundColor: '#E0E7FF',
+                color: '#4338CA',
+                padding: '14px',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }}
+            >
+              <Copy size={18} />
+              <span>複製して新規作成</span>
             </button>
 
             <button

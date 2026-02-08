@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Image as ImageIcon } from 'lucide-react';
 import { api } from '@/services/api';
 import { PageHeader } from '@/components/PageHeader';
@@ -9,10 +9,12 @@ import { Input, Textarea, Loading, LocationAutocomplete } from '@/components/ui'
 export function CreateTournamentPage() {
   const navigate = useNavigate();
   const { id: editId } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
+  const duplicateFromId = searchParams.get('from');
   const isEditMode = !!editId;
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingTournament, setIsLoadingTournament] = useState(isEditMode);
+  const [isLoadingTournament, setIsLoadingTournament] = useState(isEditMode || !!duplicateFromId);
   const [coverImage, setCoverImage] = useState('');
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [formData, setFormData] = useState({
@@ -39,8 +41,10 @@ export function CreateTournamentPage() {
   useEffect(() => {
     if (editId) {
       loadTournamentData(editId);
+    } else if (duplicateFromId) {
+      loadTournamentData(duplicateFromId);
     }
-  }, [editId]);
+  }, [editId, duplicateFromId]);
 
   const loadTournamentData = async (id: string) => {
     try {
@@ -165,7 +169,8 @@ export function CreateTournamentPage() {
     );
   }
 
-  const submitLabel = isEditMode ? '保存する' : '大会を作成';
+  const submitLabel = isEditMode ? '保存する' : duplicateFromId ? '複製して作成' : '大会を作成';
+  const breadcrumbLabel = isEditMode ? '編集' : duplicateFromId ? '複製' : '新規作成';
 
   return (
     <div className="min-h-screen bg-white">
@@ -176,7 +181,7 @@ export function CreateTournamentPage() {
         <Breadcrumb
           items={[
             { label: '大会', href: '/tournaments' },
-            { label: isEditMode ? '編集' : '新規作成' }
+            { label: breadcrumbLabel }
           ]}
         />
       </div>
