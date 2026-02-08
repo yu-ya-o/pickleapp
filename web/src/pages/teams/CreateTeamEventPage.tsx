@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { api } from '@/services/api';
 import { Input, Textarea, Select, LocationAutocomplete, Loading, DateTimeInput } from '@/components/ui';
 import { PageHeader } from '@/components/PageHeader';
@@ -16,8 +16,8 @@ const SKILL_LEVELS = [
 export function CreateTeamEventPage() {
   const navigate = useNavigate();
   const { teamId, eventId } = useParams<{ teamId: string; eventId: string }>();
-  const [searchParams] = useSearchParams();
-  const duplicateId = searchParams.get('duplicate');
+  const location = useLocation();
+  const duplicateId = new URLSearchParams(location.search).get('duplicate');
 
   const isEditMode = !!eventId;
   const isDuplicateMode = !!duplicateId;

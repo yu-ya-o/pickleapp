@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { api } from '@/services/api';
 import { PageHeader } from '@/components/PageHeader';
 import { Breadcrumb } from '@/components/Breadcrumb';
@@ -24,8 +24,8 @@ type OrganizerType = 'personal' | { teamId: string };
 export function CreateEventPage() {
   const navigate = useNavigate();
   const { id: editId, teamId: urlTeamId } = useParams<{ id: string; teamId: string }>();
-  const [searchParams] = useSearchParams();
-  const duplicateId = searchParams.get('duplicate');
+  const location = useLocation();
+  const duplicateId = new URLSearchParams(location.search).get('duplicate');
 
   const isEditMode = !!editId;
   const isDuplicateMode = !!duplicateId;
