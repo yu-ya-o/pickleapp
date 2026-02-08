@@ -125,124 +125,109 @@ export function TournamentsListPage() {
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             {tournaments.map((tournament) => (
-              <div
+              <Link
                 key={tournament.id}
-                style={{
-                  background: '#FFFFFF',
-                  borderRadius: '12px',
-                  overflow: 'hidden',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                }}
+                to={`/tournaments/${tournament.id}`}
+                style={{ textDecoration: 'none' }}
               >
-                {/* Banner Image */}
-                <div style={{ position: 'relative' }}>
-                  {tournament.coverImage ? (
-                    <img
-                      src={tournament.coverImage}
-                      alt=""
-                      style={{
+                <div
+                  style={{
+                    background: '#FFFFFF',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                  }}
+                >
+                  {/* Banner Image */}
+                  <div style={{ position: 'relative' }}>
+                    {tournament.coverImage ? (
+                      <img
+                        src={tournament.coverImage}
+                        alt=""
+                        style={{
+                          width: '100%',
+                          height: '200px',
+                          objectFit: 'cover',
+                          display: 'block',
+                        }}
+                      />
+                    ) : (
+                      <div style={{
                         width: '100%',
                         height: '200px',
-                        objectFit: 'cover',
-                        display: 'block',
-                      }}
-                    />
-                  ) : (
-                    <div style={{
-                      width: '100%',
-                      height: '200px',
-                      background: 'linear-gradient(135deg, #1e3a5f 0%, #2d5a87 40%, #1e3a5f 70%, #4a9bd9 100%)',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      position: 'relative',
-                      overflow: 'hidden',
-                    }}>
-                      <div style={{
-                        position: 'absolute',
-                        top: '-20%',
-                        right: '-10%',
-                        width: '60%',
-                        height: '140%',
-                        background: 'linear-gradient(135deg, transparent 30%, rgba(74,155,217,0.3) 50%, transparent 70%)',
-                        transform: 'rotate(-15deg)',
-                      }} />
-                      <div style={{
-                        position: 'absolute',
-                        bottom: '-10%',
-                        left: '-5%',
-                        width: '40%',
-                        height: '80%',
-                        background: 'linear-gradient(135deg, rgba(100,200,255,0.2) 0%, transparent 60%)',
-                        transform: 'rotate(10deg)',
-                      }} />
-                      <span style={{
-                        fontSize: '28px',
-                        fontWeight: 900,
-                        color: '#FFFFFF',
-                        textShadow: '2px 2px 8px rgba(0,0,0,0.3)',
-                        letterSpacing: '2px',
-                        zIndex: 1,
+                        background: 'linear-gradient(135deg, #1e3a5f 0%, #2d5a87 40%, #1e3a5f 70%, #4a9bd9 100%)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        position: 'relative',
+                        overflow: 'hidden',
                       }}>
-                        PICKLEBALL
-                      </span>
-                      <span style={{
-                        fontSize: '20px',
-                        fontWeight: 700,
-                        color: '#FFFFFF',
-                        textShadow: '2px 2px 8px rgba(0,0,0,0.3)',
-                        zIndex: 1,
-                        marginTop: '4px',
-                      }}>
-                        TOURNAMENT
-                      </span>
-                    </div>
-                  )}
-                </div>
+                        <div style={{
+                          position: 'absolute',
+                          top: '-20%',
+                          right: '-10%',
+                          width: '60%',
+                          height: '140%',
+                          background: 'linear-gradient(135deg, transparent 30%, rgba(74,155,217,0.3) 50%, transparent 70%)',
+                          transform: 'rotate(-15deg)',
+                        }} />
+                        <div style={{
+                          position: 'absolute',
+                          bottom: '-10%',
+                          left: '-5%',
+                          width: '40%',
+                          height: '80%',
+                          background: 'linear-gradient(135deg, rgba(100,200,255,0.2) 0%, transparent 60%)',
+                          transform: 'rotate(10deg)',
+                        }} />
+                        <span style={{
+                          fontSize: '28px',
+                          fontWeight: 900,
+                          color: '#FFFFFF',
+                          textShadow: '2px 2px 8px rgba(0,0,0,0.3)',
+                          letterSpacing: '2px',
+                          zIndex: 1,
+                        }}>
+                          PICKLEBALL
+                        </span>
+                        <span style={{
+                          fontSize: '20px',
+                          fontWeight: 700,
+                          color: '#FFFFFF',
+                          textShadow: '2px 2px 8px rgba(0,0,0,0.3)',
+                          zIndex: 1,
+                          marginTop: '4px',
+                        }}>
+                          TOURNAMENT
+                        </span>
+                      </div>
+                    )}
+                  </div>
 
-                {/* Title */}
-                <div style={{ padding: '12px 16px 0' }}>
-                  <h3 style={{
-                    fontSize: '15px',
-                    fontWeight: 700,
-                    color: '#1a1a2e',
-                    lineHeight: 1.4,
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  }}>
-                    {tournament.eventDate} {tournament.title}
-                  </h3>
-                </div>
-
-                {/* Info Table */}
-                <div style={{ padding: '8px 0', margin: '0 16px' }}>
-                  <InfoRow label="開催日" value={tournament.eventDate} />
-                  <InfoRow label="会場" value={tournament.address ? `${tournament.venue}（${tournament.address}）` : tournament.venue} />
-                  <InfoRow label="種目" value={tournament.events} isLast />
-                </div>
-
-                {/* Detail Button */}
-                <div style={{ padding: '0 16px 16px' }}>
-                  <Link
-                    to={`/tournaments/${tournament.id}`}
-                    style={{
-                      display: 'block',
-                      textAlign: 'center',
-                      background: 'linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)',
-                      color: '#FFFFFF',
-                      fontWeight: 600,
+                  {/* Title */}
+                  <div style={{ padding: '12px 16px 0' }}>
+                    <h3 style={{
                       fontSize: '15px',
-                      padding: '12px',
-                      borderRadius: '8px',
-                      textDecoration: 'none',
-                    }}
-                  >
-                    詳細
-                  </Link>
+                      fontWeight: 700,
+                      color: '#1a1a2e',
+                      lineHeight: 1.4,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}>
+                      {tournament.eventDate} {tournament.title}
+                    </h3>
+                  </div>
+
+                  {/* Info Table */}
+                  <div style={{ padding: '8px 0 16px', margin: '0 16px' }}>
+                    <InfoRow label="開催日" value={tournament.eventDate} />
+                    <InfoRow label="会場" value={tournament.address ? `${tournament.venue}（${tournament.address}）` : tournament.venue} />
+                    <InfoRow label="種目" value={tournament.events} isLast />
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
