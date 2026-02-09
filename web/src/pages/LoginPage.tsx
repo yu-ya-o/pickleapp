@@ -13,6 +13,7 @@ export function LoginPage() {
   const { openDrawer } = useDrawer();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
   const inAppBrowser = useMemo(() => isInAppBrowser(), []);
   const inAppBrowserName = useMemo(() => getInAppBrowserName(), []);
 
@@ -164,17 +165,18 @@ export function LoginPage() {
                 <br />
                 外部ブラウザで開いてください。
               </p>
-              <button
-                onClick={() => {
-                  // Try to open in external browser
+              <a
+                href={(() => {
                   const url = window.location.href;
-                  // Android intent scheme
-                  window.location.href = `intent://${window.location.host}${window.location.pathname}#Intent;scheme=https;end;`;
-                  // Fallback: copy URL if intent doesn't work
-                  setTimeout(() => {
-                    navigator.clipboard?.writeText(url);
-                  }, 2000);
-                }}
+                  // LINE supports openExternalBrowser param
+                  if (inAppBrowserName === 'LINE') {
+                    const sep = url.includes('?') ? '&' : '?';
+                    return `${url}${sep}openExternalBrowser=1`;
+                  }
+                  return url;
+                })()}
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{
                   display: 'block',
                   width: '100%',
@@ -187,30 +189,58 @@ export function LoginPage() {
                   fontWeight: 600,
                   cursor: 'pointer',
                   marginBottom: '12px',
+                  textDecoration: 'none',
+                  textAlign: 'center' as const,
+                  boxSizing: 'border-box' as const,
                 }}
               >
                 外部ブラウザで開く
-              </button>
+              </a>
               <button
-                onClick={() => {
-                  navigator.clipboard?.writeText(window.location.href);
-                  alert('URLをコピーしました。ブラウザに貼り付けて開いてください。');
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(window.location.href);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  } catch {
+                    // Fallback for browsers that don't support clipboard API
+                    const input = document.createElement('input');
+                    input.value = window.location.href;
+                    document.body.appendChild(input);
+                    input.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(input);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  }
                 }}
                 style={{
                   display: 'block',
                   width: '100%',
                   padding: '14px 24px',
-                  backgroundColor: '#F0F0F0',
-                  color: '#333333',
+                  backgroundColor: copied ? '#E8F5E9' : '#F0F0F0',
+                  color: copied ? '#2E7D32' : '#333333',
                   border: 'none',
                   borderRadius: '12px',
                   fontSize: '15px',
                   fontWeight: 600,
                   cursor: 'pointer',
+                  transition: 'background-color 0.2s, color 0.2s',
                 }}
               >
-                URLをコピー
+                {copied ? 'コピーしました！' : 'URLをコピー'}
               </button>
+              {inAppBrowserName === 'LINE' ? (
+                <p style={{ fontSize: '12px', color: '#999', marginTop: '16px', lineHeight: '1.5' }}>
+                  ボタンが動かない場合は、右下の「…」メニューから
+                  <br />「Safari で開く」を選んでください。
+                </p>
+              ) : (
+                <p style={{ fontSize: '12px', color: '#999', marginTop: '16px', lineHeight: '1.5' }}>
+                  URLをコピーして、SafariやChromeなどの
+                  <br />ブラウザに貼り付けて開いてください。
+                </p>
+              )}
             </div>
           ) : isLoading ? (
             <div
