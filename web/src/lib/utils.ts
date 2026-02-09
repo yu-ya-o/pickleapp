@@ -84,3 +84,28 @@ export function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength) + '...';
 }
+
+/**
+ * Detect if the current browser is an in-app browser (WebView).
+ * Google blocks OAuth from these browsers with error 403: disallowed_useragent.
+ */
+export function isInAppBrowser(): boolean {
+  const ua = navigator.userAgent || '';
+  // LINE, Instagram, Facebook, Twitter/X, TikTok, WeChat, etc.
+  return /Line\/|FBAN|FBAV|Instagram|Twitter|TikTok|BytedanceWebview|MicroMessenger|KAKAOTALK/i.test(ua);
+}
+
+/**
+ * Get the name of the detected in-app browser, or null if not in one.
+ */
+export function getInAppBrowserName(): string | null {
+  const ua = navigator.userAgent || '';
+  if (/Line\//i.test(ua)) return 'LINE';
+  if (/FBAN|FBAV/i.test(ua)) return 'Facebook';
+  if (/Instagram/i.test(ua)) return 'Instagram';
+  if (/Twitter/i.test(ua)) return 'X (Twitter)';
+  if (/TikTok|BytedanceWebview/i.test(ua)) return 'TikTok';
+  if (/MicroMessenger/i.test(ua)) return 'WeChat';
+  if (/KAKAOTALK/i.test(ua)) return 'KakaoTalk';
+  return null;
+}
