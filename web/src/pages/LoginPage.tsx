@@ -233,7 +233,11 @@ export function LoginPage() {
               {inAppBrowserName === 'LINE' ? (
                 <p style={{ fontSize: '12px', color: '#999', marginTop: '16px', lineHeight: '1.5' }}>
                   ボタンが動かない場合は、右下の「…」メニューから
-                  <br />「Safari で開く」を選んでください。
+                  <br />
+                  {/iPhone|iPad|iPod/i.test(navigator.userAgent)
+                    ? '「Safari で開く」'
+                    : '「他のアプリで開く」'}
+                  を選んでください。
                 </p>
               ) : (
                 <p style={{ fontSize: '12px', color: '#999', marginTop: '16px', lineHeight: '1.5' }}>
