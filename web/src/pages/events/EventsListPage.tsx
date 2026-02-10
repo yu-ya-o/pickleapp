@@ -321,7 +321,7 @@ export function EventsListPage() {
           onClick={() => navigate('/events/create')}
           style={{
             position: 'fixed',
-            bottom: '80px',
+            bottom: '20px',
             right: '16px',
             width: '56px',
             height: '56px',

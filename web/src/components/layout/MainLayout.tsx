@@ -2,7 +2,7 @@ import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Home, Calendar, CalendarCheck, Users, Medal, Trophy, User, LogIn, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
-import { WebAdBanner } from './WebAdBanner';
+// import { WebAdBanner } from './WebAdBanner';
 
 export function MainLayout() {
   const location = useLocation();
@@ -111,8 +111,9 @@ export function MainLayout() {
         <Outlet />
       </main>
 
-      {/* 下部固定広告バナー */}
+      {/* 下部固定広告バナー（一時的にコメントアウト）
       <WebAdBanner />
+      */}
     </div>
   );
 }
