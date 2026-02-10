@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { GoogleLogin, type CredentialResponse } from '@react-oauth/google';
 import { useAuth } from '@/contexts/AuthContext';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Menu } from 'lucide-react';
 import { useDrawer } from '@/contexts/DrawerContext';
 import { LoginSEO } from '@/components/SEO';
+import { isInAppBrowser, getInAppBrowserName } from '@/lib/utils';
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -12,6 +13,9 @@ export function LoginPage() {
   const { openDrawer } = useDrawer();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const inAppBrowser = useMemo(() => isInAppBrowser(), []);
+  const inAppBrowserName = useMemo(() => getInAppBrowserName(), []);
 
   const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
     if (!credentialResponse.credential) {
@@ -137,7 +141,70 @@ export function LoginPage() {
 
         {/* Google Login Button */}
         <div style={{ width: '100%', maxWidth: '320px' }}>
-          {isLoading ? (
+          {inAppBrowser ? (
+            <div
+              style={{
+                textAlign: 'center',
+                padding: '24px',
+                backgroundColor: '#FFFFFF',
+                borderRadius: '16px',
+                border: '1px solid #E5E5E5',
+              }}
+            >
+              <p
+                style={{
+                  fontSize: '14px',
+                  color: '#666666',
+                  marginBottom: '16px',
+                  lineHeight: '1.6',
+                }}
+              >
+                {inAppBrowserName
+                  ? `${inAppBrowserName}のアプリ内ブラウザではGoogleログインが利用できません。`
+                  : 'アプリ内ブラウザではGoogleログインが利用できません。'}
+                <br />
+                外部ブラウザで開いてください。
+              </p>
+              <button
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(window.location.href);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  } catch {
+                    // Fallback for browsers that don't support clipboard API
+                    const input = document.createElement('input');
+                    input.value = window.location.href;
+                    document.body.appendChild(input);
+                    input.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(input);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  }
+                }}
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  padding: '14px 24px',
+                  backgroundColor: copied ? '#E8F5E9' : '#F0F0F0',
+                  color: copied ? '#2E7D32' : '#333333',
+                  border: 'none',
+                  borderRadius: '12px',
+                  fontSize: '15px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s, color 0.2s',
+                }}
+              >
+                {copied ? 'コピーしました！' : 'URLをコピー'}
+              </button>
+              <p style={{ fontSize: '12px', color: '#999', marginTop: '16px', lineHeight: '1.5' }}>
+                URLをコピーして、SafariやChromeなどの
+                <br />ブラウザに貼り付けて開いてください。
+              </p>
+            </div>
+          ) : isLoading ? (
             <div
               style={{
                 display: 'flex',
