@@ -165,37 +165,6 @@ export function LoginPage() {
                 <br />
                 外部ブラウザで開いてください。
               </p>
-              <a
-                href={(() => {
-                  const url = window.location.href;
-                  // LINE supports openExternalBrowser param
-                  if (inAppBrowserName === 'LINE') {
-                    const sep = url.includes('?') ? '&' : '?';
-                    return `${url}${sep}openExternalBrowser=1`;
-                  }
-                  return url;
-                })()}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  padding: '14px 24px',
-                  backgroundColor: '#1a1a2e',
-                  color: '#FFFFFF',
-                  border: 'none',
-                  borderRadius: '12px',
-                  fontSize: '15px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  marginBottom: '12px',
-                  textDecoration: 'none',
-                  textAlign: 'center' as const,
-                  boxSizing: 'border-box' as const,
-                }}
-              >
-                外部ブラウザで開く
-              </a>
               <button
                 onClick={async () => {
                   try {
