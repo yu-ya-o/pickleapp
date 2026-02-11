@@ -5,14 +5,10 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥒</text></svg>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="theme-color" content="#22c55e" />
+    <meta name="author" content="PickleHub" />
+    <!--seo-tags-start-->
     <meta name="description" content="全国のピックルボールイベントを探して参加しよう！初心者歓迎のイベントから上級者向け大会まで。サークル募集・メンバー募集も。日本最大級のピックルボールコミュニティ。" />
     <meta name="keywords" content="ピックルボール,ピックルボール イベント,pickleball,イベント募集,サークル募集,大会,初心者,コミュニティ,日本" />
-    <meta name="author" content="PickleHub" />
-
-    <!-- SEO: Robots directive and canonical URL are managed by React Helmet (SEO component) -->
-    <!-- Do NOT add static canonical or og:url here - they cause duplicate tags with react-helmet-async -->
-
-    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="PickleHub" />
     <meta property="og:locale" content="ja_JP" />
@@ -21,21 +17,19 @@
     <meta property="og:image" content="https://picklehub.jp/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="PickleHub - ピックルボールイベント・サークル募集" />
     <meta name="twitter:description" content="全国のピックルボールイベントを探して参加しよう！初心者歓迎のイベントから上級者向け大会まで。サークル募集・メンバー募集も。日本最大級のピックルボールコミュニティ。" />
     <meta name="twitter:image" content="https://picklehub.jp/og-image.png" />
-
     <title>PickleHub - ピックルボールイベント・サークル募集</title>
+    <!--seo-tags-end-->
 
     <!-- Google AdSense (一時的にコメントアウト)
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2543138582776514" crossorigin="anonymous"></script>
     -->
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><!--ssr-outlet--></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
