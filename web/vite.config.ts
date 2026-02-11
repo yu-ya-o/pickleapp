@@ -11,4 +11,8 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  ssr: {
+    // Bundle all dependencies into SSR output to avoid CJS/ESM compatibility issues
+    noExternal: true,
+  },
 })
