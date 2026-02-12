@@ -5,47 +5,44 @@ import { prisma } from '@/lib/prisma';
 const SITE_URL = 'https://picklehub.jp';
 const OG_IMAGE = `${SITE_URL}/og-image.png`;
 
-interface EventPageProps {
+interface TeamPageProps {
   params: Promise<{
-    id: string;
+    teamId: string;
   }>;
 }
 
-async function getEvent(id: string) {
+async function getTeam(teamId: string) {
   try {
-    const event = await prisma.event.findUnique({
-      where: { id },
+    const team = await prisma.team.findUnique({
+      where: { id: teamId },
       include: {
-        creator: {
-          select: { name: true, nickname: true },
+        _count: {
+          select: { members: true },
         },
       },
     });
 
-    return event;
+    return team;
   } catch (error) {
-    console.error('Failed to fetch event:', error);
+    console.error('Failed to fetch team:', error);
     return null;
   }
 }
 
-export async function generateMetadata({ params }: EventPageProps): Promise<Metadata> {
-  const { id } = await params;
-  const event = await getEvent(id);
+export async function generateMetadata({ params }: TeamPageProps): Promise<Metadata> {
+  const { teamId } = await params;
+  const team = await getTeam(teamId);
 
-  if (!event) {
+  if (!team) {
     return {
-      title: 'イベントが見つかりません | PickleHub',
+      title: 'サークルが見つかりません | PickleHub',
     };
   }
 
-  const date = new Date(event.startTime).toLocaleDateString('ja-JP', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-  const title = `${event.title} | PickleHub`;
-  const description = `${date}に${event.location}で開催されるピックルボールイベント。${event.description?.slice(0, 100) || ''}`;
+  const title = `${team.name} | PickleHub`;
+  const regionText = team.region ? `${team.region}の` : '';
+  const description = `${team.name}は${regionText}ピックルボールサークルです。メンバー${team._count.members}人。${team.description?.slice(0, 80) || 'PickleHubでサークルに参加しよう！'}`;
+  const image = team.iconImage || OG_IMAGE;
 
   return {
     title,
@@ -53,9 +50,9 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
     openGraph: {
       title,
       description,
-      url: `${SITE_URL}/events/${id}`,
+      url: `${SITE_URL}/teams/${teamId}`,
       siteName: 'PickleHub',
-      images: [{ url: OG_IMAGE, width: 1200, height: 630 }],
+      images: [{ url: image, width: 1200, height: 630 }],
       locale: 'ja_JP',
       type: 'website',
     },
@@ -63,21 +60,21 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
       card: 'summary_large_image',
       title,
       description,
-      images: [OG_IMAGE],
+      images: [image],
     },
   };
 }
 
-export default async function EventPage({ params }: EventPageProps) {
-  const { id } = await params;
-  const event = await getEvent(id);
+export default async function TeamPage({ params }: TeamPageProps) {
+  const { teamId } = await params;
+  const team = await getTeam(teamId);
 
-  if (!event) {
+  if (!team) {
     notFound();
   }
 
-  const deepLink = `picklehub://events/${id}`;
-  const webLink = `${SITE_URL}/events/${id}`;
+  const deepLink = `picklehub://teams/${teamId}`;
+  const webLink = `${SITE_URL}/teams/${teamId}`;
 
   return (
     <html lang="ja">
@@ -93,15 +90,23 @@ export default async function EventPage({ params }: EventPageProps) {
           justifyContent: 'center',
           minHeight: '100vh',
           padding: '20px',
-          background: 'linear-gradient(to bottom, #eff6ff, white)',
+          background: 'linear-gradient(to bottom, #f0fdf4, white)',
           textAlign: 'center'
         }}>
-          <div style={{ marginBottom: '20px', fontSize: '48px' }}>🎾</div>
+          {team.iconImage ? (
+            <img
+              src={team.iconImage}
+              alt={team.name}
+              style={{ width: '64px', height: '64px', borderRadius: '16px', marginBottom: '20px', objectFit: 'cover' }}
+            />
+          ) : (
+            <div style={{ marginBottom: '20px', fontSize: '48px' }}>🏓</div>
+          )}
           <h1 style={{ fontSize: '24px', marginBottom: '10px', color: '#1f2937' }}>
-            {event.title}
+            {team.name}
           </h1>
           <p style={{ color: '#6b7280', marginBottom: '10px' }}>
-            {new Date(event.startTime).toLocaleDateString('ja-JP')} / {event.location}
+            {team.region || 'ピックルボールサークル'} / メンバー{team._count.members}人
           </p>
           <p style={{ color: '#6b7280', marginBottom: '30px', fontSize: '14px' }}>
             アプリが開かない場合は下のボタンをタップしてください
@@ -113,7 +118,7 @@ export default async function EventPage({ params }: EventPageProps) {
               width: '100%',
               maxWidth: '300px',
               padding: '16px 24px',
-              backgroundColor: '#3b82f6',
+              backgroundColor: '#65a30d',
               color: 'white',
               textDecoration: 'none',
               borderRadius: '12px',
@@ -129,7 +134,7 @@ export default async function EventPage({ params }: EventPageProps) {
             href={webLink}
             style={{
               fontSize: '14px',
-              color: '#3b82f6',
+              color: '#65a30d',
               textDecoration: 'underline',
             }}
           >
