@@ -255,8 +255,10 @@ export function EventsListPage() {
       {/* Content */}
       <div style={{ padding: '16px', paddingBottom: '24px' }}>
         {isLoading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '80px' }}>
+          <div style={{ paddingTop: '40px', textAlign: 'center' }}>
             <Loading size="lg" />
+            <p style={{ color: '#888888', fontSize: '14px', marginTop: '16px' }}>全国のピックルボールイベント・大会情報を読み込み中...</p>
+            <p style={{ color: '#AAAAAA', fontSize: '12px', marginTop: '8px' }}>初心者歓迎のイベントから上級者向けトーナメントまで、参加者募集中のイベントを探せます。</p>
           </div>
         ) : error ? (
           <div style={{ textAlign: 'center', paddingTop: '80px' }}>

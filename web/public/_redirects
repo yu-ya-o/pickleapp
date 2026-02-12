@@ -2,4 +2,4 @@
 /sitemap.xml https://pickleapp.onrender.com/sitemap.xml 200
 
 # SPA fallback - must be last
-/*    /index.html   200
+/*    /_spa.html   200

@@ -184,8 +184,10 @@ export function TeamsListPage() {
       {/* Content */}
       <div style={{ padding: '16px', paddingBottom: '24px' }}>
         {isLoading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '80px' }}>
+          <div style={{ paddingTop: '40px', textAlign: 'center' }}>
             <Loading size="lg" />
+            <p style={{ color: '#888888', fontSize: '14px', marginTop: '16px' }}>ピックルボールサークル情報を読み込み中...</p>
+            <p style={{ color: '#AAAAAA', fontSize: '12px', marginTop: '8px' }}>全国のピックルボールサークルに参加して、仲間と一緒にプレイしましょう。メンバー募集中のサークルを探せます。</p>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
