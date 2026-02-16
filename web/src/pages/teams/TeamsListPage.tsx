@@ -186,7 +186,7 @@ export function TeamsListPage() {
         {isLoading ? (
           <div style={{ paddingTop: '40px', textAlign: 'center' }}>
             <Loading size="lg" />
-            <p style={{ color: '#888888', fontSize: '14px', marginTop: '16px' }}>ピックルボールサークル情報を読み込み中...</p>
+            <p style={{ color: '#888888', fontSize: '14px', marginTop: '16px' }}>全国のピックルボールサークル・チーム情報</p>
             <p style={{ color: '#AAAAAA', fontSize: '12px', marginTop: '8px' }}>全国のピックルボールサークルに参加して、仲間と一緒にプレイしましょう。メンバー募集中のサークルを探せます。</p>
           </div>
         ) : (
