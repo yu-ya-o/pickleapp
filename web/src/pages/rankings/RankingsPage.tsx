@@ -145,7 +145,7 @@ export function RankingsPage() {
         {isLoading ? (
           <div style={{ paddingTop: '40px', textAlign: 'center' }}>
             <Loading size="lg" />
-            <p style={{ color: '#888888', fontSize: '14px', marginTop: '16px' }}>ピックルボールランキングを読み込み中...</p>
+            <p style={{ color: '#888888', fontSize: '14px', marginTop: '16px' }}>ピックルボールプレイヤー・サークルランキング</p>
             <p style={{ color: '#AAAAAA', fontSize: '12px', marginTop: '8px' }}>アクティブなピックルボールプレイヤー・サークルのランキングをチェックしよう。</p>
           </div>
         ) : rankings.length === 0 ? (

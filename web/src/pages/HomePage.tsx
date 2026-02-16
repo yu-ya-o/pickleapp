@@ -25,6 +25,19 @@ function getWeekendRange() {
   return { saturday, sunday };
 }
 
+// ビルド時にプリレンダリングで埋め込まれた初期データを取得
+function getPrerenderStats(): { eventCount: number; teamCount: number } {
+  try {
+    const data = (window as Record<string, unknown>).__PRERENDER_DATA__ as { stats?: { eventCount: number; teamCount: number } } | undefined;
+    if (data?.stats && data.stats.eventCount > 0) {
+      return data.stats;
+    }
+  } catch {
+    // SSR環境ではwindowが無いので無視
+  }
+  return { eventCount: 0, teamCount: 0 };
+}
+
 export function HomePage() {
   const { openDrawer } = useDrawer();
   const [weekendEvents, setWeekendEvents] = useState<(Event | TeamEvent)[]>([]);
@@ -33,7 +46,7 @@ export function HomePage() {
   const [recruitingTeams, setRecruitingTeams] = useState<Team[]>([]);
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [stats, setStats] = useState({ eventCount: 0, teamCount: 0 });
+  const [stats, setStats] = useState(getPrerenderStats);
 
   useEffect(() => {
     loadHomeData();
@@ -232,7 +245,8 @@ export function HomePage() {
           全国のピックルボール情報、<br />まるっとここに。
         </p>
 
-        {/* Stats */}
+        {/* Stats - データ読み込み後のみ表示 */}
+        {!isLoading && (stats.eventCount > 0 || stats.teamCount > 0) && (
         <div style={{ display: 'flex', gap: '8px', position: 'absolute', left: '20px', bottom: '20px', zIndex: 1 }}>
           <div style={{
             background: '#FFFFFF',
@@ -283,6 +297,7 @@ export function HomePage() {
             <div style={{ fontSize: '9px', color: '#666666', fontWeight: 500, marginTop: '2px' }}>サークル</div>
           </div>
         </div>
+        )}
       </section>
 
       <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -344,7 +359,7 @@ export function HomePage() {
           </div>
           {isLoading ? (
             <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '24px', textAlign: 'center', color: '#888888' }}>
-              <p>今週末のピックルボールイベントを読み込み中...</p>
+              <p>今週末開催予定のピックルボールイベントを表示します。初心者歓迎のイベントや練習会、上級者向けトーナメントまで幅広く掲載中。</p>
             </div>
           ) : weekendEvents.length === 0 ? (
             <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '24px', textAlign: 'center', color: '#888888' }}>
@@ -373,7 +388,7 @@ export function HomePage() {
           </div>
           {isLoading ? (
             <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '24px', textAlign: 'center', color: '#888888' }}>
-              <p>ピックルボールサークル情報を読み込み中...</p>
+              <p>全国のピックルボールサークル・チームを表示します。メンバー募集中のサークルに参加して、一緒にプレイしましょう。</p>
             </div>
           ) : featuredTeams.length === 0 ? (
             <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '24px', textAlign: 'center', color: '#888888' }}>
@@ -403,7 +418,7 @@ export function HomePage() {
           <div style={{ background: '#FFFFFF', borderRadius: '16px', overflow: 'hidden' }}>
             {isLoading ? (
               <div style={{ padding: '24px', textAlign: 'center', color: '#888888' }}>
-                <p>ピックルボール大会情報を読み込み中...</p>
+                <p>全国のピックルボール大会・トーナメント情報を表示します。最新の大会スケジュールをチェックしよう。</p>
               </div>
             ) : tournaments.length === 0 ? (
               <div style={{ padding: '24px', textAlign: 'center', color: '#888888' }}>
@@ -473,7 +488,7 @@ export function HomePage() {
           <div style={{ background: '#FFFFFF', borderRadius: '16px', overflow: 'hidden' }}>
             {isLoading ? (
               <div style={{ padding: '24px', textAlign: 'center', color: '#888888' }}>
-                <p>新着ピックルボールイベントを読み込み中...</p>
+                <p>最近追加されたピックルボールイベントを表示します。新しいイベントが毎日掲載されています。</p>
               </div>
             ) : recentEvents.length === 0 ? (
               <div style={{ padding: '24px', textAlign: 'center', color: '#888888' }}>
@@ -502,7 +517,7 @@ export function HomePage() {
           <div style={{ background: '#FFFFFF', borderRadius: '16px', overflow: 'hidden' }}>
             {isLoading ? (
               <div style={{ padding: '24px', textAlign: 'center', color: '#888888' }}>
-                <p>メンバー募集中のピックルボールサークルを読み込み中...</p>
+                <p>メンバー募集中のピックルボールサークルを表示します。初心者から上級者まで、あなたに合ったサークルが見つかります。</p>
               </div>
             ) : recruitingTeams.length === 0 ? (
               <div style={{ padding: '24px', textAlign: 'center', color: '#888888' }}>

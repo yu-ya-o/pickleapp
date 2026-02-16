@@ -8,6 +8,8 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const resolve = (p) => path.resolve(__dirname, '..', p);
 
+const API_URL = process.env.VITE_API_URL || 'https://pickleapp.onrender.com';
+
 // Mock browser globals for SSR (api.ts uses localStorage in constructor)
 globalThis.localStorage = {
   getItem: () => null,
@@ -21,8 +23,32 @@ globalThis.localStorage = {
 // Routes to pre-render (public, SEO-important pages)
 const ROUTES = ['/', '/events', '/teams', '/rankings', '/tournaments'];
 
+// Fetch stats data from the backend API for SSR embedding
+async function fetchPrerenderData() {
+  try {
+    console.log(`Fetching prerender data from ${API_URL}...`);
+    const response = await fetch(`${API_URL}/api/stats`, {
+      signal: AbortSignal.timeout(10000),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Stats API returned ${response.status}`);
+    }
+
+    const stats = await response.json();
+    console.log(`Fetched stats: ${stats.eventCount} events, ${stats.teamCount} teams`);
+    return { stats };
+  } catch (error) {
+    console.warn('Failed to fetch prerender data:', error.message);
+    return null;
+  }
+}
+
 async function prerender() {
   console.log('Starting pre-rendering...');
+
+  // Fetch data from API for embedding
+  const prerenderData = await fetchPrerenderData();
 
   // Read the built index.html as template
   const templatePath = resolve('dist/index.html');
@@ -64,6 +90,15 @@ async function prerender() {
         finalHtml = finalHtml.replace(
           /<!--seo-tags-start-->[\s\S]*?<!--seo-tags-end-->/,
           `<!--seo-tags-start-->\n    ${helmetTags}\n    <!--seo-tags-end-->`
+        );
+      }
+
+      // Inject prerender data as a script tag (before the main script)
+      if (prerenderData) {
+        const dataScript = `<script>window.__PRERENDER_DATA__=${JSON.stringify(prerenderData)};</script>`;
+        finalHtml = finalHtml.replace(
+          '<script type="module"',
+          `${dataScript}\n    <script type="module"`
         );
       }
 
