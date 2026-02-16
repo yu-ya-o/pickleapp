@@ -28,7 +28,7 @@ function getWeekendRange() {
 // ビルド時にプリレンダリングで埋め込まれた初期データを取得
 function getPrerenderStats(): { eventCount: number; teamCount: number } {
   try {
-    const data = (window as Record<string, unknown>).__PRERENDER_DATA__ as { stats?: { eventCount: number; teamCount: number } } | undefined;
+    const data = (window as unknown as Record<string, unknown>).__PRERENDER_DATA__ as { stats?: { eventCount: number; teamCount: number } } | undefined;
     if (data?.stats && data.stats.eventCount > 0) {
       return data.stats;
     }
