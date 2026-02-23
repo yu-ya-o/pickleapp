@@ -116,6 +116,10 @@ export function CreateTeamEventPage() {
     if (!teamId) return;
 
     // バリデーション
+    if (!formData.description.trim()) {
+      setErrorMessage('詳細を入力してください');
+      return;
+    }
     if (!formData.startTime || !formData.endTime) {
       setErrorMessage('開始日時と終了日時を選択してください');
       return;
@@ -197,6 +201,7 @@ export function CreateTeamEventPage() {
             value={formData.description}
             onChange={handleChange}
             placeholder="イベントの詳細を入力..."
+            required
           />
 
           <LocationAutocomplete
