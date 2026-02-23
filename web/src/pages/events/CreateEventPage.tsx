@@ -32,6 +32,7 @@ export function CreateEventPage() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingEvent, setIsLoadingEvent] = useState(isEditMode || isDuplicateMode);
+  const [errorMessage, setErrorMessage] = useState('');
   const [eligibleTeams, setEligibleTeams] = useState<Team[]>([]);
   const [selectedOrganizer, setSelectedOrganizer] = useState<OrganizerType>(
     urlTeamId ? { teamId: urlTeamId } : 'personal'
@@ -170,6 +171,13 @@ export function CreateEventPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage('');
+
+    // バリデーション
+    if (!formData.startTime || !formData.endTime) {
+      setErrorMessage('開始日時と終了日時を選択してください');
+      return;
+    }
 
     try {
       setIsLoading(true);
@@ -221,6 +229,7 @@ export function CreateEventPage() {
       }
     } catch (error) {
       console.error('Failed to save event:', error);
+      setErrorMessage('イベントの保存に失敗しました。入力内容を確認してください。');
     } finally {
       setIsLoading(false);
     }
@@ -362,6 +371,10 @@ export function CreateEventPage() {
             onChange={handleChange}
             options={SKILL_LEVELS}
           />
+
+          {errorMessage && (
+            <p className="text-sm text-red-500 text-center">{errorMessage}</p>
+          )}
 
           <button
             type="submit"
