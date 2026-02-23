@@ -283,6 +283,7 @@ export function CreateEventPage() {
               value={typeof selectedOrganizer === 'string' ? selectedOrganizer : selectedOrganizer.teamId}
               onChange={handleOrganizerChange}
               options={organizerOptions}
+              required
             />
           )}
 
@@ -294,6 +295,7 @@ export function CreateEventPage() {
               value={visibility}
               onChange={(e) => setVisibility(e.target.value as 'public' | 'private')}
               options={VISIBILITY_OPTIONS}
+              required
             />
           )}
 
