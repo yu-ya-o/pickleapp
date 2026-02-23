@@ -141,13 +141,13 @@ export function DateTimeInput({
                 showOutsideDays
                 classNames={{
                   root: 'w-full',
-                  months: 'flex flex-col',
+                  months: 'flex flex-col relative',
                   month: 'space-y-4',
-                  month_caption: 'flex justify-center relative items-center h-10',
+                  month_caption: 'flex justify-center items-center h-10',
                   caption_label: 'text-sm font-semibold text-gray-900',
-                  nav: 'flex items-center gap-1',
-                  button_previous: 'absolute left-0 p-2 rounded-lg hover:bg-gray-100 transition-colors',
-                  button_next: 'absolute right-0 p-2 rounded-lg hover:bg-gray-100 transition-colors',
+                  nav: 'absolute inset-x-0 top-0 flex items-center justify-between h-10 z-10',
+                  button_previous: 'p-2 rounded-lg hover:bg-gray-100 transition-colors',
+                  button_next: 'p-2 rounded-lg hover:bg-gray-100 transition-colors',
                   weekdays: 'flex',
                   weekday: 'w-10 h-10 flex items-center justify-center text-xs font-medium text-gray-500',
                   week: 'flex',
