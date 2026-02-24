@@ -130,46 +130,27 @@ export function MyEventsPage() {
         {/* Tab Control */}
         <div style={{
           display: 'flex',
-          background: '#F0F0F0',
-          borderRadius: '12px',
-          padding: '4px'
+          gap: '12px'
         }}>
-          <button
-            onClick={() => setTab('upcoming')}
-            style={{
-              flex: 1,
-              padding: '8px 0',
-              fontSize: '14px',
-              fontWeight: 500,
-              borderRadius: '10px',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-              background: tab === 'upcoming' ? '#FFFFFF' : 'transparent',
-              color: tab === 'upcoming' ? '#1a1a2e' : '#888888',
-              boxShadow: tab === 'upcoming' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
-            }}
-          >
-            これから ({upcomingEvents.length})
-          </button>
-          <button
-            onClick={() => setTab('past')}
-            style={{
-              flex: 1,
-              padding: '8px 0',
-              fontSize: '14px',
-              fontWeight: 500,
-              borderRadius: '10px',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-              background: tab === 'past' ? '#FFFFFF' : 'transparent',
-              color: tab === 'past' ? '#1a1a2e' : '#888888',
-              boxShadow: tab === 'past' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
-            }}
-          >
-            これまで ({pastEvents.length})
-          </button>
+          {([{ label: `これから (${upcomingEvents.length})`, value: 'upcoming' as const }, { label: `これまで (${pastEvents.length})`, value: 'past' as const }]).map(({ label, value }) => (
+            <button
+              key={value}
+              onClick={() => setTab(value)}
+              style={{
+                padding: '6px 14px',
+                fontSize: '13px',
+                fontWeight: 500,
+                borderRadius: '20px',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                background: tab === value ? '#1a1a2e' : '#F0F0F0',
+                color: tab === value ? '#FFFFFF' : '#888888'
+              }}
+            >
+              {label}
+            </button>
+          ))}
         </div>
       </header>
 
