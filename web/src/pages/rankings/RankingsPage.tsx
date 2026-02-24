@@ -1,31 +1,52 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, Trophy, Menu, Calendar } from 'lucide-react';
+import { Users, Trophy, Menu, Calendar, User } from 'lucide-react';
 import { api } from '@/services/api';
-import type { TeamRanking } from '@/services/api';
+import type { TeamRanking, UserDuprRanking } from '@/services/api';
 import { Loading } from '@/components/ui';
 import { RankingsSEO } from '@/components/SEO';
 import { useDrawer } from '@/contexts/DrawerContext';
 
-type RankingType = 'members' | 'events';
+type MainTab = 'team' | 'dupr';
+type TeamRankingType = 'members' | 'events';
+type DuprType = 'doubles' | 'singles';
 
 export function RankingsPage() {
   const { openDrawer } = useDrawer();
-  const [rankings, setRankings] = useState<TeamRanking[]>([]);
+  const [mainTab, setMainTab] = useState<MainTab>('team');
+  const [teamRankings, setTeamRankings] = useState<TeamRanking[]>([]);
+  const [duprRankings, setDuprRankings] = useState<UserDuprRanking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [rankingType, setRankingType] = useState<RankingType>('members');
+  const [teamRankingType, setTeamRankingType] = useState<TeamRankingType>('members');
+  const [duprType, setDuprType] = useState<DuprType>('doubles');
 
   useEffect(() => {
-    loadRankings();
-  }, [rankingType]);
+    if (mainTab === 'team') {
+      loadTeamRankings();
+    } else {
+      loadDuprRankings();
+    }
+  }, [mainTab, teamRankingType, duprType]);
 
-  const loadRankings = async () => {
+  const loadTeamRankings = async () => {
     try {
       setIsLoading(true);
-      const data = await api.getTeamRankings(rankingType);
-      setRankings(data);
+      const data = await api.getTeamRankings(teamRankingType);
+      setTeamRankings(data);
     } catch (error) {
-      console.error('Failed to load rankings:', error);
+      console.error('Failed to load team rankings:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const loadDuprRankings = async () => {
+    try {
+      setIsLoading(true);
+      const data = await api.getUserDuprRankings(duprType);
+      setDuprRankings(data);
+    } catch (error) {
+      console.error('Failed to load DUPR rankings:', error);
     } finally {
       setIsLoading(false);
     }
@@ -42,6 +63,260 @@ export function RankingsPage() {
       default:
         return '#888888';
     }
+  };
+
+  const renderSegmentButton = (
+    label: string,
+    isActive: boolean,
+    onClick: () => void
+  ) => (
+    <button
+      onClick={onClick}
+      style={{
+        flex: 1,
+        padding: '8px 0',
+        fontSize: '14px',
+        fontWeight: 500,
+        borderRadius: '10px',
+        border: 'none',
+        cursor: 'pointer',
+        transition: 'all 0.2s',
+        background: isActive ? '#FFFFFF' : 'transparent',
+        color: isActive ? '#1a1a2e' : '#888888',
+        boxShadow: isActive ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+      }}
+    >
+      {label}
+    </button>
+  );
+
+  const renderRankBadge = (rank: number) => (
+    <div style={{
+      width: '40px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      {rank <= 3 ? (
+        <div style={{
+          width: '32px',
+          height: '32px',
+          borderRadius: '50%',
+          background: getMedalColor(rank),
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#FFFFFF',
+          fontWeight: 700,
+          fontSize: '14px'
+        }}>
+          {rank}
+        </div>
+      ) : (
+        <span style={{ fontSize: '18px', fontWeight: 600, color: '#888888' }}>
+          {rank}
+        </span>
+      )}
+    </div>
+  );
+
+  const renderTeamRankings = () => {
+    if (teamRankings.length === 0) {
+      return (
+        <div style={{ textAlign: 'center', paddingTop: '80px' }}>
+          <Trophy size={56} style={{ color: '#CCCCCC', margin: '0 auto' }} />
+          <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#1a1a2e', marginTop: '20px', marginBottom: '8px' }}>
+            ランキングがありません
+          </h3>
+          <p style={{ color: '#888888' }}>サークルが登録されるとランキングが表示されます</p>
+        </div>
+      );
+    }
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {teamRankings.map((team) => (
+          <Link
+            key={team.id}
+            to={`/teams/${team.id}`}
+            style={{
+              display: 'block',
+              background: '#FFFFFF',
+              borderRadius: '16px',
+              padding: '16px',
+              textDecoration: 'none',
+              transition: 'background 0.2s',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+              {renderRankBadge(team.rank)}
+
+              {/* Team Icon */}
+              <div style={{
+                width: '50px',
+                height: '50px',
+                borderRadius: '12px',
+                overflow: 'hidden',
+                background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0
+              }}>
+                {team.iconImage ? (
+                  <img src={team.iconImage} alt={team.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  <span style={{ fontSize: '20px' }}>🏓</span>
+                )}
+              </div>
+
+              {/* Team Info */}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <h3 style={{
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  color: '#1a1a2e',
+                  marginBottom: '4px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                }}>
+                  {team.name}
+                </h3>
+                {team.description && (
+                  <p style={{
+                    fontSize: '13px',
+                    color: '#888888',
+                    marginBottom: '4px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  }}>
+                    {team.description}
+                  </p>
+                )}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  {teamRankingType === 'events' ? (
+                    <Calendar size={14} style={{ color: '#65A30D' }} />
+                  ) : (
+                    <Users size={14} style={{ color: '#65A30D' }} />
+                  )}
+                  <span style={{ fontSize: '13px', color: '#888888' }}>
+                    {teamRankingType === 'events'
+                      ? `${team.publicEventCount}イベント`
+                      : `${team.memberCount}人`}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+    );
+  };
+
+  const renderDuprRankings = () => {
+    if (duprRankings.length === 0) {
+      return (
+        <div style={{ textAlign: 'center', paddingTop: '80px' }}>
+          <Trophy size={56} style={{ color: '#CCCCCC', margin: '0 auto' }} />
+          <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#1a1a2e', marginTop: '20px', marginBottom: '8px' }}>
+            ランキングがありません
+          </h3>
+          <p style={{ color: '#888888' }}>DUPRレーティングを登録するとランキングが表示されます</p>
+        </div>
+      );
+    }
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {duprRankings.map((user) => {
+          const rating = duprType === 'doubles' ? user.duprDoubles : user.duprSingles;
+          return (
+            <Link
+              key={user.id}
+              to={`/users/${user.id}`}
+              style={{
+                display: 'block',
+                background: '#FFFFFF',
+                borderRadius: '16px',
+                padding: '16px',
+                textDecoration: 'none',
+                transition: 'background 0.2s',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                {renderRankBadge(user.rank)}
+
+                {/* User Avatar */}
+                <div style={{
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '50%',
+                  overflow: 'hidden',
+                  background: 'linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0
+                }}>
+                  {user.profileImage ? (
+                    <img src={user.profileImage} alt={user.nickname || user.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <User size={24} style={{ color: '#FFFFFF' }} />
+                  )}
+                </div>
+
+                {/* User Info */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <h3 style={{
+                    fontSize: '16px',
+                    fontWeight: 600,
+                    color: '#1a1a2e',
+                    marginBottom: '4px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  }}>
+                    {user.nickname || user.name}
+                  </h3>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {user.region && (
+                      <span style={{ fontSize: '13px', color: '#888888' }}>
+                        {user.region}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* DUPR Rating */}
+                <div style={{
+                  textAlign: 'right',
+                  flexShrink: 0
+                }}>
+                  <div style={{
+                    fontSize: '20px',
+                    fontWeight: 700,
+                    color: '#3B82F6'
+                  }}>
+                    {rating != null ? rating.toFixed(3) : '-'}
+                  </div>
+                  <div style={{
+                    fontSize: '11px',
+                    color: '#888888',
+                    marginTop: '2px'
+                  }}>
+                    DUPR
+                  </div>
+                </div>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+    );
   };
 
   return (
@@ -94,49 +369,36 @@ export function RankingsPage() {
           <div style={{ width: '36px' }} className="md:hidden" />
         </div>
 
-        {/* Segment Control */}
+        {/* Main Tab: Team vs DUPR */}
+        <div style={{
+          display: 'flex',
+          background: '#F0F0F0',
+          borderRadius: '12px',
+          padding: '4px',
+          marginBottom: '8px'
+        }}>
+          {renderSegmentButton('サークル', mainTab === 'team', () => setMainTab('team'))}
+          {renderSegmentButton('DUPR', mainTab === 'dupr', () => setMainTab('dupr'))}
+        </div>
+
+        {/* Sub Segment Control */}
         <div style={{
           display: 'flex',
           background: '#F0F0F0',
           borderRadius: '12px',
           padding: '4px'
         }}>
-          <button
-            onClick={() => setRankingType('members')}
-            style={{
-              flex: 1,
-              padding: '8px 0',
-              fontSize: '14px',
-              fontWeight: 500,
-              borderRadius: '10px',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-              background: rankingType === 'members' ? '#FFFFFF' : 'transparent',
-              color: rankingType === 'members' ? '#1a1a2e' : '#888888',
-              boxShadow: rankingType === 'members' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
-            }}
-          >
-            メンバー数
-          </button>
-          <button
-            onClick={() => setRankingType('events')}
-            style={{
-              flex: 1,
-              padding: '8px 0',
-              fontSize: '14px',
-              fontWeight: 500,
-              borderRadius: '10px',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-              background: rankingType === 'events' ? '#FFFFFF' : 'transparent',
-              color: rankingType === 'events' ? '#1a1a2e' : '#888888',
-              boxShadow: rankingType === 'events' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
-            }}
-          >
-            公開イベント数
-          </button>
+          {mainTab === 'team' ? (
+            <>
+              {renderSegmentButton('メンバー数', teamRankingType === 'members', () => setTeamRankingType('members'))}
+              {renderSegmentButton('公開イベント数', teamRankingType === 'events', () => setTeamRankingType('events'))}
+            </>
+          ) : (
+            <>
+              {renderSegmentButton('ダブルス', duprType === 'doubles', () => setDuprType('doubles'))}
+              {renderSegmentButton('シングルス', duprType === 'singles', () => setDuprType('singles'))}
+            </>
+          )}
         </div>
       </header>
 
@@ -148,121 +410,10 @@ export function RankingsPage() {
             <p style={{ color: '#888888', fontSize: '14px', marginTop: '16px' }}>ピックルボールプレイヤー・サークルランキング</p>
             <p style={{ color: '#AAAAAA', fontSize: '12px', marginTop: '8px' }}>アクティブなピックルボールプレイヤー・サークルのランキングをチェックしよう。</p>
           </div>
-        ) : rankings.length === 0 ? (
-          <div style={{ textAlign: 'center', paddingTop: '80px' }}>
-            <Trophy size={56} style={{ color: '#CCCCCC', margin: '0 auto' }} />
-            <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#1a1a2e', marginTop: '20px', marginBottom: '8px' }}>
-              ランキングがありません
-            </h3>
-            <p style={{ color: '#888888' }}>サークルが登録されるとランキングが表示されます</p>
-          </div>
+        ) : mainTab === 'team' ? (
+          renderTeamRankings()
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {rankings.map((team) => (
-              <Link
-                key={team.id}
-                to={`/teams/${team.id}`}
-                style={{
-                  display: 'block',
-                  background: '#FFFFFF',
-                  borderRadius: '16px',
-                  padding: '16px',
-                  textDecoration: 'none',
-                  transition: 'background 0.2s',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                  {/* Rank */}
-                  <div style={{
-                    width: '40px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    {team.rank <= 3 ? (
-                      <div style={{
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: '50%',
-                        background: getMedalColor(team.rank),
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#FFFFFF',
-                        fontWeight: 700,
-                        fontSize: '14px'
-                      }}>
-                        {team.rank}
-                      </div>
-                    ) : (
-                      <span style={{ fontSize: '18px', fontWeight: 600, color: '#888888' }}>
-                        {team.rank}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Team Icon */}
-                  <div style={{
-                    width: '50px',
-                    height: '50px',
-                    borderRadius: '12px',
-                    overflow: 'hidden',
-                    background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0
-                  }}>
-                    {team.iconImage ? (
-                      <img src={team.iconImage} alt={team.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    ) : (
-                      <span style={{ fontSize: '20px' }}>🏓</span>
-                    )}
-                  </div>
-
-                  {/* Team Info */}
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <h3 style={{
-                      fontSize: '16px',
-                      fontWeight: 600,
-                      color: '#1a1a2e',
-                      marginBottom: '4px',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap'
-                    }}>
-                      {team.name}
-                    </h3>
-                    {team.description && (
-                      <p style={{
-                        fontSize: '13px',
-                        color: '#888888',
-                        marginBottom: '4px',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap'
-                      }}>
-                        {team.description}
-                      </p>
-                    )}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      {rankingType === 'events' ? (
-                        <Calendar size={14} style={{ color: '#65A30D' }} />
-                      ) : (
-                        <Users size={14} style={{ color: '#65A30D' }} />
-                      )}
-                      <span style={{ fontSize: '13px', color: '#888888' }}>
-                        {rankingType === 'events'
-                          ? `${team.publicEventCount}イベント`
-                          : `${team.memberCount}人`}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+          renderDuprRankings()
         )}
       </div>
     </div>

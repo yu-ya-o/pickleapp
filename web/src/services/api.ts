@@ -415,6 +415,10 @@ class ApiClient {
     return this.request<TeamRanking[]>(`/api/teams/rankings?type=${type}`);
   }
 
+  async getUserDuprRankings(type: 'doubles' | 'singles' = 'doubles'): Promise<UserDuprRanking[]> {
+    return this.request<UserDuprRanking[]>(`/api/users/rankings?type=${type}`);
+  }
+
   // Stats
   async getStats(): Promise<{ eventCount: number; teamCount: number }> {
     // キャッシュ防止のためタイムスタンプを追加
@@ -451,6 +455,19 @@ export interface UserProfile {
   tiktokUrl: string | null;
   lineUrl: string | null;
   createdAt: string;
+}
+
+// User DUPR Ranking type
+export interface UserDuprRanking {
+  id: string;
+  name: string;
+  nickname: string | null;
+  profileImage: string | null;
+  region: string | null;
+  skillLevel: string | null;
+  duprDoubles: number | null;
+  duprSingles: number | null;
+  rank: number;
 }
 
 // Team Ranking type
