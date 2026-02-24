@@ -372,13 +372,29 @@ export function RankingsPage() {
         {/* Main Tab: Team vs DUPR */}
         <div style={{
           display: 'flex',
-          background: '#F0F0F0',
-          borderRadius: '12px',
-          padding: '4px',
+          gap: '16px',
           marginBottom: '8px'
         }}>
-          {renderSegmentButton('サークル', mainTab === 'team', () => setMainTab('team'))}
-          {renderSegmentButton('DUPR', mainTab === 'dupr', () => setMainTab('dupr'))}
+          {(['team', 'dupr'] as const).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setMainTab(tab)}
+              style={{
+                padding: '0',
+                fontSize: '13px',
+                fontWeight: mainTab === tab ? 600 : 400,
+                border: 'none',
+                borderBottom: mainTab === tab ? '2px solid #1a1a2e' : '2px solid transparent',
+                cursor: 'pointer',
+                background: 'transparent',
+                color: mainTab === tab ? '#1a1a2e' : '#AAAAAA',
+                paddingBottom: '4px',
+                transition: 'all 0.2s'
+              }}
+            >
+              {tab === 'team' ? 'サークル' : 'DUPR'}
+            </button>
+          ))}
         </div>
 
         {/* Sub Segment Control */}
