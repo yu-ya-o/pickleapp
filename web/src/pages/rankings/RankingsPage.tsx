@@ -65,31 +65,6 @@ export function RankingsPage() {
     }
   };
 
-  const renderSegmentButton = (
-    label: string,
-    isActive: boolean,
-    onClick: () => void
-  ) => (
-    <button
-      onClick={onClick}
-      style={{
-        flex: 1,
-        padding: '8px 0',
-        fontSize: '14px',
-        fontWeight: 500,
-        borderRadius: '10px',
-        border: 'none',
-        cursor: 'pointer',
-        transition: 'all 0.2s',
-        background: isActive ? '#FFFFFF' : 'transparent',
-        color: isActive ? '#1a1a2e' : '#888888',
-        boxShadow: isActive ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
-      }}
-    >
-      {label}
-    </button>
-  );
-
   const renderRankBadge = (rank: number) => (
     <div style={{
       width: '40px',
@@ -400,20 +375,48 @@ export function RankingsPage() {
         {/* Sub Segment Control */}
         <div style={{
           display: 'flex',
-          background: '#F0F0F0',
-          borderRadius: '12px',
-          padding: '4px'
+          gap: '12px'
         }}>
           {mainTab === 'team' ? (
-            <>
-              {renderSegmentButton('メンバー数', teamRankingType === 'members', () => setTeamRankingType('members'))}
-              {renderSegmentButton('公開イベント数', teamRankingType === 'events', () => setTeamRankingType('events'))}
-            </>
+            [{ label: 'メンバー数', value: 'members' as const }, { label: '公開イベント数', value: 'events' as const }].map(({ label, value }) => (
+              <button
+                key={value}
+                onClick={() => setTeamRankingType(value)}
+                style={{
+                  padding: '6px 14px',
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  borderRadius: '20px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  background: teamRankingType === value ? '#1a1a2e' : '#F0F0F0',
+                  color: teamRankingType === value ? '#FFFFFF' : '#888888'
+                }}
+              >
+                {label}
+              </button>
+            ))
           ) : (
-            <>
-              {renderSegmentButton('ダブルス', duprType === 'doubles', () => setDuprType('doubles'))}
-              {renderSegmentButton('シングルス', duprType === 'singles', () => setDuprType('singles'))}
-            </>
+            [{ label: 'ダブルス', value: 'doubles' as const }, { label: 'シングルス', value: 'singles' as const }].map(({ label, value }) => (
+              <button
+                key={value}
+                onClick={() => setDuprType(value)}
+                style={{
+                  padding: '6px 14px',
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  borderRadius: '20px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  background: duprType === value ? '#1a1a2e' : '#F0F0F0',
+                  color: duprType === value ? '#FFFFFF' : '#888888'
+                }}
+              >
+                {label}
+              </button>
+            ))
           )}
         </div>
       </header>
