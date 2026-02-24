@@ -145,47 +145,28 @@ export function EventsListPage() {
         {isAuthenticated && (
           <div style={{
             display: 'flex',
-            background: '#F0F0F0',
-            borderRadius: '12px',
-            padding: '4px',
+            gap: '12px',
             marginBottom: '12px'
           }}>
-            <button
-              onClick={() => setSegment('public')}
-              style={{
-                flex: 1,
-                padding: '8px 0',
-                fontSize: '14px',
-                fontWeight: 500,
-                borderRadius: '10px',
-                border: 'none',
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-                background: segment === 'public' ? '#FFFFFF' : 'transparent',
-                color: segment === 'public' ? '#1a1a2e' : '#888888',
-                boxShadow: segment === 'public' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
-              }}
-            >
-              公開イベント
-            </button>
-            <button
-              onClick={() => setSegment('team')}
-              style={{
-                flex: 1,
-                padding: '8px 0',
-                fontSize: '14px',
-                fontWeight: 500,
-                borderRadius: '10px',
-                border: 'none',
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-                background: segment === 'team' ? '#FFFFFF' : 'transparent',
-                color: segment === 'team' ? '#1a1a2e' : '#888888',
-                boxShadow: segment === 'team' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
-              }}
-            >
-              所属サークルイベント
-            </button>
+            {([{ label: '公開イベント', value: 'public' as const }, { label: '所属サークルイベント', value: 'team' as const }]).map(({ label, value }) => (
+              <button
+                key={value}
+                onClick={() => setSegment(value)}
+                style={{
+                  padding: '6px 14px',
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  borderRadius: '20px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  background: segment === value ? '#1a1a2e' : '#F0F0F0',
+                  color: segment === value ? '#FFFFFF' : '#888888'
+                }}
+              >
+                {label}
+              </button>
+            ))}
           </div>
         )}
 
