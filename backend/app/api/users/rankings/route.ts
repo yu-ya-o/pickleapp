@@ -13,11 +13,17 @@ export async function GET(request: NextRequest) {
 
     const duprField = type === 'singles' ? 'duprSingles' : 'duprDoubles';
 
-    // Get users who have a DUPR rating set
+    // DUPR valid range: 2.000 - 8.000
+    const DUPR_MIN = 2.0;
+    const DUPR_MAX = 8.0;
+
+    // Get users who have a valid DUPR rating
     const users = await prisma.user.findMany({
       where: {
         [duprField]: {
           not: null,
+          gte: DUPR_MIN,
+          lte: DUPR_MAX,
         },
       },
       select: {
