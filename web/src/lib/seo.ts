@@ -80,6 +80,18 @@ export function generateUserMeta(user: {
   };
 }
 
+export function generateTournamentMeta(tournament: {
+  title: string;
+  description: string;
+  venue: string;
+  eventDate: string;
+}) {
+  return {
+    title: `${tournament.title} | ${SITE_NAME}`,
+    description: `${tournament.eventDate}に${tournament.venue}で開催されるピックルボール大会。${tournament.description.slice(0, 100)}`,
+  };
+}
+
 // JSON-LD Structured Data generators
 export function generateEventJsonLd(event: {
   id: string;
@@ -126,6 +138,45 @@ export function generateEventJsonLd(event: {
   };
 }
 
+export function generateTournamentJsonLd(tournament: {
+  id: string;
+  title: string;
+  description: string;
+  eventDate: string;
+  venue: string;
+  address?: string | null;
+  organizer: string;
+  entryFee?: string;
+  coverImage?: string | null;
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'SportsEvent',
+    name: tournament.title,
+    description: tournament.description,
+    startDate: tournament.eventDate,
+    location: {
+      '@type': 'Place',
+      name: tournament.venue,
+      ...(tournament.address && { address: tournament.address }),
+    },
+    organizer: {
+      '@type': 'Organization',
+      name: tournament.organizer,
+    },
+    sport: 'Pickleball',
+    ...(tournament.coverImage && { image: tournament.coverImage }),
+    ...(tournament.entryFee && {
+      offers: {
+        '@type': 'Offer',
+        price: tournament.entryFee,
+        priceCurrency: 'JPY',
+      },
+    }),
+    url: `${SITE_URL}/tournaments/${tournament.id}`,
+  };
+}
+
 export function generateTeamJsonLd(team: {
   id: string;
   name: string;
@@ -140,7 +191,10 @@ export function generateTeamJsonLd(team: {
     description: team.description || `${team.name} - ピックルボールサークル`,
     sport: 'Pickleball',
     ...(team.iconImage && { logo: team.iconImage }),
-    numberOfEmployees: team.memberCount,
+    member: {
+      '@type': 'QuantitativeValue',
+      value: team.memberCount,
+    },
     url: `${SITE_URL}/teams/${team.id}`,
   };
 }
@@ -231,6 +285,14 @@ export function generateUserBreadcrumb(userName: string, userId: string) {
   return generateBreadcrumbJsonLd([
     { name: 'ホーム', url: '/' },
     { name: userName, url: `/p/${userId}` },
+  ]);
+}
+
+export function generateTournamentBreadcrumb(tournamentTitle: string, tournamentId: string) {
+  return generateBreadcrumbJsonLd([
+    { name: 'ホーム', url: '/' },
+    { name: '大会一覧', url: '/tournaments' },
+    { name: tournamentTitle, url: `/tournaments/${tournamentId}` },
   ]);
 }
 

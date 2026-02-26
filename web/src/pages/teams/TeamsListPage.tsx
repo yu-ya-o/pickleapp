@@ -299,7 +299,7 @@ function TeamCard({ team, isMyTeam }: { team: Team; isMyTeam?: boolean }) {
             justifyContent: 'center'
           }}>
             {team.iconImage ? (
-              <img src={team.iconImage} alt={team.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={team.iconImage} alt={team.name} width={50} height={50} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             ) : (
               <span style={{ fontSize: '20px' }}>🏓</span>
             )}
