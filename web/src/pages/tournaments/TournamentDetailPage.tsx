@@ -12,6 +12,7 @@ import { Avatar, Loading, Modal, GoogleMap } from '@/components/ui';
 import { PageHeader } from '@/components/PageHeader';
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { SEO } from '@/components/SEO';
+import { generateTournamentJsonLd, generateTournamentBreadcrumb } from '@/lib/seo';
 import { getDisplayName } from '@/lib/utils';
 import type { Tournament } from '@/types';
 
@@ -96,13 +97,28 @@ export function TournamentDetailPage() {
   if (tournament.snsUrls?.instagram) snsText.push('Instagram');
   if (tournament.snsUrls?.line) snsText.push('LINE');
 
+  const tournamentJsonLd = generateTournamentJsonLd({
+    id: tournament.id,
+    title: tournament.title,
+    description: tournament.description,
+    eventDate: tournament.eventDate,
+    venue: tournament.venue,
+    address: tournament.address,
+    organizer: tournament.organizer,
+    entryFee: tournament.entryFee,
+    coverImage: tournament.coverImage,
+  });
+  const seoBreadcrumb = generateTournamentBreadcrumb(tournament.title, tournament.id);
+
   return (
     <div style={{ minHeight: '100vh', background: '#F5F5F7', overflowX: 'hidden' }}>
       <SEO
-        title={`${tournament.title} | PickleHub`}
+        title={tournament.title}
         description={tournament.description}
         keywords="ピックルボール, 大会, トーナメント, pickleball, tournament"
         url={`/tournaments/${tournament.id}`}
+        image={tournament.coverImage}
+        jsonLd={[tournamentJsonLd, seoBreadcrumb]}
       />
       <PageHeader />
 

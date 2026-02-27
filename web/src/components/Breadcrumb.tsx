@@ -13,6 +13,7 @@ interface BreadcrumbProps {
 export function Breadcrumb({ items }: BreadcrumbProps) {
   return (
     <nav
+      aria-label="パンくずリスト"
       style={{
         display: 'flex',
         alignItems: 'center',

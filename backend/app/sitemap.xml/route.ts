@@ -61,6 +61,20 @@ export async function GET() {
       },
     });
 
+    // Fetch all active tournaments
+    const tournaments = await prisma.tournament.findMany({
+      where: {
+        status: 'active',
+      },
+      select: {
+        id: true,
+        updatedAt: true,
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
+    });
+
     const today = new Date().toISOString().split('T')[0];
 
     // Build sitemap XML
@@ -90,6 +104,12 @@ export async function GET() {
     <lastmod>${today}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>${SITE_URL}/tournaments</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
   </url>
 `;
 
@@ -124,6 +144,18 @@ export async function GET() {
     <loc>${SITE_URL}/teams/${teamEvent.teamId}/events/${teamEvent.id}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+`;
+    }
+
+    // Add dynamic tournament pages
+    for (const tournament of tournaments) {
+      const lastmod = tournament.updatedAt.toISOString().split('T')[0];
+      xml += `  <url>
+    <loc>${SITE_URL}/tournaments/${tournament.id}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 `;
@@ -175,6 +207,11 @@ export async function GET() {
     <loc>${SITE_URL}/rankings</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>${SITE_URL}/tournaments</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>`;
 

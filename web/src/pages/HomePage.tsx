@@ -574,7 +574,7 @@ function EventCard({ event }: { event: Event | TeamEvent }) {
           flexShrink: 0
         }}>
           {displayImage ? (
-            <img src={displayImage} alt={displayName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src={displayImage} alt={displayName} width={44} height={44} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           ) : (
             <span style={{ fontSize: '18px' }}>🏓</span>
           )}
@@ -635,7 +635,7 @@ function TeamCard({ team }: { team: Team }) {
           flexShrink: 0
         }}>
           {team.iconImage ? (
-            <img src={team.iconImage} alt={team.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src={team.iconImage} alt={team.name} width={44} height={44} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           ) : (
             <span style={{ fontSize: '18px' }}>🏓</span>
           )}
@@ -699,7 +699,7 @@ function EventListItem({ event, isLast }: { event: Event | TeamEvent; isLast: bo
         flexShrink: 0
       }}>
         {displayImage ? (
-          <img src={displayImage} alt={displayName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img src={displayImage} alt={displayName} width={40} height={40} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         ) : (
           <span style={{ fontSize: '16px' }}>🏓</span>
         )}
@@ -743,7 +743,7 @@ function TournamentListItem({ tournament, isLast }: { tournament: Tournament; is
         flexShrink: 0
       }}>
         {tournament.coverImage ? (
-          <img src={tournament.coverImage} alt={tournament.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img src={tournament.coverImage} alt={tournament.title} width={40} height={40} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         ) : (
           <Medal size={18} style={{ color: '#FFFFFF' }} />
         )}
@@ -787,7 +787,7 @@ function TeamListItem({ team, isLast }: { team: Team; isLast: boolean }) {
         flexShrink: 0
       }}>
         {team.iconImage ? (
-          <img src={team.iconImage} alt={team.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img src={team.iconImage} alt={team.name} width={40} height={40} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         ) : (
           <span style={{ fontSize: '16px' }}>🏓</span>
         )}

@@ -140,7 +140,7 @@ export function RankingsPage() {
                 flexShrink: 0
               }}>
                 {team.iconImage ? (
-                  <img src={team.iconImage} alt={team.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={team.iconImage} alt={team.name} width={50} height={50} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
                   <span style={{ fontSize: '20px' }}>🏓</span>
                 )}
@@ -238,7 +238,7 @@ export function RankingsPage() {
                   flexShrink: 0
                 }}>
                   {user.profileImage ? (
-                    <img src={user.profileImage} alt={user.nickname || user.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src={user.profileImage} alt={user.nickname || user.name} width={50} height={50} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   ) : (
                     <User size={24} style={{ color: '#FFFFFF' }} />
                   )}

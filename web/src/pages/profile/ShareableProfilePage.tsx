@@ -336,7 +336,7 @@ export function ShareableProfilePage() {
                   overflow: 'hidden'
                 }}>
                   {team.iconImage ? (
-                    <img src={team.iconImage} alt={team.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
+                    <img src={team.iconImage} alt={team.name} width={32} height={32} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   ) : (
                     '🏓'
                   )}

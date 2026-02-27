@@ -246,7 +246,7 @@ function MyEventCard({ event }: { event: MyEvent }) {
             justifyContent: 'center'
           }}>
             {displayImage ? (
-              <img src={displayImage} alt={displayName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
+              <img src={displayImage} alt={displayName} width={50} height={50} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             ) : (
               <span style={{ fontSize: '20px' }}>🏓</span>
             )}
