@@ -387,9 +387,7 @@ export function HomePage() {
             </Link>
           </div>
           {isLoading ? (
-            <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '24px', textAlign: 'center', color: '#888888' }}>
-              <p>今週末開催予定のピックルボールイベントを表示します。初心者歓迎のイベントや練習会、上級者向けトーナメントまで幅広く掲載中。</p>
-            </div>
+            <SkeletonCardRow />
           ) : weekendEvents.length === 0 ? (
             /* A-5: 空状態にCTAとイラスト */
             <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '32px 24px', textAlign: 'center' }}>
@@ -428,9 +426,7 @@ export function HomePage() {
             </Link>
           </div>
           {isLoading ? (
-            <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '24px', textAlign: 'center', color: '#888888' }}>
-              <p>全国のピックルボールサークル・チームを表示します。メンバー募集中のサークルに参加して、一緒にプレイしましょう。</p>
-            </div>
+            <SkeletonCardRow />
           ) : featuredTeams.length === 0 ? (
             <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '32px 24px', textAlign: 'center' }}>
               <div style={{ fontSize: '40px', marginBottom: '12px' }}>👥</div>
@@ -469,9 +465,7 @@ export function HomePage() {
           </div>
           <div style={{ background: '#FFFFFF', borderRadius: '16px', overflow: 'hidden' }}>
             {isLoading ? (
-              <div style={{ padding: '24px', textAlign: 'center', color: '#888888' }}>
-                <p>全国のピックルボール大会・トーナメント情報を表示します。最新の大会スケジュールをチェックしよう。</p>
-              </div>
+              <SkeletonListRows />
             ) : tournaments.length === 0 ? (
               <div style={{ padding: '32px 24px', textAlign: 'center' }}>
                 <div style={{ fontSize: '40px', marginBottom: '12px' }}>🏆</div>
@@ -546,9 +540,7 @@ export function HomePage() {
           </div>
           <div style={{ background: '#FFFFFF', borderRadius: '16px', overflow: 'hidden' }}>
             {isLoading ? (
-              <div style={{ padding: '24px', textAlign: 'center', color: '#888888' }}>
-                <p>最近追加されたピックルボールイベントを表示します。新しいイベントが毎日掲載されています。</p>
-              </div>
+              <SkeletonListRows />
             ) : recentEvents.length === 0 ? (
               <div style={{ padding: '32px 24px', textAlign: 'center' }}>
                 <div style={{ fontSize: '40px', marginBottom: '12px' }}>📅</div>
@@ -586,9 +578,7 @@ export function HomePage() {
           </div>
           <div style={{ background: '#FFFFFF', borderRadius: '16px', overflow: 'hidden' }}>
             {isLoading ? (
-              <div style={{ padding: '24px', textAlign: 'center', color: '#888888' }}>
-                <p>メンバー募集中のピックルボールサークルを表示します。初心者から上級者まで、あなたに合ったサークルが見つかります。</p>
-              </div>
+              <SkeletonListRows />
             ) : recruitingTeams.length === 0 ? (
               <div style={{ padding: '32px 24px', textAlign: 'center' }}>
                 <div style={{ fontSize: '40px', marginBottom: '12px' }}>🤝</div>
@@ -603,6 +593,49 @@ export function HomePage() {
         </section>
       </div>
     </div>
+  );
+}
+
+// スケルトン: 横スクロールカード用
+function SkeletonCardRow() {
+  return (
+    <div style={{ display: 'flex', gap: '12px', overflow: 'hidden', margin: '0 -16px', padding: '0 16px' }}>
+      {[0, 1, 2].map((i) => (
+        <div key={i} style={{
+          background: '#FFFFFF', borderRadius: '16px', padding: '14px',
+          minWidth: '260px', border: '1px solid #F0F0F0'
+        }}>
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <div className="skeleton" style={{ width: '44px', height: '44px', borderRadius: '10px', flexShrink: 0 }} />
+            <div style={{ flex: 1 }}>
+              <div className="skeleton" style={{ height: '14px', width: '70%', marginBottom: '8px' }} />
+              <div className="skeleton" style={{ height: '12px', width: '50%', marginBottom: '4px' }} />
+              <div className="skeleton" style={{ height: '12px', width: '40%' }} />
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// スケルトン: 縦リスト用
+function SkeletonListRows() {
+  return (
+    <>
+      {[0, 1, 2].map((i) => (
+        <div key={i} style={{
+          display: 'flex', alignItems: 'center', gap: '12px',
+          padding: '14px 16px', borderBottom: i < 2 ? '1px solid #F0F0F0' : 'none'
+        }}>
+          <div className="skeleton" style={{ width: '40px', height: '40px', borderRadius: '10px', flexShrink: 0 }} />
+          <div style={{ flex: 1 }}>
+            <div className="skeleton" style={{ height: '14px', width: '60%', marginBottom: '6px' }} />
+            <div className="skeleton" style={{ height: '12px', width: '40%' }} />
+          </div>
+        </div>
+      ))}
+    </>
   );
 }
 

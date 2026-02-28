@@ -149,6 +149,13 @@ body {
   100% { background-position: 200% center; }
 }
 
+.skeleton {
+  background: linear-gradient(90deg, #F0F0F0 25%, #E0E0E0 50%, #F0F0F0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 6px;
+}
+
 .animate-fade-in {
   animation: fadeIn 0.3s ease-out;
 }
