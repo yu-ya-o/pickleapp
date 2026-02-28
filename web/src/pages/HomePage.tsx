@@ -26,27 +26,74 @@ function getWeekendRange() {
 }
 
 // ビルド時にプリレンダリングで埋め込まれた初期データを取得
-function getPrerenderStats(): { eventCount: number; teamCount: number } {
+interface PrerenderData {
+  stats?: { eventCount: number; teamCount: number };
+  events?: Event[];
+  teamEvents?: TeamEvent[];
+  teams?: Team[];
+  tournaments?: Tournament[];
+}
+
+function getPrerenderData(): PrerenderData | null {
   try {
-    const data = (window as unknown as Record<string, unknown>).__PRERENDER_DATA__ as { stats?: { eventCount: number; teamCount: number } } | undefined;
-    if (data?.stats && data.stats.eventCount > 0) {
-      return data.stats;
-    }
+    const data = (window as unknown as Record<string, unknown>).__PRERENDER_DATA__ as PrerenderData | undefined;
+    if (data) return data;
   } catch {
     // SSR環境ではwindowが無いので無視
   }
-  return { eventCount: 0, teamCount: 0 };
+  return null;
+}
+
+function buildHomeData(prerenderData: PrerenderData) {
+  const allEvents = prerenderData.events || [];
+  const allTeamEvents = prerenderData.teamEvents || [];
+  const allTeams = prerenderData.teams || [];
+  const allTournaments = prerenderData.tournaments || [];
+
+  const combinedEvents = [...allEvents, ...allTeamEvents];
+
+  // 今週末のイベント
+  const { saturday, sunday } = getWeekendRange();
+  const weekend = combinedEvents.filter((event) => {
+    const eventDate = new Date(event.startTime);
+    return eventDate >= saturday && eventDate <= sunday;
+  });
+
+  // 新着イベント（直近追加順）
+  const sorted = [...combinedEvents].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+
+  // 注目のチーム（メンバー数順）
+  const sortedTeams = [...allTeams].sort((a, b) => b.memberCount - a.memberCount);
+
+  // 参加者募集中（公開チーム）
+  const publicTeams = allTeams.filter((t) => t.visibility === 'public');
+
+  return {
+    weekendEvents: weekend.slice(0, 6),
+    recentEvents: sorted.slice(0, 5),
+    featuredTeams: sortedTeams.slice(0, 6),
+    recruitingTeams: publicTeams.slice(0, 5),
+    tournaments: allTournaments.slice(0, 5),
+    stats: prerenderData.stats || { eventCount: 0, teamCount: 0 },
+  };
 }
 
 export function HomePage() {
   const { openDrawer } = useDrawer();
-  const [weekendEvents, setWeekendEvents] = useState<(Event | TeamEvent)[]>([]);
-  const [recentEvents, setRecentEvents] = useState<(Event | TeamEvent)[]>([]);
-  const [featuredTeams, setFeaturedTeams] = useState<Team[]>([]);
-  const [recruitingTeams, setRecruitingTeams] = useState<Team[]>([]);
-  const [tournaments, setTournaments] = useState<Tournament[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [stats, setStats] = useState(getPrerenderStats);
+
+  // プリレンダリングデータがあれば即座にコンテンツ表示
+  const prerenderData = getPrerenderData();
+  const initialData = prerenderData ? buildHomeData(prerenderData) : null;
+
+  const [weekendEvents, setWeekendEvents] = useState<(Event | TeamEvent)[]>(initialData?.weekendEvents || []);
+  const [recentEvents, setRecentEvents] = useState<(Event | TeamEvent)[]>(initialData?.recentEvents || []);
+  const [featuredTeams, setFeaturedTeams] = useState<Team[]>(initialData?.featuredTeams || []);
+  const [recruitingTeams, setRecruitingTeams] = useState<Team[]>(initialData?.recruitingTeams || []);
+  const [tournaments, setTournaments] = useState<Tournament[]>(initialData?.tournaments || []);
+  const [isLoading, setIsLoading] = useState(!initialData);
+  const [stats, setStats] = useState(initialData?.stats || { eventCount: 0, teamCount: 0 });
 
   useEffect(() => {
     loadHomeData();
@@ -387,9 +434,7 @@ export function HomePage() {
             </Link>
           </div>
           {isLoading ? (
-            <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '24px', textAlign: 'center', color: '#888888' }}>
-              <p>今週末開催予定のピックルボールイベントを表示します。初心者歓迎のイベントや練習会、上級者向けトーナメントまで幅広く掲載中。</p>
-            </div>
+            <SkeletonCardRow />
           ) : weekendEvents.length === 0 ? (
             /* A-5: 空状態にCTAとイラスト */
             <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '32px 24px', textAlign: 'center' }}>
@@ -428,9 +473,7 @@ export function HomePage() {
             </Link>
           </div>
           {isLoading ? (
-            <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '24px', textAlign: 'center', color: '#888888' }}>
-              <p>全国のピックルボールサークル・チームを表示します。メンバー募集中のサークルに参加して、一緒にプレイしましょう。</p>
-            </div>
+            <SkeletonCardRow />
           ) : featuredTeams.length === 0 ? (
             <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '32px 24px', textAlign: 'center' }}>
               <div style={{ fontSize: '40px', marginBottom: '12px' }}>👥</div>
@@ -469,9 +512,7 @@ export function HomePage() {
           </div>
           <div style={{ background: '#FFFFFF', borderRadius: '16px', overflow: 'hidden' }}>
             {isLoading ? (
-              <div style={{ padding: '24px', textAlign: 'center', color: '#888888' }}>
-                <p>全国のピックルボール大会・トーナメント情報を表示します。最新の大会スケジュールをチェックしよう。</p>
-              </div>
+              <SkeletonListRows />
             ) : tournaments.length === 0 ? (
               <div style={{ padding: '32px 24px', textAlign: 'center' }}>
                 <div style={{ fontSize: '40px', marginBottom: '12px' }}>🏆</div>
@@ -546,9 +587,7 @@ export function HomePage() {
           </div>
           <div style={{ background: '#FFFFFF', borderRadius: '16px', overflow: 'hidden' }}>
             {isLoading ? (
-              <div style={{ padding: '24px', textAlign: 'center', color: '#888888' }}>
-                <p>最近追加されたピックルボールイベントを表示します。新しいイベントが毎日掲載されています。</p>
-              </div>
+              <SkeletonListRows />
             ) : recentEvents.length === 0 ? (
               <div style={{ padding: '32px 24px', textAlign: 'center' }}>
                 <div style={{ fontSize: '40px', marginBottom: '12px' }}>📅</div>
@@ -586,9 +625,7 @@ export function HomePage() {
           </div>
           <div style={{ background: '#FFFFFF', borderRadius: '16px', overflow: 'hidden' }}>
             {isLoading ? (
-              <div style={{ padding: '24px', textAlign: 'center', color: '#888888' }}>
-                <p>メンバー募集中のピックルボールサークルを表示します。初心者から上級者まで、あなたに合ったサークルが見つかります。</p>
-              </div>
+              <SkeletonListRows />
             ) : recruitingTeams.length === 0 ? (
               <div style={{ padding: '32px 24px', textAlign: 'center' }}>
                 <div style={{ fontSize: '40px', marginBottom: '12px' }}>🤝</div>
@@ -603,6 +640,49 @@ export function HomePage() {
         </section>
       </div>
     </div>
+  );
+}
+
+// スケルトン: 横スクロールカード用
+function SkeletonCardRow() {
+  return (
+    <div style={{ display: 'flex', gap: '12px', overflow: 'hidden', margin: '0 -16px', padding: '0 16px' }}>
+      {[0, 1, 2].map((i) => (
+        <div key={i} style={{
+          background: '#FFFFFF', borderRadius: '16px', padding: '14px',
+          minWidth: '260px', border: '1px solid #F0F0F0'
+        }}>
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <div className="skeleton" style={{ width: '44px', height: '44px', borderRadius: '10px', flexShrink: 0 }} />
+            <div style={{ flex: 1 }}>
+              <div className="skeleton" style={{ height: '14px', width: '70%', marginBottom: '8px' }} />
+              <div className="skeleton" style={{ height: '12px', width: '50%', marginBottom: '4px' }} />
+              <div className="skeleton" style={{ height: '12px', width: '40%' }} />
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// スケルトン: 縦リスト用
+function SkeletonListRows() {
+  return (
+    <>
+      {[0, 1, 2].map((i) => (
+        <div key={i} style={{
+          display: 'flex', alignItems: 'center', gap: '12px',
+          padding: '14px 16px', borderBottom: i < 2 ? '1px solid #F0F0F0' : 'none'
+        }}>
+          <div className="skeleton" style={{ width: '40px', height: '40px', borderRadius: '10px', flexShrink: 0 }} />
+          <div style={{ flex: 1 }}>
+            <div className="skeleton" style={{ height: '14px', width: '60%', marginBottom: '6px' }} />
+            <div className="skeleton" style={{ height: '12px', width: '40%' }} />
+          </div>
+        </div>
+      ))}
+    </>
   );
 }
 
