@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Plus, MapPin, Calendar, Users, Search, Menu } from 'lucide-react';
 import { api } from '@/services/api';
 import { Loading } from '@/components/ui';
@@ -14,6 +14,7 @@ type SegmentType = 'public' | 'team';
 
 export function EventsListPage() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { openDrawer } = useDrawer();
   const { isAuthenticated } = useAuth();
   const [events, setEvents] = useState<Event[]>([]);
@@ -22,7 +23,7 @@ export function EventsListPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedRegion, setSelectedRegion] = useState('');
+  const [selectedRegion, setSelectedRegion] = useState(searchParams.get('region') || '');
   const [segment, setSegment] = useState<SegmentType>('public');
 
   useEffect(() => {
@@ -185,7 +186,15 @@ export function EventsListPage() {
             <MapPin size={16} style={{ color: '#65A30D', flexShrink: 0 }} />
             <select
               value={selectedRegion}
-              onChange={(e) => setSelectedRegion(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                setSelectedRegion(value);
+                if (value) {
+                  setSearchParams({ region: value });
+                } else {
+                  setSearchParams({});
+                }
+              }}
               style={{
                 background: 'transparent',
                 border: 'none',
