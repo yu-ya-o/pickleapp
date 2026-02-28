@@ -6,7 +6,6 @@ import { SEO } from '@/components/SEO';
 import { generateOrganizationJsonLd, generateWebsiteJsonLd } from '@/lib/seo';
 import { useDrawer } from '@/contexts/DrawerContext';
 import { formatDateTime, getDisplayName } from '@/lib/utils';
-import { PREFECTURES } from '@/lib/prefectures';
 import type { Event, Team, TeamEvent, Tournament } from '@/types';
 
 // 今週末の日付範囲を取得
@@ -535,7 +534,7 @@ export function HomePage() {
             <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>地域から探す</h2>
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-            {PREFECTURES.slice(0, 12).map((pref) => (
+            {['東京都', '神奈川県', '大阪府', '愛知県', '埼玉県', '千葉県', '兵庫県', '北海道', '福岡県', '静岡県', '茨城県', '広島県'].map((pref) => (
               <Link
                 key={pref}
                 to={`/events?region=${encodeURIComponent(pref)}`}
