@@ -23,7 +23,7 @@ export function EventsListPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedRegion, setSelectedRegion] = useState(searchParams.get('region') || '');
+  const selectedRegion = searchParams.get('region') || '';
   const [segment, setSegment] = useState<SegmentType>('public');
 
   useEffect(() => {
@@ -188,7 +188,6 @@ export function EventsListPage() {
               value={selectedRegion}
               onChange={(e) => {
                 const value = e.target.value;
-                setSelectedRegion(value);
                 if (value) {
                   setSearchParams({ region: value });
                 } else {
