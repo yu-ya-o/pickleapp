@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, Users, MapPin, ChevronRight, Flame, Clock, UserPlus, Medal, Menu } from 'lucide-react';
+import { Calendar, Users, MapPin, ChevronRight, Flame, Clock, UserPlus, Medal, Menu, Search, PlusCircle, Zap } from 'lucide-react';
 import { api } from '@/services/api';
 import { SEO } from '@/components/SEO';
 import { generateOrganizationJsonLd, generateWebsiteJsonLd } from '@/lib/seo';
@@ -178,126 +178,153 @@ export function HomePage() {
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* Hero Section - A-1: 躍動感のあるヒーロー */}
       <section style={{
-        background: `linear-gradient(135deg, rgba(163, 230, 53, 0.9) 0%, rgba(101, 163, 13, 0.95) 100%), url('https://images.unsplash.com/photo-1684495643649-9dc9feaa0d54?auto=format&fit=crop&w=1200&q=80')`,
+        background: `linear-gradient(135deg, rgba(101, 163, 13, 0.75) 0%, rgba(22, 101, 52, 0.85) 100%), url('https://images.unsplash.com/photo-1684495643649-9dc9feaa0d54?auto=format&fit=crop&w=1200&q=80')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         color: '#FFFFFF',
-        padding: '40px 20px 100px',
+        padding: '32px 20px 28px',
         position: 'relative',
         overflow: 'hidden',
-        minHeight: '200px'
+        minHeight: '240px'
       }}>
-        {/* Pickleball pattern background */}
-        <div style={{
+        {/* Decorative floating balls */}
+        <div className="animate-float" style={{
           position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          opacity: 0.1,
-          backgroundImage: `
-            radial-gradient(circle at 20% 30%, #fff 8px, transparent 8px),
-            radial-gradient(circle at 80% 20%, #fff 12px, transparent 12px),
-            radial-gradient(circle at 60% 70%, #fff 6px, transparent 6px),
-            radial-gradient(circle at 10% 80%, #fff 10px, transparent 10px),
-            radial-gradient(circle at 90% 60%, #fff 7px, transparent 7px),
-            radial-gradient(circle at 40% 10%, #fff 5px, transparent 5px),
-            radial-gradient(circle at 70% 90%, #fff 9px, transparent 9px),
-            radial-gradient(circle at 30% 50%, #fff 4px, transparent 4px)
-          `,
-          pointerEvents: 'none'
-        }} />
-
-        {/* Decorative ball */}
-        <div style={{
-          position: 'absolute',
-          top: '-40px',
-          right: '-40px',
-          width: '180px',
-          height: '180px',
+          top: '-30px',
+          right: '-20px',
+          width: '140px',
+          height: '140px',
           borderRadius: '50%',
-          background: 'rgba(255,255,255,0.1)',
-          border: '3px solid rgba(255,255,255,0.2)'
+          background: 'rgba(255,255,255,0.12)',
+          border: '3px solid rgba(255,255,255,0.25)'
         }} />
-        <div style={{
+        <div className="animate-float-reverse" style={{
           position: 'absolute',
-          bottom: '-50px',
-          left: '-30px',
-          width: '120px',
-          height: '120px',
+          bottom: '-40px',
+          left: '-20px',
+          width: '100px',
+          height: '100px',
           borderRadius: '50%',
           background: 'rgba(255,255,255,0.08)',
-          border: '2px solid rgba(255,255,255,0.15)'
+          border: '2px solid rgba(255,255,255,0.18)'
+        }} />
+        <div className="animate-float" style={{
+          position: 'absolute',
+          top: '40%',
+          right: '15%',
+          width: '24px',
+          height: '24px',
+          borderRadius: '50%',
+          background: 'rgba(255,255,255,0.2)',
+          animationDelay: '1s'
         }} />
 
-        <p style={{
-          fontSize: '24px',
-          fontWeight: 700,
-          opacity: 1,
-          marginBottom: '32px',
-          textShadow: '0 2px 8px rgba(0,0,0,0.2)',
-          position: 'relative',
-          zIndex: 1,
-          lineHeight: 1.4
-        }}>
-          全国のピックルボール情報、<br />まるっとここに。
-        </p>
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <p style={{
+            fontSize: '26px',
+            fontWeight: 800,
+            marginBottom: '8px',
+            textShadow: '0 2px 12px rgba(0,0,0,0.3)',
+            lineHeight: 1.3,
+            letterSpacing: '-0.5px'
+          }}>
+            さあ、コートへ。
+          </p>
+          <p style={{
+            fontSize: '14px',
+            fontWeight: 500,
+            opacity: 0.9,
+            marginBottom: '20px',
+            textShadow: '0 1px 4px rgba(0,0,0,0.2)'
+          }}>
+            全国のピックルボール仲間とつながろう
+          </p>
 
-        {/* Stats - データ読み込み後のみ表示 */}
-        {!isLoading && (stats.eventCount > 0 || stats.teamCount > 0) && (
-        <div style={{ display: 'flex', gap: '8px', position: 'absolute', left: '20px', bottom: '20px', zIndex: 1 }}>
-          <div style={{
-            background: '#FFFFFF',
-            borderRadius: '10px',
-            width: '64px',
-            height: '64px',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
+          {/* Stats - A-3: 熱量が見える統計 */}
+          {!isLoading && (stats.eventCount > 0 || stats.teamCount > 0) && (
+          <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
             <div style={{
-              fontSize: '20px',
-              fontWeight: 700,
-              background: 'linear-gradient(135deg, #65A30D 0%, #3f6212 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              lineHeight: 1
+              background: 'rgba(255,255,255,0.2)',
+              backdropFilter: 'blur(8px)',
+              borderRadius: '12px',
+              padding: '10px 16px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              border: '1px solid rgba(255,255,255,0.25)'
             }}>
-              {stats.eventCount}
+              <Zap size={16} style={{ color: '#FDE047' }} />
+              <div>
+                <div style={{ fontSize: '20px', fontWeight: 800, lineHeight: 1 }}>{stats.eventCount}</div>
+                <div style={{ fontSize: '10px', fontWeight: 500, opacity: 0.85 }}>イベント開催</div>
+              </div>
             </div>
-            <div style={{ fontSize: '9px', color: '#666666', fontWeight: 500, marginTop: '2px' }}>イベント</div>
+            <div style={{
+              background: 'rgba(255,255,255,0.2)',
+              backdropFilter: 'blur(8px)',
+              borderRadius: '12px',
+              padding: '10px 16px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              border: '1px solid rgba(255,255,255,0.25)'
+            }}>
+              <Users size={16} style={{ color: '#FDE047' }} />
+              <div>
+                <div style={{ fontSize: '20px', fontWeight: 800, lineHeight: 1 }}>{stats.teamCount}</div>
+                <div style={{ fontSize: '10px', fontWeight: 500, opacity: 0.85 }}>サークル活動中</div>
+              </div>
+            </div>
           </div>
-          <div style={{
-            background: '#FFFFFF',
-            borderRadius: '10px',
-            width: '64px',
-            height: '64px',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            <div style={{
-              fontSize: '20px',
-              fontWeight: 700,
-              background: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              lineHeight: 1
-            }}>
-              {stats.teamCount}
-            </div>
-            <div style={{ fontSize: '9px', color: '#666666', fontWeight: 500, marginTop: '2px' }}>サークル</div>
+          )}
+
+          {/* A-6: Hero CTA buttons */}
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <Link
+              to="/events"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: '#FFFFFF',
+                color: '#166534',
+                fontWeight: 700,
+                fontSize: '14px',
+                padding: '10px 18px',
+                borderRadius: '12px',
+                textDecoration: 'none',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                transition: 'transform 0.2s, box-shadow 0.2s'
+              }}
+            >
+              <Search size={16} />
+              イベントを探す
+            </Link>
+            <Link
+              to="/events/create"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: 'rgba(255,255,255,0.2)',
+                border: '1.5px solid rgba(255,255,255,0.5)',
+                color: '#FFFFFF',
+                fontWeight: 600,
+                fontSize: '14px',
+                padding: '10px 18px',
+                borderRadius: '12px',
+                textDecoration: 'none',
+                backdropFilter: 'blur(4px)',
+                transition: 'background 0.2s'
+              }}
+            >
+              <PlusCircle size={16} />
+              イベント作成
+            </Link>
           </div>
         </div>
-        )}
       </section>
 
       <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -345,14 +372,16 @@ export function HomePage() {
           </div>
         </a>
 
-        {/* 今週末のイベント */}
+        {/* 今週末のイベント - A-4: セクションヘッダーに色彩強化 */}
         <section>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Flame size={20} style={{ color: '#F59E0B' }} />
+              <div style={{ background: 'linear-gradient(135deg, #F59E0B, #EF4444)', borderRadius: '8px', padding: '4px', display: 'flex' }}>
+                <Flame size={16} style={{ color: '#FFFFFF' }} />
+              </div>
               <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>今週末のイベント</h2>
             </div>
-            <Link to="/events" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: '#65A30D', textDecoration: 'none' }}>
+            <Link to="/events" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', fontWeight: 600, color: '#16A34A', textDecoration: 'none' }}>
               もっと見る
               <ChevronRight size={16} />
             </Link>
@@ -362,8 +391,18 @@ export function HomePage() {
               <p>今週末開催予定のピックルボールイベントを表示します。初心者歓迎のイベントや練習会、上級者向けトーナメントまで幅広く掲載中。</p>
             </div>
           ) : weekendEvents.length === 0 ? (
-            <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '24px', textAlign: 'center', color: '#888888' }}>
-              今週末のイベントはまだありません
+            /* A-5: 空状態にCTAとイラスト */
+            <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '32px 24px', textAlign: 'center' }}>
+              <div style={{ fontSize: '40px', marginBottom: '12px' }}>🏓</div>
+              <p style={{ fontSize: '14px', color: '#666666', marginBottom: '16px' }}>今週末のイベントはまだありません</p>
+              <Link to="/events/create" style={{
+                display: 'inline-flex', alignItems: 'center', gap: '6px',
+                background: 'linear-gradient(135deg, #65A30D, #16A34A)',
+                color: '#FFFFFF', fontWeight: 600, fontSize: '13px',
+                padding: '10px 20px', borderRadius: '10px', textDecoration: 'none'
+              }}>
+                <PlusCircle size={14} /> イベントを作成する
+              </Link>
             </div>
           ) : (
             <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '8px', margin: '0 -16px', padding: '0 16px 8px' }}>
@@ -378,10 +417,12 @@ export function HomePage() {
         <section>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Users size={20} style={{ color: '#65A30D' }} />
+              <div style={{ background: 'linear-gradient(135deg, #65A30D, #16A34A)', borderRadius: '8px', padding: '4px', display: 'flex' }}>
+                <Users size={16} style={{ color: '#FFFFFF' }} />
+              </div>
               <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>注目のサークル</h2>
             </div>
-            <Link to="/teams" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: '#65A30D', textDecoration: 'none' }}>
+            <Link to="/teams" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', fontWeight: 600, color: '#16A34A', textDecoration: 'none' }}>
               もっと見る
               <ChevronRight size={16} />
             </Link>
@@ -391,8 +432,17 @@ export function HomePage() {
               <p>全国のピックルボールサークル・チームを表示します。メンバー募集中のサークルに参加して、一緒にプレイしましょう。</p>
             </div>
           ) : featuredTeams.length === 0 ? (
-            <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '24px', textAlign: 'center', color: '#888888' }}>
-              サークルはまだありません
+            <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '32px 24px', textAlign: 'center' }}>
+              <div style={{ fontSize: '40px', marginBottom: '12px' }}>👥</div>
+              <p style={{ fontSize: '14px', color: '#666666', marginBottom: '16px' }}>サークルはまだありません</p>
+              <Link to="/teams" style={{
+                display: 'inline-flex', alignItems: 'center', gap: '6px',
+                background: 'linear-gradient(135deg, #65A30D, #16A34A)',
+                color: '#FFFFFF', fontWeight: 600, fontSize: '13px',
+                padding: '10px 20px', borderRadius: '10px', textDecoration: 'none'
+              }}>
+                <Search size={14} /> サークルを探す
+              </Link>
             </div>
           ) : (
             <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '8px', margin: '0 -16px', padding: '0 16px 8px' }}>
@@ -407,10 +457,12 @@ export function HomePage() {
         <section>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Medal size={20} style={{ color: '#F59E0B' }} />
+              <div style={{ background: 'linear-gradient(135deg, #F59E0B, #D97706)', borderRadius: '8px', padding: '4px', display: 'flex' }}>
+                <Medal size={16} style={{ color: '#FFFFFF' }} />
+              </div>
               <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>大会情報</h2>
             </div>
-            <Link to="/tournaments" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: '#65A30D', textDecoration: 'none' }}>
+            <Link to="/tournaments" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', fontWeight: 600, color: '#16A34A', textDecoration: 'none' }}>
               もっと見る
               <ChevronRight size={16} />
             </Link>
@@ -421,8 +473,9 @@ export function HomePage() {
                 <p>全国のピックルボール大会・トーナメント情報を表示します。最新の大会スケジュールをチェックしよう。</p>
               </div>
             ) : tournaments.length === 0 ? (
-              <div style={{ padding: '24px', textAlign: 'center', color: '#888888' }}>
-                大会情報はまだありません
+              <div style={{ padding: '32px 24px', textAlign: 'center' }}>
+                <div style={{ fontSize: '40px', marginBottom: '12px' }}>🏆</div>
+                <p style={{ fontSize: '14px', color: '#666666' }}>大会情報はまだありません</p>
               </div>
             ) : (
               tournaments.map((tournament, index) => (
@@ -435,7 +488,9 @@ export function HomePage() {
         {/* 地域から探す */}
         <section>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-            <MapPin size={20} style={{ color: '#EC4899' }} />
+            <div style={{ background: 'linear-gradient(135deg, #EC4899, #DB2777)', borderRadius: '8px', padding: '4px', display: 'flex' }}>
+              <MapPin size={16} style={{ color: '#FFFFFF' }} />
+            </div>
             <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>地域から探す</h2>
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -449,6 +504,7 @@ export function HomePage() {
                   border: '1px solid #E5E5E5',
                   borderRadius: '20px',
                   fontSize: '13px',
+                  fontWeight: 500,
                   color: '#1a1a2e',
                   textDecoration: 'none',
                   transition: 'all 0.2s'
@@ -464,7 +520,8 @@ export function HomePage() {
                 background: '#F0F0F0',
                 borderRadius: '20px',
                 fontSize: '13px',
-                color: '#888888',
+                fontWeight: 500,
+                color: '#666666',
                 textDecoration: 'none'
               }}
             >
@@ -477,10 +534,12 @@ export function HomePage() {
         <section>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Clock size={20} style={{ color: '#10B981' }} />
+              <div style={{ background: 'linear-gradient(135deg, #10B981, #059669)', borderRadius: '8px', padding: '4px', display: 'flex' }}>
+                <Clock size={16} style={{ color: '#FFFFFF' }} />
+              </div>
               <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>新着イベント</h2>
             </div>
-            <Link to="/events" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: '#65A30D', textDecoration: 'none' }}>
+            <Link to="/events" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', fontWeight: 600, color: '#16A34A', textDecoration: 'none' }}>
               もっと見る
               <ChevronRight size={16} />
             </Link>
@@ -491,8 +550,17 @@ export function HomePage() {
                 <p>最近追加されたピックルボールイベントを表示します。新しいイベントが毎日掲載されています。</p>
               </div>
             ) : recentEvents.length === 0 ? (
-              <div style={{ padding: '24px', textAlign: 'center', color: '#888888' }}>
-                イベントはまだありません
+              <div style={{ padding: '32px 24px', textAlign: 'center' }}>
+                <div style={{ fontSize: '40px', marginBottom: '12px' }}>📅</div>
+                <p style={{ fontSize: '14px', color: '#666666', marginBottom: '16px' }}>イベントはまだありません</p>
+                <Link to="/events/create" style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '6px',
+                  background: 'linear-gradient(135deg, #65A30D, #16A34A)',
+                  color: '#FFFFFF', fontWeight: 600, fontSize: '13px',
+                  padding: '10px 20px', borderRadius: '10px', textDecoration: 'none'
+                }}>
+                  <PlusCircle size={14} /> 最初のイベントを作成
+                </Link>
               </div>
             ) : (
               recentEvents.map((event, index) => (
@@ -506,10 +574,12 @@ export function HomePage() {
         <section>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <UserPlus size={20} style={{ color: '#3B82F6' }} />
+              <div style={{ background: 'linear-gradient(135deg, #3B82F6, #2563EB)', borderRadius: '8px', padding: '4px', display: 'flex' }}>
+                <UserPlus size={16} style={{ color: '#FFFFFF' }} />
+              </div>
               <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>メンバー募集中</h2>
             </div>
-            <Link to="/teams" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: '#65A30D', textDecoration: 'none' }}>
+            <Link to="/teams" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', fontWeight: 600, color: '#16A34A', textDecoration: 'none' }}>
               もっと見る
               <ChevronRight size={16} />
             </Link>
@@ -520,8 +590,9 @@ export function HomePage() {
                 <p>メンバー募集中のピックルボールサークルを表示します。初心者から上級者まで、あなたに合ったサークルが見つかります。</p>
               </div>
             ) : recruitingTeams.length === 0 ? (
-              <div style={{ padding: '24px', textAlign: 'center', color: '#888888' }}>
-                募集中のサークルはありません
+              <div style={{ padding: '32px 24px', textAlign: 'center' }}>
+                <div style={{ fontSize: '40px', marginBottom: '12px' }}>🤝</div>
+                <p style={{ fontSize: '14px', color: '#666666' }}>募集中のサークルはありません</p>
               </div>
             ) : (
               recruitingTeams.map((team, index) => (
@@ -535,7 +606,15 @@ export function HomePage() {
   );
 }
 
-// イベントカード（横スクロール用）
+// スキルレベルのラベルと色
+const SKILL_LEVEL_CONFIG: Record<string, { label: string; bg: string; color: string }> = {
+  all: { label: '全レベル', bg: '#F0FDF4', color: '#16A34A' },
+  beginner: { label: '初心者歓迎', bg: '#EFF6FF', color: '#2563EB' },
+  intermediate: { label: '中級者向け', bg: '#FFF7ED', color: '#EA580C' },
+  advanced: { label: '上級者向け', bg: '#FEF2F2', color: '#DC2626' },
+};
+
+// イベントカード（横スクロール用）- A-2/A-3: 残枠・レベルバッジ追加
 function EventCard({ event }: { event: Event | TeamEvent }) {
   const isTeamEvent = 'team' in event;
   const linkTo = isTeamEvent
@@ -548,9 +627,19 @@ function EventCard({ event }: { event: Event | TeamEvent }) {
     ? (event as TeamEvent).team.name
     : getDisplayName(event.creator);
 
+  const spotsInfo = !isTeamEvent && event.maxParticipants > 0 ? {
+    available: event.availableSpots,
+    total: event.maxParticipants,
+    isAlmostFull: event.availableSpots <= 3 && event.availableSpots > 0,
+    isFull: event.availableSpots === 0,
+  } : null;
+
+  const skillConfig = !isTeamEvent ? SKILL_LEVEL_CONFIG[event.skillLevel] || SKILL_LEVEL_CONFIG.all : null;
+
   return (
     <Link
       to={linkTo}
+      className="hover-lift"
       style={{
         display: 'block',
         background: '#FFFFFF',
@@ -558,9 +647,23 @@ function EventCard({ event }: { event: Event | TeamEvent }) {
         padding: '14px',
         minWidth: '260px',
         textDecoration: 'none',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+        border: spotsInfo?.isAlmostFull ? '1.5px solid #FDE68A' : '1px solid #F0F0F0',
+        position: 'relative'
       }}
     >
+      {/* A-3: 残枠バッジ */}
+      {spotsInfo && (spotsInfo.isAlmostFull || spotsInfo.isFull) && (
+        <div style={{
+          position: 'absolute', top: '8px', right: '8px',
+          background: spotsInfo.isFull ? '#FEE2E2' : '#FEF3C7',
+          color: spotsInfo.isFull ? '#DC2626' : '#D97706',
+          fontSize: '10px', fontWeight: 700,
+          padding: '2px 8px', borderRadius: '10px'
+        }}>
+          {spotsInfo.isFull ? '満員' : `残り${spotsInfo.available}枠`}
+        </div>
+      )}
       <div style={{ display: 'flex', gap: '12px' }}>
         <div style={{
           width: '44px',
@@ -592,26 +695,47 @@ function EventCard({ event }: { event: Event | TeamEvent }) {
             {event.title}
           </h3>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
-            <Calendar size={12} style={{ color: '#65A30D' }} />
-            <span style={{ fontSize: '12px', color: '#888888' }}>{formatDateTime(event.startTime)}</span>
+            <Calendar size={12} style={{ color: '#16A34A' }} />
+            <span style={{ fontSize: '12px', color: '#555555' }}>{formatDateTime(event.startTime)}</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <MapPin size={12} style={{ color: '#65A30D' }} />
-            <span style={{ fontSize: '12px', color: '#888888', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <MapPin size={12} style={{ color: '#16A34A' }} />
+            <span style={{ fontSize: '12px', color: '#555555', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {event.location}
             </span>
           </div>
         </div>
       </div>
+      {/* A-2: スキルレベル + 参加状況バー */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid #F5F5F5' }}>
+        {skillConfig && (
+          <span style={{
+            fontSize: '10px', fontWeight: 600,
+            background: skillConfig.bg, color: skillConfig.color,
+            padding: '2px 8px', borderRadius: '8px'
+          }}>
+            {skillConfig.label}
+          </span>
+        )}
+        {spotsInfo && !spotsInfo.isFull && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <Users size={10} style={{ color: '#888888' }} />
+            <span style={{ fontSize: '10px', color: '#888888' }}>
+              {spotsInfo.total - spotsInfo.available}/{spotsInfo.total}人
+            </span>
+          </div>
+        )}
+      </div>
     </Link>
   );
 }
 
-// サークルカード（横スクロール用）
+// サークルカード（横スクロール用）- A-2: メンバー数・地域の視覚強化
 function TeamCard({ team }: { team: Team }) {
   return (
     <Link
       to={`/teams/${team.id}`}
+      className="hover-lift"
       style={{
         display: 'block',
         background: '#FFFFFF',
@@ -619,7 +743,8 @@ function TeamCard({ team }: { team: Team }) {
         padding: '14px',
         minWidth: '200px',
         textDecoration: 'none',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+        border: '1px solid #F0F0F0'
       }}
     >
       <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
@@ -652,9 +777,14 @@ function TeamCard({ team }: { team: Team }) {
           }}>
             {team.name}
           </h3>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <Users size={12} style={{ color: '#65A30D' }} />
-            <span style={{ fontSize: '12px', color: '#888888' }}>{team.memberCount}人</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+              <Users size={12} style={{ color: '#16A34A' }} />
+              <span style={{ fontSize: '12px', color: '#555555', fontWeight: 500 }}>{team.memberCount}人</span>
+            </div>
+            {team.region && (
+              <span style={{ fontSize: '11px', color: '#888888' }}>{team.region}</span>
+            )}
           </div>
         </div>
       </div>
@@ -662,7 +792,7 @@ function TeamCard({ team }: { team: Team }) {
   );
 }
 
-// イベントリストアイテム（縦リスト用）
+// イベントリストアイテム（縦リスト用）- A-3: 残枠バッジ追加
 function EventListItem({ event, isLast }: { event: Event | TeamEvent; isLast: boolean }) {
   const isTeamEvent = 'team' in event;
   const linkTo = isTeamEvent
@@ -675,6 +805,12 @@ function EventListItem({ event, isLast }: { event: Event | TeamEvent; isLast: bo
     ? (event as TeamEvent).team.name
     : getDisplayName(event.creator);
 
+  const spotsInfo = !isTeamEvent && event.maxParticipants > 0 ? {
+    available: event.availableSpots,
+    isAlmostFull: event.availableSpots <= 3 && event.availableSpots > 0,
+    isFull: event.availableSpots === 0,
+  } : null;
+
   return (
     <Link
       to={linkTo}
@@ -684,7 +820,8 @@ function EventListItem({ event, isLast }: { event: Event | TeamEvent; isLast: bo
         gap: '12px',
         padding: '14px 16px',
         borderBottom: isLast ? 'none' : '1px solid #F0F0F0',
-        textDecoration: 'none'
+        textDecoration: 'none',
+        transition: 'background 0.15s'
       }}
     >
       <div style={{
@@ -708,11 +845,22 @@ function EventListItem({ event, isLast }: { event: Event | TeamEvent; isLast: bo
         <h4 style={{ fontSize: '14px', fontWeight: 600, color: '#1a1a2e', marginBottom: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {event.title}
         </h4>
-        <p style={{ fontSize: '12px', color: '#888888' }}>
+        <p style={{ fontSize: '12px', color: '#555555' }}>
           {formatDateTime(event.startTime)} / {event.location.split(' ')[0]}
         </p>
       </div>
-      <ChevronRight size={16} style={{ color: '#CCCCCC', flexShrink: 0 }} />
+      {spotsInfo && (spotsInfo.isAlmostFull || spotsInfo.isFull) ? (
+        <span style={{
+          fontSize: '10px', fontWeight: 700, flexShrink: 0,
+          background: spotsInfo.isFull ? '#FEE2E2' : '#FEF3C7',
+          color: spotsInfo.isFull ? '#DC2626' : '#D97706',
+          padding: '2px 8px', borderRadius: '10px'
+        }}>
+          {spotsInfo.isFull ? '満員' : `残${spotsInfo.available}`}
+        </span>
+      ) : (
+        <ChevronRight size={16} style={{ color: '#CCCCCC', flexShrink: 0 }} />
+      )}
     </Link>
   );
 }
