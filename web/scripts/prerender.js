@@ -23,21 +23,27 @@ globalThis.localStorage = {
 // Routes to pre-render (public, SEO-important pages)
 const ROUTES = ['/', '/events', '/teams', '/rankings', '/tournaments'];
 
-// Fetch stats data from the backend API for SSR embedding
+// Fetch all homepage data from the backend API for SSR embedding
 async function fetchPrerenderData() {
   try {
     console.log(`Fetching prerender data from ${API_URL}...`);
-    const response = await fetch(`${API_URL}/api/stats`, {
-      signal: AbortSignal.timeout(10000),
-    });
 
-    if (!response.ok) {
-      throw new Error(`Stats API returned ${response.status}`);
-    }
+    const [statsRes, eventsRes, teamEventsRes, teamsRes, tournamentsRes] = await Promise.all([
+      fetch(`${API_URL}/api/stats`, { signal: AbortSignal.timeout(10000) }).catch(() => null),
+      fetch(`${API_URL}/api/events?status=active&upcoming=true`, { signal: AbortSignal.timeout(10000) }).catch(() => null),
+      fetch(`${API_URL}/api/team-events?upcoming=true`, { signal: AbortSignal.timeout(10000) }).catch(() => null),
+      fetch(`${API_URL}/api/teams`, { signal: AbortSignal.timeout(10000) }).catch(() => null),
+      fetch(`${API_URL}/api/tournaments?status=active`, { signal: AbortSignal.timeout(10000) }).catch(() => null),
+    ]);
 
-    const stats = await response.json();
-    console.log(`Fetched stats: ${stats.eventCount} events, ${stats.teamCount} teams`);
-    return { stats };
+    const stats = statsRes?.ok ? await statsRes.json() : { eventCount: 0, teamCount: 0 };
+    const events = eventsRes?.ok ? await eventsRes.json() : [];
+    const teamEvents = teamEventsRes?.ok ? await teamEventsRes.json() : [];
+    const teams = teamsRes?.ok ? await teamsRes.json() : [];
+    const tournaments = tournamentsRes?.ok ? await tournamentsRes.json() : [];
+
+    console.log(`Fetched: ${stats.eventCount} events, ${stats.teamCount} teams, ${events.length} active events, ${teams.length} teams, ${tournaments.length} tournaments`);
+    return { stats, events, teamEvents, teams, tournaments };
   } catch (error) {
     console.warn('Failed to fetch prerender data:', error.message);
     return null;

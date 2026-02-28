@@ -26,27 +26,74 @@ function getWeekendRange() {
 }
 
 // ビルド時にプリレンダリングで埋め込まれた初期データを取得
-function getPrerenderStats(): { eventCount: number; teamCount: number } {
+interface PrerenderData {
+  stats?: { eventCount: number; teamCount: number };
+  events?: Event[];
+  teamEvents?: TeamEvent[];
+  teams?: Team[];
+  tournaments?: Tournament[];
+}
+
+function getPrerenderData(): PrerenderData | null {
   try {
-    const data = (window as unknown as Record<string, unknown>).__PRERENDER_DATA__ as { stats?: { eventCount: number; teamCount: number } } | undefined;
-    if (data?.stats && data.stats.eventCount > 0) {
-      return data.stats;
-    }
+    const data = (window as unknown as Record<string, unknown>).__PRERENDER_DATA__ as PrerenderData | undefined;
+    if (data) return data;
   } catch {
     // SSR環境ではwindowが無いので無視
   }
-  return { eventCount: 0, teamCount: 0 };
+  return null;
+}
+
+function buildHomeData(prerenderData: PrerenderData) {
+  const allEvents = prerenderData.events || [];
+  const allTeamEvents = prerenderData.teamEvents || [];
+  const allTeams = prerenderData.teams || [];
+  const allTournaments = prerenderData.tournaments || [];
+
+  const combinedEvents = [...allEvents, ...allTeamEvents];
+
+  // 今週末のイベント
+  const { saturday, sunday } = getWeekendRange();
+  const weekend = combinedEvents.filter((event) => {
+    const eventDate = new Date(event.startTime);
+    return eventDate >= saturday && eventDate <= sunday;
+  });
+
+  // 新着イベント（直近追加順）
+  const sorted = [...combinedEvents].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+
+  // 注目のチーム（メンバー数順）
+  const sortedTeams = [...allTeams].sort((a, b) => b.memberCount - a.memberCount);
+
+  // 参加者募集中（公開チーム）
+  const publicTeams = allTeams.filter((t) => t.visibility === 'public');
+
+  return {
+    weekendEvents: weekend.slice(0, 6),
+    recentEvents: sorted.slice(0, 5),
+    featuredTeams: sortedTeams.slice(0, 6),
+    recruitingTeams: publicTeams.slice(0, 5),
+    tournaments: allTournaments.slice(0, 5),
+    stats: prerenderData.stats || { eventCount: 0, teamCount: 0 },
+  };
 }
 
 export function HomePage() {
   const { openDrawer } = useDrawer();
-  const [weekendEvents, setWeekendEvents] = useState<(Event | TeamEvent)[]>([]);
-  const [recentEvents, setRecentEvents] = useState<(Event | TeamEvent)[]>([]);
-  const [featuredTeams, setFeaturedTeams] = useState<Team[]>([]);
-  const [recruitingTeams, setRecruitingTeams] = useState<Team[]>([]);
-  const [tournaments, setTournaments] = useState<Tournament[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [stats, setStats] = useState(getPrerenderStats);
+
+  // プリレンダリングデータがあれば即座にコンテンツ表示
+  const prerenderData = getPrerenderData();
+  const initialData = prerenderData ? buildHomeData(prerenderData) : null;
+
+  const [weekendEvents, setWeekendEvents] = useState<(Event | TeamEvent)[]>(initialData?.weekendEvents || []);
+  const [recentEvents, setRecentEvents] = useState<(Event | TeamEvent)[]>(initialData?.recentEvents || []);
+  const [featuredTeams, setFeaturedTeams] = useState<Team[]>(initialData?.featuredTeams || []);
+  const [recruitingTeams, setRecruitingTeams] = useState<Team[]>(initialData?.recruitingTeams || []);
+  const [tournaments, setTournaments] = useState<Tournament[]>(initialData?.tournaments || []);
+  const [isLoading, setIsLoading] = useState(!initialData);
+  const [stats, setStats] = useState(initialData?.stats || { eventCount: 0, teamCount: 0 });
 
   useEffect(() => {
     loadHomeData();
