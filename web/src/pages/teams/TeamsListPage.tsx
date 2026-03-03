@@ -203,7 +203,7 @@ export function TeamsListPage() {
                 }}>
                   MY TEAMS
                 </h2>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                   {filteredMyTeams.map((team) => (
                     <TeamCard key={team.id} team={team} isMyTeam />
                   ))}
@@ -231,7 +231,7 @@ export function TeamsListPage() {
                   <p style={{ color: '#888888' }}>新しいサークルを作成しましょう</p>
                 </div>
               ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                   {filteredTeams.map((team) => (
                     <TeamCard key={team.id} team={team} />
                   ))}
@@ -272,80 +272,155 @@ export function TeamsListPage() {
 }
 
 function TeamCard({ team, isMyTeam }: { team: Team; isMyTeam?: boolean }) {
+  const bannerImage = team.headerImage || team.iconImage;
+
   return (
-    <Link
-      to={`/teams/${team.id}`}
-      style={{
-        display: 'block',
+    <Link to={`/teams/${team.id}`} style={{ textDecoration: 'none' }}>
+      <div style={{
         background: '#FFFFFF',
-        borderRadius: '16px',
-        padding: '16px',
-        textDecoration: 'none',
-        transition: 'background 0.2s',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
-      }}
-    >
-      <div style={{ display: 'flex', gap: '14px' }}>
-        {/* Avatar */}
-        <div style={{ flexShrink: 0 }}>
-          <div style={{
-            width: '50px',
-            height: '50px',
-            borderRadius: '12px',
-            overflow: 'hidden',
-            background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            {team.iconImage ? (
-              <img src={team.iconImage} alt={team.name} width={50} height={50} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            ) : (
-              <span style={{ fontSize: '20px' }}>🏓</span>
-            )}
-          </div>
+        borderRadius: '12px',
+        overflow: 'hidden',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+      }}>
+        {/* Banner Image */}
+        <div style={{ position: 'relative' }}>
+          {bannerImage ? (
+            <img
+              src={bannerImage}
+              alt=""
+              style={{
+                width: '100%',
+                height: '160px',
+                objectFit: 'cover',
+                display: 'block',
+              }}
+            />
+          ) : (
+            <div style={{
+              width: '100%',
+              height: '160px',
+              background: 'linear-gradient(135deg, #2d5a1b 0%, #4a8c2a 40%, #2d5a1b 70%, #65A30D 100%)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative',
+              overflow: 'hidden',
+            }}>
+              <div style={{
+                position: 'absolute',
+                top: '-20%',
+                right: '-10%',
+                width: '60%',
+                height: '140%',
+                background: 'linear-gradient(135deg, transparent 30%, rgba(163,230,53,0.3) 50%, transparent 70%)',
+                transform: 'rotate(-15deg)',
+              }} />
+              <div style={{
+                position: 'absolute',
+                bottom: '-10%',
+                left: '-5%',
+                width: '40%',
+                height: '80%',
+                background: 'linear-gradient(135deg, rgba(163,230,53,0.2) 0%, transparent 60%)',
+                transform: 'rotate(10deg)',
+              }} />
+              <span style={{
+                fontSize: '24px',
+                fontWeight: 900,
+                color: '#FFFFFF',
+                textShadow: '2px 2px 8px rgba(0,0,0,0.3)',
+                letterSpacing: '2px',
+                zIndex: 1,
+              }}>
+                PICKLEBALL
+              </span>
+              <span style={{
+                fontSize: '17px',
+                fontWeight: 700,
+                color: '#FFFFFF',
+                textShadow: '2px 2px 8px rgba(0,0,0,0.3)',
+                zIndex: 1,
+                marginTop: '4px',
+              }}>
+                CIRCLE
+              </span>
+            </div>
+          )}
         </div>
 
-        {/* Team Info */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          {/* Name */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-            <h3 style={{
-              fontSize: '16px',
-              fontWeight: 600,
-              color: '#1a1a2e',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'
-            }}>
-              {team.name}
-            </h3>
-            {isMyTeam && (
-              <Crown size={16} style={{ color: '#F59E0B', flexShrink: 0 }} />
-            )}
-          </div>
-
-          {/* Description */}
-          {team.description && (
-            <p style={{
-              fontSize: '13px',
-              color: '#888888',
-              marginBottom: '8px',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'
-            }}>
-              {team.description}
-            </p>
+        {/* Title */}
+        <div style={{ padding: '12px 16px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <h3 style={{
+            fontSize: '15px',
+            fontWeight: 700,
+            color: '#1a1a2e',
+            lineHeight: 1.4,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            flex: 1,
+          }}>
+            {team.name}
+          </h3>
+          {isMyTeam && (
+            <Crown size={16} style={{ color: '#F59E0B', flexShrink: 0 }} />
           )}
+        </div>
 
-          {/* Member count */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Users size={14} style={{ color: '#65A30D' }} />
-            <span style={{ fontSize: '13px', color: '#888888' }}>{team.memberCount}人</span>
-          </div>
+        {/* Info Table */}
+        <div style={{ padding: '8px 0', margin: '0 16px' }}>
+          <TeamInfoRow label="メンバー" value={`${team.memberCount}人`} />
+          <TeamInfoRow label="活動地域" value={team.region || '全国'} />
+          <TeamInfoRow label="代表者" value={team.owner.nickname || team.owner.name} isLast />
+        </div>
+
+        {/* Detail Button */}
+        <div style={{ padding: '8px 16px 14px', textAlign: 'center' }}>
+          <span style={{
+            display: 'inline-block',
+            background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
+            color: '#FFFFFF',
+            fontWeight: 600,
+            fontSize: '13px',
+            padding: '8px 48px',
+            borderRadius: '6px',
+          }}>
+            詳細を見る
+          </span>
         </div>
       </div>
     </Link>
+  );
+}
+
+function TeamInfoRow({ label, value, isLast }: { label: string; value: string; isLast?: boolean }) {
+  return (
+    <div style={{
+      display: 'flex',
+      borderBottom: isLast ? 'none' : '1px solid #E5E5E5',
+      minHeight: '40px',
+    }}>
+      <div style={{
+        width: '72px',
+        minWidth: '72px',
+        background: '#F9FAFB',
+        padding: '8px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRight: '1px solid #E5E5E5',
+      }}>
+        <span style={{ fontSize: '12px', fontWeight: 600, color: '#374151' }}>{label}</span>
+      </div>
+      <div style={{
+        flex: 1,
+        padding: '8px 10px',
+        display: 'flex',
+        alignItems: 'center',
+      }}>
+        <span style={{ fontSize: '13px', color: '#333333', lineHeight: 1.5 }}>{value}</span>
+      </div>
+    </div>
   );
 }
