@@ -281,7 +281,7 @@ export function EventsListPage() {
               <p style={{ color: '#888888' }}>最初のイベントを作成しましょう！</p>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               {allPublicEvents.map((event) => (
                 <EventCard key={event.id} event={event} />
               ))}
@@ -298,7 +298,7 @@ export function EventsListPage() {
             </p>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             {filteredTeamEvents.map((event) => (
               <TeamEventCard key={event.id} event={event} />
             ))}
@@ -349,84 +349,115 @@ function EventCard({ event }: { event: Event | TeamEvent }) {
     : getDisplayName(event.creator);
 
   return (
-    <Link
-      to={linkTo}
-      style={{
-        display: 'block',
+    <Link to={linkTo} style={{ textDecoration: 'none' }}>
+      <div style={{
         background: '#FFFFFF',
-        borderRadius: '16px',
-        padding: '16px',
-        textDecoration: 'none',
-        transition: 'background 0.2s',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
-      }}
-    >
-      <div style={{ display: 'flex', gap: '14px' }}>
-        {/* Avatar */}
-        <div style={{ flexShrink: 0 }}>
-          <div style={{
-            width: '50px',
-            height: '50px',
-            borderRadius: '12px',
-            overflow: 'hidden',
-            background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            {displayImage ? (
-              <img src={displayImage} alt={displayName} width={50} height={50} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            ) : (
-              <span style={{ fontSize: '20px' }}>🏓</span>
-            )}
-          </div>
+        borderRadius: '12px',
+        overflow: 'hidden',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+      }}>
+        {/* Banner Image */}
+        <div style={{ position: 'relative' }}>
+          {displayImage ? (
+            <img
+              src={displayImage}
+              alt=""
+              style={{
+                width: '100%',
+                height: '160px',
+                objectFit: 'cover',
+                display: 'block',
+              }}
+            />
+          ) : (
+            <div style={{
+              width: '100%',
+              height: '160px',
+              background: 'linear-gradient(135deg, #2d5a1b 0%, #4a8c2a 40%, #2d5a1b 70%, #65A30D 100%)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative',
+              overflow: 'hidden',
+            }}>
+              <div style={{
+                position: 'absolute',
+                top: '-20%',
+                right: '-10%',
+                width: '60%',
+                height: '140%',
+                background: 'linear-gradient(135deg, transparent 30%, rgba(163,230,53,0.3) 50%, transparent 70%)',
+                transform: 'rotate(-15deg)',
+              }} />
+              <div style={{
+                position: 'absolute',
+                bottom: '-10%',
+                left: '-5%',
+                width: '40%',
+                height: '80%',
+                background: 'linear-gradient(135deg, rgba(163,230,53,0.2) 0%, transparent 60%)',
+                transform: 'rotate(10deg)',
+              }} />
+              <span style={{
+                fontSize: '24px',
+                fontWeight: 900,
+                color: '#FFFFFF',
+                textShadow: '2px 2px 8px rgba(0,0,0,0.3)',
+                letterSpacing: '2px',
+                zIndex: 1,
+              }}>
+                PICKLEBALL
+              </span>
+              <span style={{
+                fontSize: '17px',
+                fontWeight: 700,
+                color: '#FFFFFF',
+                textShadow: '2px 2px 8px rgba(0,0,0,0.3)',
+                zIndex: 1,
+                marginTop: '4px',
+              }}>
+                EVENT
+              </span>
+            </div>
+          )}
         </div>
 
-        {/* Event Info */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          {/* Date */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-            <Calendar size={14} style={{ color: '#65A30D' }} />
-            <span style={{ fontSize: '13px', color: '#888888' }}>
-              {formatDateTime(event.startTime)}
-            </span>
-          </div>
-
-          {/* Title */}
+        {/* Title */}
+        <div style={{ padding: '12px 16px 0' }}>
           <h3 style={{
-            fontSize: '16px',
-            fontWeight: 600,
+            fontSize: '15px',
+            fontWeight: 700,
             color: '#1a1a2e',
-            marginBottom: '6px',
+            lineHeight: 1.4,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap'
+            whiteSpace: 'nowrap',
           }}>
             {event.title}
           </h3>
+        </div>
 
-          {/* Location */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <MapPin size={14} style={{ color: '#65A30D' }} />
-            <span style={{
-              fontSize: '13px',
-              color: '#888888',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'
-            }}>
-              {event.location}
-            </span>
-          </div>
+        {/* Info Table */}
+        <div style={{ padding: '8px 0', margin: '0 16px' }}>
+          <EventInfoRow label="開催日" value={formatDateTime(event.startTime)} />
+          <EventInfoRow label="会場" value={event.location} />
+          <EventInfoRow label="主催者" value={displayName} isLast />
+        </div>
 
-          {/* Host */}
-          <div style={{
-            marginTop: '8px',
-            fontSize: '12px',
-            color: '#AAAAAA'
+        {/* Detail Button */}
+        <div style={{ padding: '8px 16px 14px', textAlign: 'center' }}>
+          <span style={{
+            display: 'inline-block',
+            background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
+            color: '#FFFFFF',
+            fontWeight: 600,
+            fontSize: '13px',
+            padding: '8px 48px',
+            borderRadius: '6px',
           }}>
-            by {displayName}
-          </div>
+            詳細を見る
+          </span>
         </div>
       </div>
     </Link>
@@ -435,86 +466,148 @@ function EventCard({ event }: { event: Event | TeamEvent }) {
 
 function TeamEventCard({ event }: { event: TeamEvent }) {
   return (
-    <Link
-      to={`/teams/${event.team.id}/events/${event.id}`}
-      style={{
-        display: 'block',
+    <Link to={`/teams/${event.team.id}/events/${event.id}`} style={{ textDecoration: 'none' }}>
+      <div style={{
         background: '#FFFFFF',
-        borderRadius: '16px',
-        padding: '16px',
-        textDecoration: 'none',
-        transition: 'background 0.2s',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
-      }}
-    >
-      <div style={{ display: 'flex', gap: '14px' }}>
-        {/* Avatar */}
-        <div style={{ flexShrink: 0 }}>
-          <div style={{
-            width: '50px',
-            height: '50px',
-            borderRadius: '12px',
-            overflow: 'hidden',
-            background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            {event.team.iconImage ? (
-              <img src={event.team.iconImage} alt={event.team.name} width={50} height={50} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            ) : (
-              <span style={{ fontSize: '20px' }}>🏓</span>
-            )}
-          </div>
+        borderRadius: '12px',
+        overflow: 'hidden',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+      }}>
+        {/* Banner Image */}
+        <div style={{ position: 'relative' }}>
+          {event.team.iconImage ? (
+            <img
+              src={event.team.iconImage}
+              alt=""
+              style={{
+                width: '100%',
+                height: '160px',
+                objectFit: 'cover',
+                display: 'block',
+              }}
+            />
+          ) : (
+            <div style={{
+              width: '100%',
+              height: '160px',
+              background: 'linear-gradient(135deg, #2d5a1b 0%, #4a8c2a 40%, #2d5a1b 70%, #65A30D 100%)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative',
+              overflow: 'hidden',
+            }}>
+              <div style={{
+                position: 'absolute',
+                top: '-20%',
+                right: '-10%',
+                width: '60%',
+                height: '140%',
+                background: 'linear-gradient(135deg, transparent 30%, rgba(163,230,53,0.3) 50%, transparent 70%)',
+                transform: 'rotate(-15deg)',
+              }} />
+              <div style={{
+                position: 'absolute',
+                bottom: '-10%',
+                left: '-5%',
+                width: '40%',
+                height: '80%',
+                background: 'linear-gradient(135deg, rgba(163,230,53,0.2) 0%, transparent 60%)',
+                transform: 'rotate(10deg)',
+              }} />
+              <span style={{
+                fontSize: '24px',
+                fontWeight: 900,
+                color: '#FFFFFF',
+                textShadow: '2px 2px 8px rgba(0,0,0,0.3)',
+                letterSpacing: '2px',
+                zIndex: 1,
+              }}>
+                PICKLEBALL
+              </span>
+              <span style={{
+                fontSize: '17px',
+                fontWeight: 700,
+                color: '#FFFFFF',
+                textShadow: '2px 2px 8px rgba(0,0,0,0.3)',
+                zIndex: 1,
+                marginTop: '4px',
+              }}>
+                EVENT
+              </span>
+            </div>
+          )}
         </div>
 
-        {/* Event Info */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          {/* Date */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-            <Calendar size={14} style={{ color: '#65A30D' }} />
-            <span style={{ fontSize: '13px', color: '#888888' }}>
-              {formatDateTime(event.startTime)}
-            </span>
-          </div>
-
-          {/* Title */}
+        {/* Title */}
+        <div style={{ padding: '12px 16px 0' }}>
           <h3 style={{
-            fontSize: '16px',
-            fontWeight: 600,
+            fontSize: '15px',
+            fontWeight: 700,
             color: '#1a1a2e',
-            marginBottom: '6px',
+            lineHeight: 1.4,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap'
+            whiteSpace: 'nowrap',
           }}>
             {event.title}
           </h3>
+        </div>
 
-          {/* Location */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <MapPin size={14} style={{ color: '#65A30D' }} />
-            <span style={{
-              fontSize: '13px',
-              color: '#888888',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'
-            }}>
-              {event.location}
-            </span>
-          </div>
+        {/* Info Table */}
+        <div style={{ padding: '8px 0', margin: '0 16px' }}>
+          <EventInfoRow label="開催日" value={formatDateTime(event.startTime)} />
+          <EventInfoRow label="会場" value={event.location} />
+          <EventInfoRow label="サークル" value={event.team.name} isLast />
+        </div>
 
-          {/* Team Name */}
-          <div style={{
-            marginTop: '8px',
-            fontSize: '12px',
-            color: '#AAAAAA'
+        {/* Detail Button */}
+        <div style={{ padding: '8px 16px 14px', textAlign: 'center' }}>
+          <span style={{
+            display: 'inline-block',
+            background: 'linear-gradient(135deg, #A3E635 0%, #65A30D 100%)',
+            color: '#FFFFFF',
+            fontWeight: 600,
+            fontSize: '13px',
+            padding: '8px 48px',
+            borderRadius: '6px',
           }}>
-            {event.team.name}
-          </div>
+            詳細を見る
+          </span>
         </div>
       </div>
     </Link>
+  );
+}
+
+function EventInfoRow({ label, value, isLast }: { label: string; value: string; isLast?: boolean }) {
+  return (
+    <div style={{
+      display: 'flex',
+      borderBottom: isLast ? 'none' : '1px solid #E5E5E5',
+      minHeight: '40px',
+    }}>
+      <div style={{
+        width: '72px',
+        minWidth: '72px',
+        background: '#F9FAFB',
+        padding: '8px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRight: '1px solid #E5E5E5',
+      }}>
+        <span style={{ fontSize: '12px', fontWeight: 600, color: '#374151' }}>{label}</span>
+      </div>
+      <div style={{
+        flex: 1,
+        padding: '8px 10px',
+        display: 'flex',
+        alignItems: 'center',
+      }}>
+        <span style={{ fontSize: '13px', color: '#333333', lineHeight: 1.5 }}>{value}</span>
+      </div>
+    </div>
   );
 }
