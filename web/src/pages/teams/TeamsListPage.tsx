@@ -368,11 +368,26 @@ function TeamCard({ team, isMyTeam }: { team: Team; isMyTeam?: boolean }) {
           )}
         </div>
 
+        {/* Description */}
+        {team.description && (
+          <p style={{
+            margin: '6px 16px 0',
+            fontSize: '13px',
+            color: '#888888',
+            lineHeight: 1.5,
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+          }}>
+            {team.description}
+          </p>
+        )}
+
         {/* Info Table */}
-        <div style={{ padding: '8px 0', margin: '0 16px 14px' }}>
+        <div style={{ padding: '8px 0', margin: '8px 16px 14px' }}>
           <TeamInfoRow label="メンバー" value={`${team.memberCount}人`} />
-          <TeamInfoRow label="活動地域" value={team.region || '全国'} />
-          <TeamInfoRow label="説明" value={team.description || '—'} isLast />
+          <TeamInfoRow label="活動地域" value={team.region || '全国'} isLast />
         </div>
       </div>
     </Link>
