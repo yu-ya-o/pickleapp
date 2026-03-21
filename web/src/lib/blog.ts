@@ -1,5 +1,3 @@
-import matter from 'gray-matter';
-
 export interface BlogPost {
   slug: string;
   title: string;
@@ -28,9 +26,37 @@ const rawFiles = import.meta.glob('/content/blog/*.md', {
   eager: true,
 }) as Record<string, string>;
 
+function parseFrontmatter(raw: string): { data: Record<string, unknown>; content: string } {
+  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
+  if (!match) return { data: {}, content: raw };
+
+  const content = match[2];
+  const data: Record<string, unknown> = {};
+  let current = match[1];
+
+  // Parse affiliateLinks block
+  const affiliateMatch = current.match(/affiliateLinks:\s*\n((?:\s+\S[^\n]*\n?)*)/);
+  if (affiliateMatch) {
+    const links: Record<string, string> = {};
+    for (const line of affiliateMatch[1].split('\n')) {
+      const m = line.match(/^\s+(\w+):\s*"?([^"]*)"?\s*$/);
+      if (m) links[m[1]] = m[2];
+    }
+    data.affiliateLinks = links;
+    current = current.replace(affiliateMatch[0], '');
+  }
+
+  for (const line of current.split('\n')) {
+    const m = line.match(/^(\w+):\s*"?([^"]*)"?\s*$/);
+    if (m) data[m[1]] = m[2];
+  }
+
+  return { data, content };
+}
+
 function parsePost(filePath: string, raw: string): BlogPost {
   const slug = filePath.split('/').pop()?.replace('.md', '') ?? filePath;
-  const { data, content } = matter(raw);
+  const { data, content } = parseFrontmatter(raw);
 
   return {
     slug,
