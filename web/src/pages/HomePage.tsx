@@ -418,28 +418,11 @@ export function HomePage() {
           </div>
         </a>
 
-        {/* Android / PWA notice */}
-        <div style={{
-          background: '#F0F9FF',
-          border: '1px solid #BAE6FD',
-          borderRadius: '12px',
-          padding: '12px 16px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px'
-        }}>
-          <span style={{ fontSize: '20px', flexShrink: 0 }}>🤖</span>
-          <p style={{ fontSize: '13px', color: '#0369A1', margin: 0, lineHeight: 1.5 }}>
-            <strong>Androidの方</strong>はブラウザ版をそのままご利用いただけます。
-            ホーム画面に追加してアプリのように使えます。
-          </p>
-        </div>
-
         {/* ピックルボールとは */}
         <section>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
             <div style={{ background: 'linear-gradient(135deg, #8B5CF6, #6D28D9)', borderRadius: '8px', padding: '4px', display: 'flex' }}>
-              <span style={{ fontSize: '14px', lineHeight: 1 }}>🏓</span>
+              <span style={{ fontSize: '14px', lineHeight: 1 }}>🎯</span>
             </div>
             <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>ピックルボールとは</h2>
           </div>
@@ -481,7 +464,7 @@ export function HomePage() {
         <section>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
             <div style={{ background: 'linear-gradient(135deg, #F59E0B, #D97706)', borderRadius: '8px', padding: '4px', display: 'flex' }}>
-              <span style={{ fontSize: '14px', lineHeight: 1 }}>👋</span>
+              <span style={{ fontSize: '14px', lineHeight: 1 }}>🔰</span>
             </div>
             <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>初めての方へ</h2>
           </div>
