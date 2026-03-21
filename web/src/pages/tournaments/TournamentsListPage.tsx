@@ -61,8 +61,8 @@ export function TournamentsListPage() {
   return (
     <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
       <SEO
-        title="大会一覧 | PickleHub"
-        description="ピックルボールの大会情報一覧。大会を探して参加しよう。"
+        title="ピックルボール大会・トーナメント情報"
+        description="全国のピックルボール大会・トーナメント情報を掲載。初心者向けから上級者向けまで、参加者募集中の大会をチェックしよう。"
         keywords="ピックルボール, 大会, トーナメント, pickleball, tournament"
         url="/tournaments"
       />

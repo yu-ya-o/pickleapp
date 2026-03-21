@@ -226,6 +226,7 @@ export function generateOrganizationJsonLd() {
     description: DEFAULT_DESCRIPTION,
     sameAs: [
       'https://twitter.com/picklehub',
+      'https://www.instagram.com/picklehub_jp',
     ],
   };
 }
