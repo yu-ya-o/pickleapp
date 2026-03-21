@@ -418,6 +418,142 @@ export function HomePage() {
           </div>
         </a>
 
+        {/* Android / PWA notice */}
+        <div style={{
+          background: '#F0F9FF',
+          border: '1px solid #BAE6FD',
+          borderRadius: '12px',
+          padding: '12px 16px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px'
+        }}>
+          <span style={{ fontSize: '20px', flexShrink: 0 }}>🤖</span>
+          <p style={{ fontSize: '13px', color: '#0369A1', margin: 0, lineHeight: 1.5 }}>
+            <strong>Androidの方</strong>はブラウザ版をそのままご利用いただけます。
+            ホーム画面に追加してアプリのように使えます。
+          </p>
+        </div>
+
+        {/* ピックルボールとは */}
+        <section>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+            <div style={{ background: 'linear-gradient(135deg, #8B5CF6, #6D28D9)', borderRadius: '8px', padding: '4px', display: 'flex' }}>
+              <span style={{ fontSize: '14px', lineHeight: 1 }}>🏓</span>
+            </div>
+            <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>ピックルボールとは</h2>
+          </div>
+          <div style={{ background: '#FFFFFF', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+            <img
+              src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=800&q=80"
+              alt="ピックルボールのコートとパドル"
+              style={{ width: '100%', height: '160px', objectFit: 'cover', display: 'block' }}
+            />
+            <div style={{ padding: '16px' }}>
+              <p style={{ fontSize: '14px', color: '#444444', lineHeight: 1.7, margin: '0 0 12px' }}>
+                ピックルボール（Pickleball）は、テニス・バドミントン・卓球の要素を組み合わせたパドルスポーツです。
+                小さいコートで手軽に楽しめ、<strong>年齢やスキルレベルを問わず</strong>楽しめることから、
+                日本でも急速に人気が高まっています。
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                {[
+                  { icon: '🎾', text: 'テニスより手軽' },
+                  { icon: '👴', text: '年齢不問' },
+                  { icon: '👥', text: '仲間と楽しめる' },
+                  { icon: '🌏', text: '世界で人気拡大中' },
+                ].map(({ icon, text }) => (
+                  <span key={text} style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '4px',
+                    background: '#F0FDF4', color: '#166534',
+                    fontSize: '12px', fontWeight: 600,
+                    padding: '4px 10px', borderRadius: '20px',
+                    border: '1px solid #BBF7D0'
+                  }}>
+                    {icon} {text}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 初めての方へ - 3ステップ案内 */}
+        <section>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+            <div style={{ background: 'linear-gradient(135deg, #F59E0B, #D97706)', borderRadius: '8px', padding: '4px', display: 'flex' }}>
+              <span style={{ fontSize: '14px', lineHeight: 1 }}>👋</span>
+            </div>
+            <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e' }}>初めての方へ</h2>
+          </div>
+          <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+            <p style={{ fontSize: '13px', color: '#666666', marginBottom: '16px' }}>
+              PickleHubは3ステップで始められます
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {[
+                {
+                  step: '1',
+                  title: 'イベントを探す',
+                  desc: '地域や日程から参加できるイベントを検索',
+                  icon: '🔍',
+                  color: '#16A34A',
+                  link: '/events',
+                },
+                {
+                  step: '2',
+                  title: 'サークルに参加する',
+                  desc: 'お近くのサークルに参加して定期的に楽しもう',
+                  icon: '👥',
+                  color: '#2563EB',
+                  link: '/teams',
+                },
+                {
+                  step: '3',
+                  title: 'イベントを作成する',
+                  desc: '自分でイベントを企画して仲間を募集しよう',
+                  icon: '✏️',
+                  color: '#D97706',
+                  link: '/events/create',
+                },
+              ].map(({ step, title, desc, icon, color, link }) => (
+                <Link
+                  key={step}
+                  to={link}
+                  style={{ display: 'flex', alignItems: 'center', gap: '14px', textDecoration: 'none' }}
+                >
+                  <div style={{
+                    width: '40px', height: '40px', borderRadius: '12px',
+                    background: `${color}18`, display: 'flex', alignItems: 'center',
+                    justifyContent: 'center', flexShrink: 0, fontSize: '20px'
+                  }}>
+                    {icon}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: '14px', fontWeight: 700, color: '#1a1a2e', marginBottom: '2px' }}>
+                      <span style={{ color, marginRight: '6px' }}>Step {step}</span>{title}
+                    </div>
+                    <div style={{ fontSize: '12px', color: '#666666' }}>{desc}</div>
+                  </div>
+                  <span style={{ fontSize: '16px', color: '#CCCCCC' }}>›</span>
+                </Link>
+              ))}
+            </div>
+            <Link
+              to="/events"
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                marginTop: '20px',
+                background: 'linear-gradient(135deg, #65A30D, #16A34A)',
+                color: '#FFFFFF', fontWeight: 700, fontSize: '14px',
+                padding: '12px 24px', borderRadius: '12px', textDecoration: 'none',
+                boxShadow: '0 4px 12px rgba(22, 163, 74, 0.3)'
+              }}
+            >
+              イベントを探してみる
+            </Link>
+          </div>
+        </section>
+
         {/* 今週末のイベント - A-4: セクションヘッダーに色彩強化 */}
         <section>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
