@@ -33,6 +33,8 @@ import { UserProfilePage } from '@/pages/users/UserProfilePage';
 import { TournamentsListPage } from '@/pages/tournaments/TournamentsListPage';
 import { TournamentDetailPage } from '@/pages/tournaments/TournamentDetailPage';
 import { CreateTournamentPage } from '@/pages/tournaments/CreateTournamentPage';
+import { BlogListPage } from '@/pages/blog/BlogListPage';
+import { BlogDetailPage } from '@/pages/blog/BlogDetailPage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -94,6 +96,8 @@ function AppRoutes() {
         <Route path="/rankings" element={<RankingsPage />} />
         <Route path="/users/:userId" element={<UserProfilePage />} />
         <Route path="/p/:userId" element={<ShareableProfilePage />} />
+        <Route path="/blog" element={<BlogListPage />} />
+        <Route path="/blog/:slug" element={<BlogDetailPage />} />
       </Route>
 
       {/* Protected routes with MainLayout */}
