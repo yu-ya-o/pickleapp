@@ -1,8 +1,9 @@
-import { useParams, Link, Navigate } from 'react-router-dom';
+import { useParams, Link, Navigate, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { ChevronRight, ExternalLink } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Menu, Calendar, Tag } from 'lucide-react';
 import { SEO } from '@/components/SEO';
+import { useDrawer } from '@/contexts/DrawerContext';
 import { getPostBySlug, getRelatedPosts } from '@/lib/blog';
 import { SITE_URL } from '@/lib/seo';
 
@@ -34,18 +35,15 @@ function AffiliateCTA({ url, label }: { url: string; label: string }) {
           textDecoration: 'none',
         }}
       >
-        <ExternalLink size={16} />
         {label}
       </a>
     </div>
   );
 }
 
-// Splits markdown content roughly in half to insert mid-article CTA
 function splitContentAtMidpoint(content: string): [string, string] {
   const lines = content.split('\n');
   const mid = Math.floor(lines.length / 2);
-  // Find nearest heading after midpoint
   let splitIndex = mid;
   for (let i = mid; i < lines.length; i++) {
     if (lines[i].startsWith('## ') || lines[i].startsWith('### ')) {
@@ -58,6 +56,8 @@ function splitContentAtMidpoint(content: string): [string, string] {
 
 export function BlogDetailPage() {
   const { slug } = useParams<{ slug: string }>();
+  const { openDrawer } = useDrawer();
+  const navigate = useNavigate();
   const post = slug ? getPostBySlug(slug) : undefined;
 
   if (!post) {
@@ -102,120 +102,178 @@ export function BlogDetailPage() {
         jsonLd={[articleJsonLd, breadcrumbJsonLd]}
       />
 
-      <div style={{ maxWidth: '720px', margin: '0 auto', padding: '0 16px 48px' }}>
-        {/* Breadcrumb */}
-        <nav style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '4px',
-          padding: '16px 0 12px',
-          fontSize: '12px',
-          color: '#888',
-        }}>
-          <Link to="/" style={{ color: '#888', textDecoration: 'none' }}>ホーム</Link>
-          <ChevronRight size={12} />
-          <Link to="/blog" style={{ color: '#888', textDecoration: 'none' }}>ブログ</Link>
-          <ChevronRight size={12} />
-          <span style={{ color: '#4a7c3f', fontWeight: 600 }}>{post.category}</span>
-        </nav>
+      {/* Mobile Header */}
+      <header style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 30,
+        background: '#FFFFFF',
+        borderBottom: '1px solid #E5E5E5',
+        padding: '12px 16px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      }}>
+        <button
+          onClick={() => navigate('/blog')}
+          style={{
+            background: 'none',
+            border: 'none',
+            padding: '4px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            color: '#4a7c3f',
+            fontWeight: 600,
+            fontSize: '14px',
+          }}
+        >
+          <ChevronLeft size={20} />
+          <span className="md:hidden">ブログ</span>
+        </button>
 
-        {/* Article header */}
+        <h1 className="md:hidden" style={{ fontSize: '22px', fontWeight: 900, fontStyle: 'italic', color: '#1a1a2e' }}>
+          PickleHub
+        </h1>
+
+        <button
+          onClick={openDrawer}
+          className="md:hidden"
+          style={{
+            background: 'none',
+            border: 'none',
+            padding: '4px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Menu size={24} style={{ color: '#1a1a2e' }} />
+        </button>
+        <div className="hidden md:block" style={{ width: '32px' }} />
+      </header>
+
+      {/* Article */}
+      <div style={{ maxWidth: '720px', margin: '0 auto', padding: '0 16px 48px' }}>
+
+        {/* Article header card */}
         <div style={{
           background: '#FFFFFF',
           borderRadius: '12px',
-          overflow: 'hidden',
-          marginBottom: '24px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+          padding: '24px 20px 20px',
+          marginTop: '16px',
+          marginBottom: '4px',
+          boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
         }}>
-          <div style={{
-            background: 'linear-gradient(135deg, #4a7c3f 0%, #6abf5e 100%)',
-            padding: '24px 20px',
-          }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px', flexWrap: 'wrap' }}>
             <span style={{
-              fontSize: '11px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              fontSize: '12px',
               fontWeight: 700,
-              color: '#FFFFFF',
-              background: 'rgba(255,255,255,0.2)',
-              borderRadius: '20px',
+              color: '#4a7c3f',
+              background: '#f0f7ee',
+              borderRadius: '6px',
               padding: '3px 10px',
             }}>
+              <Tag size={11} />
               {post.category}
             </span>
-            <h1 style={{
-              fontSize: '20px',
-              fontWeight: 800,
-              color: '#FFFFFF',
-              lineHeight: 1.5,
-              marginTop: '12px',
+            <span style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              fontSize: '12px',
+              color: '#999',
             }}>
-              {post.title}
-            </h1>
-            <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.8)', marginTop: '8px' }}>
+              <Calendar size={11} />
               {post.date}
-            </p>
+            </span>
           </div>
 
-          {/* Article body */}
-          <div style={{ padding: '20px' }}>
-            <div className="blog-content">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {firstHalf}
-              </ReactMarkdown>
-            </div>
+          <h1 style={{
+            fontSize: '22px',
+            fontWeight: 800,
+            color: '#1a1a2e',
+            lineHeight: 1.5,
+            letterSpacing: '-0.3px',
+          }}>
+            {post.title}
+          </h1>
 
-            {/* Mid-article affiliate CTA */}
-            <AffiliateCTA
-              url={post.affiliateLinks.main}
-              label="▶ Amazonで人気パドルをチェック"
-            />
+          <p style={{
+            fontSize: '14px',
+            color: '#666',
+            lineHeight: 1.7,
+            marginTop: '12px',
+            paddingTop: '12px',
+            borderTop: '1px solid #F0F0F0',
+          }}>
+            {post.description}
+          </p>
+        </div>
 
-            <div className="blog-content">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {secondHalf}
-              </ReactMarkdown>
-            </div>
-
-            {/* End affiliate CTA */}
-            <AffiliateCTA
-              url={post.affiliateLinks.sub}
-              label="▶ Amazonでピックルボール用品を見る"
-            />
+        {/* Article body */}
+        <div style={{
+          background: '#FFFFFF',
+          borderRadius: '0 0 12px 12px',
+          padding: '24px 20px',
+          marginBottom: '16px',
+          boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+        }}>
+          <div className="blog-content">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {firstHalf}
+            </ReactMarkdown>
           </div>
+
+          <AffiliateCTA
+            url={post.affiliateLinks.main}
+            label="▶ Amazonで人気パドルをチェック"
+          />
+
+          <div className="blog-content">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {secondHalf}
+            </ReactMarkdown>
+          </div>
+
+          <AffiliateCTA
+            url={post.affiliateLinks.sub}
+            label="▶ Amazonでピックルボール用品を見る"
+          />
         </div>
 
         {/* Related posts */}
         {relatedPosts.length > 0 && (
-          <div>
-            <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#1a1a2e', marginBottom: '12px' }}>
+          <div style={{ marginBottom: '16px' }}>
+            <h2 style={{ fontSize: '15px', fontWeight: 700, color: '#1a1a2e', marginBottom: '10px', paddingLeft: '4px' }}>
               関連記事
             </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {relatedPosts.map((related) => (
+            <div style={{ background: '#FFFFFF', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+              {relatedPosts.map((related, i) => (
                 <Link
                   key={related.slug}
                   to={`/blog/${related.slug}`}
                   style={{ textDecoration: 'none' }}
                 >
                   <div style={{
-                    background: '#FFFFFF',
-                    borderRadius: '10px',
                     padding: '14px 16px',
-                    boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'space-between',
                     gap: '12px',
+                    borderBottom: i < relatedPosts.length - 1 ? '1px solid #F0F0F0' : 'none',
                   }}>
-                    <div>
+                    <div style={{ flex: 1 }}>
                       <span style={{
-                        fontSize: '10px',
+                        fontSize: '11px',
                         fontWeight: 700,
                         color: '#4a7c3f',
-                        background: '#e8f2e6',
-                        borderRadius: '20px',
-                        padding: '2px 8px',
-                        marginBottom: '6px',
-                        display: 'inline-block',
+                        display: 'block',
+                        marginBottom: '3px',
                       }}>
                         {related.category}
                       </span>
@@ -223,7 +281,7 @@ export function BlogDetailPage() {
                         {related.title}
                       </p>
                     </div>
-                    <ChevronRight size={16} style={{ color: '#888', flexShrink: 0 }} />
+                    <ChevronRight size={16} style={{ color: '#ccc', flexShrink: 0 }} />
                   </div>
                 </Link>
               ))}
@@ -232,23 +290,26 @@ export function BlogDetailPage() {
         )}
 
         {/* Back to list */}
-        <div style={{ marginTop: '24px', textAlign: 'center' }}>
-          <Link
-            to="/blog"
-            style={{
-              display: 'inline-block',
-              padding: '10px 28px',
-              background: '#1a1a2e',
-              color: '#FFFFFF',
-              borderRadius: '8px',
-              fontSize: '13px',
-              fontWeight: 600,
-              textDecoration: 'none',
-            }}
-          >
-            ← ブログ一覧へ
-          </Link>
-        </div>
+        <Link
+          to="/blog"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px',
+            padding: '12px',
+            background: '#FFFFFF',
+            borderRadius: '12px',
+            fontSize: '14px',
+            fontWeight: 600,
+            color: '#4a7c3f',
+            textDecoration: 'none',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+          }}
+        >
+          <ChevronLeft size={18} />
+          ブログ一覧に戻る
+        </Link>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, Search, Menu } from 'lucide-react';
+import { BookOpen, Search, Menu, ChevronRight } from 'lucide-react';
 import { SEO } from '@/components/SEO';
 import { useDrawer } from '@/contexts/DrawerContext';
 import { getAllPosts, BLOG_CATEGORIES } from '@/lib/blog';
@@ -35,7 +35,7 @@ export function BlogListPage() {
         type="website"
       />
 
-      {/* Header */}
+      {/* Mobile Header */}
       <header style={{
         position: 'sticky',
         top: 0,
@@ -49,55 +49,25 @@ export function BlogListPage() {
             onClick={openDrawer}
             className="md:hidden"
             style={{
-              background: '#F0F0F0',
+              background: 'none',
               border: 'none',
-              borderRadius: '50%',
-              width: '36px',
-              height: '36px',
+              padding: '4px',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Menu size={20} style={{ color: '#1a1a2e' }} />
+            <Menu size={24} style={{ color: '#1a1a2e' }} />
           </button>
-          <h1 style={{ fontSize: '24px', fontWeight: 900, fontStyle: 'italic', color: '#1a1a2e' }}>
+          <h1 className="md:hidden" style={{ fontSize: '22px', fontWeight: 900, fontStyle: 'italic', color: '#1a1a2e' }}>
             PickleHub
           </h1>
-          <div style={{ width: '36px' }} className="md:hidden" />
+          <div className="md:hidden" style={{ width: '32px' }} />
         </div>
 
         {/* Search */}
-        <div style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            background: '#F0F0F0',
-            borderRadius: '10px',
-            padding: '8px 12px',
-            minWidth: '100px',
-          }}>
-            <BookOpen size={16} style={{ color: '#65A30D', flexShrink: 0 }} />
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: '#1a1a2e',
-                fontSize: '14px',
-                outline: 'none',
-                cursor: 'pointer',
-              }}
-            >
-              <option value="">全カテゴリ</option>
-              {BLOG_CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
-          </div>
+        <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
           <div style={{
             flex: 1,
             display: 'flex',
@@ -107,10 +77,10 @@ export function BlogListPage() {
             borderRadius: '10px',
             padding: '8px 12px',
           }}>
-            <Search size={16} style={{ color: '#888888', flexShrink: 0 }} />
+            <Search size={16} style={{ color: '#888', flexShrink: 0 }} />
             <input
               type="text"
-              placeholder="記事を検索"
+              placeholder="記事を検索..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
@@ -124,33 +94,66 @@ export function BlogListPage() {
             />
           </div>
         </div>
+
+        {/* Category pills */}
+        <div style={{ display: 'flex', gap: '8px', marginTop: '10px', overflowX: 'auto', paddingBottom: '2px' }}>
+          <button
+            onClick={() => setSelectedCategory('')}
+            style={{
+              flexShrink: 0,
+              padding: '5px 14px',
+              borderRadius: '20px',
+              fontSize: '12px',
+              fontWeight: 600,
+              border: 'none',
+              cursor: 'pointer',
+              background: selectedCategory === '' ? '#1a1a2e' : '#F0F0F0',
+              color: selectedCategory === '' ? '#FFFFFF' : '#555',
+            }}
+          >
+            すべて
+          </button>
+          {BLOG_CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat === selectedCategory ? '' : cat)}
+              style={{
+                flexShrink: 0,
+                padding: '5px 14px',
+                borderRadius: '20px',
+                fontSize: '12px',
+                fontWeight: 600,
+                border: 'none',
+                cursor: 'pointer',
+                background: selectedCategory === cat ? '#4a7c3f' : '#F0F0F0',
+                color: selectedCategory === cat ? '#FFFFFF' : '#555',
+              }}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
       </header>
 
       {/* Content */}
-      <div style={{ padding: '16px', paddingBottom: '40px' }}>
-        {/* Page title */}
-        <div style={{ marginBottom: '20px' }}>
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: '#1a1a2e' }}>ブログ</h2>
-          <p style={{ fontSize: '13px', color: '#888', marginTop: '4px' }}>
-            {filteredPosts.length}件の記事
-          </p>
+      <div style={{ maxWidth: '720px', margin: '0 auto', padding: '20px 16px 48px' }}>
+        <div style={{ marginBottom: '16px' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#1a1a2e' }}>
+            {selectedCategory || 'すべての記事'}
+          </h2>
+          <p style={{ fontSize: '12px', color: '#888', marginTop: '2px' }}>{filteredPosts.length}件</p>
         </div>
 
         {filteredPosts.length === 0 ? (
           <div style={{ textAlign: 'center', paddingTop: '60px' }}>
             <BookOpen size={48} style={{ color: '#CCCCCC', margin: '0 auto' }} />
-            <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#1a1a2e', marginTop: '16px' }}>
-              {allPosts.length === 0 ? '記事はまだありません' : '記事が見つかりません'}
-            </h3>
-            <p style={{ color: '#888', marginTop: '8px' }}>
-              {allPosts.length === 0
-                ? 'まもなく記事が公開されます'
-                : '検索条件を変更してみてください'}
+            <p style={{ color: '#888', marginTop: '16px' }}>
+              {allPosts.length === 0 ? 'まもなく記事が公開されます' : '記事が見つかりません'}
             </p>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {filteredPosts.map((post) => (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: '#E5E5E5', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+            {filteredPosts.map((post, i) => (
               <Link
                 key={post.slug}
                 to={`/blog/${post.slug}`}
@@ -158,49 +161,53 @@ export function BlogListPage() {
               >
                 <div style={{
                   background: '#FFFFFF',
-                  borderRadius: '12px',
-                  overflow: 'hidden',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                  transition: 'box-shadow 0.2s',
+                  padding: '16px',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '12px',
+                  borderRadius: i === 0 ? '12px 12px 0 0' : i === filteredPosts.length - 1 ? '0 0 12px 12px' : '0',
                 }}>
-                  {/* Category banner */}
+                  {/* Number */}
                   <div style={{
-                    background: 'linear-gradient(135deg, #4a7c3f 0%, #6abf5e 100%)',
-                    padding: '12px 16px',
+                    flexShrink: 0,
+                    width: '32px',
+                    height: '32px',
+                    background: '#f0f7ee',
+                    borderRadius: '8px',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'space-between',
+                    justifyContent: 'center',
                   }}>
-                    <span style={{
-                      fontSize: '11px',
-                      fontWeight: 700,
-                      color: '#FFFFFF',
-                      background: 'rgba(255,255,255,0.2)',
-                      borderRadius: '20px',
-                      padding: '3px 10px',
-                    }}>
-                      {post.category}
-                    </span>
-                    <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.8)' }}>
-                      {post.date}
-                    </span>
+                    <BookOpen size={16} style={{ color: '#4a7c3f' }} />
                   </div>
 
-                  {/* Content */}
-                  <div style={{ padding: '14px 16px 16px' }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                      <span style={{
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        color: '#4a7c3f',
+                        background: '#f0f7ee',
+                        borderRadius: '4px',
+                        padding: '2px 7px',
+                      }}>
+                        {post.category}
+                      </span>
+                      <span style={{ fontSize: '11px', color: '#bbb' }}>{post.date}</span>
+                    </div>
                     <h3 style={{
-                      fontSize: '15px',
+                      fontSize: '14px',
                       fontWeight: 700,
                       color: '#1a1a2e',
                       lineHeight: 1.5,
-                      marginBottom: '8px',
+                      marginBottom: '4px',
                     }}>
                       {post.title}
                     </h3>
                     <p style={{
-                      fontSize: '13px',
-                      color: '#555',
-                      lineHeight: 1.6,
+                      fontSize: '12px',
+                      color: '#777',
+                      lineHeight: 1.5,
                       overflow: 'hidden',
                       display: '-webkit-box',
                       WebkitLineClamp: 2,
@@ -208,16 +215,9 @@ export function BlogListPage() {
                     }}>
                       {post.description}
                     </p>
-                    <div style={{ marginTop: '12px', textAlign: 'right' }}>
-                      <span style={{
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        color: '#4a7c3f',
-                      }}>
-                        続きを読む →
-                      </span>
-                    </div>
                   </div>
+
+                  <ChevronRight size={16} style={{ color: '#ccc', flexShrink: 0, marginTop: '4px' }} />
                 </div>
               </Link>
             ))}
