@@ -1,6 +1,6 @@
 import { useState, createContext, useContext } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Calendar, CalendarCheck, Users, Medal, Trophy, User, X, LogIn, LogOut } from 'lucide-react';
+import { Home, Calendar, CalendarCheck, Users, Medal, Trophy, User, X, LogIn, LogOut, BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -35,6 +35,7 @@ export function DrawerProvider({ children }: { children: React.ReactNode }) {
         { to: '/teams', icon: Users, label: 'サークル' },
         { to: '/tournaments', icon: Medal, label: '大会情報' },
         { to: '/rankings', icon: Trophy, label: 'ランキング' },
+        { to: '/blog', icon: BookOpen, label: 'ブログ' },
         { to: '/profile', icon: User, label: 'プロフィール' },
       ]
     : [
@@ -43,6 +44,7 @@ export function DrawerProvider({ children }: { children: React.ReactNode }) {
         { to: '/teams', icon: Users, label: 'サークル' },
         { to: '/tournaments', icon: Medal, label: '大会情報' },
         { to: '/rankings', icon: Trophy, label: 'ランキング' },
+        { to: '/blog', icon: BookOpen, label: 'ブログ' },
         { to: '/login', icon: LogIn, label: 'ログイン' },
       ];
 
