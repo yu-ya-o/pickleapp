@@ -1,0 +1,50 @@
+name: Daily Blog Generation
+
+on:
+  schedule:
+    # Runs at 00:00 UTC = 09:00 JST
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate blog articles
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          AFFILIATE_AMAZON_MAIN: ${{ secrets.AFFILIATE_AMAZON_MAIN }}
+          AFFILIATE_AMAZON_SUB: ${{ secrets.AFFILIATE_AMAZON_SUB }}
+        run: node scripts/generate-blog.js
+
+      - name: Commit and push new articles
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add content/blog/ scripts/generated.json
+          if git diff --staged --quiet; then
+            echo "No new articles to commit"
+          else
+            DATE=$(date -u +"%Y-%m-%d")
+            git commit -m "🥒 Auto: Add blog posts ${DATE}"
+            git push
+          fi
