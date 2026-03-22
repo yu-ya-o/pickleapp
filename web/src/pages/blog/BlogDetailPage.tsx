@@ -1,7 +1,7 @@
 import { useParams, Link, Navigate, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { ChevronLeft, ChevronRight, Menu, Calendar, Tag } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Menu } from 'lucide-react';
 import { SEO } from '@/components/SEO';
 import { useDrawer } from '@/contexts/DrawerContext';
 import { getPostBySlug, getRelatedPosts } from '@/lib/blog';
@@ -11,13 +11,16 @@ function AffiliateCTA({ url, label }: { url: string; label: string }) {
   if (!url || url === 'https://www.amazon.co.jp/') return null;
   return (
     <div style={{
-      background: 'linear-gradient(135deg, #fff8e7 0%, #fef3d0 100%)',
+      background: '#fffbf0',
       border: '2px solid #f5a623',
-      borderRadius: '12px',
-      padding: '16px 20px',
-      margin: '28px 0',
+      borderRadius: '8px',
+      padding: '20px 24px',
+      margin: '36px 0',
       textAlign: 'center',
     }}>
+      <p style={{ fontSize: '16px', color: '#666', marginBottom: '14px' }}>
+        ピックルボール用品をお探しなら
+      </p>
       <a
         href={url}
         target="_blank"
@@ -29,9 +32,9 @@ function AffiliateCTA({ url, label }: { url: string; label: string }) {
           background: '#f5a623',
           color: '#FFFFFF',
           fontWeight: 700,
-          fontSize: '14px',
-          padding: '12px 24px',
-          borderRadius: '8px',
+          fontSize: '17px',
+          padding: '14px 28px',
+          borderRadius: '6px',
           textDecoration: 'none',
         }}
       >
@@ -93,7 +96,7 @@ export function BlogDetailPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFFFF' }}>
       <SEO
         title={post.title}
         description={post.description}
@@ -108,8 +111,8 @@ export function BlogDetailPage() {
         top: 0,
         zIndex: 30,
         background: '#FFFFFF',
-        borderBottom: '1px solid #E5E5E5',
-        padding: '12px 16px',
+        borderBottom: '2px solid #4a7c3f',
+        padding: '14px 20px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -125,15 +128,15 @@ export function BlogDetailPage() {
             alignItems: 'center',
             gap: '4px',
             color: '#4a7c3f',
-            fontWeight: 600,
-            fontSize: '14px',
+            fontWeight: 700,
+            fontSize: '16px',
           }}
         >
-          <ChevronLeft size={20} />
-          <span className="md:hidden">ブログ</span>
+          <ChevronLeft size={22} />
+          <span>一覧へ</span>
         </button>
 
-        <h1 className="md:hidden" style={{ fontSize: '22px', fontWeight: 900, fontStyle: 'italic', color: '#1a1a2e' }}>
+        <h1 className="md:hidden" style={{ fontSize: '24px', fontWeight: 900, fontStyle: 'italic', color: '#1a1a2e' }}>
           PickleHub
         </h1>
 
@@ -147,169 +150,159 @@ export function BlogDetailPage() {
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
           }}
         >
-          <Menu size={24} style={{ color: '#1a1a2e' }} />
+          <Menu size={28} style={{ color: '#1a1a2e' }} />
         </button>
-        <div className="hidden md:block" style={{ width: '32px' }} />
+        <div className="hidden md:block" style={{ width: '40px' }} />
       </header>
 
       {/* Article */}
-      <div style={{ maxWidth: '720px', margin: '0 auto', padding: '0 16px 48px' }}>
+      <div style={{ maxWidth: '760px', margin: '0 auto', padding: '0 20px 60px' }}>
 
-        {/* Article header card */}
-        <div style={{
-          background: '#FFFFFF',
-          borderRadius: '12px',
-          padding: '24px 20px 20px',
-          marginTop: '16px',
-          marginBottom: '4px',
-          boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px', flexWrap: 'wrap' }}>
-            <span style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '4px',
-              fontSize: '12px',
-              fontWeight: 700,
-              color: '#4a7c3f',
-              background: '#f0f7ee',
-              borderRadius: '6px',
-              padding: '3px 10px',
-            }}>
-              <Tag size={11} />
-              {post.category}
-            </span>
-            <span style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '4px',
-              fontSize: '12px',
-              color: '#999',
-            }}>
-              <Calendar size={11} />
-              {post.date}
-            </span>
-          </div>
+        {/* Breadcrumb */}
+        <nav style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '16px 0 20px', fontSize: '15px', color: '#999', flexWrap: 'wrap' }}>
+          <Link to="/" style={{ color: '#4a7c3f', textDecoration: 'none' }}>ホーム</Link>
+          <span>›</span>
+          <Link to="/blog" style={{ color: '#4a7c3f', textDecoration: 'none' }}>ブログ</Link>
+          <span>›</span>
+          <span style={{ color: '#999' }}>{post.category}</span>
+        </nav>
+
+        {/* Article header */}
+        <div style={{ borderBottom: '2px solid #E8E8E8', paddingBottom: '24px', marginBottom: '32px' }}>
+          <span style={{
+            display: 'inline-block',
+            fontSize: '15px',
+            fontWeight: 700,
+            color: '#FFFFFF',
+            background: '#4a7c3f',
+            borderRadius: '4px',
+            padding: '4px 14px',
+            marginBottom: '16px',
+          }}>
+            {post.category}
+          </span>
 
           <h1 style={{
-            fontSize: '22px',
+            fontSize: '28px',
             fontWeight: 800,
             color: '#1a1a2e',
-            lineHeight: 1.5,
-            letterSpacing: '-0.3px',
+            lineHeight: 1.6,
+            marginBottom: '16px',
           }}>
             {post.title}
           </h1>
 
-          <p style={{
-            fontSize: '14px',
-            color: '#666',
-            lineHeight: 1.7,
-            marginTop: '12px',
-            paddingTop: '12px',
-            borderTop: '1px solid #F0F0F0',
-          }}>
-            {post.description}
+          <p style={{ fontSize: '16px', color: '#888' }}>
+            公開日：{post.date}　｜　PickleHub編集部
           </p>
         </div>
 
-        {/* Article body */}
-        <div style={{
-          background: '#FFFFFF',
-          borderRadius: '0 0 12px 12px',
-          padding: '24px 20px',
-          marginBottom: '16px',
-          boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+        {/* Lead text */}
+        <p style={{
+          fontSize: '18px',
+          color: '#444',
+          lineHeight: 2.0,
+          background: '#f8fdf7',
+          border: '1px solid #d0e8cc',
+          borderRadius: '6px',
+          padding: '20px 24px',
+          marginBottom: '36px',
         }}>
-          <div className="blog-content">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {firstHalf}
-            </ReactMarkdown>
-          </div>
+          {post.description}
+        </p>
 
-          <AffiliateCTA
-            url={post.affiliateLinks.main}
-            label="▶ Amazonで人気パドルをチェック"
-          />
+        {/* Article body */}
+        <div className="blog-content">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {firstHalf}
+          </ReactMarkdown>
+        </div>
 
-          <div className="blog-content">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {secondHalf}
-            </ReactMarkdown>
-          </div>
+        <AffiliateCTA
+          url={post.affiliateLinks.main}
+          label="▶ Amazonで人気パドルをチェック"
+        />
 
-          <AffiliateCTA
-            url={post.affiliateLinks.sub}
-            label="▶ Amazonでピックルボール用品を見る"
-          />
+        <div className="blog-content">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {secondHalf}
+          </ReactMarkdown>
+        </div>
+
+        <AffiliateCTA
+          url={post.affiliateLinks.sub}
+          label="▶ Amazonでピックルボール用品を見る"
+        />
+
+        {/* Back to list */}
+        <div style={{ borderTop: '1px solid #E8E8E8', paddingTop: '32px', marginTop: '16px' }}>
+          <Link
+            to="/blog"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontSize: '17px',
+              fontWeight: 600,
+              color: '#4a7c3f',
+              textDecoration: 'none',
+            }}
+          >
+            <ChevronLeft size={20} />
+            ブログ一覧に戻る
+          </Link>
         </div>
 
         {/* Related posts */}
         {relatedPosts.length > 0 && (
-          <div style={{ marginBottom: '16px' }}>
-            <h2 style={{ fontSize: '15px', fontWeight: 700, color: '#1a1a2e', marginBottom: '10px', paddingLeft: '4px' }}>
+          <div style={{ marginTop: '48px' }}>
+            <h2 style={{
+              fontSize: '20px',
+              fontWeight: 700,
+              color: '#1a1a2e',
+              borderBottom: '2px solid #4a7c3f',
+              paddingBottom: '10px',
+              marginBottom: '20px',
+            }}>
               関連記事
             </h2>
-            <div style={{ background: '#FFFFFF', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-              {relatedPosts.map((related, i) => (
+            <div>
+              {relatedPosts.map((related) => (
                 <Link
                   key={related.slug}
                   to={`/blog/${related.slug}`}
-                  style={{ textDecoration: 'none' }}
+                  style={{ textDecoration: 'none', display: 'block' }}
                 >
                   <div style={{
-                    padding: '14px 16px',
+                    borderBottom: '1px solid #EEEEEE',
+                    padding: '18px 0',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '12px',
-                    borderBottom: i < relatedPosts.length - 1 ? '1px solid #F0F0F0' : 'none',
                   }}>
                     <div style={{ flex: 1 }}>
                       <span style={{
-                        fontSize: '11px',
+                        fontSize: '14px',
                         fontWeight: 700,
                         color: '#4a7c3f',
                         display: 'block',
-                        marginBottom: '3px',
+                        marginBottom: '6px',
                       }}>
                         {related.category}
                       </span>
-                      <p style={{ fontSize: '13px', fontWeight: 600, color: '#1a1a2e', lineHeight: 1.5 }}>
+                      <p style={{ fontSize: '18px', fontWeight: 600, color: '#1a1a2e', lineHeight: 1.6 }}>
                         {related.title}
                       </p>
                     </div>
-                    <ChevronRight size={16} style={{ color: '#ccc', flexShrink: 0 }} />
+                    <ChevronRight size={22} style={{ color: '#aaa', flexShrink: 0 }} />
                   </div>
                 </Link>
               ))}
             </div>
           </div>
         )}
-
-        {/* Back to list */}
-        <Link
-          to="/blog"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '6px',
-            padding: '12px',
-            background: '#FFFFFF',
-            borderRadius: '12px',
-            fontSize: '14px',
-            fontWeight: 600,
-            color: '#4a7c3f',
-            textDecoration: 'none',
-            boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
-          }}
-        >
-          <ChevronLeft size={18} />
-          ブログ一覧に戻る
-        </Link>
       </div>
     </div>
   );
