@@ -1,7 +1,8 @@
-import { useParams, Link, Navigate, useNavigate } from 'react-router-dom';
+import { useParams, Link, Navigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ChevronLeft, ChevronRight, Menu } from 'lucide-react';
+
 import { SEO } from '@/components/SEO';
 import { useDrawer } from '@/contexts/DrawerContext';
 import { getPostBySlug, getRelatedPosts } from '@/lib/blog';
@@ -60,7 +61,6 @@ function splitContentAtMidpoint(content: string): [string, string] {
 export function BlogDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const { openDrawer } = useDrawer();
-  const navigate = useNavigate();
   const post = slug ? getPostBySlug(slug) : undefined;
 
   if (!post) {
@@ -118,29 +118,6 @@ export function BlogDetailPage() {
         justifyContent: 'space-between',
       }}>
         <button
-          onClick={() => navigate('/blog')}
-          style={{
-            background: 'none',
-            border: 'none',
-            padding: '4px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-            color: '#4a7c3f',
-            fontWeight: 700,
-            fontSize: '16px',
-          }}
-        >
-          <ChevronLeft size={22} />
-          <span>一覧へ</span>
-        </button>
-
-        <h1 className="md:hidden" style={{ fontSize: '24px', fontWeight: 900, fontStyle: 'italic', color: '#1a1a2e' }}>
-          PickleHub
-        </h1>
-
-        <button
           onClick={openDrawer}
           className="md:hidden"
           style={{
@@ -155,6 +132,12 @@ export function BlogDetailPage() {
           <Menu size={28} style={{ color: '#1a1a2e' }} />
         </button>
         <div className="hidden md:block" style={{ width: '40px' }} />
+
+        <h1 className="md:hidden" style={{ fontSize: '24px', fontWeight: 900, fontStyle: 'italic', color: '#1a1a2e' }}>
+          PickleHub
+        </h1>
+
+        <div style={{ width: '40px' }} />
       </header>
 
       {/* Article */}
