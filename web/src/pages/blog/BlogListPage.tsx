@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, Search, Menu } from 'lucide-react';
+import { BookOpen, Search, Menu, ChevronRight } from 'lucide-react';
 import { SEO } from '@/components/SEO';
 import { useDrawer } from '@/contexts/DrawerContext';
 import { getAllPosts, BLOG_CATEGORIES } from '@/lib/blog';
@@ -26,7 +26,7 @@ export function BlogListPage() {
   });
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFFFF' }}>
       <SEO
         title="ピックルボールブログ - 攻略・用品・大会情報"
         description="ピックルボールのパドル選び、ルール解説、初心者向けガイド、大会情報など役立つ記事を毎日更新。"
@@ -35,190 +35,179 @@ export function BlogListPage() {
         type="website"
       />
 
-      {/* Header */}
+      {/* Mobile Header */}
       <header style={{
         position: 'sticky',
         top: 0,
         zIndex: 30,
         background: '#FFFFFF',
-        borderBottom: '1px solid #E5E5E5',
-        padding: '12px 16px',
+        borderBottom: '2px solid #4a7c3f',
+        padding: '14px 20px',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <button
             onClick={openDrawer}
             className="md:hidden"
             style={{
-              background: '#F0F0F0',
+              background: 'none',
               border: 'none',
-              borderRadius: '50%',
-              width: '36px',
-              height: '36px',
+              padding: '4px',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Menu size={20} style={{ color: '#1a1a2e' }} />
+            <Menu size={28} style={{ color: '#1a1a2e' }} />
           </button>
-          <h1 style={{ fontSize: '24px', fontWeight: 900, fontStyle: 'italic', color: '#1a1a2e' }}>
+          <h1 className="md:hidden" style={{ fontSize: '24px', fontWeight: 900, fontStyle: 'italic', color: '#1a1a2e' }}>
             PickleHub
           </h1>
-          <div style={{ width: '36px' }} className="md:hidden" />
-        </div>
-
-        {/* Search */}
-        <div style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            background: '#F0F0F0',
-            borderRadius: '10px',
-            padding: '8px 12px',
-            minWidth: '100px',
-          }}>
-            <BookOpen size={16} style={{ color: '#65A30D', flexShrink: 0 }} />
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: '#1a1a2e',
-                fontSize: '14px',
-                outline: 'none',
-                cursor: 'pointer',
-              }}
-            >
-              <option value="">全カテゴリ</option>
-              {BLOG_CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
-          </div>
-          <div style={{
-            flex: 1,
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            background: '#F0F0F0',
-            borderRadius: '10px',
-            padding: '8px 12px',
-          }}>
-            <Search size={16} style={{ color: '#888888', flexShrink: 0 }} />
-            <input
-              type="text"
-              placeholder="記事を検索"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                flex: 1,
-                background: 'transparent',
-                border: 'none',
-                color: '#1a1a2e',
-                fontSize: '14px',
-                outline: 'none',
-              }}
-            />
-          </div>
+          <div className="md:hidden" style={{ width: '36px' }} />
         </div>
       </header>
 
-      {/* Content */}
-      <div style={{ padding: '16px', paddingBottom: '40px' }}>
-        {/* Page title */}
-        <div style={{ marginBottom: '20px' }}>
-          <h2 style={{ fontSize: '20px', fontWeight: 700, color: '#1a1a2e' }}>ブログ</h2>
-          <p style={{ fontSize: '13px', color: '#888', marginTop: '4px' }}>
-            {filteredPosts.length}件の記事
-          </p>
+      {/* Page Title */}
+      <div style={{ background: '#f8fdf7', borderBottom: '1px solid #e0ede0', padding: '20px 20px 16px' }}>
+        <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#1a1a2e', marginBottom: '12px' }}>
+          ブログ記事一覧
+        </h2>
+
+        {/* Search */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          background: '#FFFFFF',
+          border: '2px solid #ddd',
+          borderRadius: '8px',
+          padding: '10px 14px',
+          marginBottom: '12px',
+        }}>
+          <Search size={20} style={{ color: '#888', flexShrink: 0 }} />
+          <input
+            type="text"
+            placeholder="記事を検索..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{
+              flex: 1,
+              background: 'transparent',
+              border: 'none',
+              color: '#1a1a2e',
+              fontSize: '17px',
+              outline: 'none',
+            }}
+          />
         </div>
 
+        {/* Category pills */}
+        <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
+          <button
+            onClick={() => setSelectedCategory('')}
+            style={{
+              flexShrink: 0,
+              padding: '8px 16px',
+              borderRadius: '4px',
+              fontSize: '15px',
+              fontWeight: 600,
+              border: '2px solid',
+              cursor: 'pointer',
+              borderColor: selectedCategory === '' ? '#4a7c3f' : '#ddd',
+              background: selectedCategory === '' ? '#4a7c3f' : '#FFFFFF',
+              color: selectedCategory === '' ? '#FFFFFF' : '#555',
+            }}
+          >
+            すべて
+          </button>
+          {BLOG_CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat === selectedCategory ? '' : cat)}
+              style={{
+                flexShrink: 0,
+                padding: '8px 16px',
+                borderRadius: '4px',
+                fontSize: '15px',
+                fontWeight: 600,
+                border: '2px solid',
+                cursor: 'pointer',
+                borderColor: selectedCategory === cat ? '#4a7c3f' : '#ddd',
+                background: selectedCategory === cat ? '#4a7c3f' : '#FFFFFF',
+                color: selectedCategory === cat ? '#FFFFFF' : '#555',
+              }}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div style={{ maxWidth: '760px', margin: '0 auto', padding: '0 20px 60px' }}>
         {filteredPosts.length === 0 ? (
-          <div style={{ textAlign: 'center', paddingTop: '60px' }}>
-            <BookOpen size={48} style={{ color: '#CCCCCC', margin: '0 auto' }} />
-            <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#1a1a2e', marginTop: '16px' }}>
-              {allPosts.length === 0 ? '記事はまだありません' : '記事が見つかりません'}
-            </h3>
-            <p style={{ color: '#888', marginTop: '8px' }}>
-              {allPosts.length === 0
-                ? 'まもなく記事が公開されます'
-                : '検索条件を変更してみてください'}
+          <div style={{ textAlign: 'center', paddingTop: '80px' }}>
+            <BookOpen size={56} style={{ color: '#CCCCCC', margin: '0 auto' }} />
+            <p style={{ color: '#888', marginTop: '20px', fontSize: '18px' }}>
+              {allPosts.length === 0 ? 'まもなく記事が公開されます' : '記事が見つかりません'}
             </p>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div>
             {filteredPosts.map((post) => (
               <Link
                 key={post.slug}
                 to={`/blog/${post.slug}`}
-                style={{ textDecoration: 'none' }}
+                style={{ textDecoration: 'none', display: 'block' }}
               >
-                <div style={{
-                  background: '#FFFFFF',
-                  borderRadius: '12px',
-                  overflow: 'hidden',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                  transition: 'box-shadow 0.2s',
+                <article style={{
+                  borderBottom: '1px solid #E8E8E8',
+                  padding: '24px 0',
                 }}>
-                  {/* Category banner */}
-                  <div style={{
-                    background: 'linear-gradient(135deg, #4a7c3f 0%, #6abf5e 100%)',
-                    padding: '12px 16px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
                     <span style={{
-                      fontSize: '11px',
+                      fontSize: '14px',
                       fontWeight: 700,
                       color: '#FFFFFF',
-                      background: 'rgba(255,255,255,0.2)',
-                      borderRadius: '20px',
-                      padding: '3px 10px',
+                      background: '#4a7c3f',
+                      borderRadius: '4px',
+                      padding: '3px 12px',
                     }}>
                       {post.category}
                     </span>
-                    <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.8)' }}>
-                      {post.date}
-                    </span>
+                    <span style={{ fontSize: '15px', color: '#999' }}>{post.date}</span>
                   </div>
 
-                  {/* Content */}
-                  <div style={{ padding: '14px 16px 16px' }}>
-                    <h3 style={{
-                      fontSize: '15px',
-                      fontWeight: 700,
-                      color: '#1a1a2e',
-                      lineHeight: 1.5,
-                      marginBottom: '8px',
-                    }}>
-                      {post.title}
-                    </h3>
-                    <p style={{
-                      fontSize: '13px',
-                      color: '#555',
-                      lineHeight: 1.6,
-                      overflow: 'hidden',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                    }}>
-                      {post.description}
-                    </p>
-                    <div style={{ marginTop: '12px', textAlign: 'right' }}>
-                      <span style={{
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        color: '#4a7c3f',
-                      }}>
-                        続きを読む →
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                  <h3 style={{
+                    fontSize: '20px',
+                    fontWeight: 700,
+                    color: '#1a1a2e',
+                    lineHeight: 1.6,
+                    marginBottom: '10px',
+                  }}>
+                    {post.title}
+                  </h3>
+
+                  <p style={{
+                    fontSize: '16px',
+                    color: '#666',
+                    lineHeight: 1.8,
+                    marginBottom: '12px',
+                  }}>
+                    {post.description}
+                  </p>
+
+                  <span style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    fontSize: '15px',
+                    fontWeight: 600,
+                    color: '#4a7c3f',
+                  }}>
+                    続きを読む <ChevronRight size={18} />
+                  </span>
+                </article>
               </Link>
             ))}
           </div>
