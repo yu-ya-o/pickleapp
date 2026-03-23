@@ -1,4 +1,5 @@
 import { useParams, Link, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ChevronLeft, ChevronRight, Menu } from 'lucide-react';
@@ -62,6 +63,10 @@ export function BlogDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const { openDrawer } = useDrawer();
   const post = slug ? getPostBySlug(slug) : undefined;
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [slug]);
 
   if (!post) {
     return <Navigate to="/blog" replace />;
