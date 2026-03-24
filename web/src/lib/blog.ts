@@ -17,6 +17,8 @@ export const BLOG_CATEGORIES = [
   '初心者ガイド',
   '大会情報',
   'ルール解説',
+  'コート・施設',
+  'コミュニティ・楽しみ方',
 ] as const;
 
 // Eagerly import all markdown files as raw strings at build time

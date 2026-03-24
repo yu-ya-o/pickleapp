@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, Search, Menu, ChevronRight } from 'lucide-react';
+import { BookOpen, Search, Menu, ChevronRight, ChevronLeft } from 'lucide-react';
 import { SEO } from '@/components/SEO';
 import { useDrawer } from '@/contexts/DrawerContext';
 import { getAllPosts, BLOG_CATEGORIES } from '@/lib/blog';
+
+const POSTS_PER_PAGE = 20;
 
 export function BlogListPage() {
   const { openDrawer } = useDrawer();
   const [selectedCategory, setSelectedCategory] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
   const allPosts = getAllPosts();
 
@@ -24,6 +27,22 @@ export function BlogListPage() {
     }
     return true;
   });
+
+  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
+  const paginatedPosts = filteredPosts.slice(
+    (currentPage - 1) * POSTS_PER_PAGE,
+    currentPage * POSTS_PER_PAGE
+  );
+
+  const handleCategoryChange = (cat: string) => {
+    setSelectedCategory(cat === selectedCategory ? '' : cat);
+    setCurrentPage(1);
+  };
+
+  const handleSearchChange = (q: string) => {
+    setSearchQuery(q);
+    setCurrentPage(1);
+  };
 
   return (
     <div style={{ minHeight: '100vh', background: '#FFFFFF' }}>
@@ -89,7 +108,7 @@ export function BlogListPage() {
             type="text"
             placeholder="記事を検索..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
             style={{
               flex: 1,
               background: 'transparent',
@@ -104,7 +123,7 @@ export function BlogListPage() {
         {/* Category pills */}
         <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
           <button
-            onClick={() => setSelectedCategory('')}
+            onClick={() => { setSelectedCategory(''); setCurrentPage(1); }}
             style={{
               flexShrink: 0,
               padding: '8px 16px',
@@ -123,7 +142,7 @@ export function BlogListPage() {
           {BLOG_CATEGORIES.map((cat) => (
             <button
               key={cat}
-              onClick={() => setSelectedCategory(cat === selectedCategory ? '' : cat)}
+              onClick={() => handleCategoryChange(cat)}
               style={{
                 flexShrink: 0,
                 padding: '8px 16px',
@@ -154,7 +173,12 @@ export function BlogListPage() {
           </div>
         ) : (
           <div>
-            {filteredPosts.map((post) => (
+            {/* 件数表示 */}
+            <p style={{ fontSize: '14px', color: '#888', padding: '16px 0 4px' }}>
+              {filteredPosts.length}件中 {(currentPage - 1) * POSTS_PER_PAGE + 1}〜{Math.min(currentPage * POSTS_PER_PAGE, filteredPosts.length)}件を表示
+            </p>
+
+            {paginatedPosts.map((post) => (
               <Link
                 key={post.slug}
                 to={`/blog/${post.slug}`}
@@ -210,6 +234,80 @@ export function BlogListPage() {
                 </article>
               </Link>
             ))}
+
+            {/* ページネーション */}
+            {totalPages > 1 && (
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                padding: '32px 0',
+              }}>
+                <button
+                  onClick={() => { setCurrentPage(p => p - 1); window.scrollTo(0, 0); }}
+                  disabled={currentPage === 1}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '8px 16px',
+                    borderRadius: '6px',
+                    border: '2px solid',
+                    fontSize: '15px',
+                    fontWeight: 600,
+                    cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                    borderColor: currentPage === 1 ? '#ddd' : '#4a7c3f',
+                    background: '#FFFFFF',
+                    color: currentPage === 1 ? '#ccc' : '#4a7c3f',
+                  }}
+                >
+                  <ChevronLeft size={18} /> 前へ
+                </button>
+
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => { setCurrentPage(page); window.scrollTo(0, 0); }}
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '6px',
+                      border: '2px solid',
+                      fontSize: '15px',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      borderColor: currentPage === page ? '#4a7c3f' : '#ddd',
+                      background: currentPage === page ? '#4a7c3f' : '#FFFFFF',
+                      color: currentPage === page ? '#FFFFFF' : '#555',
+                    }}
+                  >
+                    {page}
+                  </button>
+                ))}
+
+                <button
+                  onClick={() => { setCurrentPage(p => p + 1); window.scrollTo(0, 0); }}
+                  disabled={currentPage === totalPages}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '8px 16px',
+                    borderRadius: '6px',
+                    border: '2px solid',
+                    fontSize: '15px',
+                    fontWeight: 600,
+                    cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+                    borderColor: currentPage === totalPages ? '#ddd' : '#4a7c3f',
+                    background: '#FFFFFF',
+                    color: currentPage === totalPages ? '#ccc' : '#4a7c3f',
+                  }}
+                >
+                  次へ <ChevronRight size={18} />
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
