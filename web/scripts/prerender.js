@@ -20,8 +20,19 @@ globalThis.localStorage = {
   key: () => null,
 };
 
+// Read blog slugs from content/blog/ directory
+function getBlogRoutes() {
+  const blogDir = resolve('content/blog');
+  if (!fs.existsSync(blogDir)) return [];
+  return fs
+    .readdirSync(blogDir)
+    .filter((f) => f.endsWith('.md'))
+    .map((f) => `/blog/${f.replace('.md', '')}`);
+}
+
 // Routes to pre-render (public, SEO-important pages)
-const ROUTES = ['/', '/events', '/teams', '/rankings', '/tournaments'];
+const STATIC_ROUTES = ['/', '/events', '/teams', '/rankings', '/tournaments', '/blog'];
+const ROUTES = [...STATIC_ROUTES, ...getBlogRoutes()];
 
 // Fetch all homepage data from the backend API for SSR embedding
 async function fetchPrerenderData() {
@@ -51,7 +62,9 @@ async function fetchPrerenderData() {
 }
 
 async function prerender() {
+  const blogRoutes = getBlogRoutes();
   console.log('Starting pre-rendering...');
+  console.log(`Routes to prerender: ${ROUTES.length} (including ${blogRoutes.length} blog posts)`);
 
   // Fetch data from API for embedding
   const prerenderData = await fetchPrerenderData();
@@ -100,7 +113,8 @@ async function prerender() {
       }
 
       // Inject prerender data as a script tag (before the main script)
-      if (prerenderData) {
+      // Only for non-blog pages (blog content is embedded in the JS bundle)
+      if (prerenderData && !url.startsWith('/blog')) {
         const dataScript = `<script>window.__PRERENDER_DATA__=${JSON.stringify(prerenderData)};</script>`;
         finalHtml = finalHtml.replace(
           '<script type="module"',
